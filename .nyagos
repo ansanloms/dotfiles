@@ -1,0 +1,57 @@
+-- vim:set ft=lua:
+
+-- set envs
+set {
+	EDITOR = [[C:\app\vim\vim.exe]]
+	,LESSCHARSET = "UTF-8"
+}
+
+-- set prompt
+nyagos.prompt = function(this)
+	local prompt = '\n'
+
+	-- パス
+	local prompt = prompt .. '[' .. nyagos.eval('pwd'):gsub('\\', '/') .. ']'
+
+	-- git ブランチ名
+	local gitbranch =  nyagos.eval('git rev-parse --abbrev-ref HEAD 2>nul')
+	if (gitbranch ~= '') then
+		prompt = prompt .. ' ' .. gitbranch
+	end
+
+	-- hg ブランチ名
+	local hgbranch = nyagos.eval('hg branch 2> nul')
+	if (hgbranch ~= '') then
+		prompt = prompt .. ' ' .. hgbranch
+	end
+
+	prompt = prompt .. '\n$ '
+
+	-- nyagos.default_prompt はデフォルトのプロンプト表示関数です。
+	-- 第二引数でターミナルのタイトルを変更することができます。
+	return nyagos.default_prompt(prompt, 'NYAGOS - ' .. nyagos.getwd():gsub('\\', '/'))
+end
+
+-- set alias
+nyagos.alias.hlsdl = function(args)
+	-- ffmpeg path
+	local ffmpeg_path = [[C:\app\ffmpeg\bin\ffmpeg.exe]]
+	print(ffmpeg_path .. " -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
+	io.popen("start " .. ffmpeg_path .. " -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
+end
+
+nyagos.alias.find = [[C:\app\msys64\usr\bin\find.exe]]
+nyagos.alias.sort = [[C:\app\msys64\usr\bin\sort.exe]]
+nyagos.alias.uniq = [[C:\app\msys64\usr\bin\uniq.exe]]
+
+nyagos.alias.grep = "grep --color=auto"
+nyagos.alias.egrep = "egrep --color=auto"
+nyagos.alias.fgrep = "fgrep --color=auto"
+
+nyagos.alias.ls = "ls"
+nyagos.alias.ll = "ls -l"
+
+nyagos.alias.gvim = "start " .. [[C:\app\vim\gvim.exe]]
+-- nyagos.alias.vim = "start " .. [[C:\app\vim\vim.exe]]
+nyagos.alias.vim = "gvim"
+nyagos.alias.vi = "vim"
