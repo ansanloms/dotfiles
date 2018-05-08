@@ -164,7 +164,7 @@ if exists("*minpac#init")
 
   " ctrlp-launcher
   " CtrlPでのランチャ
-  call minpac#add("https://github.com/mattn/ctrlp-launcher.git")
+  call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
 
   " vim-fugitive
   " vimからgit操作を行う
@@ -238,6 +238,12 @@ let g:ctrlp_max_height = 20
 
 " ファイルの新規作成時は別タブで開く
 let g:ctrlp_open_new_file = 1
+
+" ランチャーで読み込むファイルパス
+let g:ctrlp_launcher_file_list = [
+\ "~/.ctrlp-launcher",
+\ "~/.ctrlp-launcher-work"
+\]
 
 " quickrun関連
 let g:quickrun_config = {}
@@ -681,6 +687,9 @@ nnoremap <C-e> :<C-u>CtrlPLauncher<CR>
 " CtrlPMRUFile
 nnoremap <C-h> :<C-u>CtrlPMRUFiles<CR>
 
+" CtrlPBuffer
+nnoremap <C-s> :<C-u>CtrlPBuffer<CR>
+
 " プラグインを更新する
 command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update()
 
@@ -697,22 +706,6 @@ command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 if has("terminal")
   " 端末のエンコーディング
   set termencoding="utf-8"
-
-  if executable("nyagos")
-    " nyagos起動
-    function! TermNyagos()
-      tabnew    " 新規タブで端末起動
-      call term_start(
-      \ ["nyagos"],
-      \ {
-      \   "term_name":    "NYAGOS",
-      \   "term_finish":  "close",
-      \   "curwin":       1
-      \ }
-      \)
-    endfunction
-    nnoremap <Leader>nyagos :<C-u>call TermNyagos()<CR>
-  endif
 endif
 
 "-----------------------------------

@@ -1,0 +1,15 @@
+# vim:set noexpandtab:
+# vim:set filetype=conf:
+
+# terminal
+nyagos								call term_start(["C:/app/nyagos/nyagos.exe"], {"term_name": "NYAGOS", "term_finish": "close", "curwin": 1})
+MSYS2 MSYS							call term_start(["C:/app/msys64/usr/bin/bash.exe", "-l"], {"term_name": "MSYS2 MSYS", "term_finish": "close", "curwin": 1, "env": {"MSYSTEM": "MSYS2"}})
+MinGW x32							call term_start(["C:/app/msys64/usr/bin/bash.exe", "-l"], {"term_name": "MinGW x32", "term_finish": "close", "curwin": 1, "env": {"MSYSTEM": "MINGW32"}})
+MinGW x64							call term_start(["C:/app/msys64/usr/bin/bash.exe", "-l"], {"term_name": "MinGW x64", "term_finish": "close", "curwin": 1, "env": {"MSYSTEM": "MINGW64"}})
+
+# utility
+Putty								!start C:\app\putty\putty.exe
+WinMerge							!start C:\app\WinMerge\WinMergeU.exe
+WinSCP								!start C:\app\WinSCP\WinSCP.exe
+Psytec QR Code Editor				!start C:\app\PsQREdit\PsQREdit.exe
+spoitkun							!start C:\app\spoitkun\spoitkun.exe
