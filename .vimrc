@@ -570,106 +570,11 @@ nnoremap G Gzz
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
-" メモ関連セットアップ
-function! s:memo_setup()
-  let l:memo_dir = $HOME . "/memo"
-
-  if exists("g:memo_dir")
-    let l:memo_dir = g:memo_dir
-  else
-    let g:memo_dir = l:memo_dir
-  endif
-
-  if !isdirectory(expand(l:memo_dir))
-    call mkdir(l:memo_dir, "p")
-  endif
-
-  if !isdirectory(expand(l:memo_dir))
-    echo l:memo_dir . " is not a directory."
-  endif
-endfunction
-
-" メモを開く
-function! s:memo_open(...)
-  call s:memo_setup()
-  let l:memo_filename = ""
-
-  if a:0 >= 1
-    if a:0 >= 2
-      let l:memo_filename = a:1
-    else
-      let l:memo_filename = strftime("%Y%m%d") . "_" . a:1
-    endif
-  else
-    let l:memo_filename = strftime("%Y%m%d")
-  endif
-
-  execute "tabnew " . expand(g:memo_dir) . "/" . l:memo_filename . ".md"
-endfunction
-
-" メモ一覧をCtrlPで表示
-function! s:memo_list()
-  call s:memo_setup()
-  execute "CtrlP " . expand(g:memo_dir)
-endfunction
-
-" メモ管理ディレクトリを設定
-if has("win32") || has("win64")
-  " windows
-  let g:memo_dir = "C:/dev/memo"
-endif
-
-command! -nargs=* Memo call s:memo_open(<f-args>)
-command! -nargs=0 MemoList call s:memo_list()
-command! -nargs=* Report call s:memo_open("report/" . strftime("%Y%m%d") 1)
-
-nnoremap <Leader>memo :<C-u>Memo memo 1<CR>
-nnoremap <Leader>report :<C-u>execute ":Memo report/" . strftime("%Y%m%d") . " 1"<CR>
-
-" hostsを開く
-function! s:open_hosts()
-  let l:hosts_path = "/etc/hosts"
-
-  if has("mac")
-    " mac
-    let l:hosts_path = "/private/etc/hosts"
-  elseif has("win32") || has("win64")
-    " windows
-    let l:hosts_path = "C:/Windows/System32/drivers/etc/hosts"
-  endif
-
-  execute "tabnew " . l:hosts_path
-endfunction
-
-command! -nargs=0 Hosts call s:open_hosts()
-nnoremap <Leader>hosts :<C-u>Hosts<CR>
-
 " タグジャンプの際に新しいタブで開く
 nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
 
 " 検索のハイライト削除
 nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
-
-" tagファイルの作成
-function! s:create_tagfile()
-  packadd vital.vim
-
-  let l:path = vital#of("vital").import("Prelude").path2project_directory(expand("%:p"))
-  let l:optfunc = {}
-
-  let l:job_ctags = job_start("ctags -R -f " . l:path . "/tags " . l:path, {
-  \})
-endfunction
-command! -nargs=0 Ctags call s:create_tagfile()
-
-" ファイルマネージャで開く
-function! s:open_by_file_manager()
-  if has("win32") || has("win64")
-    call system("explorer.exe /select," . expand("%:p"))
-  endif
-endfunction
-command! -nargs=0 OpenByFileManager call s:open_by_file_manager()
-nnoremap <Leader>fm :<C-u>OpenByFileManager<CR>
 
 " very magic
 nnoremap / /\v
@@ -698,6 +603,80 @@ command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 
 " 端末モード時に右クリックでクリップボードの内容をペースト
 "tnoremap <RightMouse> <C-w>"+
+
+"-----------------------------------
+" functions
+"-----------------------------------
+
+" memoを設置するディレクトリ
+if has("win32") || has("win64")
+  let g:memo_base_dir = "/dev/memo"
+endif
+
+" 自分用関数群
+function! AnsanlomsFunctions()
+  let l:func = {}
+
+  " ファイルマネージャで開く
+  function! l:func.OpenByFileManager() dict
+    if has("win32") || has("win64")
+      call system("explorer.exe /select," . expand("%:p"))
+    endif
+  endfunction
+
+  " タグファイル生成
+  function! l:func.createTagfile() dict
+    packadd vital.vim
+    let l:path = vital#vital#new().import("Prelude").path2project_directory(expand("%:p"))
+
+    let l:job_ctags = job_start("ctags -R -f " . l:path . "/tags " . l:path, {})
+  endfunction
+
+  " hostsを開く
+  function! l:func.OpenHosts() dict
+    let l:hosts_path = "/etc/hosts"
+
+    if has("mac")
+      " mac
+      let l:hosts_path = "/private/etc/hosts"
+    elseif has("win32") || has("win64")
+      " windows
+      let l:hosts_path = "C:/Windows/System32/drivers/etc/hosts"
+    endif
+
+    execute "tabnew " . l:hosts_path
+  endfunction
+
+  " メモ関連
+  let l:func.memo = {}
+
+  " メモ関連: memoを設置するディレクトリを取得
+  function! l:func.memo.getBaseDir() dict
+    let l:memo_base_dir = get(g:, "memo_base_dir", $HOME . "/memo")
+
+    if !isdirectory(expand(l:memo_base_dir))
+      call mkdir(l:memo_base_dir, "p")
+    endif
+
+    if !isdirectory(expand(l:memo_base_dir))
+      echoerr l:memo_base_dir . " is not a directory."
+    endif
+
+    return l:memo_base_dir
+  endfunction
+
+  " メモ関連: 開く
+  function! l:func.memo.Open(...) dict
+    execute "tabnew " . expand(self.getBaseDir()) . "/" . get(a:, "1", strftime("%Y%m%d")) . ".md"
+  endfunction
+
+  " メモ関連: CtrlPで開く
+  function! l:func.memo.List() dict
+    execute "CtrlP " . expand(self.getBaseDir())
+  endfunction
+
+  return l:func
+endfunction
 
 "-----------------------------------
 " terminal 設定
