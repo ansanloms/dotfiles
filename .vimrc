@@ -166,6 +166,10 @@ if exists("*minpac#init")
   " CtrlPでのランチャ
   call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
 
+  " ctrlp-tjump
+  " CtrlPでのタグジャンプ
+  call minpac#add("https://github.com/ivalkeen/vim-ctrlp-tjump.git")
+
   " vim-fugitive
   " vimからgit操作を行う
   call minpac#add("https://github.com/tpope/vim-fugitive.git")
@@ -244,6 +248,9 @@ let g:ctrlp_launcher_file_list = [
 \ "~/.ctrlp-launcher",
 \ "~/.ctrlp-launcher-work"
 \]
+
+" タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプする
+let g:ctrlp_tjump_only_silent = 1
 
 " quickrun関連
 let g:quickrun_config = {}
@@ -563,7 +570,6 @@ nnoremap N Nzz
 nnoremap * *zz
 nnoremap # #zz
 nnoremap g* g*zz
-nnoremap g# g#zz
 nnoremap G Gzz
 
 " 危険なコマンドは使わせない
@@ -571,7 +577,7 @@ nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
 " タグジャンプの際に新しいタブで開く
-nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
+"nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
 
 " 検索のハイライト削除
 nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
@@ -594,6 +600,10 @@ nnoremap <C-h> :<C-u>CtrlPMRUFiles<CR>
 
 " CtrlPBuffer
 nnoremap <C-s> :<C-u>CtrlPBuffer<CR>
+
+" CtrlPtjump
+nnoremap <c-]> :<C-u>CtrlPtjump<CR>
+vnoremap <c-]> :<C-u>CtrlPtjumpVisual<CR>
 
 " プラグインを更新する
 command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update()
@@ -626,10 +636,14 @@ function! AnsanlomsFunctions()
 
   " タグファイル生成
   function! l:func.createTagfile() dict
+    if !executable("ctags")
+      echoerr "ctags command not found"
+      return
+    endif
+
     packadd vital.vim
     let l:path = vital#vital#new().import("Prelude").path2project_directory(expand("%:p"))
-
-    let l:job_ctags = job_start("ctags -R -f " . l:path . "/tags " . l:path, {})
+    let l:job_ctags = job_start("ctags --output-format=e-ctags -R -f " . l:path . "/tags " . l:path, {})
   endfunction
 
   " hostsを開く
