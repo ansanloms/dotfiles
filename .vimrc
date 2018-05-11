@@ -635,7 +635,7 @@ function! AnsanlomsFunctions()
   endfunction
 
   " タグファイル生成
-  function! l:func.createTagfile() dict
+  function! l:func.CreateTagfile() dict
     if !executable("ctags")
       echoerr "ctags command not found"
       return
