@@ -658,7 +658,7 @@ function! AnsanlomsFunctions()
       let l:hosts_path = "C:/Windows/System32/drivers/etc/hosts"
     endif
 
-    execute "tabnew " . l:hosts_path
+    execute "edit " . l:hosts_path
   endfunction
 
   " メモ関連
@@ -681,7 +681,7 @@ function! AnsanlomsFunctions()
 
   " メモ関連: 開く
   function! l:func.memo.Open(...) dict
-    execute "tabnew " . expand(self.getBaseDir()) . "/" . get(a:, "1", strftime("%Y%m%d")) . ".md"
+    execute "edit " . expand(self.getBaseDir()) . "/" . get(a:, "1", strftime("%Y%m%d")) . ".md"
   endfunction
 
   " メモ関連: CtrlPで開く
