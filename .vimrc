@@ -982,7 +982,7 @@ if has("gui_running")
   endif
 
   " GUIオプション
-  set guioptions=AcfiM
+  set guioptions=AcfiM!
 
   " 行間設定
   set linespace=0
