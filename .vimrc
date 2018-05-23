@@ -249,8 +249,8 @@ let g:ctrlp_launcher_file_list = [
 \ "~/.ctrlp-launcher-work"
 \]
 
-" タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプする
-let g:ctrlp_tjump_only_silent = 1
+" タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
+let g:ctrlp_tjump_only_silent = 0
 
 " quickrun関連
 let g:quickrun_config = {}
