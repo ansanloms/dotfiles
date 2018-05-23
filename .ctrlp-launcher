@@ -16,9 +16,9 @@ spoitkun				!start C:\app\spoitkun\spoitkun.exe
 
 # functions
 OpenByFileManager		call AnsanlomsFunctions().OpenByFileManager()
-OpenHosts				call AnsanlomsFunctions().OpenHosts()
+OpenHosts				tabnew | call AnsanlomsFunctions().OpenHosts()
 CreateTagfile			call AnsanlomsFunctions().CreateTagfile()
-OpenDailyMemo			call AnsanlomsFunctions().memo.Open()
-OpenMemo				call AnsanlomsFunctions().memo.Open("memo")
-OpenReport				call AnsanlomsFunctions().memo.Open("report/" . strftime("%Y%m%d"))
+OpenDailyMemo			tabnew | call AnsanlomsFunctions().memo.Open()
+OpenMemo				tabnew | call AnsanlomsFunctions().memo.Open("memo")
+OpenReport				tabnew | call AnsanlomsFunctions().memo.Open("report/" . strftime("%Y%m%d"))
 OpenMemoList			call AnsanlomsFunctions().memo.List()
