@@ -221,6 +221,10 @@ if exists("*minpac#init")
   " sky-color-clock.vim
   " 時間と月齢を表示
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
+
+  " phpactor
+  " PHP補完
+  call minpac#add("https://github.com/phpactor/phpactor.git", {"type": "opt", "do": {-> system("composer install")}})
 endif
 
 " Align関連
@@ -387,7 +391,7 @@ let g:loaded_matchparen = 1
 " vim-singleton関連
 if (has("clientserver"))
   try
-    packadd! vim-singleton
+    packadd vim-singleton
     call singleton#enable()
   catch
   endtry
@@ -496,19 +500,19 @@ endfunction
 " インデントの設定
 "-----------------------------------
 
-" インデントをスペース4つ分に設定
-set tabstop=4
-
 " オートインデント
 set smartindent
+
+" インデントをスペース4つ分に設定
+set tabstop=4
 
 " 自動インデントでずれる幅
 set shiftwidth=4
 
 " Insertモードで <Tab> を挿入するとき代わりに
-" 適切な数の空白を使う(ソフトTAB)
-set expandtab
-"set noexpandtab
+" 適切な数の空白(ソフトTAB)を使わない
+"set expandtab
+set noexpandtab
 
 " ソフトTABのスペースの数
 set softtabstop=4
@@ -769,6 +773,12 @@ augroup php-setting
 
   " ハイライト行指定
   autocmd FileType php syntax sync minlines=500 maxlines=1000
+
+  " プラグイン読み込み
+  autocmd FileType php packadd phpactor
+
+  " 補完設定
+  "autocmd FileType php setlocal omnifunc=phpactor#Complete
 augroup END
 
 "-----------------------------------
@@ -808,7 +818,7 @@ augroup markdown-setting
   autocmd FileType markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
 
   " プラグイン読み込み
-  autocmd FileType markdown packadd! vim-markdown
+  autocmd FileType markdown packadd vim-markdown
 augroup END
 
 "-----------------------------------
@@ -822,11 +832,11 @@ augroup sh-setting
   autocmd FileType sh setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
 
   " プラグイン読み込み
-  autocmd FileType sh packadd! sh.vim--Cla
+  autocmd FileType sh packadd sh.vim--Cla
 augroup END
 
 "-----------------------------------
-" vimの設定
+" Vim scriptの設定
 "-----------------------------------
 
 " \ を入力した際のインデント量
@@ -873,7 +883,7 @@ augroup json-setting
   autocmd!
 
   " プラグイン読み込み
-  autocmd FileType json packadd! vim-json
+  autocmd FileType json packadd vim-json
 augroup END
 
 "-----------------------------------
