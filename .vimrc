@@ -43,10 +43,6 @@ if filereadable(expand($VIMRUNTIME . "/defaults.vim"))
   source $VIMRUNTIME/defaults.vim
 endif
 
-" viモードの廃止
-" .vimrcがある時点で廃止される
-"set nocompatible
-
 if has("win32") || has("win64")
   " 読み込みディレクトリの追記
   set runtimepath^=~/.vim
@@ -113,9 +109,6 @@ set foldlevel=1
 set foldnestmax=2
 set foldcolumn=2
 
-" スクリプト実行中に画面を描画しない
-set lazyredraw
-
 " 外部grepの設定
 if executable("grep")
   set grepprg=grep\ -Hnd\ skip\ -r
@@ -137,134 +130,51 @@ endif
 if exists("*minpac#init")
   call minpac#init()
 
-  " minpac
-  " プラグイン管理
   call minpac#add("https://github.com/k-takata/minpac.git", {"type": "opt"})
-
-  " vimdoc-ja
-  " 日本語ヘルプ
   call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
-
-  " vim-midoronuma
-  " カラースキーム
   call minpac#add("https://github.com/ansanloms/vim-midoronuma.git")
-
-  " vital.vim
-  " vimライブラリ群
   call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
-
-  " Align.vim
-  " 整形を行う
-  " 本家にはカーソルがファイル末尾に飛ぶバグがあるので修正版を使用する
-  call minpac#add("https://github.com/todesking/vim-align.git", {"branch": "xstrlen-fix"})
-
-  " CtrlP
-  " 多機能セレクタ
+  call minpac#add("https://github.com/todesking/vim-align.git", {"branch": "xstrlen-fix"})    " 本家にはカーソルがファイル末尾に飛ぶバグがあるので修正版を使用する
   call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
-
-  " ctrlp-launcher
-  " CtrlPでのランチャ
   call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
-
-  " ctrlp-tjump
-  " CtrlPでのタグジャンプ
   call minpac#add("https://github.com/ivalkeen/vim-ctrlp-tjump.git")
-
-  " vim-fugitive
-  " vimからgit操作を行う
   call minpac#add("https://github.com/tpope/vim-fugitive.git")
-
-  " open-browser.vim
-  " 指定URLをブラウザで開く
   call minpac#add("https://github.com/tyru/open-browser.vim.git")
-
-  " quickrun
-  " 編集のプログラムをその場で実行する
   call minpac#add("https://github.com/thinca/vim-quickrun.git")
-
-  " vim-watchdogs
-  " シンタックスチェックを行う
   call minpac#add("https://github.com/osyo-manga/vim-watchdogs.git")
-
-  " vim-markdown
-  " markdownのシンタックス
   call minpac#add("https://github.com/rcmdnk/vim-markdown.git", {"type": "opt"})
-
-  " vim-markdown-quote-syntax
-  " markdownのコードブロックのハイライト設定
   call minpac#add("https://github.com/joker1007/vim-markdown-quote-syntax.git")
-
-  " sh.vim
-  " shのindent
   call minpac#add("https://github.com/vim-scripts/sh.vim--Cla.git", {"type": "opt"})
-
-  " vim-json
-  " json のシンタックス
   call minpac#add("https://github.com/elzr/vim-json.git", {"type": "opt"})
-
-  " parenmatch
-  " matchparenの代替
   call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
-
-  " vim-singleton
-  " vimの多重起動を防ぐ
   call minpac#add("https://github.com/thinca/vim-singleton.git", {"type": "opt"})
-
-  " vim-volt-syntax
-  " volt 用シンタックス
   call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git")
-
-  " emmet-vim
-  " emmet
   call minpac#add("https://github.com/mattn/emmet-vim.git")
-
-  " sky-color-clock.vim
-  " 時間と月齢を表示
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-
-  " phpactor
-  " PHP補完
-  call minpac#add("https://github.com/phpactor/phpactor.git", {"type": "opt", "do": {-> system("composer install")}})
+  "if executable("composer")
+  "  call minpac#add("https://github.com/phpactor/phpactor.git", {"type": "opt", "do": {-> system("composer install")}})
+  "endif
 endif
 
 " Align関連
-" 幅広文字に対応する
-let g:Align_xstrlen = 3
+let g:Align_xstrlen = 3 " 幅広文字に対応する
 
 " CtrlP関連
-" キャッシュを使用する
-let g:ctrlp_use_caching = 1
-
-" キャッシュディレクトリ
-let g:ctrlp_cache_dir = $HOME."/.cache/ctrlp"
-
-" 終了時にキャッシュを削除しない
-let g:ctrlp_clear_cache_on_exit = 0
-
-" 20行表示
-let g:ctrlp_max_height = 20
-
-" ファイルの新規作成時は別タブで開く
-let g:ctrlp_open_new_file = 1
-
-" ランチャーで読み込むファイルパス
-let g:ctrlp_launcher_file_list = [
-\ "~/.ctrlp-launcher",
-\ "~/.ctrlp-launcher-work"
-\]
-
-" タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
-let g:ctrlp_tjump_only_silent = 0
+let g:ctrlp_use_caching = 1                                                       " キャッシュを使用する
+let g:ctrlp_cache_dir = $HOME."/.cache/ctrlp"                                     " キャッシュディレクトリ
+let g:ctrlp_clear_cache_on_exit = 0                                               " 終了時にキャッシュを削除しない
+let g:ctrlp_max_height = 20                                                       " 20行表示
+let g:ctrlp_open_new_file = 1                                                     " ファイルの新規作成時は別タブで開く
+let g:ctrlp_launcher_file_list = ["~/.ctrlp-launcher", "~/.ctrlp-launcher-work"]  " ランチャーで読み込むファイルパス
+let g:ctrlp_tjump_only_silent = 0                                                 " タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
 
 " quickrun関連
 let g:quickrun_config = {}
-
-" 設定
 let g:quickrun_config["_"] = {
 \ "runner": "job",
 \}
 
-" java
+" quickrun - java
 let g:quickrun_config["java"] = {
 \ "hook/cd/directory": "%S:p:h",
 \ "exec": [
@@ -273,7 +183,7 @@ let g:quickrun_config["java"] = {
 \ ]
 \}
 
-" html
+" quickrun - html
 if executable("w3m")
   " text 出力
   let g:quickrun_config["html"] = {
@@ -287,7 +197,7 @@ if executable("w3m")
   \}
 endif
 
-" markdown
+" quickrun - markdown
 if executable("pandoc")
   " cssの取得
   if !filereadable(expand("~/.vim/markdown.css"))
@@ -328,19 +238,13 @@ if executable("pandoc")
 endif
 
 " watchdogs関連
-" 書き込み後にシンタックスチェックを行う
-let g:watchdogs_check_BufWritePost_enable = 1
-
-" 一定時間キー入力がなかった場合にシンタックスチェックを行う
-" バッファに書き込み後、1度だけ行われる
-let g:watchdogs_check_CursorHold_enable = 1
-
-" watchdogs 設定
+let g:watchdogs_check_BufWritePost_enable = 1       " 書き込み後にシンタックスチェックを行う
+let g:watchdogs_check_CursorHold_enable = 1         " 一定時間キー入力がなかった場合にシンタックスチェックを行う
 let g:quickrun_config["watchdogs_checker/_"] = {
 \ "runner": "job",
 \}
 
-" watchdogs 設定 - java
+" watchdogs - java
 let g:quickrun_config["java/watchdogs_checker"] = {
 \ "command": "javac",
 \ "cmdopt": join([
@@ -359,7 +263,7 @@ if executable("eslint")
   \}
 endif
 
-" watchdogs 設定 - php
+" watchdogs - php
 let g:quickrun_config["php/watchdogs_checker"] = {
 \ "command": "php",
 \ "cmdopt": join([
@@ -371,7 +275,7 @@ let g:quickrun_config["php/watchdogs_checker"] = {
 \   "-d xdebug.cli_color=0",
 \ ]),
 \ "exec": "%c %o %s:p",
-\ "errorformat": "%m\ in\ %f\ on\ line\ %l"
+\ "errorformat": "%m\ in\ %f\ on\ line\ %l",
 \}
 
 " vim-markdown-quote-syntax 関連
@@ -385,11 +289,10 @@ let g:markdown_quote_syntax_filetypes = {
 \}
 
 " parenmatch関連
-" matchparenを無効にする
-let g:loaded_matchparen = 1
+let g:loaded_matchparen = 1     " matchparenを無効にする
 
 " vim-singleton関連
-if (has("clientserver"))
+if (has("clientserver") && has("gui_running"))
   try
     packadd vim-singleton
     call singleton#enable()
@@ -398,12 +301,8 @@ if (has("clientserver"))
 endif
 
 " sky-color-clock.vim関連
-
-" 日付フォーマット
-let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"
-
-" 絵文字表示
-let g:sky_color_clock#enable_emoji_icon = 1
+let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
+let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 "-----------------------------------
 " ステータスラインの設定
@@ -462,7 +361,9 @@ set statusline+=[%{&filetype}]                                                  
 set statusline+=[%{&fileformat}]                                                        " 改行コード
 set statusline+=[%{&fileencoding}]                                                      " 文字コード
 set statusline+=[%l/%L\ %p%%]                                                           " 現在行数/全行数 カーソル位置までの割合
-set statusline+=%#SkyColorClock#\ %{sky_color_clock#statusline()}\  " <-- 行末にSP有    " 日付と月齢表示
+if exists("sky_color_clock#statusline")
+  set statusline+=%#SkyColorClock#\ %{sky_color_clock#statusline()}\  " <-- 行末にSP有  " 日付と月齢表示
+endif
 
 "-----------------------------------
 " タブラインの設定
@@ -580,9 +481,6 @@ nnoremap G Gzz
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
-" タグジャンプの際に新しいタブで開く
-"nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
-
 " 検索のハイライト削除
 nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
 
@@ -608,6 +506,9 @@ nnoremap <C-s> :<C-u>CtrlPBuffer<CR>
 " CtrlPtjump
 nnoremap <c-]> :<C-u>CtrlPtjump<CR>
 vnoremap <c-]> :<C-u>CtrlPtjumpVisual<CR>
+
+" タグジャンプの際に新しいタブで開く
+"nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
 
 " プラグインを更新する
 command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update()
