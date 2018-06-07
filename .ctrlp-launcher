@@ -7,6 +7,11 @@ terminal MSYS2 MSYS		tabnew | call term_start(["C:/app/msys64/usr/bin/bash.exe",
 terminal MinGW x32		tabnew | call term_start(["C:/app/msys64/usr/bin/bash.exe", "-l"], {"term_name": "MinGW x32", "term_finish": "close", "curwin": 1, "env": {"MSYSTEM": "MINGW32"}})
 terminal MinGW x64		tabnew | call term_start(["C:/app/msys64/usr/bin/bash.exe", "-l"], {"term_name": "MinGW x64", "term_finish": "close", "curwin": 1, "env": {"MSYSTEM": "MINGW64"}})
 
+# msys / mingw
+mintty MSYS2 MSYS		!start C:\app\msys64\msys2.exe
+mintty MinGW x32		!start C:\app\msys64\mingw32.exe
+mintty MinGW x64		!start C:\app\msys64\mingw64.exe
+
 # utility
 Putty					!start C:\app\putty\putty.exe
 WinMerge				!start C:\app\WinMerge\WinMergeU.exe
