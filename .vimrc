@@ -154,6 +154,8 @@ if exists("*minpac#init")
   "if executable("composer")
   "  call minpac#add("https://github.com/phpactor/phpactor.git", {"type": "opt", "do": {-> system("composer install")}})
   "endif
+  call minpac#add("https://github.com/othree/yajs.vim", {"type": "opt"})
+  call minpac#add("https://github.com/maxmellon/vim-jsx-pretty", {"type": "opt"})
 endif
 
 " Align関連
@@ -361,9 +363,7 @@ set statusline+=[%{&filetype}]                                                  
 set statusline+=[%{&fileformat}]                                                        " 改行コード
 set statusline+=[%{&fileencoding}]                                                      " 文字コード
 set statusline+=[%l/%L\ %p%%]                                                           " 現在行数/全行数 カーソル位置までの割合
-if exists("sky_color_clock#statusline")
-  set statusline+=%#SkyColorClock#\ %{sky_color_clock#statusline()}\  " <-- 行末にSP有  " 日付と月齢表示
-endif
+set statusline+=%#SkyColorClock#\ %{sky_color_clock#statusline()}\  " <-- 行末にSP有    " 日付と月齢表示
 
 "-----------------------------------
 " タブラインの設定
@@ -629,6 +629,10 @@ augroup javascript-setting
 
   " インデントセット
   autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+
+  " プラグイン読み込み
+  autocmd FileType javascript packadd yajs
+  autocmd FileType javascript packadd vim-jsx-pretty
 augroup END
 
 "-----------------------------------
