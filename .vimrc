@@ -155,6 +155,7 @@ if exists("*minpac#init")
   "  call minpac#add("https://github.com/phpactor/phpactor.git", {"type": "opt", "do": {-> system("composer install")}})
   "endif
   call minpac#add("https://github.com/othree/yajs.vim", {"type": "opt"})
+  call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
   call minpac#add("https://github.com/maxmellon/vim-jsx-pretty", {"type": "opt"})
 endif
 
@@ -625,13 +626,14 @@ augroup javascript-setting
   autocmd!
 
   " 拡張子設定
-  autocmd BufNewFile,BufRead *.js setlocal filetype=javascript
+  autocmd BufNewFile,BufRead *.{js,jsx} setlocal filetype=javascript
 
   " インデントセット
   autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
   autocmd FileType javascript packadd yajs
+  autocmd FileType javascript packadd vim-javascript
   autocmd FileType javascript packadd vim-jsx-pretty
 augroup END
 
