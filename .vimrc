@@ -541,7 +541,7 @@ function! AnsanlomsFunctions()
   endfunction
 
   " タグファイル生成
-  function! l:func.CreateTagfile() dict
+  function! l:func.CreateTagfile(...) dict
     if !executable("ctags")
       echoerr "ctags command not found"
       return
@@ -549,7 +549,13 @@ function! AnsanlomsFunctions()
 
     packadd vital.vim
     let l:path = vital#vital#new().import("Prelude").path2project_directory(expand("%:p"))
-    let l:job_ctags = job_start("ctags --output-format=e-ctags -R -f " . l:path . "/tags " . l:path, {})
+    let l:ctags_cmd = "ctags --output-format=e-ctags -R -f " . l:path . "/tags " . l:path
+
+    if &filetype == "php"
+      let l:ctags_cmd = "ctags --languages=PHP --php-types=c+f+d --langmap=PHP:.php.inc.volt --output-format=e-ctags -R -f " . l:path . "/tags " . l:path
+    endif
+
+    let l:job_ctags = job_start(l:ctags_cmd, {})
   endfunction
 
   " hostsを開く
