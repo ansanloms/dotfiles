@@ -777,8 +777,34 @@ augroup sql-setting
 
   " フォーマット指定
   if executable("sql-formatter")
-    autocmd FileType sql setlocal formatexpr=
     autocmd FileType sql setlocal formatprg=sql-formatter
+  endif
+augroup END
+
+"-----------------------------------
+" htmlの設定
+"-----------------------------------
+
+augroup html-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
+augroup END
+
+"-----------------------------------
+" xmlの設定
+"-----------------------------------
+
+augroup xml-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType xml setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
+
+  " フォーマット指定
+  if executable("xmllint")
+    autocmd FileType xml setlocal formatprg=xmllint\ --format\ -
   endif
 augroup END
 
