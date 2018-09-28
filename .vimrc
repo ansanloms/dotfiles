@@ -166,6 +166,7 @@ let g:Align_xstrlen = 3 " 幅広文字に対応する
 let g:ctrlp_use_caching = 1                                                       " キャッシュを使用する
 let g:ctrlp_cache_dir = $HOME."/.cache/ctrlp"                                     " キャッシュディレクトリ
 let g:ctrlp_clear_cache_on_exit = 0                                               " 終了時にキャッシュを削除しない
+let g:ctrlp_lazy_update = 1                                                       " 遅延再描画
 let g:ctrlp_max_height = 20                                                       " 20行表示
 let g:ctrlp_open_new_file = 1                                                     " ファイルの新規作成時は別タブで開く
 let g:ctrlp_launcher_file_list = ["~/.ctrlp-launcher", "~/.ctrlp-launcher-work"]  " ランチャーで読み込むファイルパス
@@ -656,8 +657,8 @@ let g:php_htmlInStrings = 0
 " Baselibメソッドのハイライト表示
 let g:php_baselib = 0
 
-" ショートタグを使わない
-let g:php_noShortTags = 1
+" ショートタグを除外する
+"let g:php_noShortTags = 1
 
 " ] や ) の対応エラーをハイライトする
 let g:php_parent_error_close = 0
