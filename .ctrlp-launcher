@@ -20,6 +20,7 @@ WinMerge				!start C:\app\WinMerge\WinMergeU.exe
 WinSCP					!start C:\app\WinSCP\WinSCP.exe
 Psytec QR Code Editor	!start C:\app\PsQREdit\PsQREdit.exe
 spoitkun				!start C:\app\spoitkun\spoitkun.exe
+eclipse					!start C:\app\pleiades\eclipse\eclipse.exe
 
 # functions
 OpenByFileManager		call AnsanlomsFunctions().OpenByFileManager()
