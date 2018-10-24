@@ -132,7 +132,7 @@ if exists("*minpac#init")
 
   call minpac#add("https://github.com/k-takata/minpac.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
-  call minpac#add("https://github.com/ansanloms/vim-midoronuma.git")
+  call minpac#add("https://github.com/morhetz/gruvbox.git")
   call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
   call minpac#add("https://github.com/todesking/vim-align.git", {"branch": "xstrlen-fix"})    " 本家にはカーソルがファイル末尾に飛ぶバグがあるので修正版を使用する
   call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
@@ -349,9 +349,9 @@ function! StatuslineMode()
   let a:current_mode = mode()
   let a:paste_mode   = (&paste) ? "(PASTE)" : ""
   if has_key(a:mode_list, a:current_mode)
-    return a:mode_list[a:current_mode].a:paste_mode
+    return a:mode_list[a:current_mode] . a:paste_mode
   endif
-  return a:current_mode.a:paste_mode."?"
+  return a:current_mode.a:paste_mode . "?"
 endfunction
 
 set statusline=[%{StatuslineMode()}]                                                    " モード表示
@@ -649,20 +649,20 @@ augroup END
 "-----------------------------------
 
 " SQLをハイライト表示
-let g:php_sql_query = 0
+"let g:php_sql_query = 0
 
 " HTMLをハイライト表示
-let g:php_htmlInStrings = 0
+"let g:php_htmlInStrings = 0
 
 " Baselibメソッドのハイライト表示
-let g:php_baselib = 0
+"let g:php_baselib = 0
 
 " ショートタグを除外する
 "let g:php_noShortTags = 1
 
 " ] や ) の対応エラーをハイライトする
-let g:php_parent_error_close = 0
-let g:php_parent_error_open = 0
+"let g:php_parent_error_close = 0
+"let g:php_parent_error_open = 0
 
 " case文対応
 let g:PHP_vintage_case_default_indent = 1
@@ -674,7 +674,7 @@ augroup php-setting
   autocmd!
 
   " 拡張子設定
-  autocmd BufNewFile,BufRead *.php set filetype=php
+  autocmd BufNewFile,BufRead *.{php,ctp} set filetype=php
 
   " インデントセット
   autocmd FileType php setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
@@ -686,10 +686,10 @@ augroup php-setting
   endif
 
   " ハイライト行指定
-  autocmd FileType php syntax sync minlines=500 maxlines=1000
+  autocmd FileType php syntax sync minlines=300 maxlines=500
 
   " プラグイン読み込み
-  autocmd FileType php packadd phpactor
+  "autocmd FileType php packadd phpactor
 
   " 補完設定
   "autocmd FileType php setlocal omnifunc=phpactor#Complete
@@ -709,7 +709,7 @@ augroup volt-setting
   autocmd filetype volt setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 
   " ハイライト行指定
-  autocmd filetype volt syntax sync minlines=500 maxlines=1000
+  autocmd filetype volt syntax sync minlines=300 maxlines=500
 augroup END
 
 "-----------------------------------
@@ -965,13 +965,13 @@ set listchars=tab:\|\ ,trail:_,extends:>,precedes:<,nbsp:%
 set number
 
 " 行可視化
-set nocursorline
+"set cursorline
 
 " 列可視化
-set nocursorcolumn
+"set cursorcolumn
 
 " 相対行で表示
-set norelativenumber
+"set relativenumber
 
 " 右側で折り返す
 set wrap
@@ -1013,7 +1013,22 @@ syntax enable
 " 背景設定
 " カラースキーム設定
 try
-  set t_Co=16
-  colorscheme midoronuma
+  set background=dark
+  set t_Co=256
+
+  " 太字にしない
+  let g:gruvbox_bold = 0
+
+  " 斜体にしない
+  let g:gruvbox_italic = 0
+
+  " 下線を引かない
+  let g:gruvbox_undercur = 0
+
+  " コントラスト
+  let g:gruvbox_contrast_dark = "hard"
+  let g:gruvbox_contrast_light = "hard"
+
+  colorscheme gruvbox
 catch
 endtry
