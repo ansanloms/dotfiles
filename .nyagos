@@ -51,7 +51,7 @@ nyagos.alias.fgrep = "fgrep --color=auto"
 nyagos.alias.ls = "ls"
 nyagos.alias.ll = "ls -l"
 
-nyagos.alias.gvim = "start " .. [[C:\app\vim\gvim.exe]]
+nyagos.alias.gvim = "start " .. [[C:\app\vim\gvim.exe]] .. ' --remote-tab-silent $*'
 -- nyagos.alias.vim = "start " .. [[C:\app\vim\vim.exe]]
 nyagos.alias.vim = "gvim"
 nyagos.alias.vi = "vim"
