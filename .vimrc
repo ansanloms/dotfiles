@@ -147,6 +147,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/vim-scripts/sh.vim--Cla.git", {"type": "opt"})
   call minpac#add("https://github.com/elzr/vim-json.git", {"type": "opt"})
   call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
+  call minpac#add("https://github.com/thinca/vim-singleton.git", {"type": "opt"})
   call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git")
   call minpac#add("https://github.com/mattn/emmet-vim.git")
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
@@ -293,6 +294,15 @@ let g:markdown_quote_syntax_filetypes = {
 
 " parenmatch関連
 let g:loaded_matchparen = 1     " matchparenを無効にする
+
+" vim-singleton関連
+if (has("clientserver") && has("gui_running"))
+  try
+    packadd vim-singleton
+    call singleton#enable()
+  catch
+  endtry
+endif
 
 " sky-color-clock.vim関連
 let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
@@ -517,7 +527,7 @@ command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 
 " memoを設置するディレクトリ
 if has("win32") || has("win64")
-  let g:memo_base_dir = "/dev/memo"
+  let g:memo_base_dir = "c:/dev/work/memo"
 endif
 
 " 自分用関数群
