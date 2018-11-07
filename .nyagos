@@ -2,7 +2,7 @@
 
 -- set envs
 set {
-	EDITOR = [[C:\app\vim\vim.exe]]
+	EDITOR = "vim"
 	,LESSCHARSET = "UTF-8"
 }
 
@@ -36,13 +36,9 @@ end
 nyagos.alias.hlsdl = function(args)
 	-- ffmpeg path
 	local ffmpeg_path = [[C:\app\ffmpeg\bin\ffmpeg.exe]]
-	print(ffmpeg_path .. " -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
-	io.popen("start " .. ffmpeg_path .. " -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
+	print("ffmpeg -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
+	io.popen("start ffmpeg -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
 end
-
-nyagos.alias.find = [[C:\app\msys64\usr\bin\find.exe]]
-nyagos.alias.sort = [[C:\app\msys64\usr\bin\sort.exe]]
-nyagos.alias.uniq = [[C:\app\msys64\usr\bin\uniq.exe]]
 
 nyagos.alias.grep = "grep --color=auto"
 nyagos.alias.egrep = "egrep --color=auto"
@@ -51,7 +47,5 @@ nyagos.alias.fgrep = "fgrep --color=auto"
 nyagos.alias.ls = "ls"
 nyagos.alias.ll = "ls -l"
 
-nyagos.alias.gvim = "start " .. [[C:\app\vim\gvim.exe]] .. ' --remote-tab-silent $*'
--- nyagos.alias.vim = "start " .. [[C:\app\vim\vim.exe]]
 nyagos.alias.vim = "gvim"
 nyagos.alias.vi = "vim"
