@@ -35,7 +35,6 @@ end
 -- set alias
 nyagos.alias.hlsdl = function(args)
 	-- ffmpeg path
-	local ffmpeg_path = [[C:\app\ffmpeg\bin\ffmpeg.exe]]
 	print("ffmpeg -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
 	io.popen("start ffmpeg -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
 end
