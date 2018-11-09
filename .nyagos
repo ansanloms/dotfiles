@@ -43,8 +43,7 @@ nyagos.alias.grep = "grep --color=auto"
 nyagos.alias.egrep = "egrep --color=auto"
 nyagos.alias.fgrep = "fgrep --color=auto"
 
-nyagos.alias.ls = "ls"
-nyagos.alias.ll = "ls -l"
+nyagos.alias.find = [[~\scoop\shims\find.exe]]
 
 nyagos.alias.vim = "gvim"
 nyagos.alias.vi = "vim"
