@@ -157,6 +157,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/othree/yajs.vim", {"type": "opt"})
   call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
   call minpac#add("https://github.com/maxmellon/vim-jsx-pretty", {"type": "opt"})
+  call minpac#add("https://github.com/leafgarland/typescript-vim.git")
 endif
 
 " Align関連
