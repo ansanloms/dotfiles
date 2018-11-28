@@ -139,6 +139,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
   call minpac#add("https://github.com/ivalkeen/vim-ctrlp-tjump.git")
   call minpac#add("https://github.com/tpope/vim-fugitive.git")
+  call minpac#add("https://github.com/airblade/vim-gitgutter.git")
   call minpac#add("https://github.com/tyru/open-browser.vim.git")
   call minpac#add("https://github.com/thinca/vim-quickrun.git")
   call minpac#add("https://github.com/osyo-manga/vim-watchdogs.git")
@@ -921,8 +922,10 @@ if has("gui_running")
   if has("vim_starting")
     " フォント設定
     if has("win32") || has("win64")
-      set guifont=Cica:h12
-      set printfont=Cica:h8
+      "set guifont=Cica:h12
+      "set printfont=Cica:h8
+      set guifont=BDF_UM+_OUTLINE:h10
+      set renderoptions=type:directx,gamma:1.0,contrast:0,level:0.0,geom:1,renmode:5,taamode:1
     endif
 
     " 縦幅 デフォルトは24
