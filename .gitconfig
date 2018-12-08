@@ -23,3 +23,5 @@
 	email = ansanloms@users.noreply.github.com
 [url "git@github.com:"]
 	pushinsteadof = https://github.com/
+[credential]
+	helper = manager
