@@ -35,6 +35,30 @@ if has("vim_starting")
 endif
 
 "-----------------------------------
+" gVimのみ: 他のvimが起動済ならそれを使う
+" http://tyru.hatenablog.com/entry/20130430/vim_resident
+"-----------------------------------
+
+if has("gui_running") && argc()
+  let s:running_vim_list = filter(split(serverlist(), "\n"), "v:val !=? v:servername")
+
+  if !empty(s:running_vim_list)
+    let s:arg_list = []
+    for arg in argv()
+      " 引数に空白があったら""で囲む
+      call add(s:arg_list, match(arg, " ") ? "\"" . arg  . "\"" : arg)
+    endfor
+
+    " Open given files in running Vim and exit.
+    silent execute "!start gvim --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
+    unlet s:arg_list
+    qa!
+  endif
+
+  unlet s:running_vim_list
+endif
+
+"-----------------------------------
 " 基本設定
 "-----------------------------------
 
@@ -43,13 +67,11 @@ if filereadable(expand($VIMRUNTIME . "/defaults.vim"))
   source $VIMRUNTIME/defaults.vim
 endif
 
-if has("win32") || has("win64")
-  " 読み込みディレクトリの追記
-  set runtimepath^=~/.vim
+" 読み込みディレクトリの追記
+set runtimepath^=~/.vim
 
-  " パッケージディレクトリの追記
-  set packpath^=~/.vim
-endif
+" パッケージディレクトリの追記
+set packpath^=~/.vim
 
 " viminfoの保存先を変更
 set viminfo+=n~/.vim/viminfo
@@ -100,8 +122,7 @@ endif
 
 " スペルチェック
 "set spell
-set nospell
-set spelllang+=cjk
+"set spelllang+=cjk
 
 " fold設定
 set foldmethod=syntax
@@ -129,7 +150,6 @@ endif
 
 if exists("*minpac#init")
   call minpac#init()
-
   call minpac#add("https://github.com/k-takata/minpac.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
   call minpac#add("https://github.com/morhetz/gruvbox.git")
@@ -158,12 +178,15 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
   call minpac#add("https://github.com/maxmellon/vim-jsx-pretty", {"type": "opt"})
   call minpac#add("https://github.com/leafgarland/typescript-vim.git")
+
+  call minpac#add("https://github.com/prabirshrestha/async.vim.git")
+  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
 endif
 
-" Align関連
+" Align
 let g:Align_xstrlen = 3 " 幅広文字に対応する
 
-" CtrlP関連
+" CtrlP
 let g:ctrlp_use_caching = 1                                                       " キャッシュを使用する
 let g:ctrlp_cache_dir = $HOME."/.cache/ctrlp"                                     " キャッシュディレクトリ
 let g:ctrlp_clear_cache_on_exit = 0                                               " 終了時にキャッシュを削除しない
@@ -173,7 +196,7 @@ let g:ctrlp_open_new_file = 1                                                   
 let g:ctrlp_launcher_file_list = ["~/.ctrlp-launcher", "~/.ctrlp-launcher-work", "~/.ctrlp-launcher-gcp"]  " ランチャーで読み込むファイルパス
 let g:ctrlp_tjump_only_silent = 0                                                 " タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
 
-" quickrun関連
+" quickrun
 let g:quickrun_config = {}
 let g:quickrun_config["_"] = {
 \ "runner": "job",
@@ -242,7 +265,7 @@ if executable("pandoc")
   \}
 endif
 
-" watchdogs関連
+" watchdogs
 let g:watchdogs_check_BufWritePost_enable = 1       " 書き込み後にシンタックスチェックを行う
 let g:watchdogs_check_CursorHold_enable = 1         " 一定時間キー入力がなかった場合にシンタックスチェックを行う
 let g:quickrun_config["watchdogs_checker/_"] = {
@@ -283,7 +306,7 @@ let g:quickrun_config["php/watchdogs_checker"] = {
 \ "errorformat": "%m\ in\ %f\ on\ line\ %l",
 \}
 
-" vim-markdown-quote-syntax 関連
+" vim-markdown-quote-syntax
 let g:markdown_quote_syntax_filetypes = {
 \ "css" : {
 \   "start" : "css",
@@ -293,12 +316,47 @@ let g:markdown_quote_syntax_filetypes = {
 \ },
 \}
 
-" parenmatch関連
+" parenmatch
 let g:loaded_matchparen = 1     " matchparenを無効にする
 
-" sky-color-clock.vim関連
+" sky-color-clock.vim
 let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
+
+" vim-lsp
+let g:lsp_signs_enabled = 1         " enable signs
+let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+
+let g:lsp_signs_error = {"text": "✗"}
+let g:lsp_signs_warning = {"text": "‼"}
+
+if has("win32") || has("win64")
+  if isdirectory(expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528"))
+    autocmd User lsp_setup call lsp#register_server({
+    \ "name": "eclipse.jdt.ls",
+    \ "cmd": {server_info->[
+    \   join([
+    \     "java",
+    \     "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044",
+    \     "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+    \     "-Dosgi.bundles.defaultStartLevel=4",
+    \     "-Declipse.product=org.eclipse.jdt.ls.core.product",
+    \     "-Dlog.protocol=true",
+    \     "-Dlog.level=ALL",
+    \     "-noverify",
+    \     "-Xmx1G",
+    \     "-jar",
+    \     expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528/plugins/org.eclipse.equinox.launcher.win32.win32.x86_64_1.1.900.v20180922-1751.jar"),
+    \     "-configuration",
+    \     expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528/config_win"),
+    \     "-data",
+    \     expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528/jdt-data")
+    \   ])
+    \ ]},
+    \ "whitelist": ["java"],
+    \ })
+  endif
+endif
 
 "-----------------------------------
 " ステータスラインの設定
@@ -548,6 +606,7 @@ function! AnsanlomsFunctions()
       let l:ctags_cmd = "ctags --languages=PHP --php-types=c+f+d --langmap=PHP:.php.inc.volt --output-format=e-ctags -R -f " . l:path . "/tags " . l:path
     endif
 
+    echo l:ctags_cmd
     let l:job_ctags = job_start(l:ctags_cmd, {})
   endfunction
 
@@ -816,6 +875,11 @@ augroup json-setting
 
   " プラグイン読み込み
   autocmd FileType json packadd vim-json
+
+  " フォーマット指定
+  if executable("python")
+    autocmd FileType json setlocal formatprg=python\ -m\ json.tool
+  endif
 augroup END
 
 "-----------------------------------
@@ -843,10 +907,10 @@ augroup remove-dust
   autocmd BufWritePre * call s:remove_dust()
 
   function! s:remove_dust()
-    let cursor = getpos(".")
+    let l:cursor = getpos(".")
     %s/\s\+$//ge
     call setpos(".", cursor)
-    unlet cursor
+    unlet l:cursor
   endfunction
 augroup END
 
@@ -863,32 +927,6 @@ augroup vimrc-auto-mkdir
     endif
   endfunction
 augroup END
-
-" If starting gvim && arguments were given
-" (assuming double-click on file explorer)
-if has("gui_running") && argc()
-    let s:running_vim_list = filter(
-    \   split(serverlist(), "\n"),
-    \   "v:val !=? v:servername")
-    let s:arg_list = []
-    " If one or more Vim instances are running
-    if !empty(s:running_vim_list)
-        " Open given files in running Vim and exit.
-        for arg in argv()
-          if match(arg, " ")
-            call add(s:arg_list, "\"" . arg  . "\"")
-          else
-            call add(s:arg_list, arg)
-          endif
-        endfor
-        silent execute "!start gvim"
-        \   "--servername" s:running_vim_list[0]
-        \   "--remote-tab-silent" join(s:arg_list, ' ')
-        qa!
-    endif
-    unlet s:running_vim_list
-    unlet s:arg_list
-endif
 
 " バックアップファイルとスワップファイル設定
 if isdirectory(expand("~/.vim/backup"))
@@ -970,11 +1008,6 @@ endif
 "-----------------------------------
 " 表示の設定
 "-----------------------------------
-
-" renderoptions
-if has("win32") || has("win64")
-  set rop=type:directx,renmode:5
-endif
 
 " 空白文字の表示
 " とりあえずTAB/行末スペース/省略文字(右)/省略文字(左)/nbsp
