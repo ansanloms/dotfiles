@@ -162,7 +162,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/airblade/vim-gitgutter.git")
   call minpac#add("https://github.com/tyru/open-browser.vim.git")
   call minpac#add("https://github.com/thinca/vim-quickrun.git")
-  call minpac#add("https://github.com/osyo-manga/vim-watchdogs.git")
+  "call minpac#add("https://github.com/osyo-manga/vim-watchdogs.git")
   call minpac#add("https://github.com/rcmdnk/vim-markdown.git", {"type": "opt"})
   call minpac#add("https://github.com/joker1007/vim-markdown-quote-syntax.git")
   call minpac#add("https://github.com/vim-scripts/sh.vim--Cla.git", {"type": "opt"})
@@ -171,9 +171,6 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git")
   call minpac#add("https://github.com/mattn/emmet-vim.git")
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-  "if executable("composer")
-  "  call minpac#add("https://github.com/phpactor/phpactor.git", {"type": "opt", "do": {-> system("composer install")}})
-  "endif
   call minpac#add("https://github.com/othree/yajs.vim", {"type": "opt"})
   call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
   call minpac#add("https://github.com/maxmellon/vim-jsx-pretty", {"type": "opt"})
@@ -181,7 +178,12 @@ if exists("*minpac#init")
 
   call minpac#add("https://github.com/prabirshrestha/async.vim.git")
   call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
+
+  if executable("composer")
+    call minpac#add("https://github.com/felixfbecker/php-language-server.git", {"type": "opt", "do": {-> system("composer install && composer run-script parse-stubs")}})
+  endif
 endif
+
 
 " Align
 let g:Align_xstrlen = 3 " 幅広文字に対応する
@@ -265,46 +267,46 @@ if executable("pandoc")
   \}
 endif
 
-" watchdogs
-let g:watchdogs_check_BufWritePost_enable = 1       " 書き込み後にシンタックスチェックを行う
-let g:watchdogs_check_CursorHold_enable = 1         " 一定時間キー入力がなかった場合にシンタックスチェックを行う
-let g:quickrun_config["watchdogs_checker/_"] = {
-\ "runner": "job",
-\}
-
-" watchdogs - java
-let g:quickrun_config["java/watchdogs_checker"] = {
-\ "command": "javac",
-\ "cmdopt": join([
-\   "-J-Dfile.encoding=UTF8",
-\   "-Xlint:all",
-\   "-deprecation",
-\ ]),
-\ "exec": "%c %o %S",
-\ "errorformat": "%A%f:%l: %m,%-Z%p^,%+C%.%#,%-G%.%#",
-\}
-
-" watchdogs 設定 - javascript
-if executable("eslint")
-  let g:quickrun_config["javascript/watchdogs_checker"] = {
-  \ "type" : "watchdogs_checker/eslint",
-  \}
-endif
-
-" watchdogs - php
-let g:quickrun_config["php/watchdogs_checker"] = {
-\ "command": "php",
-\ "cmdopt": join([
-\   "-l",
-\   "-d error_reporting=E_ALL",
-\   "-d display_errors=1",
-\   "-d display_startup_errors=1",
-\   "-d log_errors=0",
-\   "-d xdebug.cli_color=0",
-\ ]),
-\ "exec": "%c %o %s:p",
-\ "errorformat": "%m\ in\ %f\ on\ line\ %l",
-\}
+"" watchdogs
+"let g:watchdogs_check_BufWritePost_enable = 1       " 書き込み後にシンタックスチェックを行う
+"let g:watchdogs_check_CursorHold_enable = 1         " 一定時間キー入力がなかった場合にシンタックスチェックを行う
+"let g:quickrun_config["watchdogs_checker/_"] = {
+"\ "runner": "job",
+"\}
+"
+"" watchdogs - java
+"let g:quickrun_config["java/watchdogs_checker"] = {
+"\ "command": "javac",
+"\ "cmdopt": join([
+"\   "-J-Dfile.encoding=UTF8",
+"\   "-Xlint:all",
+"\   "-deprecation",
+"\ ]),
+"\ "exec": "%c %o %S",
+"\ "errorformat": "%A%f:%l: %m,%-Z%p^,%+C%.%#,%-G%.%#",
+"\}
+"
+"" watchdogs 設定 - javascript
+"if executable("eslint")
+"  let g:quickrun_config["javascript/watchdogs_checker"] = {
+"  \ "type" : "watchdogs_checker/eslint",
+"  \}
+"endif
+"
+"" watchdogs - php
+"let g:quickrun_config["php/watchdogs_checker"] = {
+"\ "command": "php",
+"\ "cmdopt": join([
+"\   "-l",
+"\   "-d error_reporting=E_ALL",
+"\   "-d display_errors=1",
+"\   "-d display_startup_errors=1",
+"\   "-d log_errors=0",
+"\   "-d xdebug.cli_color=0",
+"\ ]),
+"\ "exec": "%c %o %s:p",
+"\ "errorformat": "%m\ in\ %f\ on\ line\ %l",
+"\}
 
 " vim-markdown-quote-syntax
 let g:markdown_quote_syntax_filetypes = {
@@ -324,39 +326,52 @@ let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォ
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 " vim-lsp
-let g:lsp_signs_enabled = 1         " enable signs
+let g:lsp_signs_enabled = 1           " enable signs
+let g:lsp_diagnostics_enabled = 1
 let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
 
 let g:lsp_signs_error = {"text": "✗"}
 let g:lsp_signs_warning = {"text": "‼"}
 
-if has("win32") || has("win64")
-  if isdirectory(expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528"))
-    autocmd User lsp_setup call lsp#register_server({
-    \ "name": "eclipse.jdt.ls",
-    \ "cmd": {server_info->[
-    \   join([
-    \     "java",
-    \     "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044",
-    \     "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-    \     "-Dosgi.bundles.defaultStartLevel=4",
-    \     "-Declipse.product=org.eclipse.jdt.ls.core.product",
-    \     "-Dlog.protocol=true",
-    \     "-Dlog.level=ALL",
-    \     "-noverify",
-    \     "-Xmx1G",
-    \     "-jar",
-    \     expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528/plugins/org.eclipse.equinox.launcher.win32.win32.x86_64_1.1.900.v20180922-1751.jar"),
-    \     "-configuration",
-    \     expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528/config_win"),
-    \     "-data",
-    \     expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528/jdt-data")
-    \   ])
-    \ ]},
-    \ "whitelist": ["java"],
-    \ })
-  endif
+let g:lsp_log_verbose = 1
+let g:lsp_log_file = expand("/logs/vim-lsp.log")
+
+" php
+if isdirectory(expand("~/.vim/pack/minpac/opt/php-language-server"))
+  autocmd User lsp_setup call lsp#register_server({
+  \ "name"      : "php-language-server",
+  \ "cmd"       : {server_info->["php", expand("~/.vim/pack/minpac/opt/php-language-server/bin/php-language-server.php")]},
+  \ "whitelist" : ["php"],
+  \ })
 endif
+
+"if has("win32") || has("win64")
+"  if isdirectory(expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528"))
+"    autocmd User lsp_setup call lsp#register_server({
+"    \ "name": "eclipse.jdt.ls",
+"    \ "cmd": {server_info->[
+"    \   join([
+"    \     "java",
+"    \     "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044",
+"    \     "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+"    \     "-Dosgi.bundles.defaultStartLevel=4",
+"    \     "-Declipse.product=org.eclipse.jdt.ls.core.product",
+"    \     "-Dlog.protocol=true",
+"    \     "-Dlog.level=ALL",
+"    \     "-noverify",
+"    \     "-Xmx1G",
+"    \     "-jar",
+"    \     expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528/plugins/org.eclipse.equinox.launcher.win32.win32.x86_64_1.1.900.v20180922-1751.jar"),
+"    \     "-configuration",
+"    \     expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528/config_win"),
+"    \     "-data",
+"    \     expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528/jdt-data")
+"    \   ])
+"    \ ]},
+"    \ "whitelist": ["java"],
+"    \ })
+"  endif
+"endif
 
 "-----------------------------------
 " ステータスラインの設定
