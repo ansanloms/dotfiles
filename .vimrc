@@ -397,7 +397,7 @@ endfunction
 
 " モード取得
 function! StatuslineMode()
-  let a:mode_list = {
+  let mode_list = {
   \ "n":       "NORMAL"
   \ ,"i":      "INSERT"
   \ ,"R":      "REPLACE"
@@ -411,12 +411,12 @@ function! StatuslineMode()
   \ ,"t":      "TERMINAL"
   \ ,"?":      "?"
   \}
-  let a:current_mode = mode()
-  let a:paste_mode   = (&paste) ? "(PASTE)" : ""
-  if has_key(a:mode_list, a:current_mode)
-    return a:mode_list[a:current_mode] . a:paste_mode
+  let current_mode = mode()
+  let paste_mode   = (&paste) ? "(PASTE)" : ""
+  if has_key(mode_list, current_mode)
+    return mode_list[current_mode] . paste_mode
   endif
-  return a:current_mode.a:paste_mode . "?"
+  return current_mode.paste_mode . "?"
 endfunction
 
 set statusline=[%{StatuslineMode()}]                                                    " モード表示
