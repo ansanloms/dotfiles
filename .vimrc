@@ -27,6 +27,7 @@ if has("vim_starting")
   \ ,"~/.vim/view"
   \ ,"~/.vim/undo"
   \ ,"~/.vim/pack"
+  \ ,"~/.vim/logs"
   \]
     if !isdirectory(expand(dir))
       call mkdir(iconv(expand(dir), &encoding, &termencoding), "p")
@@ -162,28 +163,22 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/airblade/vim-gitgutter.git")
   call minpac#add("https://github.com/tyru/open-browser.vim.git")
   call minpac#add("https://github.com/thinca/vim-quickrun.git")
-  "call minpac#add("https://github.com/osyo-manga/vim-watchdogs.git")
   call minpac#add("https://github.com/rcmdnk/vim-markdown.git", {"type": "opt"})
-  call minpac#add("https://github.com/joker1007/vim-markdown-quote-syntax.git")
   call minpac#add("https://github.com/vim-scripts/sh.vim--Cla.git", {"type": "opt"})
   call minpac#add("https://github.com/elzr/vim-json.git", {"type": "opt"})
   call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
   call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git")
   call minpac#add("https://github.com/mattn/emmet-vim.git")
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-  call minpac#add("https://github.com/othree/yajs.vim", {"type": "opt"})
   call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
+  call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
   call minpac#add("https://github.com/maxmellon/vim-jsx-pretty", {"type": "opt"})
-  call minpac#add("https://github.com/leafgarland/typescript-vim.git")
 
   call minpac#add("https://github.com/prabirshrestha/async.vim.git")
   call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
 
-  if executable("composer")
-    call minpac#add("https://github.com/felixfbecker/php-language-server.git", {"type": "opt", "do": {-> system("composer install && composer run-script parse-stubs")}})
-  endif
+  call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git")
 endif
-
 
 " Align
 let g:Align_xstrlen = 3 " 幅広文字に対応する
@@ -308,16 +303,6 @@ endif
 "\ "errorformat": "%m\ in\ %f\ on\ line\ %l",
 "\}
 
-" vim-markdown-quote-syntax
-let g:markdown_quote_syntax_filetypes = {
-\ "css" : {
-\   "start" : "css",
-\ },
-\ "php" : {
-\   "start" : "php",
-\ },
-\}
-
 " parenmatch
 let g:loaded_matchparen = 1     " matchparenを無効にする
 
@@ -334,44 +319,10 @@ let g:lsp_signs_error = {"text": "✗"}
 let g:lsp_signs_warning = {"text": "‼"}
 
 let g:lsp_log_verbose = 1
-let g:lsp_log_file = expand("/logs/vim-lsp.log")
+let g:lsp_log_file = expand("~/.vim/logs/vim-lsp.log")
 
-" php
-if isdirectory(expand("~/.vim/pack/minpac/opt/php-language-server"))
-  autocmd User lsp_setup call lsp#register_server({
-  \ "name"      : "php-language-server",
-  \ "cmd"       : {server_info->["php", expand("~/.vim/pack/minpac/opt/php-language-server/bin/php-language-server.php")]},
-  \ "whitelist" : ["php"],
-  \ })
-endif
-
-"if has("win32") || has("win64")
-"  if isdirectory(expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528"))
-"    autocmd User lsp_setup call lsp#register_server({
-"    \ "name": "eclipse.jdt.ls",
-"    \ "cmd": {server_info->[
-"    \   join([
-"    \     "java",
-"    \     "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044",
-"    \     "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-"    \     "-Dosgi.bundles.defaultStartLevel=4",
-"    \     "-Declipse.product=org.eclipse.jdt.ls.core.product",
-"    \     "-Dlog.protocol=true",
-"    \     "-Dlog.level=ALL",
-"    \     "-noverify",
-"    \     "-Xmx1G",
-"    \     "-jar",
-"    \     expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528/plugins/org.eclipse.equinox.launcher.win32.win32.x86_64_1.1.900.v20180922-1751.jar"),
-"    \     "-configuration",
-"    \     expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528/config_win"),
-"    \     "-data",
-"    \     expand("~/scoop/apps/eclipse-jdt-language-server/0.31.0-201901170528/jdt-data")
-"    \   ])
-"    \ ]},
-"    \ "whitelist": ["java"],
-"    \ })
-"  endif
-"endif
+packadd async.vim
+packadd vim-lsp
 
 "-----------------------------------
 " ステータスラインの設定
@@ -533,33 +484,8 @@ set completeopt=menuone
 " | tmap / tnoremap | -      | -      | @        | -              | -      | -    | -        |
 " +-----------------+--------+--------+----------+----------------+--------+------+----------+
 
-" Leaderの設定
-let g:mapleader = ","
-
-" 検索などで飛んだらそこを真ん中に
-nnoremap n nzz
-nnoremap N Nzz
-nnoremap * *zz
-nnoremap # #zz
-nnoremap g* g*zz
-nnoremap G Gzz
-
-" 危険なコマンドは使わせない
-nnoremap ZZ <Nop>
-nnoremap ZQ <Nop>
-
-" 検索のハイライト削除
-nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
-
-" very magic
-nnoremap / /\v
-
-" undo-branche
-nnoremap u g-
-nnoremap <C-r> g+
-
-" バッファ
-nnoremap <Leader>b :<C-u>ls<CR>:<C-u>buf<Space>
+" 共通keymap
+exec "source " . expand("~/.vimrc.keymap")
 
 " CtrlPLauncher
 nnoremap <C-e> :<C-u>CtrlPLauncher<CR>
@@ -692,6 +618,51 @@ augroup quickfix-setting
 augroup END
 
 "-----------------------------------
+" Javaの設定
+"-----------------------------------
+
+function! SearchProjectRoot(target_file)
+endfunction
+
+augroup java-setting
+  autocmd!
+
+  " 拡張子設定
+  autocmd BufNewFile,BufRead *.{java} setlocal filetype=java
+
+  " インデントセット
+  autocmd FileType java setlocal shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
+
+  if (has("win32") || has("win64")) && isdirectory(expand("~/scoop/apps/eclipse-jdt-language-server/0.32.0-201901231649"))
+    autocmd User lsp_setup call lsp#register_server({
+    \ "name": "eclipse.jdt.ls",
+    \ "cmd": {server_info->[
+    \   "java",
+    \   "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+    \   "-Dosgi.bundles.defaultStartLevel=4",
+    \   "-Declipse.product=org.eclipse.jdt.ls.core.product",
+    \   "-Dlog.level=ALL",
+    \   "-noverify",
+    \   "-Dfile.encoding=UTF-8",
+    \   "-Xmx1G",
+    \   "-jar",
+    \   expand("~/scoop/apps/eclipse-jdt-language-server/0.32.0-201901231649/plugins/org.eclipse.equinox.launcher_1.5.200.v20180922-1751.jar"),
+    \   "-configuration",
+    \   expand("~/scoop/apps/eclipse-jdt-language-server/0.32.0-201901231649/config_win"),
+    \   "-data",
+    \   expand("~/scoop/apps/eclipse-jdt-language-server/0.32.0-201901231649/workspace")
+    \ ]},
+    \ "root_uri": {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), "settings.gradle"))},
+    \ "whitelist": ["java"],
+    \})
+
+    call lsp#enable()
+    autocmd FileType java setlocal omnifunc=lsp#complete
+    autocmd FileType java nnoremap <c-]> :<C-u>LspDefinition<CR>
+  endif
+augroup END
+
+"-----------------------------------
 " JavaScriptの設定
 "-----------------------------------
 
@@ -705,9 +676,38 @@ augroup javascript-setting
   autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
-  autocmd FileType javascript packadd yajs
   autocmd FileType javascript packadd vim-javascript
   autocmd FileType javascript packadd vim-jsx-pretty
+augroup END
+
+"-----------------------------------
+" TypeScriptの設定
+"-----------------------------------
+
+augroup typescript-setting
+  autocmd!
+
+  " 拡張子設定
+  autocmd BufNewFile,BufRead *.{ts,tsx} setlocal filetype=typescript
+
+  " インデントセット
+  autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+
+  " プラグイン読み込み
+  autocmd FileType typescript packadd vim-typescript
+  autocmd FileType typescript packadd vim-jsx-pretty
+
+  if executable("typescript-language-server")
+    autocmd User lsp_setup call lsp#register_server({
+    \ "name": "typescript-language-server",
+    \ "cmd": {server_info->[&shell, &shellcmdflag, "typescript-language-server --stdio"]},
+    \ "root_uri": {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), "tsconfig.json"))},
+    \ "whitelist": ["typescript", "typescript.tsx"],
+    \})
+
+    call lsp#enable()
+    autocmd FileType typescript setlocal omnifunc=lsp#complete
+  endif
 augroup END
 
 "-----------------------------------
@@ -753,12 +753,6 @@ augroup php-setting
 
   " ハイライト行指定
   autocmd FileType php syntax sync minlines=300 maxlines=500
-
-  " プラグイン読み込み
-  "autocmd FileType php packadd phpactor
-
-  " 補完設定
-  "autocmd FileType php setlocal omnifunc=phpactor#Complete
 augroup END
 
 "-----------------------------------
@@ -856,7 +850,7 @@ augroup html-setting
   autocmd!
 
   " インデントセット
-  autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
+  autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
 "-----------------------------------
@@ -867,7 +861,7 @@ augroup xml-setting
   autocmd!
 
   " インデントセット
-  autocmd FileType xml setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
+  autocmd FileType xml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " フォーマット指定
   if executable("xmllint")
@@ -887,6 +881,9 @@ let g:vim_json_syntax_conceal = 0
 
 augroup json-setting
   autocmd!
+
+  " インデントセット
+  autocmd FileType json setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 
   " プラグイン読み込み
   autocmd FileType json packadd vim-json
