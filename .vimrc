@@ -656,7 +656,6 @@ augroup java-setting
     \ "whitelist": ["java"],
     \})
 
-    call lsp#enable()
     autocmd FileType java setlocal omnifunc=lsp#complete
     autocmd FileType java nnoremap <c-]> :<C-u>LspDefinition<CR>
   endif
@@ -694,7 +693,7 @@ augroup typescript-setting
   autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
-  autocmd FileType typescript packadd vim-typescript
+  autocmd FileType typescript packadd typescript-vim
   autocmd FileType typescript packadd vim-jsx-pretty
 
   if executable("typescript-language-server")
@@ -705,7 +704,6 @@ augroup typescript-setting
     \ "whitelist": ["typescript", "typescript.tsx"],
     \})
 
-    call lsp#enable()
     autocmd FileType typescript setlocal omnifunc=lsp#complete
   endif
 augroup END
