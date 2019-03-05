@@ -1,0 +1,7 @@
+scriptencoding utf-8
+
+" 共通keymap
+exec "source " . expand("~/.vimrc.keymap")
+
+" タグジャンプ: 定義元
+nnoremap <C-]> :<C-u:action GotoImplementation<CR>
