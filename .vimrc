@@ -321,6 +321,9 @@ let g:lsp_signs_warning = {"text": "‼"}
 let g:lsp_log_verbose = 1
 let g:lsp_log_file = expand("~/.vim/logs/vim-lsp.log")
 
+" for asyncomplete.vim log
+let g:asyncomplete_log_file = expand("~/.vim/asyncomplete.log")
+
 packadd async.vim
 packadd vim-lsp
 
@@ -657,7 +660,7 @@ augroup java-setting
     \})
 
     autocmd FileType java setlocal omnifunc=lsp#complete
-    autocmd FileType java nnoremap <c-]> :<C-u>LspDefinition<CR>
+    autocmd FileType java nnoremap <c-]> :<c-u>call lsp#ui#vim#definition()<cr>
   endif
 augroup END
 
@@ -711,22 +714,6 @@ augroup END
 "-----------------------------------
 " PHPの設定
 "-----------------------------------
-
-" SQLをハイライト表示
-"let g:php_sql_query = 0
-
-" HTMLをハイライト表示
-"let g:php_htmlInStrings = 0
-
-" Baselibメソッドのハイライト表示
-"let g:php_baselib = 0
-
-" ショートタグを除外する
-"let g:php_noShortTags = 1
-
-" ] や ) の対応エラーをハイライトする
-"let g:php_parent_error_close = 0
-"let g:php_parent_error_open = 0
 
 " case文対応
 let g:PHP_vintage_case_default_indent = 1
@@ -881,7 +868,7 @@ augroup json-setting
   autocmd!
 
   " インデントセット
-  autocmd FileType json setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
+  autocmd FileType json setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
   autocmd FileType json packadd vim-json
