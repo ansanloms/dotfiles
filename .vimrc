@@ -262,47 +262,6 @@ if executable("pandoc")
   \}
 endif
 
-"" watchdogs
-"let g:watchdogs_check_BufWritePost_enable = 1       " 書き込み後にシンタックスチェックを行う
-"let g:watchdogs_check_CursorHold_enable = 1         " 一定時間キー入力がなかった場合にシンタックスチェックを行う
-"let g:quickrun_config["watchdogs_checker/_"] = {
-"\ "runner": "job",
-"\}
-"
-"" watchdogs - java
-"let g:quickrun_config["java/watchdogs_checker"] = {
-"\ "command": "javac",
-"\ "cmdopt": join([
-"\   "-J-Dfile.encoding=UTF8",
-"\   "-Xlint:all",
-"\   "-deprecation",
-"\ ]),
-"\ "exec": "%c %o %S",
-"\ "errorformat": "%A%f:%l: %m,%-Z%p^,%+C%.%#,%-G%.%#",
-"\}
-"
-"" watchdogs 設定 - javascript
-"if executable("eslint")
-"  let g:quickrun_config["javascript/watchdogs_checker"] = {
-"  \ "type" : "watchdogs_checker/eslint",
-"  \}
-"endif
-"
-"" watchdogs - php
-"let g:quickrun_config["php/watchdogs_checker"] = {
-"\ "command": "php",
-"\ "cmdopt": join([
-"\   "-l",
-"\   "-d error_reporting=E_ALL",
-"\   "-d display_errors=1",
-"\   "-d display_startup_errors=1",
-"\   "-d log_errors=0",
-"\   "-d xdebug.cli_color=0",
-"\ ]),
-"\ "exec": "%c %o %s:p",
-"\ "errorformat": "%m\ in\ %f\ on\ line\ %l",
-"\}
-
 " parenmatch
 let g:loaded_matchparen = 1     " matchparenを無効にする
 
@@ -660,7 +619,7 @@ augroup java-setting
     \})
 
     autocmd FileType java setlocal omnifunc=lsp#complete
-    autocmd FileType java nnoremap <c-]> :<c-u>call lsp#ui#vim#definition()<cr>
+    autocmd FileType java nnoremap <c-]> :<c-u>tabnew \| :<c-u>call lsp#ui#vim#definition()<CR>
   endif
 augroup END
 
@@ -973,9 +932,7 @@ if has("gui_running")
   if has("vim_starting")
     " フォント設定
     if has("win32") || has("win64")
-      "set guifont=Cica:h12
-      "set printfont=Cica:h8
-      set guifont=BDF_UM+_OUTLINE:h10
+      set guifont=PixelMplus12:h12:cSHIFTJIS:qDRAFT
       set renderoptions=type:directx,gamma:1.0,contrast:0,level:0.0,geom:1,renmode:5,taamode:1
     endif
 
