@@ -26,6 +26,7 @@ if has("vim_starting")
   \ ,"~/.vim/backup"
   \ ,"~/.vim/view"
   \ ,"~/.vim/undo"
+  \ ,"~/.vim/syntax"
   \ ,"~/.vim/pack"
   \ ,"~/.vim/logs"
   \]
@@ -154,6 +155,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/k-takata/minpac.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
   call minpac#add("https://github.com/morhetz/gruvbox.git")
+  call minpac#add("https://github.com/pasela/edark.vim.git")
   call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
   call minpac#add("https://github.com/todesking/vim-align.git", {"branch": "xstrlen-fix"})    " 本家にはカーソルがファイル末尾に飛ぶバグがあるので修正版を使用する
   call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
@@ -173,25 +175,24 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
   call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
   call minpac#add("https://github.com/maxmellon/vim-jsx-pretty", {"type": "opt"})
-
   call minpac#add("https://github.com/prabirshrestha/async.vim.git")
   call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
-
-  call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git")
+  call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
+  call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
 endif
 
 " Align
 let g:Align_xstrlen = 3 " 幅広文字に対応する
 
 " CtrlP
-let g:ctrlp_use_caching = 1                                                       " キャッシュを使用する
-let g:ctrlp_cache_dir = $HOME."/.cache/ctrlp"                                     " キャッシュディレクトリ
-let g:ctrlp_clear_cache_on_exit = 0                                               " 終了時にキャッシュを削除しない
-let g:ctrlp_lazy_update = 1                                                       " 遅延再描画
-let g:ctrlp_max_height = 20                                                       " 20行表示
-let g:ctrlp_open_new_file = 1                                                     " ファイルの新規作成時は別タブで開く
+let g:ctrlp_use_caching = 1                                 " キャッシュを使用する
+let g:ctrlp_cache_dir = $HOME."/.cache/ctrlp"               " キャッシュディレクトリ
+let g:ctrlp_clear_cache_on_exit = 0                         " 終了時にキャッシュを削除しない
+let g:ctrlp_lazy_update = 1                                 " 遅延再描画
+let g:ctrlp_max_height = 20                                 " 20行表示
+let g:ctrlp_open_new_file = 1                               " ファイルの新規作成時は別タブで開く
 let g:ctrlp_launcher_file_list = ["~/.ctrlp-launcher", "~/.ctrlp-launcher-work", "~/.ctrlp-launcher-gcp"]  " ランチャーで読み込むファイルパス
-let g:ctrlp_tjump_only_silent = 0                                                 " タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
+let g:ctrlp_tjump_only_silent = 0                           " タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
 
 " quickrun
 let g:quickrun_config = {}
@@ -480,7 +481,7 @@ command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 
 " memoを設置するディレクトリ
 if has("win32") || has("win64")
-  let g:memo_base_dir = "c:/dev/work/memo"
+  let g:ansanloms_memo_base_dir = expand("c:/dev/work/memo")
 endif
 
 " 自分用関数群
@@ -533,7 +534,7 @@ function! AnsanlomsFunctions()
 
   " メモ関連: memoを設置するディレクトリを取得
   function! l:func.memo.getBaseDir() dict
-    let l:memo_base_dir = get(g:, "memo_base_dir", $HOME . "/memo")
+    let l:memo_base_dir = get(g:, "ansanloms_memo_base_dir", expand($HOME . "/memo"))
 
     if !isdirectory(expand(l:memo_base_dir))
       call mkdir(l:memo_base_dir, "p")
@@ -592,8 +593,18 @@ augroup java-setting
   " 拡張子設定
   autocmd BufNewFile,BufRead *.{java} setlocal filetype=java
 
+  " cssの取得
+  if !filereadable(expand("~/.vim/syntax/javaid.vim"))
+    call system("curl https://fleiner.com/vim/syntax/javaid.vim -o " . expand("~/.vim/syntax/javaid.vim"))
+  endif
+
+  let g:java_highlight_all = 1
+
   " インデントセット
   autocmd FileType java setlocal shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
+
+  " プラグイン読み込み
+  autocmd FileType java packadd vim-java
 
   if (has("win32") || has("win64")) && isdirectory(expand("~/scoop/apps/eclipse-jdt-language-server/0.32.0-201901231649"))
     autocmd User lsp_setup call lsp#register_server({
@@ -619,7 +630,7 @@ augroup java-setting
     \})
 
     autocmd FileType java setlocal omnifunc=lsp#complete
-    autocmd FileType java nnoremap <c-]> :<c-u>tabnew \| :<c-u>call lsp#ui#vim#definition()<CR>
+    autocmd FileType java nnoremap <silent> <c-]> :<c-u>LspDefinition<CR>
   endif
 augroup END
 
@@ -657,6 +668,7 @@ augroup typescript-setting
   " プラグイン読み込み
   autocmd FileType typescript packadd typescript-vim
   autocmd FileType typescript packadd vim-jsx-pretty
+  autocmd FileType typescript packadd vim-lsp-typescript
 
   if executable("typescript-language-server")
     autocmd User lsp_setup call lsp#register_server({
@@ -972,7 +984,7 @@ set listchars=tab:\|\ ,trail:_,extends:>,precedes:<,nbsp:%
 set number
 
 " 行可視化
-"set cursorline
+set cursorline
 
 " 列可視化
 "set cursorcolumn
@@ -1023,19 +1035,34 @@ try
   set background=dark
   set t_Co=256
 
-  " 太字にしない
-  let g:gruvbox_bold = 0
+  "" 太字にしない
+  "let g:gruvbox_bold = 0
 
-  " 斜体にしない
-  let g:gruvbox_italic = 0
+  "" 斜体にしない
+  "let g:gruvbox_italic = 0
 
-  " 下線を引かない
-  let g:gruvbox_undercur = 0
+  "" 下線を引かない
+  "let g:gruvbox_undercur = 0
 
-  " コントラスト
-  let g:gruvbox_contrast_dark = "hard"
-  let g:gruvbox_contrast_light = "hard"
+  "" コントラスト
+  "let g:gruvbox_contrast_dark = "hard"
+  "let g:gruvbox_contrast_light = "hard"
 
-  colorscheme gruvbox
+  "colorscheme gruvbox
+
+  " 行のハイライトを有効にする
+  let g:edark_current_line = 0
+
+  " IME on 時にカーソルのハイライトを有効にする
+  let g:edark_ime_cursor = 1
+
+  " Insert Mode 時のステータスラインのハイライトを有効にする。
+  let g:edark_insert_status_line = 1
+
+  colorscheme edark
+
+  highlight StatusLineTerm guifg=#2e3436 ctermfg=236 guibg=#babdb6 ctermbg=250 gui=none cterm=none
+  highlight StatusLineTermNC guifg=#2e3436 ctermfg=236 guibg=#888a85 ctermbg=102 gui=none cterm=none
 catch
 endtry
+
