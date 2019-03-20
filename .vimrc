@@ -175,8 +175,8 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
   call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
   call minpac#add("https://github.com/maxmellon/vim-jsx-pretty", {"type": "opt"})
-  call minpac#add("https://github.com/prabirshrestha/async.vim.git")
-  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
+  call minpac#add("https://github.com/prabirshrestha/async.vim.git", {"type": "opt"})
+  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git", {"type": "opt"})
   call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
 endif
@@ -186,7 +186,7 @@ let g:Align_xstrlen = 3 " 幅広文字に対応する
 
 " CtrlP
 let g:ctrlp_use_caching = 1                                 " キャッシュを使用する
-let g:ctrlp_cache_dir = $HOME."/.cache/ctrlp"               " キャッシュディレクトリ
+let g:ctrlp_cache_dir = expand("~/.cache/ctrlp")            " キャッシュディレクトリ
 let g:ctrlp_clear_cache_on_exit = 0                         " 終了時にキャッシュを削除しない
 let g:ctrlp_lazy_update = 1                                 " 遅延再描画
 let g:ctrlp_max_height = 20                                 " 20行表示
@@ -260,6 +260,19 @@ if executable("pandoc")
   \ "outputter": "null",
   \ "type": "markdown/pandoc",
   \ "exec": "pandoc %s --standalone --self-contained --toc-depth=6 --to=docx --highlight-style=zenburn --output=%s.docx"
+  \}
+endif
+
+" quickrun - mysql
+if executable("mysql")
+  let g:quickrun_config["sql"] = {
+  \ "type": "sql/mysql"
+  \}
+
+  let g:quickrun_config["sql/mysql"] = {
+  \ "command": "mysql",
+  \ "cmdopt": "--defaults-extra-file=" . expand("~/.mysql/local.conf"),
+  \ "exec": ["%c %o < %s"]
   \}
 endif
 
@@ -534,7 +547,7 @@ function! AnsanlomsFunctions()
 
   " メモ関連: memoを設置するディレクトリを取得
   function! l:func.memo.getBaseDir() dict
-    let l:memo_base_dir = get(g:, "ansanloms_memo_base_dir", expand($HOME . "/memo"))
+    let l:memo_base_dir = get(g:, "ansanloms_memo_base_dir", expand("~/memo"))
 
     if !isdirectory(expand(l:memo_base_dir))
       call mkdir(l:memo_base_dir, "p")
@@ -650,6 +663,18 @@ augroup javascript-setting
   " プラグイン読み込み
   autocmd FileType javascript packadd vim-javascript
   autocmd FileType javascript packadd vim-jsx-pretty
+
+  if executable("typescript-language-server")
+    autocmd User lsp_setup call lsp#register_server({
+    \ "name": "javascript support using typescript-language-server",
+    \ "cmd": {server_info->[&shell, &shellcmdflag, "typescript-language-server --stdio"]},
+    \ "root_uri":{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), "package.json"))},
+    \ "whitelist": ["javascript", "javascript.jsx"],
+    \})
+
+    autocmd FileType javascript setlocal omnifunc=lsp#complete
+    autocmd FileType javascript packadd typescript-vim
+  endif
 augroup END
 
 "-----------------------------------
@@ -666,7 +691,6 @@ augroup typescript-setting
   autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
-  autocmd FileType typescript packadd typescript-vim
   autocmd FileType typescript packadd vim-jsx-pretty
   autocmd FileType typescript packadd vim-lsp-typescript
 
@@ -674,11 +698,12 @@ augroup typescript-setting
     autocmd User lsp_setup call lsp#register_server({
     \ "name": "typescript-language-server",
     \ "cmd": {server_info->[&shell, &shellcmdflag, "typescript-language-server --stdio"]},
-    \ "root_uri": {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), "tsconfig.json"))},
+    \ "root_uri": {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), "package.json"))},
     \ "whitelist": ["typescript", "typescript.tsx"],
     \})
 
     autocmd FileType typescript setlocal omnifunc=lsp#complete
+    autocmd FileType typescript packadd typescript-vim
   endif
 augroup END
 
