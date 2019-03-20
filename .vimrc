@@ -606,7 +606,6 @@ augroup java-setting
   " 拡張子設定
   autocmd BufNewFile,BufRead *.{java} setlocal filetype=java
 
-  " cssの取得
   if !filereadable(expand("~/.vim/syntax/javaid.vim"))
     call system("curl https://fleiner.com/vim/syntax/javaid.vim -o " . expand("~/.vim/syntax/javaid.vim"))
   endif
