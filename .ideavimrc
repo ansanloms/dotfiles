@@ -1,7 +1,13 @@
 scriptencoding utf-8
 
+" 基本設定
+source ~/.vimrc.general
+
+" 検索の設定
+source ~/.vimrc.search
+
 " 共通keymap
-exec "source " . expand("~/.vimrc.keymap")
+source ~/.vimrc.keymap
 
 " タグジャンプ: 定義元
-nnoremap <C-]> :<C-u:action GotoImplementation<CR>
+nnoremap <C-]> :<C-u>:action GotoImplementation<CR>
