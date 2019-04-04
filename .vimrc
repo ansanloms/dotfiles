@@ -69,77 +69,7 @@ if filereadable(expand($VIMRUNTIME . "/defaults.vim"))
   source $VIMRUNTIME/defaults.vim
 endif
 
-" 読み込みディレクトリの追記
-set runtimepath^=~/.vim
-
-" パッケージディレクトリの追記
-set packpath^=~/.vim
-
-" viminfoの保存先を変更
-set viminfo+=n~/.vim/viminfo
-
-" コマンドの保存履歴数
-set history=1000
-
-" backspaceの設定
-" start:    ノーマルモードに移った後に挿入モードに入っても[Backspace]で自由に文字を削除できるようにする
-" eol:      行頭で[Backspace]を押したときに行の連結を可能にする
-" indent:   オートインデントモードのインデントも削除可能にする
-set backspace=start,eol,indent
-
-" C-vの矩形選択で行末より後ろもカーソルを置ける
-set virtualedit=block
-
-" クリップボード使用可能に設定
-set clipboard=unnamed
-
-" ヘルプ検索で日本語を優先
-set helplang=ja,en
-
-" カーソルを行頭行末で止まらないようにする
-set whichwrap=b,s,h,l,<,>,[,]
-
-" マウスは使わない
-set mouse=
-
-" バッファ有効
-set hidden
-
-" filler: vimdiffで埋め立てを行う
-" iwhite: vimdiffで空白を無視して比較する
-set diffopt=filler,iwhite
-
-" タグファイルの二分探索
-set tagbsearch
-
-" conceal処理の設定
-" 0: 通常通り表示(デフォルト)
-" 1: conceal対象のテキストは代理文字(初期設定はスペース)に置換される
-" 2: conceal対象のテキストは非表示になる
-" 3: conceal対象のテキストは完全に非表示
-if has("conceal")
-  set conceallevel=1
-  set concealcursor=
-endif
-
-" スペルチェック
-"set spell
-"set spelllang+=cjk
-
-" fold設定
-set foldmethod=syntax
-set foldlevel=1
-set foldnestmax=2
-set foldcolumn=2
-
-" 外部grepの設定
-if executable("grep")
-  set grepprg=grep\ -Hnd\ skip\ -r
-  set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
-endif
-
-" beep音を消す
-set belloff=all
+exec "source " . expand("~/.vimrc.general")
 
 "-----------------------------------
 " プラグイン設定
@@ -416,20 +346,7 @@ set softtabstop=4
 " 検索の設定
 "-----------------------------------
 
-" 大文字/小文字の区別なく検索する
-set ignorecase
-
-" 検索文字列に大文字が含まれている場合は区別して検索する
-set smartcase
-
-" 検索時に最後まで行ったら最初に戻る
-set wrapscan
-
-" インクリメンタルサーチを有効
-set incsearch
-
-" 検索結果をハイライト表示
-set hlsearch
+exec "source " . expand("~/.vimrc.search")
 
 "-----------------------------------
 " 補完の設定
