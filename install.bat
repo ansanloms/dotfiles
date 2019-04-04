@@ -23,6 +23,8 @@ if "%ELEVATED%" neq "yes" (
     mklink C:%HOMEPATH%\.ctrlp-launcher     %~d0%~p0.ctrlp-launcher
     mklink C:%HOMEPATH%\.nyagos             %~d0%~p0.nyagos
     mklink C:%HOMEPATH%\.ideavimrc          %~d0%~p0.ideavimrc
+    mklink C:%HOMEPATH%\.vimrc.general      %~d0%~p0.vimrc.general
+    mklink C:%HOMEPATH%\.vimrc.search       %~d0%~p0.vimrc.search
     mklink C:%HOMEPATH%\.vimrc.keymap       %~d0%~p0.vimrc.keymap
 
     goto exit1
