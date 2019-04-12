@@ -227,9 +227,6 @@ let g:lsp_log_file = expand("~/.vim/logs/vim-lsp.log")
 " for asyncomplete.vim log
 let g:asyncomplete_log_file = expand("~/.vim/asyncomplete.log")
 
-packadd async.vim
-packadd vim-lsp
-
 "-----------------------------------
 " ステータスラインの設定
 "-----------------------------------
@@ -536,6 +533,9 @@ augroup java-setting
   autocmd FileType java packadd vim-java
 
   if (has("win32") || has("win64")) && isdirectory(expand("~/scoop/apps/eclipse-jdt-language-server/0.32.0-201901231649"))
+    packadd async.vim
+    packadd vim-lsp
+
     autocmd User lsp_setup call lsp#register_server({
     \ "name": "eclipse.jdt.ls",
     \ "cmd": {server_info->[
@@ -581,6 +581,9 @@ augroup javascript-setting
   autocmd FileType javascript packadd vim-jsx-pretty
 
   if executable("typescript-language-server")
+    packadd async.vim
+    packadd vim-lsp
+
     autocmd User lsp_setup call lsp#register_server({
     \ "name": "javascript support using typescript-language-server",
     \ "cmd": {server_info->[&shell, &shellcmdflag, "typescript-language-server --stdio"]},
@@ -611,6 +614,9 @@ augroup typescript-setting
   autocmd FileType typescript packadd vim-lsp-typescript
 
   if executable("typescript-language-server")
+    packadd async.vim
+    packadd vim-lsp
+
     autocmd User lsp_setup call lsp#register_server({
     \ "name": "typescript-language-server",
     \ "cmd": {server_info->[&shell, &shellcmdflag, "typescript-language-server --stdio"]},
