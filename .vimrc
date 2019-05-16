@@ -109,6 +109,8 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/prabirshrestha/vim-lsp.git", {"type": "opt"})
   call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
+  call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
+  call minpac#add("https://github.com/vim-scripts/groovyindent.git")
 endif
 
 " Align
@@ -767,8 +769,8 @@ augroup xml-setting
   autocmd FileType xml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " フォーマット指定
-  if executable("xmllint")
-    autocmd FileType xml setlocal formatprg=xmllint\ --format\ -
+  if executable("python")
+    autocmd FileType xml setlocal formatprg=python\ -c\ 'import\ sys;import\ xml.dom.minidom;s=sys.stdin.read();print(xml.dom.minidom.parseString(s).toprettyxml())'
   endif
 augroup END
 
