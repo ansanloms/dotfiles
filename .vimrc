@@ -395,11 +395,10 @@ vnoremap <c-]> :<C-u>CtrlPtjumpVisual<CR>
 " タグジャンプの際に新しいタブで開く
 "nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
 
-" プラグインを更新する
+" minpac
 command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update()
-
-" プラグインを削除する
 command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
+command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
 
 " 端末モード時に右クリックでクリップボードの内容をペースト
 "tnoremap <RightMouse> <C-w>"+
@@ -1014,4 +1013,3 @@ try
   highlight StatusLineTermNC guifg=#2e3436 ctermfg=236 guibg=#888a85 ctermbg=102 gui=none cterm=none
 catch
 endtry
-
