@@ -111,6 +111,8 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
   call minpac#add("https://github.com/vim-scripts/groovyindent.git")
+  call minpac#add("https://github.com/rakr/vim-one.git")
+  call minpac#add("https://github.com/cocopon/iceberg.vim.git")
 endif
 
 " Align
@@ -999,17 +1001,24 @@ try
   "colorscheme gruvbox
 
   " 行のハイライトを有効にする
-  let g:edark_current_line = 0
+  "let g:edark_current_line = 0
 
-  " IME on 時にカーソルのハイライトを有効にする
-  let g:edark_ime_cursor = 1
+  "" IME on 時にカーソルのハイライトを有効にする
+  "let g:edark_ime_cursor = 1
 
-  " Insert Mode 時のステータスラインのハイライトを有効にする。
-  let g:edark_insert_status_line = 1
+  "" Insert Mode 時のステータスラインのハイライトを有効にする。
+  "let g:edark_insert_status_line = 1
 
-  colorscheme edark
+  "colorscheme edark
 
-  highlight StatusLineTerm guifg=#2e3436 ctermfg=236 guibg=#babdb6 ctermbg=250 gui=none cterm=none
-  highlight StatusLineTermNC guifg=#2e3436 ctermfg=236 guibg=#888a85 ctermbg=102 gui=none cterm=none
+  "highlight StatusLineTerm guifg=#2e3436 ctermfg=236 guibg=#babdb6 ctermbg=250 gui=none cterm=none
+  "highlight StatusLineTermNC guifg=#2e3436 ctermfg=236 guibg=#888a85 ctermbg=102 gui=none cterm=none
+
+  "" 斜体にしない
+  "let g:one_allow_italics = 0
+
+  "colorscheme one
+
+  colorscheme iceberg
 catch
 endtry
