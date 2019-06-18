@@ -96,7 +96,8 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/tyru/open-browser.vim.git")
   call minpac#add("https://github.com/thinca/vim-quickrun.git")
   call minpac#add("https://github.com/rcmdnk/vim-markdown.git", {"type": "opt"})
-  call minpac#add("https://github.com/vim-scripts/sh.vim--Cla.git", {"type": "opt"})
+  call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
+  call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
   call minpac#add("https://github.com/elzr/vim-json.git", {"type": "opt"})
   call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
   call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git")
@@ -113,6 +114,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/vim-scripts/groovyindent.git")
   call minpac#add("https://github.com/rakr/vim-one.git")
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
+  call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
 endif
 
 " Align
@@ -712,11 +714,13 @@ augroup sh-setting
   autocmd FileType sh setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
 
   " プラグイン読み込み
-  autocmd FileType sh packadd sh.vim--Cla
+  autocmd FileType sh packadd Super-Shell-Indent
+  autocmd FileType sh packadd sh.vim
+  let g:sh_indent_case_labels=1
 augroup END
 
 "-----------------------------------
-" Vim scriptの設定
+" VimScriptの設定
 "-----------------------------------
 
 " \ を入力した際のインデント量
@@ -798,6 +802,17 @@ augroup json-setting
   if executable("python")
     autocmd FileType json setlocal formatprg=python\ -m\ json.tool
   endif
+augroup END
+
+"-----------------------------------
+" apacheの設定
+"-----------------------------------
+
+augroup apache-setting
+  autocmd!
+
+  " プラグイン読み込み
+  autocmd FileType apache packadd apachestyle
 augroup END
 
 "-----------------------------------
