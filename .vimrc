@@ -516,8 +516,7 @@ augroup END
 " Javaの設定
 "-----------------------------------
 
-function! SearchProjectRoot(target_file)
-endfunction
+let g:ansanloms_eclipse_workspace = expand("/dev/eclipse_workspace")
 
 augroup java-setting
   autocmd!
@@ -537,7 +536,7 @@ augroup java-setting
   " プラグイン読み込み
   autocmd FileType java packadd vim-java
 
-  if (has("win32") || has("win64")) && isdirectory(expand("~/scoop/apps/eclipse-jdt-language-server/0.32.0-201901231649"))
+  if (has("win32") || has("win64")) && isdirectory(expand("~/scoop/apps/eclipse-jdt-language-server/0.40.0"))
     packadd async.vim
     packadd vim-lsp
 
@@ -553,11 +552,11 @@ augroup java-setting
     \   "-Dfile.encoding=UTF-8",
     \   "-Xmx1G",
     \   "-jar",
-    \   expand("~/scoop/apps/eclipse-jdt-language-server/0.32.0-201901231649/plugins/org.eclipse.equinox.launcher_1.5.200.v20180922-1751.jar"),
+    \   expand("~/scoop/apps/eclipse-jdt-language-server/0.40.0/plugins/org.eclipse.equinox.launcher_1.5.400.v20190515-0925.jar"),
     \   "-configuration",
-    \   expand("~/scoop/apps/eclipse-jdt-language-server/0.32.0-201901231649/config_win"),
+    \   expand("~/scoop/apps/eclipse-jdt-language-server/0.40.0/config_win"),
     \   "-data",
-    \   expand("~/scoop/apps/eclipse-jdt-language-server/0.32.0-201901231649/workspace")
+    \   get(g:, "ansanloms_memo_base_dir", expand("~/workspace"))
     \ ]},
     \ "root_uri": {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), "settings.gradle"))},
     \ "whitelist": ["java"],
@@ -914,10 +913,10 @@ if has("gui_running")
     endif
 
     " 縦幅 デフォルトは24
-    set lines=40
+    set lines=60
 
     " 横幅 デフォルトは80
-    set columns=120
+    set columns=180
   endif
 
   " GUIオプション
