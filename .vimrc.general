@@ -57,10 +57,11 @@ endif
 "set spelllang+=cjk
 
 " fold設定
-set foldmethod=syntax
-set foldlevel=1
-set foldnestmax=2
-set foldcolumn=2
+"set foldmethod=syntax
+"set foldlevel=1
+"set foldnestmax=2
+"set foldcolumn=2
+set nofoldenable
 
 " 外部grepの設定
 if executable("grep")
@@ -70,3 +71,12 @@ endif
 
 " beep音を消す
 set belloff=all
+
+" 構文アイテムを検索する桁数の最大値
+set synmaxcol=600
+
+" 高速ターミナル接続を行う(スクロールが重くなる対策)
+set ttyfast
+
+" マクロやコマンドを実行する間、画面を再描画しない(スクロールが重くなる対策)
+set lazyredraw
