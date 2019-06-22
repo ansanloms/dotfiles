@@ -87,7 +87,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/morhetz/gruvbox.git")
   call minpac#add("https://github.com/pasela/edark.vim.git")
   call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
-  call minpac#add("https://github.com/todesking/vim-align.git", {"branch": "xstrlen-fix"})    " 本家にはカーソルがファイル末尾に飛ぶバグがあるので修正版を使用する
+  call minpac#add("https://github.com/junegunn/vim-easy-align.git")
   call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
   call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
   call minpac#add("https://github.com/ivalkeen/vim-ctrlp-tjump.git")
@@ -688,6 +688,12 @@ let g:vim_markdown_folding_disabled = 1
 
 " conceal設定
 let g:vim_markdown_conceal = 0
+
+let g:vim_markdown_liquid=1
+let g:vim_markdown_math=0
+let g:vim_markdown_frontmatter=1
+let g:vim_markdown_toml_frontmatter=1
+let g:vim_markdown_json_frontmatter=0
 
 augroup markdown-setting
   autocmd!
