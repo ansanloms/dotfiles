@@ -3,6 +3,7 @@
 
 # terminal
 terminal nyagos			tabnew | call term_start([$HOME . "/scoop/apps/nyagos/current/nyagos"], {"term_name": "NYAGOS", "term_finish": "close", "curwin": 1})
+terminal wsl			tabnew | call term_start(["wsl"], {"term_name": "Windows Subsystem for Linux", "term_finish": "close", "curwin": 1})
 terminal cmd			tabnew | call term_start(["cmd"], {"term_name": "cmd", "term_finish": "close", "curwin": 1})
 terminal powershell		tabnew | call term_start(["powershell"], {"term_name": "powershell", "term_finish": "close", "curwin": 1})
 

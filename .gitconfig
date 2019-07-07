@@ -25,3 +25,5 @@
 	pushinsteadof = https://github.com/
 [credential]
 	helper = manager
+[credential "helperselector"]
+	selected = manager

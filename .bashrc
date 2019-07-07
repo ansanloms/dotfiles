@@ -5,6 +5,7 @@ export MYSQL_PS1="(\u@\h) [\d]> "
 
 # LANG
 export LANG=ja_JP.utf8
+export PATH=$HOME/.nodebrew/current/bin:$PATH
 
 # User specific aliases and functions
 alias rm='rm -i'
