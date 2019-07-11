@@ -52,7 +52,14 @@ if has("gui_running") && argc()
     endfor
 
     " Open given files in running Vim and exit.
-    silent execute "!start gvim --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
+    if has("mac")
+      " mac
+      silent execute "!mvim --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
+    elseif has("win32") || has("win64")
+      " windows
+      silent execute "!start gvim --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
+    endif
+
     unlet s:arg_list
     qa!
   endif
