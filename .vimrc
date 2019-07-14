@@ -805,7 +805,7 @@ augroup json-setting
   autocmd!
 
   " インデントセット
-  autocmd FileType json setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+  autocmd FileType json setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 
   " プラグイン読み込み
   autocmd FileType json packadd vim-json
@@ -921,8 +921,7 @@ if has("gui_running")
   if has("vim_starting")
     " フォント設定
     if has("win32") || has("win64")
-      "set guifont=BDF_UM+_OUTLINE:h10:cSHIFTJIS:qDRAFT
-      set guifont=guifont=Cica:h16:cSHIFTJIS:qDRAFT
+      set guifont=Cica:h16:cSHIFTJIS:qDRAFT
       set renderoptions=type:directx,gamma:1.0,contrast:0,level:0.0,geom:1,renmode:5,taamode:1
     endif
 
