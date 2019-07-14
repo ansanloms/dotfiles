@@ -1,6 +1,7 @@
 # color
 PS1="\t [\u@\[\e[0;36m\]\h\[\e[00m\] \W]\$ "
 
+# mysql
 export MYSQL_PS1="(\u@\h) [\d]> "
 
 # LANG
