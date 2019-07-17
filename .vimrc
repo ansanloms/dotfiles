@@ -1014,40 +1014,6 @@ try
   set background=dark
   set t_Co=256
 
-  "" 太字にしない
-  "let g:gruvbox_bold = 0
-
-  "" 斜体にしない
-  "let g:gruvbox_italic = 0
-
-  "" 下線を引かない
-  "let g:gruvbox_undercur = 0
-
-  "" コントラスト
-  "let g:gruvbox_contrast_dark = "hard"
-  "let g:gruvbox_contrast_light = "hard"
-
-  "colorscheme gruvbox
-
-  " 行のハイライトを有効にする
-  "let g:edark_current_line = 0
-
-  "" IME on 時にカーソルのハイライトを有効にする
-  "let g:edark_ime_cursor = 1
-
-  "" Insert Mode 時のステータスラインのハイライトを有効にする。
-  "let g:edark_insert_status_line = 1
-
-  "colorscheme edark
-
-  "highlight StatusLineTerm guifg=#2e3436 ctermfg=236 guibg=#babdb6 ctermbg=250 gui=none cterm=none
-  "highlight StatusLineTermNC guifg=#2e3436 ctermfg=236 guibg=#888a85 ctermbg=102 gui=none cterm=none
-
-  "" 斜体にしない
-  "let g:one_allow_italics = 0
-
-  "colorscheme one
-
   colorscheme iceberg
 catch
 endtry
