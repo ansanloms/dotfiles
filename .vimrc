@@ -137,6 +137,7 @@ let g:ctrlp_max_height = 20                                 " 20行表示
 let g:ctrlp_open_new_file = 1                               " ファイルの新規作成時は別タブで開く
 let g:ctrlp_launcher_file_list = ["~/.ctrlp-launcher", "~/.ctrlp-launcher-work", "~/.ctrlp-launcher-gcp"]  " ランチャーで読み込むファイルパス
 let g:ctrlp_tjump_only_silent = 0                           " タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'   " 除外
 
 " quickrun
 let g:quickrun_config = {}
