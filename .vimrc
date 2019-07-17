@@ -122,6 +122,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/rakr/vim-one.git")
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
   call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
+  call minpac#add("https://github.com/cespare/vim-toml.git")
 endif
 
 " Align
@@ -929,7 +930,7 @@ if has("gui_running")
     set lines=40
 
     " 横幅 デフォルトは80
-    set columns=180
+    set columns=120
   endif
 
   " GUIオプション
