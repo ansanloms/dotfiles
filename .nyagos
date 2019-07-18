@@ -8,24 +8,10 @@ set {
 
 -- set prompt
 nyagos.prompt = function(this)
-	local prompt = '\n'
-
-	-- パス
-	local prompt = prompt .. '[' .. nyagos.eval('pwd'):gsub('\\', '/') .. ']'
-
-	-- git ブランチ名
-	local gitbranch =  nyagos.eval('git rev-parse --abbrev-ref HEAD 2>nul')
-	if (gitbranch ~= '') then
-		prompt = prompt .. ' ' .. gitbranch
-	end
-
-	-- hg ブランチ名
-	local hgbranch = nyagos.eval('hg branch 2> nul')
-	if (hgbranch ~= '') then
-		prompt = prompt .. ' ' .. hgbranch
-	end
-
-	prompt = prompt .. '\n$ '
+	local prompt ='\n'
+	prompt = prompt .. nyagos.eval('pwd'):gsub('\\', '/') ..'\n'
+	prompt = prompt .. ' ' .. nyagos.eval('git show --pretty=\'format:%D\' --no-patch 2>nul') .. '\n'
+	prompt = prompt .. ' '
 
 	-- nyagos.default_prompt はデフォルトのプロンプト表示関数です。
 	-- 第二引数でターミナルのタイトルを変更することができます。
