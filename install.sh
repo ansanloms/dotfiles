@@ -11,3 +11,5 @@ ln -sf ${SCRIPT_DIR}/.vimrc.search      ~/.vimrc.search
 ln -sf ${SCRIPT_DIR}/.vimrc.keymap      ~/.vimrc.keymap
 ln -sf ${SCRIPT_DIR}/.gitconfig         ~/.gitconfig
 ln -sf ${SCRIPT_DIR}/.ctrlp-launcher    ~/.ctrlp-launcher
+
+mkdir -p ~/bin
