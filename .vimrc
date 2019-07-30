@@ -37,11 +37,11 @@ if has("vim_starting")
 endif
 
 "-----------------------------------
-" gVimのみ: 他のvimが起動済ならそれを使う
+" 他のvimが起動済ならそれを使う
 " http://tyru.hatenablog.com/entry/20130430/vim_resident
 "-----------------------------------
 
-if has("gui_running") && argc()
+if argc()
   let s:running_vim_list = filter(split(serverlist(), "\n"), "v:val !=? v:servername")
 
   if !empty(s:running_vim_list)
@@ -112,9 +112,11 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
   call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
   call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
-  call minpac#add("https://github.com/maxmellon/vim-jsx-pretty", {"type": "opt"})
-  call minpac#add("https://github.com/prabirshrestha/async.vim.git", {"type": "opt"})
-  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git", {"type": "opt"})
+  call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
+  call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
+  call minpac#add("https://github.com/prabirshrestha/async.vim.git")
+  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
+  call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
   call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
@@ -241,6 +243,10 @@ let g:lsp_log_file = expand("~/.vim/logs/vim-lsp.log")
 
 " for asyncomplete.vim log
 let g:asyncomplete_log_file = expand("~/.vim/asyncomplete.log")
+
+let g:asyncomplete_remove_duplicates = 1
+let g:asyncomplete_smart_completion = 1
+let g:asyncomplete_auto_popup = 1
 
 "-----------------------------------
 " ステータスラインの設定
@@ -545,34 +551,49 @@ augroup java-setting
   " プラグイン読み込み
   autocmd FileType java packadd vim-java
 
-  if (has("win32") || has("win64")) && isdirectory(expand("~/scoop/apps/eclipse-jdt-language-server/0.40.0"))
-    packadd async.vim
-    packadd vim-lsp
+  if (has("win32") || has("win64"))
+    " lombok
+    let s:lombok_path = $HOME . "/scoop/apps/lombok/current/lombok.jar"
+    " eclipse jdt の dir
+    let s:eclipse_jdt_dir = $HOME . "/scoop/apps/eclipse-jdt-language-server/0.40.0"
+    " eclipse jdt の config そのうちmactとかlinuxとか分ける必要あり
+    let s:eclipse_jdt_config_dir = s:eclipse_jdt_dir . "/config_win"
+    " equinox.launcher のパス バージョンごとに変わるのをどうにかしたい
+    let s:eclipse_jdt_equinox_launcher_path = s:eclipse_jdt_dir . "/plugins/org.eclipse.equinox.launcher_1.5.400.v20190515-0925.jar"
+    " workspace pleiadesのそれにのっかる
+    let s:eclipse_workspace_dir = $HOME . "/scoop/apps/pleiades4.8-java-win-full/current/workspace"
 
-    autocmd User lsp_setup call lsp#register_server({
-    \ "name": "eclipse.jdt.ls",
-    \ "cmd": {server_info->[
-    \   "java",
-    \   "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-    \   "-Dosgi.bundles.defaultStartLevel=4",
-    \   "-Declipse.product=org.eclipse.jdt.ls.core.product",
-    \   "-Dlog.level=ALL",
-    \   "-noverify",
-    \   "-Dfile.encoding=UTF-8",
-    \   "-Xmx1G",
-    \   "-jar",
-    \   expand("~/scoop/apps/eclipse-jdt-language-server/0.40.0/plugins/org.eclipse.equinox.launcher_1.5.400.v20190515-0925.jar"),
-    \   "-configuration",
-    \   expand("~/scoop/apps/eclipse-jdt-language-server/0.40.0/config_win"),
-    \   "-data",
-    \   get(g:, "ansanloms_memo_base_dir", expand("~/workspace"))
-    \ ]},
-    \ "root_uri": {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), "settings.gradle"))},
-    \ "whitelist": ["java"],
-    \})
+    if executable("java") && filereadable(expand(s:eclipse_jdt_equinox_launcher_path)) && filereadable(expand(s:lombok_path))
+      " ale の設定
+      let g:ale_java_javac_options = "-cp " . s:lombok_path
 
-    autocmd FileType java setlocal omnifunc=lsp#complete
-    autocmd FileType java nnoremap <silent> <c-]> :<c-u>LspDefinition<CR>
+      " vim-lsp の設定
+      autocmd User lsp_setup call lsp#register_server({
+      \ "name": "eclipse.jdt.ls",
+      \ "cmd": {server_info->[
+      \   "java",
+      \   "-javaagent:" . s:lombok_path,
+      \   "-Xbootclasspath/a:" . s:lombok_path,
+      \   "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+      \   "-Dosgi.bundles.defaultStartLevel=4",
+      \   "-Declipse.product=org.eclipse.jdt.ls.core.product",
+      \   "-Dlog.level=ALL",
+      \   "-noverify",
+      \   "-Dfile.encoding=UTF-8",
+      \   "-Xmx1G",
+      \   "-jar",
+      \   expand(s:eclipse_jdt_equinox_launcher_path),
+      \   "-configuration",
+      \   expand(s:eclipse_jdt_config_dir),
+      \   "-data",
+      \   get(s:, "eclipse_workspace_dir", expand("~/workspace"))
+      \ ]},
+      \ "whitelist": ["java"],
+      \})
+
+      autocmd FileType java setlocal omnifunc=lsp#complete
+      autocmd FileType java nnoremap <silent> <c-]> :<c-u>LspDefinition<CR>
+    endif
   endif
 augroup END
 
@@ -594,9 +615,6 @@ augroup javascript-setting
   autocmd FileType javascript packadd vim-jsx-pretty
 
   if executable("typescript-language-server")
-    packadd async.vim
-    packadd vim-lsp
-
     autocmd User lsp_setup call lsp#register_server({
     \ "name": "javascript support using typescript-language-server",
     \ "cmd": {server_info->[&shell, &shellcmdflag, "typescript-language-server --stdio"]},
@@ -627,9 +645,6 @@ augroup typescript-setting
   autocmd FileType typescript packadd vim-lsp-typescript
 
   if executable("typescript-language-server")
-    packadd async.vim
-    packadd vim-lsp
-
     autocmd User lsp_setup call lsp#register_server({
     \ "name": "typescript-language-server",
     \ "cmd": {server_info->[&shell, &shellcmdflag, "typescript-language-server --stdio"]},
