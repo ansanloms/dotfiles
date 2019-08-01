@@ -54,10 +54,10 @@ if argc()
     " Open given files in running Vim and exit.
     if has("mac")
       " mac
-      silent execute "!mvim --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
+      silent execute "!vim --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
     elseif has("win32") || has("win64")
       " windows
-      silent execute "!start gvim --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
+      silent execute "!start vim --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
     endif
 
     unlet s:arg_list
@@ -99,10 +99,8 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
   call minpac#add("https://github.com/ivalkeen/vim-ctrlp-tjump.git")
   call minpac#add("https://github.com/tpope/vim-fugitive.git")
-  call minpac#add("https://github.com/airblade/vim-gitgutter.git")
   call minpac#add("https://github.com/tyru/open-browser.vim.git")
   call minpac#add("https://github.com/thinca/vim-quickrun.git")
-  call minpac#add("https://github.com/rcmdnk/vim-markdown.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
   call minpac#add("https://github.com/elzr/vim-json.git", {"type": "opt"})
@@ -113,17 +111,16 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
   call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
   call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
+  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
   call minpac#add("https://github.com/prabirshrestha/async.vim.git")
-  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
   call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
   call minpac#add("https://github.com/vim-scripts/groovyindent.git")
-  call minpac#add("https://github.com/rakr/vim-one.git")
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
-  call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
+  call minpac#add("https://github.com/vim-scripts/apachestyle.git")
   call minpac#add("https://github.com/cespare/vim-toml.git")
 endif
 
@@ -131,15 +128,15 @@ endif
 let g:Align_xstrlen = 3 " 幅広文字に対応する
 
 " CtrlP
-let g:ctrlp_use_caching = 1                                 " キャッシュを使用する
-let g:ctrlp_cache_dir = expand("~/.cache/ctrlp")            " キャッシュディレクトリ
-let g:ctrlp_clear_cache_on_exit = 0                         " 終了時にキャッシュを削除しない
-let g:ctrlp_lazy_update = 1                                 " 遅延再描画
-let g:ctrlp_max_height = 20                                 " 20行表示
-let g:ctrlp_open_new_file = 1                               " ファイルの新規作成時は別タブで開く
+let g:ctrlp_use_caching = 1                                     " キャッシュを使用する
+let g:ctrlp_cache_dir = expand("~/.cache/ctrlp")                " キャッシュディレクトリ
+let g:ctrlp_clear_cache_on_exit = 0                             " 終了時にキャッシュを削除しない
+let g:ctrlp_lazy_update = 1                                     " 遅延再描画
+let g:ctrlp_max_height = 20                                     " 20行表示
+let g:ctrlp_open_new_file = 1                                   " ファイルの新規作成時は別タブで開く
 let g:ctrlp_launcher_file_list = ["~/.ctrlp-launcher", "~/.ctrlp-launcher-work", "~/.ctrlp-launcher-gcp"]  " ランチャーで読み込むファイルパス
-let g:ctrlp_tjump_only_silent = 0                           " タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'   " 除外
+let g:ctrlp_tjump_only_silent = 0                               " タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
+let g:ctrlp_custom_ignore = "node_modules\|\.DS_Store\|\.git"   " 除外
 
 " quickrun
 let g:quickrun_config = {}
@@ -556,7 +553,7 @@ augroup java-setting
     let s:lombok_path = $HOME . "/scoop/apps/lombok/current/lombok.jar"
     " eclipse jdt の dir
     let s:eclipse_jdt_dir = $HOME . "/scoop/apps/eclipse-jdt-language-server/0.40.0"
-    " eclipse jdt の config そのうちmactとかlinuxとか分ける必要あり
+    " eclipse jdt の config そのうちmacとかlinuxとか分ける必要あり
     let s:eclipse_jdt_config_dir = s:eclipse_jdt_dir . "/config_win"
     " equinox.launcher のパス バージョンごとに変わるのをどうにかしたい
     let s:eclipse_jdt_equinox_launcher_path = s:eclipse_jdt_dir . "/plugins/org.eclipse.equinox.launcher_1.5.400.v20190515-0925.jar"
@@ -564,9 +561,6 @@ augroup java-setting
     let s:eclipse_workspace_dir = $HOME . "/scoop/apps/pleiades4.8-java-win-full/current/workspace"
 
     if executable("java") && filereadable(expand(s:eclipse_jdt_equinox_launcher_path)) && filereadable(expand(s:lombok_path))
-      " ale の設定
-      let g:ale_java_javac_options = "-cp " . s:lombok_path
-
       " vim-lsp の設定
       autocmd User lsp_setup call lsp#register_server({
       \ "name": "eclipse.jdt.ls",
@@ -727,9 +721,6 @@ augroup markdown-setting
 
   " インデントセット
   autocmd FileType markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
-
-  " プラグイン読み込み
-  autocmd FileType markdown packadd vim-markdown
 augroup END
 
 "-----------------------------------
