@@ -11,7 +11,7 @@ nyagos.prompt = function(this)
 	local prompt ='\n'
 	prompt = prompt .. nyagos.eval('pwd'):gsub('\\', '/') ..'\n'
 	prompt = prompt .. ' ' .. nyagos.eval('git show --pretty=\'format:%D\' --no-patch 2>nul') .. '\n'
-	prompt = prompt .. ' '
+	prompt = prompt .. '> '
 
 	-- nyagos.default_prompt はデフォルトのプロンプト表示関数です。
 	-- 第二引数でターミナルのタイトルを変更することができます。
