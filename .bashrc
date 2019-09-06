@@ -24,4 +24,3 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias ll='ls -l'
 alias vi='vim'
-
