@@ -111,17 +111,24 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
   call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
   call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
-  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
-  call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
-  call minpac#add("https://github.com/prabirshrestha/async.vim.git")
-  call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
-  call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
   call minpac#add("https://github.com/vim-scripts/groovyindent.git")
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
   call minpac#add("https://github.com/vim-scripts/apachestyle.git")
   call minpac#add("https://github.com/cespare/vim-toml.git")
+
+  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
+  call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
+  call minpac#add("https://github.com/prabirshrestha/async.vim.git")
+  call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
+  call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
+
+  call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
+
+  if executable("php") && executable("composer")
+    call minpac#add("https://github.com/felixfbecker/php-language-server.git", {"type": "opt"}, {"do": "composer install && composer run-script parse-stubs"})
+  endif
 endif
 
 " Align
@@ -136,7 +143,7 @@ let g:ctrlp_max_height = 20                                     " 20行表示
 let g:ctrlp_open_new_file = 1                                   " ファイルの新規作成時は別タブで開く
 let g:ctrlp_launcher_file_list = ["~/.ctrlp-launcher", "~/.ctrlp-launcher-work", "~/.ctrlp-launcher-gcp"]  " ランチャーで読み込むファイルパス
 let g:ctrlp_tjump_only_silent = 0                               " タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'       " 除外
+let g:ctrlp_custom_ignore = "node_modules\|DS_Store\|git"       " 除外
 
 " quickrun
 let g:quickrun_config = {}
@@ -412,7 +419,7 @@ vnoremap <c-]> :<C-u>CtrlPtjumpVisual<CR>
 "nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
 
 " minpac
-command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update()
+command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update("", {"do": "call minpac#status()"})
 command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
 
@@ -566,8 +573,8 @@ augroup java-setting
       \ "name": "eclipse.jdt.ls",
       \ "cmd": {server_info->[
       \   "java",
-      \   "-javaagent:" . s:lombok_path,
-      \   "-Xbootclasspath/a:" . s:lombok_path,
+      \   "-javaagent:" . expand(s:lombok_path),
+      \   "-Xbootclasspath/a:" . expand(s:lombok_path),
       \   "-Declipse.application=org.eclipse.jdt.ls.core.id1",
       \   "-Dosgi.bundles.defaultStartLevel=4",
       \   "-Declipse.product=org.eclipse.jdt.ls.core.product",
@@ -675,6 +682,15 @@ augroup php-setting
     autocmd FileType php nnoremap <silent><leader>pcf :w!<CR>:echo system("phpcbf --standard=PSR2 " . expand("%:p"))<CR>:e!<CR>
     autocmd FileType php nnoremap <silent><leader>pcd :w!<CR>:echo system("phpcbf --standard=PSR2 " . expand("%:p:h"))<CR>:e!<CR>
   endif
+
+  autocmd User lsp_setup call lsp#register_server({
+  \ "name": "php-language-server",
+  \ "cmd": {server_info->["php", expand("~/.vim/pack/minpac/opt/php-language-server/bin/php-language-server.php")]},
+  \ "whitelist": ["php"],
+  \ })
+
+  autocmd FileType php setlocal omnifunc=lsp#complete
+  autocmd FileType php packadd php-language-server
 
   " ハイライト行指定
   autocmd FileType php syntax sync minlines=300 maxlines=500
