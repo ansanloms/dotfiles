@@ -41,7 +41,7 @@ endif
 " http://tyru.hatenablog.com/entry/20130430/vim_resident
 "-----------------------------------
 
-if argc()
+if argc() && (has("mac") || has("win32") || has("win64"))
   let s:running_vim_list = filter(split(serverlist(), "\n"), "v:val !=? v:servername")
 
   if !empty(s:running_vim_list)
