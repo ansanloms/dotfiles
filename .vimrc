@@ -117,6 +117,11 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
   call minpac#add("https://github.com/vim-scripts/apachestyle.git")
   call minpac#add("https://github.com/cespare/vim-toml.git")
+  call minpac#add("https://github.com/twitvim/twitvim.git")
+
+  if has("win32") || has("win64")
+    call minpac#add("https://github.com/mattn/vimtweak.git")
+  endif
 
   call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
@@ -234,6 +239,9 @@ let g:loaded_matchparen = 1     " matchparenを無効にする
 let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
+" vimtweak
+autocmd guienter * silent! VimTweakSetAlpha 230
+
 " vim-lsp
 let g:lsp_signs_enabled = 1           " enable signs
 let g:lsp_diagnostics_enabled = 1
@@ -298,18 +306,18 @@ function! StatuslineMode()
   return current_mode.paste_mode . "?"
 endfunction
 
-set statusline=[%{StatuslineMode()}]                                                    " モード表示
-set statusline+=%{SnipMid(expand('%:p'),(winwidth(0)/2)-len(expand('%:p:t')),'...')}    " ファイルパス
-set statusline+=%m                                                                      " 修正フラグ
-set statusline+=%r                                                                      " 読み込み専用フラグ
-set statusline+=%h                                                                      " ヘルプバッファフラグ
-set statusline+=%w                                                                      " プレビューウィンドウフラグ
-set statusline+=%=                                                                      " 左寄せ項目と右寄せ項目の区切り
-set statusline+=[%{&filetype}]                                                          " ファイルタイプ
-set statusline+=[%{&fileformat}]                                                        " 改行コード
-set statusline+=[%{&fileencoding}]                                                      " 文字コード
-set statusline+=[%l/%L\ %p%%]                                                           " 現在行数/全行数 カーソル位置までの割合
-set statusline+=%#SkyColorClock#\ %{sky_color_clock#statusline()}\  " <-- 行末にSP有    " 日付と月齢表示
+set statusline=[%{StatuslineMode()}]                                                          " モード表示
+set statusline+=%{SnipMid(expand('%:p'),(winwidth(0)/2)-len(expand('%:p:t')),'...')}          " ファイルパス
+set statusline+=%m                                                                            " 修正フラグ
+set statusline+=%r                                                                            " 読み込み専用フラグ
+set statusline+=%h                                                                            " ヘルプバッファフラグ
+set statusline+=%w                                                                            " プレビューウィンドウフラグ
+set statusline+=%=                                                                            " 左寄せ項目と右寄せ項目の区切り
+set statusline+=[%{&filetype}]                                                                " ファイルタイプ
+set statusline+=[%{&fileformat}]                                                              " 改行コード
+set statusline+=[%{&fileencoding}]                                                            " 文字コード
+set statusline+=[%l/%L\ %p%%]                                                                 " 現在行数/全行数 カーソル位置までの割合
+set statusline+=%#SkyColorClock#\ %{sky_color_clock#statusline()}\  " <-- 行末にSP有          " 日付と月齢表示
 
 "-----------------------------------
 " タブラインの設定
@@ -467,14 +475,14 @@ function! AnsanlomsFunctions()
 
   " hostsを開く
   function! l:func.OpenHosts() dict
-    let l:hosts_path = "/etc/hosts"
+    let l:hosts_path = expand("/etc/hosts")
 
     if has("mac")
       " mac
-      let l:hosts_path = "/private/etc/hosts"
+      let l:hosts_path = expand("/private/etc/hosts")
     elseif has("win32") || has("win64")
       " windows
-      let l:hosts_path = "C:/Windows/System32/drivers/etc/hosts"
+      let l:hosts_path = expand("C:/Windows/System32/drivers/etc/hosts")
     endif
 
     execute "edit " . l:hosts_path

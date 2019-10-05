@@ -8,9 +8,15 @@ set {
 
 -- set prompt
 nyagos.prompt = function(this)
-	local prompt ='\n'
+	local prompt = '\n'
+
+	-- path
 	prompt = prompt .. nyagos.eval('pwd'):gsub('\\', '/') ..'\n'
+
+	-- git
 	prompt = prompt .. ' ' .. nyagos.eval('git show --pretty=\'format:%D\' --no-patch 2>nul') .. '\n'
+
+	-- prompt
 	prompt = prompt .. '> '
 
 	-- nyagos.default_prompt はデフォルトのプロンプト表示関数です。
@@ -20,9 +26,9 @@ end
 
 -- set alias
 nyagos.alias.hlsdl = function(args)
-	-- ffmpeg path
-	print("ffmpeg -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
-	io.popen("start ffmpeg -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
+	local cmd = "ffmpeg -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4"
+	print(cmd)
+	io.open("start " .. cmd)
 end
 
 nyagos.alias.grep = "grep --color=auto"
@@ -30,6 +36,7 @@ nyagos.alias.egrep = "egrep --color=auto"
 nyagos.alias.fgrep = "fgrep --color=auto"
 
 nyagos.alias.find = [[~\scoop\apps\msys2\current\usr\bin\find.exe]]
+nyagos.alias.convert = [[~\scoop\shims\convert.exe]]
 
 nyagos.alias.vim = "gvim"
 nyagos.alias.vi = "vim"

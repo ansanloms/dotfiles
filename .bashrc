@@ -15,7 +15,7 @@ export PS1_COLOR_RESET="$(tput sgr0)"
 PS1='\n'
 PS1+='\w\n'
 PS1+=' $(git show --format="%D" --no-patch --no-color 2> /dev/null)\n'
-PS1+='> '
+PS1+='\u@\h > '
 
 export MYSQL_PS1="(\u@\h) [\d]> "
 
