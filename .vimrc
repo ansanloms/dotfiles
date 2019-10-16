@@ -52,14 +52,22 @@ if argc() && (has("mac") || has("win32") || has("win64"))
     endfor
 
     " Open given files in running Vim and exit.
+    let s:vim_start_cmd = "!vim"
     if has("mac")
       " mac
-      silent execute "!vim --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
+      let s:vim_start_cmd = "!vim"
     elseif has("win32") || has("win64")
       " windows
-      silent execute "!start vim --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
+      if has("gui_running")
+        let s:vim_start_cmd = "!start gvim"
+      else
+        let s:vim_start_cmd = "!start vim"
+      endif
     endif
 
+    silent execute s:vim_start_cmd " --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
+
+    unlet s:vim_start_cmd
     unlet s:arg_list
     qa!
   endif
