@@ -559,10 +559,6 @@ augroup java-setting
   " 拡張子設定
   autocmd BufNewFile,BufRead *.{java} setlocal filetype=java
 
-  if !filereadable(expand("~/.vim/syntax/javaid.vim"))
-    call system("curl https://fleiner.com/vim/syntax/javaid.vim -o " . expand("~/.vim/syntax/javaid.vim"))
-  endif
-
   let g:java_highlight_all = 1
 
   " インデントセット
