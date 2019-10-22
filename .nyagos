@@ -6,22 +6,25 @@ set {
 	,LESSCHARSET = "UTF-8"
 }
 
+nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homepath .. "\\scoop\\apps\\msys2\\current\\usr\\bin"
+nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homepath .. "\\scoop\\apps\\msys2\\current\\mingw64\\bin"
+
 -- set prompt
 nyagos.prompt = function(this)
-	local prompt = '\n'
+	local prompt = "\n"
 
 	-- path
-	prompt = prompt .. nyagos.eval('pwd'):gsub('\\', '/') ..'\n'
+	prompt = prompt .. nyagos.eval("pwd"):gsub("\\", "/") .."\n"
 
 	-- git
-	prompt = prompt .. ' ' .. nyagos.eval('git show --pretty=\'format:%D\' --no-patch 2>nul') .. '\n'
+	prompt = prompt .. " " .. nyagos.eval("git show --pretty='format:%D' --no-patch 2>nul") .. "\n"
 
 	-- prompt
-	prompt = prompt .. '> '
+	prompt = prompt .. "> "
 
 	-- nyagos.default_prompt はデフォルトのプロンプト表示関数です。
 	-- 第二引数でターミナルのタイトルを変更することができます。
-	return nyagos.default_prompt(prompt, 'NYAGOS - ' .. nyagos.getwd():gsub('\\', '/'))
+	return nyagos.default_prompt(prompt, "NYAGOS - " .. nyagos.getwd():gsub("\\", "/"))
 end
 
 -- set alias
