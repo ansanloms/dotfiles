@@ -156,7 +156,7 @@ let g:ctrlp_max_height = 20                                     " 20行表示
 let g:ctrlp_open_new_file = 1                                   " ファイルの新規作成時は別タブで開く
 let g:ctrlp_launcher_file_list = ["~/.ctrlp-launcher", "~/.ctrlp-launcher-work", "~/.ctrlp-launcher-gcp"]  " ランチャーで読み込むファイルパス
 let g:ctrlp_tjump_only_silent = 0                               " タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
-let g:ctrlp_custom_ignore = "node_modules\|DS_Store\|git"       " 除外
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|git)$'   " 除外
 
 " quickrun
 let g:quickrun_config = {}
@@ -397,6 +397,178 @@ set wildmode=list:longest
 set completeopt=menuone
 
 "-----------------------------------
+" terminal 設定
+"-----------------------------------
+
+if has("terminal")
+  " 端末のエンコーディング
+  set termencoding="utf-8"
+endif
+
+"-----------------------------------
+" functions
+"-----------------------------------
+
+" memoを設置するディレクトリ
+if has("win32") || has("win64")
+  let g:ansanloms_memo_base_dir = expand("c:/dev/work/memo")
+endif
+
+" 自分用関数群
+function! AnsanlomsFunctions()
+  let l:func = {}
+
+  " ファイルマネージャで開く
+  function! l:func.filemanager() dict
+    if has("win32") || has("win64")
+      call system("explorer.exe /select," . expand("%:p"))
+    elseif has("mac")
+      call system("open " . expand("%:p"))
+    endif
+  endfunction
+
+  " タグファイル生成
+  function! l:func.ctags(...) dict
+    if !executable("ctags")
+      echoerr "ctags command not found"
+      return
+    endif
+
+    packadd vital.vim
+    let l:path = vital#vital#new().import("Prelude").path2project_directory(expand("%:p"))
+    let l:ctags_cmd = "ctags --output-format=e-ctags -R -f " . l:path . "/tags " . l:path
+
+    if &filetype == "php"
+      let l:ctags_cmd = "ctags --languages=PHP --php-types=c+f+d --langmap=PHP:.php.inc.volt --output-format=e-ctags -R -f " . l:path . "/tags " . l:path
+    endif
+
+    echo l:ctags_cmd
+    let l:job_ctags = job_start(l:ctags_cmd, {})
+  endfunction
+
+  " hostsを開く
+  function! l:func.hosts() dict
+    let l:hosts_path = expand("/etc/hosts")
+
+    if has("mac")
+      " mac
+      let l:hosts_path = expand("/private/etc/hosts")
+    elseif has("win32") || has("win64")
+      " windows
+      let l:hosts_path = expand("C:/Windows/System32/drivers/etc/hosts")
+    endif
+
+    execute "edit " . l:hosts_path
+  endfunction
+
+  " メモ関連
+  let l:func.memo = {}
+
+  " メモ関連: memoを設置するディレクトリを取得
+  function! l:func.memo.dir() dict
+    let l:memo_base_dir = get(g:, "ansanloms_memo_base_dir", expand("~/memo"))
+
+    if !isdirectory(expand(l:memo_base_dir))
+      call mkdir(l:memo_base_dir, "p")
+    endif
+
+    if !isdirectory(expand(l:memo_base_dir))
+      echoerr l:memo_base_dir . " is not a directory."
+    endif
+
+    return l:memo_base_dir
+  endfunction
+
+  " メモ関連: 開く
+  function! l:func.memo.open(...) dict
+    execute "edit " . expand(self.dir()) . "/" . get(a:, "1", strftime("%Y%m%d")) . ".md"
+  endfunction
+
+  " メモ関連: CtrlPで開く
+  function! l:func.memo.list() dict
+    execute "CtrlP " . expand(self.dir())
+  endfunction
+
+  " terminal
+  function! l:func.terminal(...) dict
+    if !has("terminal")
+      echoerr "Terminal function is disabled"
+      return
+    endif
+
+    let l:selection = get(a:, "1", "default")
+
+    if l:selection == "default"
+      if has("win32") || has("win64")
+        if executable("nyagos")
+          return self.terminal("nyagos")
+        else
+          return self.terminal("cmd")
+        endif
+      endif
+    endif
+
+    let l:cmd = ""
+    let l:options = ""
+
+    if l:selection == "cmd"
+      let l:cmd = ["cmd"]
+      let l:options = {
+      \ "term_name": "cmd",
+      \ "term_finish": "close",
+      \ "curwin": 1
+      \}
+    elseif l:selection == "powershell"
+      let l:cmd = ["powershell"]
+      let l:options = {
+      \ "term_name": "powershell",
+      \ "term_finish": "close",
+      \ "curwin": 1
+      \}
+    elseif l:selection == "nyagos"
+      let l:cmd = [$HOME . "/scoop/apps/nyagos/current/nyagos"]
+      let l:options = {
+      \ "term_name": "NYAGOS",
+      \ "term_finish": "close",
+      \ "curwin": 1
+      \}
+    elseif l:selection == "ubuntu"
+      let l:cmd = ["Ubuntu"]
+      let l:options = {
+      \ "term_name": "WSL (Ubuntu)",
+      \ "term_finish": "close",
+      \ "curwin": 1
+      \}
+    elseif l:selection == "debian"
+      let l:cmd = ["Debian"]
+      let l:options = {
+      \ "term_name": "WSL (Debian)",
+      \ "term_finish": "close",
+      \ "curwin": 1
+      \}
+    elseif l:selection == "fedoraremix"
+      let l:cmd = ["fedoraremix"]
+      let l:options = {
+      \ "term_name": "WSL (Fedora)",
+      \ "term_finish": "close",
+      \ "curwin": 1
+      \}
+    elseif l:selection == "sles12"
+      let l:cmd = ["SLES-12"]
+      let l:options = {
+      \ "term_name": "WSL (SLES-12)",
+      \ "term_finish": "close",
+      \ "curwin": 1
+      \}
+    endif
+
+    call term_start(l:cmd, l:options)
+  endfunction
+
+  return l:func
+endfunction
+
+"-----------------------------------
 " mapの設定
 "-----------------------------------
 
@@ -414,6 +586,12 @@ set completeopt=menuone
 " | cmap / cnoremap | -      | -      | -        | @              | -      | -    | -        |
 " | tmap / tnoremap | -      | -      | @        | -              | -      | -    | -        |
 " +-----------------+--------+--------+----------+----------------+--------+------+----------+
+
+" functions
+command! Filemanager call AnsanlomsFunctions().filemanager()
+command! Hosts call AnsanlomsFunctions().hosts()
+command! Ctags call AnsanlomsFunctions().ctags()
+command! -nargs=? Terminal call AnsanlomsFunctions().terminal(<f-args>)
 
 " 共通keymap
 exec "source " . expand("~/.vimrc.keymap")
@@ -441,100 +619,6 @@ command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
 
 " 端末モード時に右クリックでクリップボードの内容をペースト
 "tnoremap <RightMouse> <C-w>"+
-
-"-----------------------------------
-" functions
-"-----------------------------------
-
-" memoを設置するディレクトリ
-if has("win32") || has("win64")
-  let g:ansanloms_memo_base_dir = expand("c:/dev/work/memo")
-endif
-
-" 自分用関数群
-function! AnsanlomsFunctions()
-  let l:func = {}
-
-  " ファイルマネージャで開く
-  function! l:func.OpenByFileManager() dict
-    if has("win32") || has("win64")
-      call system("explorer.exe /select," . expand("%:p"))
-    endif
-  endfunction
-
-  " タグファイル生成
-  function! l:func.CreateTagfile(...) dict
-    if !executable("ctags")
-      echoerr "ctags command not found"
-      return
-    endif
-
-    packadd vital.vim
-    let l:path = vital#vital#new().import("Prelude").path2project_directory(expand("%:p"))
-    let l:ctags_cmd = "ctags --output-format=e-ctags -R -f " . l:path . "/tags " . l:path
-
-    if &filetype == "php"
-      let l:ctags_cmd = "ctags --languages=PHP --php-types=c+f+d --langmap=PHP:.php.inc.volt --output-format=e-ctags -R -f " . l:path . "/tags " . l:path
-    endif
-
-    echo l:ctags_cmd
-    let l:job_ctags = job_start(l:ctags_cmd, {})
-  endfunction
-
-  " hostsを開く
-  function! l:func.OpenHosts() dict
-    let l:hosts_path = expand("/etc/hosts")
-
-    if has("mac")
-      " mac
-      let l:hosts_path = expand("/private/etc/hosts")
-    elseif has("win32") || has("win64")
-      " windows
-      let l:hosts_path = expand("C:/Windows/System32/drivers/etc/hosts")
-    endif
-
-    execute "edit " . l:hosts_path
-  endfunction
-
-  " メモ関連
-  let l:func.memo = {}
-
-  " メモ関連: memoを設置するディレクトリを取得
-  function! l:func.memo.getBaseDir() dict
-    let l:memo_base_dir = get(g:, "ansanloms_memo_base_dir", expand("~/memo"))
-
-    if !isdirectory(expand(l:memo_base_dir))
-      call mkdir(l:memo_base_dir, "p")
-    endif
-
-    if !isdirectory(expand(l:memo_base_dir))
-      echoerr l:memo_base_dir . " is not a directory."
-    endif
-
-    return l:memo_base_dir
-  endfunction
-
-  " メモ関連: 開く
-  function! l:func.memo.Open(...) dict
-    execute "edit " . expand(self.getBaseDir()) . "/" . get(a:, "1", strftime("%Y%m%d")) . ".md"
-  endfunction
-
-  " メモ関連: CtrlPで開く
-  function! l:func.memo.List() dict
-    execute "CtrlP " . expand(self.getBaseDir())
-  endfunction
-
-  return l:func
-endfunction
-
-"-----------------------------------
-" terminal 設定
-"-----------------------------------
-
-if has("terminal")
-  " 端末のエンコーディング
-  set termencoding="utf-8"
-endif
 
 "-----------------------------------
 " Quickfixの設定
@@ -957,7 +1041,7 @@ if has("gui_running")
   if has("vim_starting")
     " フォント設定
     if has("win32") || has("win64")
-      set guifont=Cica:h12:cSHIFTJIS:qDRAFT
+      set guifont=Cica:h10:cSHIFTJIS:qDRAFT
       set renderoptions=type:directx,gamma:1.0,contrast:0,level:0.0,geom:1,renmode:5,taamode:1
     endif
 
