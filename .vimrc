@@ -37,45 +37,6 @@ if has("vim_starting")
 endif
 
 "-----------------------------------
-" 他のvimが起動済ならそれを使う
-" http://tyru.hatenablog.com/entry/20130430/vim_resident
-"-----------------------------------
-
-if argc() && (has("mac") || has("win32") || has("win64"))
-  let s:running_vim_list = filter(split(serverlist(), "\n"), "v:val !=? v:servername")
-
-  if !empty(s:running_vim_list)
-    let s:arg_list = []
-    for arg in argv()
-      " 引数に空白があったら""で囲む
-      call add(s:arg_list, match(arg, " ") ? "\"" . arg  . "\"" : arg)
-    endfor
-
-    " Open given files in running Vim and exit.
-    let s:vim_start_cmd = "!vim"
-    if has("mac")
-      " mac
-      let s:vim_start_cmd = "!vim"
-    elseif has("win32") || has("win64")
-      " windows
-      if has("gui_running")
-        let s:vim_start_cmd = "!start gvim"
-      else
-        let s:vim_start_cmd = "!start vim"
-      endif
-    endif
-
-    silent execute s:vim_start_cmd " --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
-
-    unlet s:vim_start_cmd
-    unlet s:arg_list
-    qa!
-  endif
-
-  unlet s:running_vim_list
-endif
-
-"-----------------------------------
 " 基本設定
 "-----------------------------------
 
@@ -126,6 +87,9 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/vim-scripts/apachestyle.git")
   call minpac#add("https://github.com/cespare/vim-toml.git")
   call minpac#add("https://github.com/twitvim/twitvim.git")
+  call minpac#add("https://github.com/thinca/vim-singleton.git", {"type": "opt"})
+  call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
+  call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
 
   if has("win32") || has("win64")
     call minpac#add("https://github.com/mattn/vimtweak.git")
@@ -136,9 +100,6 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/prabirshrestha/async.vim.git")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
-
-  call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
-
   if executable("php") && executable("composer")
     call minpac#add("https://github.com/felixfbecker/php-language-server.git", {"type": "opt"}, {"do": "composer install && composer run-script parse-stubs"})
   endif
@@ -267,6 +228,13 @@ let g:asyncomplete_log_file = expand("~/.vim/asyncomplete.log")
 let g:asyncomplete_remove_duplicates = 1
 let g:asyncomplete_smart_completion = 1
 let g:asyncomplete_auto_popup = 1
+
+"-----------------------------------
+" 多重起動の防止
+"-----------------------------------
+
+packadd! vim-singleton
+call singleton#enable()
 
 "-----------------------------------
 " ステータスラインの設定
@@ -937,7 +905,7 @@ augroup json-setting
 augroup END
 
 "-----------------------------------
-" apacheの設定
+" apache confの設定
 "-----------------------------------
 
 augroup apache-setting
@@ -945,6 +913,17 @@ augroup apache-setting
 
   " プラグイン読み込み
   autocmd FileType apache packadd apachestyle
+augroup END
+
+"-----------------------------------
+" graphqlの設定
+"-----------------------------------
+
+augroup graphql-setting
+  autocmd!
+
+  " プラグイン読み込み
+  autocmd FileType graphql packadd vim-graphql
 augroup END
 
 "-----------------------------------

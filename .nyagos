@@ -41,5 +41,4 @@ nyagos.alias.fgrep = "fgrep --color=auto"
 nyagos.alias.find = [[~\scoop\apps\msys2\current\usr\bin\find.exe]]
 nyagos.alias.convert = [[~\scoop\shims\convert.exe]]
 
-nyagos.alias.vim = "gvim"
 nyagos.alias.vi = "vim"

@@ -33,7 +33,7 @@ set helplang=ja,en
 set whichwrap=b,s,h,l,<,>,[,]
 
 " マウスは使わない
-set mouse=
+set mouse-=a
 
 " バッファ有効
 set hidden
@@ -48,7 +48,7 @@ set diffopt=filler,iwhite
 " 2: conceal対象のテキストは非表示になる
 " 3: conceal対象のテキストは完全に非表示
 if has("conceal")
-  set conceallevel=1
+  set conceallevel=0
   set concealcursor=
 endif
 
@@ -74,9 +74,3 @@ set belloff=all
 
 " 構文アイテムを検索する桁数の最大値
 set synmaxcol=600
-
-" 高速ターミナル接続を行う(スクロールが重くなる対策)
-set ttyfast
-
-" マクロやコマンドを実行する間、画面を再描画しない(スクロールが重くなる対策)
-set lazyredraw
