@@ -70,6 +70,10 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/tpope/vim-fugitive.git")
   call minpac#add("https://github.com/tyru/open-browser.vim.git")
   call minpac#add("https://github.com/thinca/vim-quickrun.git")
+  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
+  call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
+  call minpac#add("https://github.com/prabirshrestha/async.vim.git")
+  call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
   call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
   call minpac#add("https://github.com/elzr/vim-json.git", {"type": "opt"})
@@ -90,19 +94,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/thinca/vim-singleton.git", {"type": "opt"})
   call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
   call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
-
-  if has("win32") || has("win64")
-    call minpac#add("https://github.com/mattn/vimtweak.git")
-  endif
-
-  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
-  call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
-  call minpac#add("https://github.com/prabirshrestha/async.vim.git")
-  call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
-  call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
-  if executable("php") && executable("composer")
-    call minpac#add("https://github.com/felixfbecker/php-language-server.git", {"type": "opt"}, {"do": "composer install && composer run-script parse-stubs"})
-  endif
+  call minpac#add("https://github.com/mattn/vimtweak.git")
 endif
 
 " Align
@@ -688,7 +680,6 @@ augroup javascript-setting
     \})
 
     autocmd FileType javascript setlocal omnifunc=lsp#complete
-    autocmd FileType javascript packadd typescript-vim
   endif
 augroup END
 
@@ -708,6 +699,7 @@ augroup typescript-setting
   " プラグイン読み込み
   autocmd FileType typescript packadd vim-jsx-pretty
   autocmd FileType typescript packadd vim-lsp-typescript
+  autocmd FileType javascript packadd typescript-vim
 
   if executable("typescript-language-server")
     autocmd User lsp_setup call lsp#register_server({
@@ -718,7 +710,6 @@ augroup typescript-setting
     \})
 
     autocmd FileType typescript setlocal omnifunc=lsp#complete
-    autocmd FileType typescript packadd typescript-vim
   endif
 augroup END
 
