@@ -74,3 +74,6 @@ set belloff=all
 
 " 構文アイテムを検索する桁数の最大値
 set synmaxcol=600
+
+" テキストの整形方法
+set formatoptions=croql
