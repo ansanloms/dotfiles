@@ -16,6 +16,45 @@ if has("vim_starting")
 endif
 
 "-----------------------------------
+" 他のvimが起動済ならそれを使う
+" http://tyru.hatenablog.com/entry/20130430/vim_resident
+"-----------------------------------
+
+if argc() && (has("mac") || has("win32") || has("win64"))
+  let s:running_vim_list = filter(split(serverlist(), "\n"), "v:val !=? v:servername")
+
+  if !empty(s:running_vim_list)
+    let s:arg_list = []
+    for arg in argv()
+      " 引数に空白があったら""で囲む
+      call add(s:arg_list, match(arg, " ") ? "\"" . arg  . "\"" : arg)
+    endfor
+
+    " Open given files in running Vim and exit.
+    let s:vim_start_cmd = "!vim"
+    if has("mac")
+      " mac
+      let s:vim_start_cmd = "!vim"
+    elseif has("win32") || has("win64")
+      " windows
+      if has("gui_running")
+        let s:vim_start_cmd = "!start gvim"
+      else
+        let s:vim_start_cmd = "!start vim"
+      endif
+    endif
+
+    silent execute s:vim_start_cmd " --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
+
+    unlet s:vim_start_cmd
+    unlet s:arg_list
+    qa!
+  endif
+
+  unlet s:running_vim_list
+endif
+
+"-----------------------------------
 " ディレクトリ作成
 "-----------------------------------
 
@@ -91,7 +130,6 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/vim-scripts/apachestyle.git")
   call minpac#add("https://github.com/cespare/vim-toml.git")
   call minpac#add("https://github.com/twitvim/twitvim.git")
-  call minpac#add("https://github.com/thinca/vim-singleton.git", {"type": "opt"})
   call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
   call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
   call minpac#add("https://github.com/mattn/vimtweak.git")
@@ -220,13 +258,6 @@ let g:asyncomplete_log_file = expand("~/.vim/asyncomplete.log")
 let g:asyncomplete_remove_duplicates = 1
 let g:asyncomplete_smart_completion = 1
 let g:asyncomplete_auto_popup = 1
-
-"-----------------------------------
-" 多重起動の防止
-"-----------------------------------
-
-packadd! vim-singleton
-call singleton#enable()
 
 "-----------------------------------
 " ステータスラインの設定
@@ -449,80 +480,86 @@ function! AnsanlomsFunctions()
     execute "CtrlP " . expand(self.dir())
   endfunction
 
-  " terminal
-  function! l:func.terminal(...) dict
-    if !has("terminal")
-      echoerr "Terminal function is disabled"
-      return
-    endif
+  " ターミナル関連
+  let l:func.terminal = {}
 
-    let l:selection = get(a:, "1", "default")
+  " cmd
+  function! l:func.terminal.cmd() dict
+    call term_start("cmd", {
+    \ "term_name": "cmd",
+    \ "term_finish": "close",
+    \ "curwin": 1
+    \})
+  endfunction
 
-    if l:selection == "default"
-      if has("win32") || has("win64")
-        if executable("nyagos")
-          return self.terminal("nyagos")
-        else
-          return self.terminal("cmd")
-        endif
+  " powershell
+  function! l:func.terminal.powershell() dict
+    call term_start("powershell", {
+    \ "term_name": "powershell",
+    \ "term_finish": "close",
+    \ "curwin": 1
+    \})
+  endfunction
+
+  " nyagos
+  function! l:func.terminal.nyagos() dict
+    call term_start([$HOME . "/scoop/apps/nyagos/current/nyagos"], {
+    \ "term_name": "NYAGOS",
+    \ "term_finish": "close",
+    \ "curwin": 1
+    \})
+  endfunction
+
+  " ubuntu
+  function! l:func.terminal.ubuntu() dict
+    call term_start("Ubuntu", {
+    \ "term_name": "WSL (Ubuntu)",
+    \ "term_finish": "close",
+    \ "curwin": 1
+    \})
+  endfunction
+
+  " debian
+  function! l:func.terminal.debian() dict
+    call term_start("Debian", {
+    \ "term_name": "WSL (Debian)",
+    \ "term_finish": "close",
+    \ "curwin": 1
+    \})
+  endfunction
+
+  " fedoraremix
+  function! l:func.terminal.fedoraremix() dict
+    call term_start("fedoraremix", {
+    \ "term_name": "WSL (Fedora)",
+    \ "term_finish": "close",
+    \ "curwin": 1
+    \})
+  endfunction
+
+  " sles12
+  function! l:func.terminal.sles12() dict
+    call term_start("sles12", {
+    \ "term_name": "WSL (SLES-12)",
+    \ "term_finish": "close",
+    \ "curwin": 1
+    \})
+  endfunction
+
+  " default
+  function! l:func.terminal.default() dict
+    if has("win32") || has("win64")
+      if executable("nyagos")
+        call self.nyagos()
+      else
+        call self.cmd()
       endif
     endif
+  endfunction
 
-    let l:cmd = ""
-    let l:options = ""
-
-    if l:selection == "cmd"
-      let l:cmd = ["cmd"]
-      let l:options = {
-      \ "term_name": "cmd",
-      \ "term_finish": "close",
-      \ "curwin": 1
-      \}
-    elseif l:selection == "powershell"
-      let l:cmd = ["powershell"]
-      let l:options = {
-      \ "term_name": "powershell",
-      \ "term_finish": "close",
-      \ "curwin": 1
-      \}
-    elseif l:selection == "nyagos"
-      let l:cmd = [$HOME . "/scoop/apps/nyagos/current/nyagos"]
-      let l:options = {
-      \ "term_name": "NYAGOS",
-      \ "term_finish": "close",
-      \ "curwin": 1
-      \}
-    elseif l:selection == "ubuntu"
-      let l:cmd = ["Ubuntu"]
-      let l:options = {
-      \ "term_name": "WSL (Ubuntu)",
-      \ "term_finish": "close",
-      \ "curwin": 1
-      \}
-    elseif l:selection == "debian"
-      let l:cmd = ["Debian"]
-      let l:options = {
-      \ "term_name": "WSL (Debian)",
-      \ "term_finish": "close",
-      \ "curwin": 1
-      \}
-    elseif l:selection == "fedoraremix"
-      let l:cmd = ["fedoraremix"]
-      let l:options = {
-      \ "term_name": "WSL (Fedora)",
-      \ "term_finish": "close",
-      \ "curwin": 1
-      \}
-    elseif l:selection == "sles12"
-      let l:cmd = ["SLES-12"]
-      let l:options = {
-      \ "term_name": "WSL (SLES-12)",
-      \ "term_finish": "close",
-      \ "curwin": 1
-      \}
-    endif
-
-    call term_start(l:cmd, l:options)
+  " exec
+  function! l:func.terminal.exec(...) dict
+    call self[get(a:, "1", "default")]()
   endfunction
 
   return l:func
@@ -551,7 +588,7 @@ endfunction
 command! Filemanager call AnsanlomsFunctions().filemanager()
 command! Hosts call AnsanlomsFunctions().hosts()
 command! Ctags call AnsanlomsFunctions().ctags()
-command! -nargs=? Terminal call AnsanlomsFunctions().terminal(<f-args>)
+command! -nargs=? TermAlias call AnsanlomsFunctions().terminal.exec(<f-args>)
 
 " 共通keymap
 exec "source " . expand("~/.vimrc.keymap")
@@ -566,8 +603,8 @@ nnoremap <C-h> :<C-u>CtrlPMRUFiles<CR>
 nnoremap <C-s> :<C-u>CtrlPBuffer<CR>
 
 " CtrlPtjump
-nnoremap <c-]> :<C-u>CtrlPtjump<CR>
-vnoremap <c-]> :<C-u>CtrlPtjumpVisual<CR>
+nnoremap <C-]> :<C-u>CtrlPtjump<CR>
+vnoremap <C-]> :<C-u>CtrlPtjumpVisual<CR>
 
 " タグジャンプの際に新しいタブで開く
 "nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
@@ -577,8 +614,12 @@ command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update("", {"
 command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
 
-" 端末モード時に右クリックでクリップボードの内容をペースト
-"tnoremap <RightMouse> <C-w>"+
+" libtermkeyのサポートを無効にする？
+" https://gitlab.com/gnachman/iterm2/issues/3519
+" <S-space>とか押すと ^[[32;2u[ とかはいるやつの対策
+" あんまよくわかってない
+" 取り急ぎ鬱陶しいやつだけ
+tnoremap <S-space> <space>
 
 "-----------------------------------
 " Quickfixの設定
@@ -884,7 +925,7 @@ augroup json-setting
   autocmd!
 
   " インデントセット
-  autocmd FileType json setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
+  autocmd FileType json setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
   autocmd FileType json packadd vim-json
@@ -912,6 +953,9 @@ augroup END
 
 augroup graphql-setting
   autocmd!
+
+  " インデントセット
+  autocmd FileType graphql setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
   autocmd FileType graphql packadd vim-graphql
