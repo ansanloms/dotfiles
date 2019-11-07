@@ -2,13 +2,13 @@
 # vim:set filetype=conf:
 
 # terminal
-terminal nyagos				tabnew | Terminal nyagos
-terminal wsl fedoraremix	tabnew | Terminal fedoraremix
-terminal wsl Debian			tabnew | Terminal debian
-terminal wsl Ubuntu			tabnew | Terminal ubuntu
-terminal wsl SLES-12		tabnew | Terminal sles12
-terminal cmd				tabnew | Terminal cmd
-terminal powershell			tabnew | Terminal powershell
+terminal nyagos				tabnew | call AnsanlomsFunctions().terminal.nyagos()
+terminal wsl fedoraremix	tabnew | call AnsanlomsFunctions().terminal.fedoraremix()
+terminal wsl Debian			tabnew | call AnsanlomsFunctions().terminal.debian()
+terminal wsl Ubuntu			tabnew | call AnsanlomsFunctions().terminal.ubuntu()
+terminal wsl SLES-12		tabnew | call AnsanlomsFunctions().terminal.sles12()
+terminal cmd				tabnew | call AnsanlomsFunctions().terminal.cmd()
+terminal powershell			tabnew | call AnsanlomsFunctions().terminal.powershell()
 
 # functions
 OpenDailyMemo			tabnew | call AnsanlomsFunctions().memo.open()
