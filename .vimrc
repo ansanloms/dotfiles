@@ -585,8 +585,8 @@ endfunction
 " +-----------------+--------+--------+----------+----------------+--------+------+----------+
 
 " functions
-command! Filemanager call AnsanlomsFunctions().filemanager()
-command! Hosts call AnsanlomsFunctions().hosts()
+command! OpenFilemanager call AnsanlomsFunctions().filemanager()
+command! OpenHosts call AnsanlomsFunctions().hosts()
 command! Ctags call AnsanlomsFunctions().ctags()
 command! -nargs=? TermAlias call AnsanlomsFunctions().terminal.exec(<f-args>)
 
