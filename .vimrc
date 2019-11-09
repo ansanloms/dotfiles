@@ -614,13 +614,6 @@ command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update("", {"
 command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
 
-" libtermkeyのサポートを無効にする？
-" https://gitlab.com/gnachman/iterm2/issues/3519
-" <S-space>とか押すと ^[[32;2u[ とかはいるやつの対策
-" あんまよくわかってない
-" 取り急ぎ鬱陶しいやつだけ
-tnoremap <S-space> <space>
-
 "-----------------------------------
 " Quickfixの設定
 "-----------------------------------
