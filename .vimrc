@@ -125,9 +125,9 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
-  call minpac#add("https://github.com/vim-scripts/groovyindent.git")
+  call minpac#add("https://github.com/vim-scripts/groovyindent.git", {"type": "opt"})
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
-  call minpac#add("https://github.com/vim-scripts/apachestyle.git")
+  call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
   call minpac#add("https://github.com/cespare/vim-toml.git")
   call minpac#add("https://github.com/twitvim/twitvim.git")
   call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
@@ -614,6 +614,13 @@ command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update("", {"
 command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
 
+" libtermkeyのサポートを無効にする？
+" https://gitlab.com/gnachman/iterm2/issues/3519
+" <S-space>とか押すと ^[[32;2u[ とかはいるやつの対策
+" あんまよくわかってない
+" 取り急ぎ鬱陶しいやつだけ
+tnoremap <S-space> <space>
+
 "-----------------------------------
 " Quickfixの設定
 "-----------------------------------
@@ -899,7 +906,9 @@ augroup xml-setting
   autocmd FileType xml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " フォーマット指定
-  if executable("python")
+  if executable("xmllint")
+    autocmd FileType xml setlocal formatprg=xmllint\ --format\ -
+  elseif executable("python")
     autocmd FileType xml setlocal formatprg=python\ -c\ 'import\ sys;import\ xml.dom.minidom;s=sys.stdin.read();print(xml.dom.minidom.parseString(s).toprettyxml())'
   endif
 augroup END
@@ -938,6 +947,17 @@ augroup apache-setting
 
   " プラグイン読み込み
   autocmd FileType apache packadd apachestyle
+augroup END
+
+"-----------------------------------
+" groovyの設定
+"-----------------------------------
+
+augroup groovy-setting
+  autocmd!
+
+  " プラグイン読み込み
+  autocmd FileType groovy packadd groovyindent
 augroup END
 
 "-----------------------------------
