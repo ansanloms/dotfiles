@@ -127,12 +127,15 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
   call minpac#add("https://github.com/vim-scripts/groovyindent.git", {"type": "opt"})
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
+  call minpac#add("https://github.com/hallzy/lightline-iceberg.git")
   call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
   call minpac#add("https://github.com/cespare/vim-toml.git")
   call minpac#add("https://github.com/twitvim/twitvim.git")
   call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
   call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
   call minpac#add("https://github.com/mattn/vimtweak.git")
+  call minpac#add("https://github.com/liuchengxu/vista.vim.git")
+  call minpac#add("https://github.com/itchyny/lightline.vim.git")
 endif
 
 " Align
@@ -234,6 +237,9 @@ endif
 " parenmatch
 let g:loaded_matchparen = 1     " matchparenを無効にする
 
+" vim-json
+let g:vim_json_syntax_conceal = 0
+
 " sky-color-clock.vim
 let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
@@ -259,6 +265,78 @@ let g:asyncomplete_remove_duplicates = 1
 let g:asyncomplete_smart_completion = 1
 let g:asyncomplete_auto_popup = 1
 
+" lightline
+let g:lightline = {
+\ "colorscheme": "iceberg",
+\ "active": {
+\   "left": [
+\     ["mode", "paste"],
+\     ["gitbranch", "filename"],
+\     ["vista"],
+\   ],
+\   "right": [
+\     ["sky_color_clock"],
+\     ["percent"],
+\     ["fileformat", "fileencoding", "filetype"],
+\   ]
+\ },
+\ "component_function": {
+\   "mode": "lightline#mode",
+\   "gitbranch": "fugitive#head",
+\   "filename": "LightlineFilename",
+\ },
+\ "component": {
+\   "modified": "%{(LightlineIsVisible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
+\   "fileformat": "%{LightlineIsVisible() ? &fileformat : ''}",
+\   "filetype": "%{LightlineIsVisible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
+\   "fileencoding": "%{LightlineIsVisible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
+\   "sky_color_clock": "%#SkyColorClock#%{' ' . sky_color_clock#statusline() . ' '}%#SkyColorClockTemp# ",
+\   "vista": "%{get(b:, 'vista_nearest_method_or_function', '')}",
+\ },
+\ "component_raw": {
+\   "sky_color_clock": 1,
+\ },
+\}
+
+function! LightlineIsVisible() abort
+  return (60 <= winwidth(0)) && (&filetype !~? "help\|vista")
+endfunction
+
+function! LightlineFilename()
+  if &filetype ==# "vista"
+    return ""
+  endif
+
+  if expand("%:t") == ""
+    return "[No Name]"
+  endif
+
+  " https://bitbucket.org/ns9tks/vim-fuzzyfinder/src/tip/autoload/fuf.vim
+  let l:str = expand("%:p")
+  let l:len = (winwidth(0)/2)-len(expand("%:p:t"))
+  let l:mask = "..."
+
+  if l:len >= len(l:str)
+    return l:str
+  elseif l:len <= len(l:mask)
+    return l:mask
+  endif
+
+  let l:head = (l:len - len(l:mask)) / 2
+  let l:tail = l:len - len(l:mask) - l:head
+
+  return (l:head > 0 ? l:str[: l:head - 1] : "") . l:mask . (l:tail > 0 ? l:str[-l:tail :] : "")
+endfunction
+
+" vista
+let g:vista_default_executive = "ctags"
+
+let g:vista_executive_for = {
+\ "java": "vim_lsp",
+\ "javascript": "vim_lsp",
+\ "typescript": "vim_lsp",
+\}
+
 "-----------------------------------
 " ステータスラインの設定
 "-----------------------------------
@@ -266,89 +344,12 @@ let g:asyncomplete_auto_popup = 1
 " ステータスラインを常に表示
 set laststatus=2
 
-" https://bitbucket.org/ns9tks/vim-fuzzyfinder/src/tip/autoload/fuf.vim
-" TODO: マルチバイト文字が崩れるのをなんとかする
-function! SnipMid(str, len, mask)
-  if a:len >= len(a:str)
-    return a:str
-  elseif a:len <= len(a:mask)
-    return a:mask
-  endif
-
-  let len_head = (a:len - len(a:mask)) / 2
-  let len_tail = a:len - len(a:mask) - len_head
-
-  return (len_head > 0 ? a:str[: len_head - 1] : "") . a:mask . (len_tail > 0 ? a:str[-len_tail :] : "")
-endfunction
-
-" モード取得
-function! StatuslineMode()
-  let mode_list = {
-  \ "n":       "NORMAL"
-  \ ,"i":      "INSERT"
-  \ ,"R":      "REPLACE"
-  \ ,"v":      "VISUAL"
-  \ ,"V":      "V-LINE"
-  \ ,"c":      "COMMAND"
-  \ ,"\<C-v>": "V-BLOCK"
-  \ ,"s":      "SELECT"
-  \ ,"S":      "S-LINE"
-  \ ,"\<C-s>": "S-BLOCK"
-  \ ,"t":      "TERMINAL"
-  \ ,"?":      "?"
-  \}
-  let current_mode = mode()
-  let paste_mode   = (&paste) ? "(PASTE)" : ""
-  if has_key(mode_list, current_mode)
-    return mode_list[current_mode] . paste_mode
-  endif
-  return current_mode.paste_mode . "?"
-endfunction
-
-set statusline=[%{StatuslineMode()}]                                                          " モード表示
-set statusline+=%{SnipMid(expand('%:p'),(winwidth(0)/2)-len(expand('%:p:t')),'...')}          " ファイルパス
-set statusline+=%m                                                                            " 修正フラグ
-set statusline+=%r                                                                            " 読み込み専用フラグ
-set statusline+=%h                                                                            " ヘルプバッファフラグ
-set statusline+=%w                                                                            " プレビューウィンドウフラグ
-set statusline+=%=                                                                            " 左寄せ項目と右寄せ項目の区切り
-set statusline+=[%{&filetype}]                                                                " ファイルタイプ
-set statusline+=[%{&fileformat}]                                                              " 改行コード
-set statusline+=[%{&fileencoding}]                                                            " 文字コード
-set statusline+=[%l/%L\ %p%%]                                                                 " 現在行数/全行数 カーソル位置までの割合
-set statusline+=%#SkyColorClock#\ %{sky_color_clock#statusline()}\  " <-- 行末にSP有          " 日付と月齢表示
-
 "-----------------------------------
 " タブラインの設定
 "-----------------------------------
 
 " タブラインを常に表示
 set showtabline=2
-
-" タブラインの設定
-set tabline=%!MakeTabLine()
-
-function! MakeTabLine()
-  let sep = ""  " タブ間の区切り
-  return join(map(range(1, tabpagenr("$")), "s:tabpage_label(v:val)"), sep) . sep . "%#TabLineFill#%T"
-endfunction
-
-function! s:tabpage_label(tabpagenr)
-  " タブページ内のバッファのリスト
-  let bufnrs = tabpagebuflist(a:tabpagenr)
-
-  " カレントタブページかどうかでハイライトを切り替える
-  let hi = a:tabpagenr is tabpagenr() ? "%#TabLineSel#" : "%#TabLine#"
-
-  " タブページ内に変更ありのバッファがあったら "+" を付ける
-  let mod = len(filter(copy(bufnrs), "getbufvar(v:val, \"&modified\")")) ? "[+]" : ""
-
-  " カレントバッファ
-  let curbufnr = bufnrs[tabpagewinnr(a:tabpagenr) - 1]  " tabpagewinnr() は 1 origin
-  let fname = fnamemodify(bufname(curbufnr), ":t")
-
-  return "%" . a:tabpagenr . "T" . hi . " " . a:tabpagenr . ":" . fname . mod . " " . "%T%#TabLineFill#"
-endfunction
 
 "-----------------------------------
 " インデントの設定
@@ -643,6 +644,10 @@ augroup java-setting
 
   " 拡張子設定
   autocmd BufNewFile,BufRead *.{java} setlocal filetype=java
+
+  if !filereadable(expand("~/.vim/syntax/javaid.vim"))
+    call system("curl https://fleiner.com/vim/syntax/javaid.vim -o " . expand("~/.vim/syntax/javaid.vim"))
+  endif
 
   let g:java_highlight_all = 1
 
