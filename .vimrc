@@ -245,7 +245,7 @@ let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォ
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 " vimtweak
-autocmd guienter * silent! VimTweakSetAlpha 230
+"autocmd guienter * silent! VimTweakSetAlpha 230
 
 " vim-lsp
 let g:lsp_signs_enabled = 1           " enable signs
@@ -329,6 +329,9 @@ function! LightlineFilename()
 endfunction
 
 " vista
+let g:vista_icon_indent = ["▸ ", ""]
+let g:vista_sidebar_width = 60
+
 let g:vista_default_executive = "ctags"
 
 let g:vista_executive_for = {
@@ -1073,7 +1076,7 @@ if has("gui_running")
   if has("vim_starting")
     " フォント設定
     if has("win32") || has("win64")
-      set guifont=Cica:h10:cSHIFTJIS:qDRAFT
+      set guifont=Cica:h12:cSHIFTJIS:qDRAFT
       set renderoptions=type:directx,gamma:1.0,contrast:0,level:0.0,geom:1,renmode:5,taamode:1
     endif
 
