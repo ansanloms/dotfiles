@@ -18,14 +18,9 @@ if "%ELEVATED%" neq "yes" (
     mklink C:%HOMEPATH%\.bash_profile       %~d0%~p0.bash_profile
     mklink C:%HOMEPATH%\.vimrc              %~d0%~p0.vimrc
     mklink C:%HOMEPATH%\.gitconfig          %~d0%~p0.gitconfig
-    mklink C:%HOMEPATH%\.eslintrc           %~d0%~p0.eslintrc
     mklink C:%HOMEPATH%\.minttyrc           %~d0%~p0.minttyrc
     mklink C:%HOMEPATH%\.ctrlp-launcher     %~d0%~p0.ctrlp-launcher
     mklink C:%HOMEPATH%\.nyagos             %~d0%~p0.nyagos
-    mklink C:%HOMEPATH%\.ideavimrc          %~d0%~p0.ideavimrc
-    mklink C:%HOMEPATH%\.vimrc.general      %~d0%~p0.vimrc.general
-    mklink C:%HOMEPATH%\.vimrc.search       %~d0%~p0.vimrc.search
-    mklink C:%HOMEPATH%\.vimrc.keymap       %~d0%~p0.vimrc.keymap
 
     goto exit1
 
