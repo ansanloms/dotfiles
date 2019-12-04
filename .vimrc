@@ -84,7 +84,81 @@ if filereadable(expand($VIMRUNTIME . "/defaults.vim"))
   source $VIMRUNTIME/defaults.vim
 endif
 
-exec "source " . expand("~/.vimrc.general")
+" 読み込みディレクトリの追記
+set runtimepath^=~/.vim
+
+" パッケージディレクトリの追記
+set packpath^=~/.vim
+
+" viminfoの保存先を変更
+set viminfo+=n~/.vim/viminfo
+
+" コマンドの保存履歴数
+set history=1000
+
+" backspaceの設定
+" start:    ノーマルモードに移った後に挿入モードに入っても[Backspace]で自由に文字を削除できるようにする
+" eol:      行頭で[Backspace]を押したときに行の連結を可能にする
+" indent:   オートインデントモードのインデントも削除可能にする
+set backspace=start,eol,indent
+
+" C-vの矩形選択で行末より後ろもカーソルを置ける
+set virtualedit=block
+
+" クリップボード使用可能に設定
+set clipboard=unnamed
+
+" ヘルプ検索で日本語を優先
+set helplang=ja,en
+
+" カーソルを行頭行末で止まらないようにする
+set whichwrap=b,s,h,l,<,>,[,]
+
+" マウスは使わない
+set mouse-=a
+
+" バッファ有効
+set hidden
+
+" filler: vimdiffで埋め立てを行う
+" iwhite: vimdiffで空白を無視して比較する
+set diffopt=filler,iwhite
+
+" conceal処理の設定
+" 0: 通常通り表示(デフォルト)
+" 1: conceal対象のテキストは代理文字(初期設定はスペース)に置換される
+" 2: conceal対象のテキストは非表示になる
+" 3: conceal対象のテキストは完全に非表示
+if has("conceal")
+  set conceallevel=0
+  set concealcursor=
+endif
+
+" スペルチェック
+"set spell
+"set spelllang+=cjk
+
+" fold設定
+"set foldmethod=syntax
+"set foldlevel=1
+"set foldnestmax=2
+"set foldcolumn=2
+set nofoldenable
+
+" 外部grepの設定
+if executable("grep")
+  set grepprg=grep\ -Hnd\ skip\ -r
+  set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
+endif
+
+" beep音を消す
+set belloff=all
+
+" 構文アイテムを検索する桁数の最大値
+set synmaxcol=600
+
+" テキストの整形方法
+set formatoptions=croql
 
 "-----------------------------------
 " プラグイン設定
@@ -136,6 +210,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/mattn/vimtweak.git")
   call minpac#add("https://github.com/liuchengxu/vista.vim.git")
   call minpac#add("https://github.com/itchyny/lightline.vim.git")
+  call minpac#add("https://github.com/mattn/webapi-vim.git")
 endif
 
 " Align
@@ -245,7 +320,7 @@ let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォ
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 " vimtweak
-"autocmd guienter * silent! VimTweakSetAlpha 230
+autocmd guienter * silent! VimTweakSetAlpha 230
 
 " vim-lsp
 let g:lsp_signs_enabled = 1           " enable signs
@@ -379,7 +454,23 @@ set softtabstop=4
 " 検索の設定
 "-----------------------------------
 
-exec "source " . expand("~/.vimrc.search")
+" 大文字/小文字の区別なく検索する
+set ignorecase
+
+" 検索文字列に大文字が含まれている場合は区別して検索する
+set smartcase
+
+" 検索時に最後まで行ったら最初に戻る
+set wrapscan
+
+" インクリメンタルサーチを有効
+set incsearch
+
+" 検索結果をハイライト表示
+set hlsearch
+
+" タグファイルの二分探索
+set tagbsearch
 
 "-----------------------------------
 " 補完の設定
@@ -594,8 +685,33 @@ command! OpenHosts call AnsanlomsFunctions().hosts()
 command! Ctags call AnsanlomsFunctions().ctags()
 command! -nargs=? TermAlias call AnsanlomsFunctions().terminal.exec(<f-args>)
 
-" 共通keymap
-exec "source " . expand("~/.vimrc.keymap")
+" Leaderの設定
+let g:mapleader = ","
+
+" 検索などで飛んだらそこを真ん中に
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+nnoremap g* g*zz
+nnoremap G Gzz
+
+" 危険なコマンドは使わせない
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
+
+" 検索のハイライト削除
+nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
+
+" very magic
+nnoremap / /\v
+
+" undo-branche
+nnoremap u g-
+nnoremap <C-r> g+
+
+" バッファ
+nnoremap <Leader>b :<C-u>ls<CR>:<C-u>buf<Space>
 
 " CtrlPLauncher
 nnoremap <C-e> :<C-u>CtrlPLauncher<CR>
