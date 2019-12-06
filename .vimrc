@@ -44,7 +44,7 @@ if argc() && (has("mac") || has("win32") || has("win64"))
       endif
     endif
 
-    silent execute s:vim_start_cmd " --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, ' ')
+    silent execute s:vim_start_cmd " --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, " ")
 
     unlet s:vim_start_cmd
     unlet s:arg_list
@@ -159,6 +159,10 @@ set synmaxcol=600
 
 " テキストの整形方法
 set formatoptions=croql
+
+" 画面描画の設定
+set lazyredraw    " コマンド実行時の画面描画をしない
+set ttyfast       " 高速ターミナル接続
 
 "-----------------------------------
 " プラグイン設定
@@ -577,6 +581,16 @@ function! AnsanlomsFunctions()
 
   " ターミナル関連
   let l:func.terminal = {}
+
+  " ssh
+  function! l:func.terminal.ssh(ssh) dict
+    let l:cmd = "ssh " . a:ssh
+    call term_start(l:cmd, {
+    \ "term_name": l:cmd,
+    \ "term_finish": "close",
+    \ "curwin": 1
+    \})
+  endfunction
 
   " cmd
   function! l:func.terminal.cmd() dict
