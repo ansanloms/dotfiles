@@ -24,30 +24,11 @@ if argc() && (has("mac") || has("win32") || has("win64"))
   let s:running_vim_list = filter(split(serverlist(), "\n"), "v:val !=? v:servername")
 
   if !empty(s:running_vim_list)
-    let s:arg_list = []
-    for arg in argv()
-      " 引数に空白があったら""で囲む
-      call add(s:arg_list, match(arg, " ") ? "\"" . arg  . "\"" : arg)
-    endfor
-
-    " Open given files in running Vim and exit.
-    let s:vim_start_cmd = "!vim"
-    if has("mac")
-      " mac
-      let s:vim_start_cmd = "!vim"
-    elseif has("win32") || has("win64")
-      " windows
-      if has("gui_running")
-        let s:vim_start_cmd = "!start gvim"
-      else
-        let s:vim_start_cmd = "!start vim"
-      endif
-    endif
-
-    silent execute s:vim_start_cmd " --servername" s:running_vim_list[0] "--remote-tab-silent" join(s:arg_list, " ")
-
-    unlet s:vim_start_cmd
-    unlet s:arg_list
+    silent execute
+    \ (has("gui_running") ? "!gvim" : "!vim")
+    \ "--servername" s:running_vim_list[0]
+    \ "--remote-tab-silent"
+    \ join(map(argv(), "shellescape(v:val, 1)"), " ")
     qa!
   endif
 
@@ -351,7 +332,6 @@ let g:lightline = {
 \   "left": [
 \     ["mode", "paste"],
 \     ["gitbranch", "filename"],
-\     ["vista"],
 \   ],
 \   "right": [
 \     ["sky_color_clock"],
@@ -370,7 +350,6 @@ let g:lightline = {
 \   "filetype": "%{LightlineIsVisible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
 \   "fileencoding": "%{LightlineIsVisible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
 \   "sky_color_clock": "%#SkyColorClock#%{' ' . sky_color_clock#statusline() . ' '}%#SkyColorClockTemp# ",
-\   "vista": "%{get(b:, 'vista_nearest_method_or_function', '')}",
 \ },
 \ "component_raw": {
 \   "sky_color_clock": 1,
@@ -392,7 +371,7 @@ function! LightlineFilename()
 
   " https://bitbucket.org/ns9tks/vim-fuzzyfinder/src/tip/autoload/fuf.vim
   let l:str = expand("%:p")
-  let l:len = (winwidth(0)/2)-len(expand("%:p:t"))
+  let l:len = (winwidth(0)/2) - len(expand("%:p:t"))
   let l:mask = "..."
 
   if l:len >= len(l:str)
