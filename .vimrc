@@ -490,9 +490,9 @@ function! AnsanlomsFunctions()
   " ファイルマネージャで開く
   function! l:func.filemanager() dict
     if has("win32") || has("win64")
-      call system("explorer.exe /select," . expand("%:p"))
+      silent execute "!start explorer.exe /select," expand("%:p")
     elseif has("mac")
-      call system("open " . expand("%:p"))
+      silent execute "!open" expand("%:p")
     endif
   endfunction
 
