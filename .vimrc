@@ -145,6 +145,11 @@ set formatoptions=croql
 set lazyredraw    " コマンド実行時の画面描画をしない
 set ttyfast       " 高速ターミナル接続
 
+" True Colorでのシンタックスハイライト
+if (has("termguicolors"))
+  set termguicolors
+endif
+
 "-----------------------------------
 " プラグイン設定
 "-----------------------------------
@@ -195,6 +200,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/liuchengxu/vista.vim.git")
   call minpac#add("https://github.com/mattn/webapi-vim.git")
   call minpac#add("https://github.com/aklt/plantuml-syntax.git", {"type": "opt"})
+  call minpac#add("https://github.com/kaicataldo/material.vim.git")
 endif
 
 " Align
@@ -349,6 +355,11 @@ let g:vista_executive_for = {
 \ "javascript": "vim_lsp",
 \ "typescript": "vim_lsp",
 \}
+
+" material.vim
+let g:material_theme_style = "darker"
+
+let g:material_terminal_italics = 0
 
 "-----------------------------------
 " ステータスラインの設定
@@ -1301,8 +1312,6 @@ syntax enable
 " カラースキーム設定
 try
   set background=dark
-  set t_Co=256
-
-  colorscheme iceberg
+  colorscheme material
 catch
 endtry
