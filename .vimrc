@@ -160,7 +160,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
   call minpac#add("https://github.com/morhetz/gruvbox.git")
   call minpac#add("https://github.com/pasela/edark.vim.git")
-  call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
+  call minpac#add("https://github.com/vim-jp/vital.vim.git")
   call minpac#add("https://github.com/junegunn/vim-easy-align.git")
   call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
   call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
@@ -172,30 +172,30 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
   call minpac#add("https://github.com/prabirshrestha/async.vim.git")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
-  call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
-  call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
-  call minpac#add("https://github.com/elzr/vim-json.git", {"type": "opt"})
+  call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git")
+  call minpac#add("https://github.com/vim-scripts/sh.vim.git")
+  call minpac#add("https://github.com/elzr/vim-json.git")
   call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
   call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git")
   call minpac#add("https://github.com/mattn/emmet-vim.git")
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-  call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
-  call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
-  call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
-  call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
+  call minpac#add("https://github.com/pangloss/vim-javascript.git")
+  call minpac#add("https://github.com/leafgarland/typescript-vim.git")
+  call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git")
+  call minpac#add("https://github.com/vim-jp/vim-java.git")
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
-  call minpac#add("https://github.com/vim-scripts/groovyindent.git", {"type": "opt"})
+  call minpac#add("https://github.com/vim-scripts/groovyindent.git")
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
-  call minpac#add("https://github.com/hallzy/lightline-iceberg.git")
-  call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
+  call minpac#add("https://github.com/vim-scripts/apachestyle.git")
   call minpac#add("https://github.com/cespare/vim-toml.git")
   call minpac#add("https://github.com/twitvim/twitvim.git")
-  call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
-  call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
+  call minpac#add("https://github.com/jparise/vim-graphql.git")
+  call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git")
   call minpac#add("https://github.com/mattn/vimtweak.git")
   call minpac#add("https://github.com/liuchengxu/vista.vim.git")
   call minpac#add("https://github.com/itchyny/lightline.vim.git")
   call minpac#add("https://github.com/mattn/webapi-vim.git")
+  call minpac#add("https://github.com/aklt/plantuml-syntax.git")
 endif
 
 " Align
@@ -307,6 +307,9 @@ let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表
 " vimtweak
 autocmd guienter * silent! VimTweakSetAlpha 230
 
+" sh.vim
+let g:sh_indent_case_labels=1
+
 " vim-lsp
 let g:lsp_signs_enabled = 1           " enable signs
 let g:lsp_diagnostics_enabled = 1
@@ -385,6 +388,20 @@ function! LightlineFilename()
 
   return (l:head > 0 ? l:str[: l:head - 1] : "") . l:mask . (l:tail > 0 ? l:str[-l:tail :] : "")
 endfunction
+
+" markdown
+
+" foldさせない
+let g:vim_markdown_folding_disabled = 1
+
+" conceal設定
+let g:vim_markdown_conceal = 0
+
+let g:vim_markdown_liquid=1
+let g:vim_markdown_math=0
+let g:vim_markdown_frontmatter=1
+let g:vim_markdown_toml_frontmatter=1
+let g:vim_markdown_json_frontmatter=0
 
 " vista
 let g:vista_icon_indent = ["▸ ", ""]
@@ -766,9 +783,6 @@ augroup java-setting
   " インデントセット
   autocmd FileType java setlocal shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
 
-  " プラグイン読み込み
-  autocmd FileType java packadd vim-java
-
   if (has("win32") || has("win64"))
     " lombok
     let s:lombok_path = $HOME . "/scoop/apps/lombok/current/lombok.jar"
@@ -825,10 +839,6 @@ augroup javascript-setting
   " インデントセット
   autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
-  " プラグイン読み込み
-  autocmd FileType javascript packadd vim-javascript
-  autocmd FileType javascript packadd vim-jsx-pretty
-
   if executable("typescript-language-server")
     autocmd User lsp_setup call lsp#register_server({
     \ "name": "javascript support using typescript-language-server",
@@ -853,11 +863,6 @@ augroup typescript-setting
 
   " インデントセット
   autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-  " プラグイン読み込み
-  autocmd FileType typescript packadd vim-jsx-pretty
-  autocmd FileType typescript packadd vim-lsp-typescript
-  autocmd FileType javascript packadd typescript-vim
 
   if executable("typescript-language-server")
     autocmd User lsp_setup call lsp#register_server({
@@ -903,7 +908,6 @@ augroup php-setting
   \ })
 
   autocmd FileType php setlocal omnifunc=lsp#complete
-  autocmd FileType php packadd php-language-server
 
   " ハイライト行指定
   autocmd FileType php syntax sync minlines=300 maxlines=500
@@ -930,18 +934,6 @@ augroup END
 " markdownの設定
 "-----------------------------------
 
-" foldさせない
-let g:vim_markdown_folding_disabled = 1
-
-" conceal設定
-let g:vim_markdown_conceal = 0
-
-let g:vim_markdown_liquid=1
-let g:vim_markdown_math=0
-let g:vim_markdown_frontmatter=1
-let g:vim_markdown_toml_frontmatter=1
-let g:vim_markdown_json_frontmatter=0
-
 augroup markdown-setting
   autocmd!
 
@@ -953,6 +945,21 @@ augroup markdown-setting
 augroup END
 
 "-----------------------------------
+" plantumlの設定
+"-----------------------------------
+
+augroup plantuml-setting
+  autocmd!
+
+  " 拡張子設定
+  autocmd BufNewFile,BufRead *.{pu,uml,puml,iuml,plantuml} set filetype=plantuml
+
+  " インデントセット
+  autocmd FileType plantuml setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
+augroup END
+
+
+"-----------------------------------
 " shの設定
 "-----------------------------------
 
@@ -961,11 +968,6 @@ augroup sh-setting
 
   " インデントセット
   autocmd FileType sh setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
-
-  " プラグイン読み込み
-  autocmd FileType sh packadd Super-Shell-Indent
-  autocmd FileType sh packadd sh.vim
-  let g:sh_indent_case_labels=1
 augroup END
 
 "-----------------------------------
@@ -1046,35 +1048,10 @@ augroup json-setting
   " インデントセット
   autocmd FileType json setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
-  " プラグイン読み込み
-  autocmd FileType json packadd vim-json
-
   " フォーマット指定
   if executable("python")
     autocmd FileType json setlocal formatprg=python\ -m\ json.tool
   endif
-augroup END
-
-"-----------------------------------
-" apache confの設定
-"-----------------------------------
-
-augroup apache-setting
-  autocmd!
-
-  " プラグイン読み込み
-  autocmd FileType apache packadd apachestyle
-augroup END
-
-"-----------------------------------
-" groovyの設定
-"-----------------------------------
-
-augroup groovy-setting
-  autocmd!
-
-  " プラグイン読み込み
-  autocmd FileType groovy packadd groovyindent
 augroup END
 
 "-----------------------------------
@@ -1086,9 +1063,6 @@ augroup graphql-setting
 
   " インデントセット
   autocmd FileType graphql setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-  " プラグイン読み込み
-  autocmd FileType graphql packadd vim-graphql
 augroup END
 
 "-----------------------------------
