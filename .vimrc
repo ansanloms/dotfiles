@@ -160,7 +160,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
   call minpac#add("https://github.com/morhetz/gruvbox.git")
   call minpac#add("https://github.com/pasela/edark.vim.git")
-  call minpac#add("https://github.com/vim-jp/vital.vim.git")
+  call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
   call minpac#add("https://github.com/junegunn/vim-easy-align.git")
   call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
   call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
@@ -172,30 +172,29 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
   call minpac#add("https://github.com/prabirshrestha/async.vim.git")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
-  call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git")
-  call minpac#add("https://github.com/vim-scripts/sh.vim.git")
-  call minpac#add("https://github.com/elzr/vim-json.git")
+  call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
+  call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
+  call minpac#add("https://github.com/elzr/vim-json.git", {"type": "opt"})
   call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
   call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git")
   call minpac#add("https://github.com/mattn/emmet-vim.git")
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-  call minpac#add("https://github.com/pangloss/vim-javascript.git")
-  call minpac#add("https://github.com/leafgarland/typescript-vim.git")
-  call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git")
-  call minpac#add("https://github.com/vim-jp/vim-java.git")
+  call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
+  call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
+  call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
+  call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
-  call minpac#add("https://github.com/vim-scripts/groovyindent.git")
+  call minpac#add("https://github.com/vim-scripts/groovyindent.git", {"type": "opt"})
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
-  call minpac#add("https://github.com/vim-scripts/apachestyle.git")
+  call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
   call minpac#add("https://github.com/cespare/vim-toml.git")
   call minpac#add("https://github.com/twitvim/twitvim.git")
-  call minpac#add("https://github.com/jparise/vim-graphql.git")
-  call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git")
+  call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
+  call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
   call minpac#add("https://github.com/mattn/vimtweak.git")
   call minpac#add("https://github.com/liuchengxu/vista.vim.git")
-  call minpac#add("https://github.com/itchyny/lightline.vim.git")
   call minpac#add("https://github.com/mattn/webapi-vim.git")
-  call minpac#add("https://github.com/aklt/plantuml-syntax.git")
+  call minpac#add("https://github.com/aklt/plantuml-syntax.git", {"type": "opt"})
 endif
 
 " Align
@@ -307,9 +306,6 @@ let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表
 " vimtweak
 autocmd guienter * silent! VimTweakSetAlpha 230
 
-" sh.vim
-let g:sh_indent_case_labels=1
-
 " vim-lsp
 let g:lsp_signs_enabled = 1           " enable signs
 let g:lsp_diagnostics_enabled = 1
@@ -327,67 +323,6 @@ let g:asyncomplete_log_file = expand("~/.vim/asyncomplete.log")
 let g:asyncomplete_remove_duplicates = 1
 let g:asyncomplete_smart_completion = 1
 let g:asyncomplete_auto_popup = 1
-
-" lightline
-let g:lightline = {
-\ "colorscheme": "iceberg",
-\ "active": {
-\   "left": [
-\     ["mode", "paste"],
-\     ["gitbranch", "filename"],
-\   ],
-\   "right": [
-\     ["sky_color_clock"],
-\     ["percent"],
-\     ["fileformat", "fileencoding", "filetype"],
-\   ]
-\ },
-\ "component_function": {
-\   "mode": "lightline#mode",
-\   "gitbranch": "fugitive#head",
-\   "filename": "LightlineFilename",
-\ },
-\ "component": {
-\   "modified": "%{(LightlineIsVisible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
-\   "fileformat": "%{LightlineIsVisible() ? &fileformat : ''}",
-\   "filetype": "%{LightlineIsVisible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
-\   "fileencoding": "%{LightlineIsVisible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
-\   "sky_color_clock": "%#SkyColorClock#%{' ' . sky_color_clock#statusline() . ' '}%#SkyColorClockTemp# ",
-\ },
-\ "component_raw": {
-\   "sky_color_clock": 1,
-\ },
-\}
-
-function! LightlineIsVisible() abort
-  return (60 <= winwidth(0)) && (&filetype !~? "help\|vista")
-endfunction
-
-function! LightlineFilename()
-  if &filetype ==# "vista"
-    return ""
-  endif
-
-  if expand("%:t") == ""
-    return "[No Name]"
-  endif
-
-  " https://bitbucket.org/ns9tks/vim-fuzzyfinder/src/tip/autoload/fuf.vim
-  let l:str = expand("%:p")
-  let l:len = (winwidth(0)/2) - len(expand("%:p:t"))
-  let l:mask = "..."
-
-  if l:len >= len(l:str)
-    return l:str
-  elseif l:len <= len(l:mask)
-    return l:mask
-  endif
-
-  let l:head = (l:len - len(l:mask)) / 2
-  let l:tail = l:len - len(l:mask) - l:head
-
-  return (l:head > 0 ? l:str[: l:head - 1] : "") . l:mask . (l:tail > 0 ? l:str[-l:tail :] : "")
-endfunction
 
 " markdown
 
@@ -422,12 +357,89 @@ let g:vista_executive_for = {
 " ステータスラインを常に表示
 set laststatus=2
 
+" https://bitbucket.org/ns9tks/vim-fuzzyfinder/src/tip/autoload/fuf.vim
+" TODO: マルチバイト文字が崩れるのをなんとかする
+function! SnipMid(str, len, mask)
+  if a:len >= len(a:str)
+    return a:str
+  elseif a:len <= len(a:mask)
+    return a:mask
+  endif
+
+  let len_head = (a:len - len(a:mask)) / 2
+  let len_tail = a:len - len(a:mask) - len_head
+
+  return (len_head > 0 ? a:str[: len_head - 1] : "") . a:mask . (len_tail > 0 ? a:str[-len_tail :] : "")
+endfunction
+
+" モード取得
+function! StatuslineMode()
+  let mode_list = {
+  \ "n":       "NORMAL"
+  \ ,"i":      "INSERT"
+  \ ,"R":      "REPLACE"
+  \ ,"v":      "VISUAL"
+  \ ,"V":      "V-LINE"
+  \ ,"c":      "COMMAND"
+  \ ,"\<C-v>": "V-BLOCK"
+  \ ,"s":      "SELECT"
+  \ ,"S":      "S-LINE"
+  \ ,"\<C-s>": "S-BLOCK"
+  \ ,"t":      "TERMINAL"
+  \ ,"?":      "?"
+  \}
+  let current_mode = mode()
+  let paste_mode   = (&paste) ? "(PASTE)" : ""
+  if has_key(mode_list, current_mode)
+    return mode_list[current_mode] . paste_mode
+  endif
+  return current_mode.paste_mode . "?"
+endfunction
+
+set statusline=[%{StatuslineMode()}]                                                          " モード表示
+set statusline+=%{SnipMid(expand('%:p'),(winwidth(0)/2)-len(expand('%:p:t')),'...')}          " ファイルパス
+set statusline+=%m                                                                            " 修正フラグ
+set statusline+=%r                                                                            " 読み込み専用フラグ
+set statusline+=%h                                                                            " ヘルプバッファフラグ
+set statusline+=%w                                                                            " プレビューウィンドウフラグ
+set statusline+=%=                                                                            " 左寄せ項目と右寄せ項目の区切り
+set statusline+=[%{&filetype}]                                                                " ファイルタイプ
+set statusline+=[%{&fileformat}]                                                              " 改行コード
+set statusline+=[%{&fileencoding}]                                                            " 文字コード
+set statusline+=[%l/%L\ %p%%]                                                                 " 現在行数/全行数 カーソル位置までの割合
+set statusline+=%#SkyColorClock#\ %{sky_color_clock#statusline()}\  " <-- 行末にSP有          " 日付と月齢表示
+
 "-----------------------------------
 " タブラインの設定
 "-----------------------------------
 
 " タブラインを常に表示
 set showtabline=2
+
+" タブラインの設定
+set tabline=%!MakeTabLine()
+
+function! MakeTabLine()
+  let sep = ""  " タブ間の区切り
+  return join(map(range(1, tabpagenr("$")), "s:tabpage_label(v:val)"), sep) . sep . "%#TabLineFill#%T"
+endfunction
+
+function! s:tabpage_label(tabpagenr)
+  " タブページ内のバッファのリスト
+  let bufnrs = tabpagebuflist(a:tabpagenr)
+
+  " カレントタブページかどうかでハイライトを切り替える
+  let hi = a:tabpagenr is tabpagenr() ? "%#TabLineSel#" : "%#TabLine#"
+
+  " タブページ内に変更ありのバッファがあったら "+" を付ける
+  let mod = len(filter(copy(bufnrs), "getbufvar(v:val, \"&modified\")")) ? "[+]" : ""
+
+  " カレントバッファ
+  let curbufnr = bufnrs[tabpagewinnr(a:tabpagenr) - 1]  " tabpagewinnr() は 1 origin
+  let fname = fnamemodify(bufname(curbufnr), ":t")
+
+  return "%" . a:tabpagenr . "T" . hi . " " . a:tabpagenr . ":" . fname . mod . " " . "%T%#TabLineFill#"
+endfunction
 
 "-----------------------------------
 " インデントの設定
@@ -839,6 +851,11 @@ augroup javascript-setting
   " インデントセット
   autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
+  " プラグイン読み込み
+  autocmd FileType javascript packadd vim-javascript
+  autocmd FileType javascript packadd vim-jsx-pretty
+
+  " lsp
   if executable("typescript-language-server")
     autocmd User lsp_setup call lsp#register_server({
     \ "name": "javascript support using typescript-language-server",
@@ -864,6 +881,12 @@ augroup typescript-setting
   " インデントセット
   autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
+  " プラグイン読み込み
+  autocmd FileType typescript packadd vim-jsx-pretty
+  autocmd FileType typescript packadd vim-lsp-typescript
+  autocmd FileType javascript packadd typescript-vim
+
+  " lsp
   if executable("typescript-language-server")
     autocmd User lsp_setup call lsp#register_server({
     \ "name": "typescript-language-server",
@@ -900,12 +923,6 @@ augroup php-setting
     autocmd FileType php nnoremap <silent><leader>pcf :w!<CR>:echo system("phpcbf --standard=PSR2 " . expand("%:p"))<CR>:e!<CR>
     autocmd FileType php nnoremap <silent><leader>pcd :w!<CR>:echo system("phpcbf --standard=PSR2 " . expand("%:p:h"))<CR>:e!<CR>
   endif
-
-  autocmd User lsp_setup call lsp#register_server({
-  \ "name": "php-language-server",
-  \ "cmd": {server_info->["php", expand("~/.vim/pack/minpac/opt/php-language-server/bin/php-language-server.php")]},
-  \ "whitelist": ["php"],
-  \ })
 
   autocmd FileType php setlocal omnifunc=lsp#complete
 
@@ -956,6 +973,9 @@ augroup plantuml-setting
 
   " インデントセット
   autocmd FileType plantuml setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
+
+  " プラグイン読み込み
+  autocmd FileType plantuml packadd plantuml-syntax
 augroup END
 
 
@@ -968,6 +988,11 @@ augroup sh-setting
 
   " インデントセット
   autocmd FileType sh setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
+
+  " プラグイン読み込み
+  autocmd FileType sh packadd Super-Shell-Indent
+  autocmd FileType sh packadd sh.vim
+  let g:sh_indent_case_labels=1
 augroup END
 
 "-----------------------------------
@@ -1048,10 +1073,35 @@ augroup json-setting
   " インデントセット
   autocmd FileType json setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
+  " プラグイン読み込み
+  autocmd FileType json packadd vim-json
+
   " フォーマット指定
   if executable("python")
     autocmd FileType json setlocal formatprg=python\ -m\ json.tool
   endif
+augroup END
+
+"-----------------------------------
+" apache confの設定
+"-----------------------------------
+
+augroup apache-setting
+  autocmd!
+
+  " プラグイン読み込み
+  autocmd FileType apache packadd apachestyle
+augroup END
+
+"-----------------------------------
+" groovyの設定
+"-----------------------------------
+
+augroup groovy-setting
+  autocmd!
+
+  " プラグイン読み込み
+  autocmd FileType groovy packadd groovyindent
 augroup END
 
 "-----------------------------------
@@ -1063,6 +1113,9 @@ augroup graphql-setting
 
   " インデントセット
   autocmd FileType graphql setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+
+  " プラグイン読み込み
+  autocmd FileType graphql packadd vim-graphql
 augroup END
 
 "-----------------------------------
