@@ -141,15 +141,6 @@ set synmaxcol=600
 " テキストの整形方法
 set formatoptions=croql
 
-" 画面描画の設定
-set lazyredraw    " コマンド実行時の画面描画をしない
-set ttyfast       " 高速ターミナル接続
-
-" True Colorでのシンタックスハイライト
-if (has("termguicolors"))
-  set termguicolors
-endif
-
 "-----------------------------------
 " プラグイン設定
 "-----------------------------------
@@ -1259,6 +1250,15 @@ endif
 set list
 set listchars=tab:\|\ ,trail:_,extends:>,precedes:<,nbsp:%
 
+" 画面描画の設定
+set lazyredraw    " コマンド実行時の画面描画をしない
+set ttyfast       " 高速ターミナル接続
+
+" True Colorでのシンタックスハイライト
+if (has("termguicolors"))
+  set termguicolors
+endif
+
 " 行番号を表示する
 set number
 
@@ -1312,6 +1312,6 @@ syntax enable
 " カラースキーム設定
 try
   set background=dark
-  colorscheme material
+  colorscheme iceberg
 catch
 endtry
