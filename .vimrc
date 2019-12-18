@@ -96,7 +96,8 @@ set helplang=ja,en
 set whichwrap=b,s,h,l,<,>,[,]
 
 " マウスは使わない
-set mouse-=a
+"set mouse-=a
+set mouse=
 
 " バッファ有効
 set hidden
