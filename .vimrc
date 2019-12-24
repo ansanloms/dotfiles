@@ -186,13 +186,13 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/cespare/vim-toml.git")
   call minpac#add("https://github.com/twitvim/twitvim.git")
   call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
-  call minpac#add("https://github.com/ryanolsonx/vim-lsp-typescript.git", {"type": "opt"})
   call minpac#add("https://github.com/mattn/vimtweak.git")
   call minpac#add("https://github.com/liuchengxu/vista.vim.git")
   call minpac#add("https://github.com/mattn/webapi-vim.git")
   call minpac#add("https://github.com/aklt/plantuml-syntax.git", {"type": "opt"})
   call minpac#add("https://github.com/kaicataldo/material.vim.git")
   call minpac#add("https://github.com/itchyny/lightline.vim.git")
+  call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
 endif
 
 " Align
@@ -864,47 +864,8 @@ augroup java-setting
   " インデントセット
   autocmd FileType java setlocal shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
 
-  if (has("win32") || has("win64"))
-    " lombok
-    let s:lombok_path = $HOME . "/scoop/apps/lombok/current/lombok.jar"
-    " eclipse jdt の dir
-    let s:eclipse_jdt_dir = $HOME . "/scoop/apps/eclipse-jdt-language-server/0.40.0"
-    " eclipse jdt の config そのうちmacとかlinuxとか分ける必要あり
-    let s:eclipse_jdt_config_dir = s:eclipse_jdt_dir . "/config_win"
-    " equinox.launcher のパス バージョンごとに変わるのをどうにかしたい
-    let s:eclipse_jdt_equinox_launcher_path = s:eclipse_jdt_dir . "/plugins/org.eclipse.equinox.launcher_1.5.400.v20190515-0925.jar"
-    " workspace pleiadesのそれにのっかる
-    let s:eclipse_workspace_dir = $HOME . "/scoop/apps/pleiades4.8-java-win-full/current/workspace"
-
-    if executable("java") && filereadable(expand(s:eclipse_jdt_equinox_launcher_path)) && filereadable(expand(s:lombok_path))
-      " vim-lsp の設定
-      autocmd User lsp_setup call lsp#register_server({
-      \ "name": "eclipse.jdt.ls",
-      \ "cmd": {server_info->[
-      \   "java",
-      \   "-javaagent:" . expand(s:lombok_path),
-      \   "-Xbootclasspath/a:" . expand(s:lombok_path),
-      \   "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-      \   "-Dosgi.bundles.defaultStartLevel=4",
-      \   "-Declipse.product=org.eclipse.jdt.ls.core.product",
-      \   "-Dlog.level=ALL",
-      \   "-noverify",
-      \   "-Dfile.encoding=UTF-8",
-      \   "-Xmx1G",
-      \   "-jar",
-      \   expand(s:eclipse_jdt_equinox_launcher_path),
-      \   "-configuration",
-      \   expand(s:eclipse_jdt_config_dir),
-      \   "-data",
-      \   get(s:, "eclipse_workspace_dir", expand("~/workspace"))
-      \ ]},
-      \ "whitelist": ["java"],
-      \})
-
-      autocmd FileType java setlocal omnifunc=lsp#complete
-      autocmd FileType java nnoremap <silent> <c-]> :<c-u>LspDefinition<CR>
-    endif
-  endif
+  autocmd FileType java setlocal omnifunc=lsp#complete
+  autocmd FileType java nnoremap <silent> <c-]> :<c-u>LspDefinition<CR>
 augroup END
 
 "-----------------------------------
@@ -924,17 +885,7 @@ augroup javascript-setting
   autocmd FileType javascript packadd vim-javascript
   autocmd FileType javascript packadd vim-jsx-pretty
 
-  " lsp
-  if executable("typescript-language-server")
-    autocmd User lsp_setup call lsp#register_server({
-    \ "name": "javascript support using typescript-language-server",
-    \ "cmd": {server_info->[&shell, &shellcmdflag, "typescript-language-server --stdio"]},
-    \ "root_uri":{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), "package.json"))},
-    \ "whitelist": ["javascript", "javascript.jsx"],
-    \})
-
-    autocmd FileType javascript setlocal omnifunc=lsp#complete
-  endif
+  autocmd FileType javascript setlocal omnifunc=lsp#complete
 augroup END
 
 "-----------------------------------
@@ -952,20 +903,9 @@ augroup typescript-setting
 
   " プラグイン読み込み
   autocmd FileType typescript packadd vim-jsx-pretty
-  autocmd FileType typescript packadd vim-lsp-typescript
   autocmd FileType javascript packadd typescript-vim
 
-  " lsp
-  if executable("typescript-language-server")
-    autocmd User lsp_setup call lsp#register_server({
-    \ "name": "typescript-language-server",
-    \ "cmd": {server_info->[&shell, &shellcmdflag, "typescript-language-server --stdio"]},
-    \ "root_uri": {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), "tsconfig.json"))},
-    \ "whitelist": ["typescript", "typescript.tsx"],
-    \})
-
-    autocmd FileType typescript setlocal omnifunc=lsp#complete
-  endif
+  autocmd FileType typescript setlocal omnifunc=lsp#complete
 augroup END
 
 "-----------------------------------
@@ -992,8 +932,6 @@ augroup php-setting
     autocmd FileType php nnoremap <silent><leader>pcf :w!<CR>:echo system("phpcbf --standard=PSR2 " . expand("%:p"))<CR>:e!<CR>
     autocmd FileType php nnoremap <silent><leader>pcd :w!<CR>:echo system("phpcbf --standard=PSR2 " . expand("%:p:h"))<CR>:e!<CR>
   endif
-
-  autocmd FileType php setlocal omnifunc=lsp#complete
 
   " ハイライト行指定
   autocmd FileType php syntax sync minlines=300 maxlines=500
