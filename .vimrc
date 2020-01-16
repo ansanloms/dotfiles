@@ -1,5 +1,3 @@
-scriptencoding utf-8
-
 "-----------------------------------
 " 文字コード設定
 "-----------------------------------
@@ -14,6 +12,9 @@ if has("vim_starting")
   " 改行文字設定
   set fileformats=unix,mac,dos
 endif
+
+" set encoding の後に記述する
+scriptencoding utf-8
 
 "-----------------------------------
 " 他のvimが起動済ならそれを使う
@@ -143,340 +144,11 @@ set synmaxcol=600
 set formatoptions=croql
 
 "-----------------------------------
-" プラグイン設定
-"-----------------------------------
-
-" minpacの取得
-if !isdirectory(expand("~/.vim/pack/minpac/opt/minpac"))
-  call system("git clone https://github.com/k-takata/minpac.git " . expand("~/.vim/pack/minpac/opt/minpac"))
-endif
-
-if exists("*minpac#init")
-  call minpac#init()
-  call minpac#add("https://github.com/k-takata/minpac.git", {"type": "opt"})
-  call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
-  call minpac#add("https://github.com/morhetz/gruvbox.git")
-  call minpac#add("https://github.com/pasela/edark.vim.git")
-  call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
-  call minpac#add("https://github.com/junegunn/vim-easy-align.git")
-  call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
-  call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
-  call minpac#add("https://github.com/ivalkeen/vim-ctrlp-tjump.git")
-  call minpac#add("https://github.com/tpope/vim-fugitive.git")
-  call minpac#add("https://github.com/tyru/open-browser.vim.git")
-  call minpac#add("https://github.com/thinca/vim-quickrun.git")
-  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
-  call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
-  call minpac#add("https://github.com/prabirshrestha/async.vim.git")
-  call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
-  call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
-  call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
-  call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
-  call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git")
-  call minpac#add("https://github.com/mattn/emmet-vim.git")
-  call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-  call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
-  call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
-  call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
-  call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
-  call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
-  call minpac#add("https://github.com/vim-scripts/groovyindent.git", {"type": "opt"})
-  call minpac#add("https://github.com/cocopon/iceberg.vim.git")
-  call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
-  call minpac#add("https://github.com/cespare/vim-toml.git")
-  call minpac#add("https://github.com/twitvim/twitvim.git")
-  call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
-  call minpac#add("https://github.com/mattn/vimtweak.git")
-  call minpac#add("https://github.com/liuchengxu/vista.vim.git")
-  call minpac#add("https://github.com/mattn/webapi-vim.git")
-  call minpac#add("https://github.com/aklt/plantuml-syntax.git", {"type": "opt"})
-  call minpac#add("https://github.com/kaicataldo/material.vim.git")
-  call minpac#add("https://github.com/itchyny/lightline.vim.git")
-  call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
-endif
-
-" Align
-let g:Align_xstrlen = 3 " 幅広文字に対応する
-
-" CtrlP
-let g:ctrlp_use_caching = 1                                     " キャッシュを使用する
-let g:ctrlp_cache_dir = expand("~/.cache/ctrlp")                " キャッシュディレクトリ
-let g:ctrlp_clear_cache_on_exit = 0                             " 終了時にキャッシュを削除しない
-let g:ctrlp_lazy_update = 1                                     " 遅延再描画
-let g:ctrlp_max_height = 20                                     " 20行表示
-let g:ctrlp_open_new_file = 1                                   " ファイルの新規作成時は別タブで開く
-let g:ctrlp_launcher_file_list = ["~/.ctrlp-launcher", "~/.ctrlp-launcher-work", "~/.ctrlp-launcher-gcp"]  " ランチャーで読み込むファイルパス
-let g:ctrlp_tjump_only_silent = 0                               " タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|git)$'   " 除外
-
-" quickrun
-let g:quickrun_config = {}
-let g:quickrun_config["_"] = {
-\ "runner": "job",
-\}
-
-" quickrun - java
-let g:quickrun_config["java"] = {
-\ "hook/cd/directory": "%S:p:h",
-\ "exec": [
-\   "javac -J-Dfile.encoding=UTF8 %o %s",
-\   "%c -Dfile.encoding=UTF8 %s:t:r %a"
-\ ]
-\}
-
-" quickrun - html
-if executable("w3m")
-  " text 出力
-  let g:quickrun_config["html"] = {
-  \ "type": "html/w3m"
-  \}
-
-  let g:quickrun_config["html/w3m"] = {
-  \ "command": "w3m",
-  \ "cmdopt": "-dump",
-  \ "exec": '%c %o %s'
-  \}
-endif
-
-" quickrun - markdown
-if executable("pandoc")
-  " cssの取得
-  if !filereadable(expand("~/.vim/markdown.css"))
-    call system("curl https://gist.githubusercontent.com/tuzz/3331384/raw/d1771755a3e26b039bff217d510ee558a8a1e47d/github.css -o " . expand("~/.vim/markdown.css"))
-  endif
-
-  " html 出力
-  let g:quickrun_config["markdown"] = {
-  \ "hook/cd/directory": "%S:p:h",
-  \ "type": "markdown/pandoc",
-  \ "outputter": "null",
-  \ "exec": "pandoc %s --standalone --toc-depth=6 --to=html5 --css=" . expand("~/.vim/markdown.css") . " --output=%s.html"
-  \}
-
-  " slidy 出力
-  let g:quickrun_config["markdown-slidy"] = {
-  \ "hook/cd/directory": "%S:p:h",
-  \ "type": "markdown/pandoc",
-  \ "outputter": "null",
-  \ "exec": "pandoc %s --standalone --self-contained --toc-depth=6 --to=slidy --output=%s-slidy.html"
-  \}
-
-  " html 出力 (1つのファイルに纏める)
-  let g:quickrun_config["markdown-html"] = {
-  \ "hook/cd/directory": "%S:p:h",
-  \ "type": "markdown/pandoc",
-  \ "outputter": "null",
-  \ "exec": "pandoc %s --standalone --self-contained --toc-depth=6 --to=html5 --css=" . expand("~/.vim/markdown.css") . " --output=%s-standalone.html"
-  \}
-
-  " Word docx 出力
-  let g:quickrun_config["markdown-docx"] = {
-  \ "hook/cd/directory": "%S:p:h",
-  \ "outputter": "null",
-  \ "type": "markdown/pandoc",
-  \ "exec": "pandoc %s --standalone --self-contained --toc-depth=6 --to=docx --highlight-style=zenburn --output=%s.docx"
-  \}
-endif
-
-" quickrun - mysql
-if executable("mysql")
-  let g:quickrun_config["sql"] = {
-  \ "type": "sql/mysql"
-  \}
-
-  let g:quickrun_config["sql/mysql"] = {
-  \ "command": "mysql",
-  \ "cmdopt": "--defaults-extra-file=" . expand("~/.mysql/local.conf"),
-  \ "exec": ["%c %o < %s"]
-  \}
-endif
-
-" parenmatch
-let g:loaded_matchparen = 1     " matchparenを無効にする
-
-" sky-color-clock.vim
-let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
-let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
-
-" vimtweak
-autocmd guienter * silent! VimTweakSetAlpha 230
-
-" vim-lsp
-let g:lsp_signs_enabled = 1           " enable signs
-let g:lsp_diagnostics_enabled = 1
-let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
-
-let g:lsp_signs_error = {"text": "✗"}
-let g:lsp_signs_warning = {"text": "‼"}
-
-let g:lsp_log_verbose = 1
-let g:lsp_log_file = expand("~/.vim/logs/vim-lsp.log")
-
-" for asyncomplete.vim log
-let g:asyncomplete_log_file = expand("~/.vim/asyncomplete.log")
-
-let g:asyncomplete_remove_duplicates = 1
-let g:asyncomplete_smart_completion = 1
-let g:asyncomplete_auto_popup = 1
-
-" markdown
-
-" foldさせない
-let g:vim_markdown_folding_disabled = 1
-
-" conceal設定
-let g:vim_markdown_conceal = 0
-
-let g:vim_markdown_liquid=1
-let g:vim_markdown_math=0
-let g:vim_markdown_frontmatter=1
-let g:vim_markdown_toml_frontmatter=1
-let g:vim_markdown_json_frontmatter=0
-
-" vista
-let g:vista_icon_indent = ["▸ ", ""]
-let g:vista_sidebar_width = 60
-
-let g:vista_default_executive = "ctags"
-
-let g:vista_executive_for = {
-\ "java": "vim_lsp",
-\ "javascript": "vim_lsp",
-\ "typescript": "vim_lsp",
-\}
-
-" material.vim
-let g:material_theme_style = "darker"
-
-let g:material_terminal_italics = 0
-
-" lightline
-let g:lightline = {
-\ "colorscheme": "iceberg",
-\ "active": {
-\   "left": [
-\     ["mode", "paste"],
-\     ["gitbranch", "filename"],
-\   ],
-\   "right": [
-\     ["sky_color_clock"],
-\     ["percent"],
-\     ["fileformat", "fileencoding", "filetype"],
-\   ]
-\ },
-\ "component_function": {
-\   "mode": "lightline#mode",
-\   "gitbranch": "fugitive#head",
-\   "filename": "LightlineFilename",
-\ },
-\ "component": {
-\   "modified": "%{(LightlineIsVisible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
-\   "fileformat": "%{LightlineIsVisible() ? &fileformat : ''}",
-\   "filetype": "%{LightlineIsVisible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
-\   "fileencoding": "%{LightlineIsVisible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
-\   "sky_color_clock": "%#SkyColorClock#%{' ' . sky_color_clock#statusline() . ' '}%#SkyColorClockTemp# ",
-\ },
-\ "component_raw": {
-\   "sky_color_clock": 1,
-\ },
-\ "separator": {
-\   "left": "",
-\   "right": ""
-\ },
-\ "subseparator": {
-\   "left": "",
-\   "right": ""
-\ }
-\}
-
-function! LightlineIsVisible() abort
-  return (60 <= winwidth(0)) && (&filetype !~? "help\|vista")
-endfunction
-
-function! LightlineFilename()
-  if &filetype ==# "vista"
-    return ""
-  endif
-
-  if expand("%:t") == ""
-    return "[No Name]"
-  endif
-
-  " https://bitbucket.org/ns9tks/vim-fuzzyfinder/src/tip/autoload/fuf.vim
-  let l:str = expand("%:p")
-  let l:len = (winwidth(0)/2) - len(expand("%:p:t"))
-  let l:mask = "..."
-
-  if l:len >= len(l:str)
-    return l:str
-  elseif l:len <= len(l:mask)
-    return l:mask
-  endif
-
-  let l:head = (l:len - len(l:mask)) / 2
-  let l:tail = l:len - len(l:mask) - l:head
-
-  return (l:head > 0 ? l:str[: l:head - 1] : "") . l:mask . (l:tail > 0 ? l:str[-l:tail :] : "")
-endfunction
-
-"-----------------------------------
 " ステータスラインの設定
 "-----------------------------------
 
 " ステータスラインを常に表示
 set laststatus=2
-
-"" https://bitbucket.org/ns9tks/vim-fuzzyfinder/src/tip/autoload/fuf.vim
-"" TODO: マルチバイト文字が崩れるのをなんとかする
-"function! SnipMid(str, len, mask)
-"  if a:len >= len(a:str)
-"    return a:str
-"  elseif a:len <= len(a:mask)
-"    return a:mask
-"  endif
-"
-"  let len_head = (a:len - len(a:mask)) / 2
-"  let len_tail = a:len - len(a:mask) - len_head
-"
-"  return (len_head > 0 ? a:str[: len_head - 1] : "") . a:mask . (len_tail > 0 ? a:str[-len_tail :] : "")
-"endfunction
-"
-"" モード取得
-"function! StatuslineMode()
-"  let mode_list = {
-"  \ "n":       "NORMAL"
-"  \ ,"i":      "INSERT"
-"  \ ,"R":      "REPLACE"
-"  \ ,"v":      "VISUAL"
-"  \ ,"V":      "V-LINE"
-"  \ ,"c":      "COMMAND"
-"  \ ,"\<C-v>": "V-BLOCK"
-"  \ ,"s":      "SELECT"
-"  \ ,"S":      "S-LINE"
-"  \ ,"\<C-s>": "S-BLOCK"
-"  \ ,"t":      "TERMINAL"
-"  \ ,"?":      "?"
-"  \}
-"  let current_mode = mode()
-"  let paste_mode   = (&paste) ? "(PASTE)" : ""
-"  if has_key(mode_list, current_mode)
-"    return mode_list[current_mode] . paste_mode
-"  endif
-"  return current_mode.paste_mode . "?"
-"endfunction
-"
-"set statusline=[%{StatuslineMode()}]                                                          " モード表示
-"set statusline+=%{SnipMid(expand('%:p'),(winwidth(0)/2)-len(expand('%:p:t')),'...')}          " ファイルパス
-"set statusline+=%m                                                                            " 修正フラグ
-"set statusline+=%r                                                                            " 読み込み専用フラグ
-"set statusline+=%h                                                                            " ヘルプバッファフラグ
-"set statusline+=%w                                                                            " プレビューウィンドウフラグ
-"set statusline+=%=                                                                            " 左寄せ項目と右寄せ項目の区切り
-"set statusline+=[%{&filetype}]                                                                " ファイルタイプ
-"set statusline+=[%{&fileformat}]                                                              " 改行コード
-"set statusline+=[%{&fileencoding}]                                                            " 文字コード
-"set statusline+=[%l/%L\ %p%%]                                                                 " 現在行数/全行数 カーソル位置までの割合
-"set statusline+=%#SkyColorClock#\ %{sky_color_clock#statusline()}\  " <-- 行末にSP有          " 日付と月齢表示
 
 "-----------------------------------
 " タブラインの設定
@@ -484,31 +156,6 @@ set laststatus=2
 
 " タブラインを常に表示
 set showtabline=2
-
-"" タブラインの設定
-"set tabline=%!MakeTabLine()
-"
-"function! MakeTabLine()
-"  let sep = ""  " タブ間の区切り
-"  return join(map(range(1, tabpagenr("$")), "s:tabpage_label(v:val)"), sep) . sep . "%#TabLineFill#%T"
-"endfunction
-"
-"function! s:tabpage_label(tabpagenr)
-"  " タブページ内のバッファのリスト
-"  let bufnrs = tabpagebuflist(a:tabpagenr)
-"
-"  " カレントタブページかどうかでハイライトを切り替える
-"  let hi = a:tabpagenr is tabpagenr() ? "%#TabLineSel#" : "%#TabLine#"
-"
-"  " タブページ内に変更ありのバッファがあったら "+" を付ける
-"  let mod = len(filter(copy(bufnrs), "getbufvar(v:val, \"&modified\")")) ? "[+]" : ""
-"
-"  " カレントバッファ
-"  let curbufnr = bufnrs[tabpagewinnr(a:tabpagenr) - 1]  " tabpagewinnr() は 1 origin
-"  let fname = fnamemodify(bufname(curbufnr), ":t")
-"
-"  return "%" . a:tabpagenr . "T" . hi . " " . a:tabpagenr . ":" . fname . mod . " " . "%T%#TabLineFill#"
-"endfunction
 
 "-----------------------------------
 " インデントの設定
@@ -571,6 +218,190 @@ if has("terminal")
   " 端末のエンコーディング
   set termencoding="utf-8"
 endif
+
+"-----------------------------------
+" プラグイン設定
+"-----------------------------------
+
+" minpacの取得
+if !isdirectory(expand("~/.vim/pack/minpac/opt/minpac"))
+  call system("git clone https://github.com/k-takata/minpac.git " . expand("~/.vim/pack/minpac/opt/minpac"))
+endif
+
+if exists("*minpac#init")
+  call minpac#init()
+  call minpac#add("https://github.com/k-takata/minpac.git", {"type": "opt"})
+
+  " general
+  call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
+  call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
+  call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
+  call minpac#add("https://github.com/tyru/open-browser.vim.git")
+  call minpac#add("https://github.com/mattn/webapi-vim.git")
+  call minpac#add("https://github.com/thinca/vim-quickrun.git")
+  call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
+  call minpac#add("https://github.com/twitvim/twitvim.git")
+  call minpac#add("https://github.com/junegunn/vim-easy-align.git")
+
+  " git
+  call minpac#add("https://github.com/tpope/vim-fugitive.git")
+
+  " ctrlp
+  call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
+  call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
+  call minpac#add("https://github.com/ivalkeen/vim-ctrlp-tjump.git")
+
+  " sh
+  call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
+  call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
+
+  " php
+  call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git")
+
+  " Java
+  call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
+  if !filereadable(expand("~/.vim/syntax/javaid.vim"))
+    call system("curl https://fleiner.com/vim/syntax/javaid.vim -o " . expand("~/.vim/syntax/javaid.vim"))
+  endif
+
+  " JavaScript / TypeScript
+  call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
+  call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
+  call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
+
+  " gradle
+  call minpac#add("https://github.com/vim-scripts/groovyindent.git", {"type": "opt"})
+
+  " plantuml
+  call minpac#add("https://github.com/aklt/plantuml-syntax.git", {"type": "opt"})
+
+  " toml
+  call minpac#add("https://github.com/cespare/vim-toml.git")
+
+  " apache
+  call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
+
+  " graphql
+  call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
+
+  " html
+  call minpac#add("https://github.com/mattn/emmet-vim.git")
+
+  " appearance
+  call minpac#add("https://github.com/itchyny/lightline.vim.git")
+  call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
+  call minpac#add("https://github.com/mattn/vimtweak.git")
+
+  " colorscheme
+  call minpac#add("https://github.com/morhetz/gruvbox.git")
+  call minpac#add("https://github.com/pasela/edark.vim.git")
+  call minpac#add("https://github.com/kaicataldo/material.vim.git")
+  call minpac#add("https://github.com/cocopon/iceberg.vim.git")
+
+  " lsp
+  call minpac#add("https://github.com/prabirshrestha/async.vim.git")
+  call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
+  call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
+  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
+  call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
+  call minpac#add("https://github.com/hrsh7th/vim-vsnip.git")
+  call minpac#add("https://github.com/hrsh7th/vim-vsnip-integ.git")
+endif
+
+" Align
+let g:Align_xstrlen = 3 " 幅広文字に対応する
+
+" CtrlP
+let g:ctrlp_use_caching = 1                                     " キャッシュを使用する
+let g:ctrlp_cache_dir = expand("~/.cache/ctrlp")                " キャッシュディレクトリ
+let g:ctrlp_clear_cache_on_exit = 0                             " 終了時にキャッシュを削除しない
+let g:ctrlp_lazy_update = 1                                     " 遅延再描画
+let g:ctrlp_max_height = 20                                     " 20行表示
+let g:ctrlp_open_new_file = 1                                   " ファイルの新規作成時は別タブで開く
+let g:ctrlp_launcher_file_list = ["~/.ctrlp-launcher", "~/.ctrlp-launcher-work", "~/.ctrlp-launcher-gcp"]  " ランチャーで読み込むファイルパス
+let g:ctrlp_tjump_only_silent = 0                               " タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|git)$'   " 除外
+
+" quickrun
+let g:quickrun_config = {}
+let g:quickrun_config["_"] = {
+\ "runner": "job",
+\}
+
+" parenmatch
+let g:loaded_matchparen = 1     " matchparenを無効にする
+
+" sky-color-clock.vim
+let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
+let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
+
+" vimtweak
+autocmd guienter * silent! VimTweakSetAlpha 230
+
+" lightline
+let g:lightline = {
+\ "colorscheme": "iceberg",
+\ "active": {
+\   "left": [
+\     ["mode", "paste"],
+\     ["gitbranch", "filename"],
+\   ],
+\   "right": [
+\     ["sky_color_clock"],
+\     ["percent"],
+\     ["fileformat", "fileencoding", "filetype"],
+\   ]
+\ },
+\ "component_function": {
+\   "mode": "lightline#mode",
+\   "gitbranch": "fugitive#head",
+\   "filename": "LightlineFilename",
+\ },
+\ "component": {
+\   "modified": "%{(LightlineIsVisible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
+\   "fileformat": "%{LightlineIsVisible() ? &fileformat : ''}",
+\   "filetype": "%{LightlineIsVisible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
+\   "fileencoding": "%{LightlineIsVisible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
+\   "sky_color_clock": "%#SkyColorClock#%{' ' . sky_color_clock#statusline() . ' '}%#SkyColorClockTemp# ",
+\ },
+\ "component_raw": {
+\   "sky_color_clock": 1,
+\ },
+\ "separator": {
+\   "left": "",
+\   "right": ""
+\ },
+\ "subseparator": {
+\   "left": "",
+\   "right": ""
+\ }
+\}
+
+function! LightlineIsVisible() abort
+  return (60 <= winwidth(0)) && (&filetype !~? "help")
+endfunction
+
+function! LightlineFilename()
+  if expand("%:t") == ""
+    return "[No Name]"
+  endif
+
+  " https://bitbucket.org/ns9tks/vim-fuzzyfinder/src/tip/autoload/fuf.vim
+  let l:str = expand("%:p")
+  let l:len = (winwidth(0)/2) - len(expand("%:p:t"))
+  let l:mask = "..."
+
+  if l:len >= len(l:str)
+    return l:str
+  elseif l:len <= len(l:mask)
+    return l:mask
+  endif
+
+  let l:head = (l:len - len(l:mask)) / 2
+  let l:tail = l:len - len(l:mask) - l:head
+
+  return (l:head > 0 ? l:str[: l:head - 1] : "") . l:mask . (l:tail > 0 ? l:str[-l:tail :] : "")
+endfunction
 
 "-----------------------------------
 " functions
@@ -844,10 +675,48 @@ augroup quickfix-setting
 augroup END
 
 "-----------------------------------
+" lsp の設定
+"-----------------------------------
+
+" vim-lsp
+let g:lsp_diagnostics_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_text_edit_enabled = 1
+let g:lsp_signs_enabled = 1
+
+let g:lsp_signs_error = {"text": "❌"}
+let g:lsp_signs_warning = {"text": "⚠️"}
+let g:lsp_signs_information = {"text": "❗"}
+let g:lsp_signs_hint = {"text": "❓"}
+
+" asyncomplete.vim
+let g:asyncomplete_auto_popup = 1
+let g:asyncomplete_auto_completeopt = 0
+let g:asyncomplete_popup_delay = 200
+
+augroup lsp-setting
+  autocmd!
+
+  autocmd User lsp_buffer_enabled setlocal signcolumn=yes
+  autocmd User lsp_buffer_enabled setlocal omnifunc=lsp#complete
+  autocmd User lsp_buffer_enabled nnoremap <silent> <c-]> <plug>(lsp-definition)
+augroup END
+
+"-----------------------------------
 " Javaの設定
 "-----------------------------------
 
 let g:ansanloms_eclipse_workspace = expand("/dev/eclipse_workspace")
+let g:java_highlight_all = 1
+
+" quickrun - java
+let g:quickrun_config["java"] = {
+\ "hook/cd/directory": "%S:p:h",
+\ "exec": [
+\   "javac -J-Dfile.encoding=UTF8 %o %s",
+\   "%c -Dfile.encoding=UTF8 %s:t:r %a"
+\ ]
+\}
 
 augroup java-setting
   autocmd!
@@ -855,17 +724,8 @@ augroup java-setting
   " 拡張子設定
   autocmd BufNewFile,BufRead *.{java} setlocal filetype=java
 
-  if !filereadable(expand("~/.vim/syntax/javaid.vim"))
-    call system("curl https://fleiner.com/vim/syntax/javaid.vim -o " . expand("~/.vim/syntax/javaid.vim"))
-  endif
-
-  let g:java_highlight_all = 1
-
   " インデントセット
   autocmd FileType java setlocal shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
-
-  autocmd FileType java setlocal omnifunc=lsp#complete
-  autocmd FileType java nnoremap <silent> <c-]> :<c-u>LspDefinition<CR>
 augroup END
 
 "-----------------------------------
@@ -884,8 +744,6 @@ augroup javascript-setting
   " プラグイン読み込み
   autocmd FileType javascript packadd vim-javascript
   autocmd FileType javascript packadd vim-jsx-pretty
-
-  autocmd FileType javascript setlocal omnifunc=lsp#complete
 augroup END
 
 "-----------------------------------
@@ -904,8 +762,6 @@ augroup typescript-setting
   " プラグイン読み込み
   autocmd FileType typescript packadd vim-jsx-pretty
   autocmd FileType javascript packadd typescript-vim
-
-  autocmd FileType typescript setlocal omnifunc=lsp#complete
 augroup END
 
 "-----------------------------------
@@ -958,6 +814,46 @@ augroup END
 " markdownの設定
 "-----------------------------------
 
+" quickrun - markdown
+if executable("pandoc")
+  " cssの取得
+  if !filereadable(expand("~/.vim/markdown.css"))
+    call system("curl https://gist.githubusercontent.com/tuzz/3331384/raw/d1771755a3e26b039bff217d510ee558a8a1e47d/github.css -o " . expand("~/.vim/markdown.css"))
+  endif
+
+  " html 出力
+  let g:quickrun_config["markdown"] = {
+  \ "hook/cd/directory": "%S:p:h",
+  \ "type": "markdown/pandoc",
+  \ "outputter": "null",
+  \ "exec": "pandoc %s --standalone --toc-depth=6 --to=html5 --css=" . expand("~/.vim/markdown.css") . " --output=%s.html"
+  \}
+
+  " slidy 出力
+  let g:quickrun_config["markdown-slidy"] = {
+  \ "hook/cd/directory": "%S:p:h",
+  \ "type": "markdown/pandoc",
+  \ "outputter": "null",
+  \ "exec": "pandoc %s --standalone --self-contained --toc-depth=6 --to=slidy --output=%s-slidy.html"
+  \}
+
+  " html 出力 (1つのファイルに纏める)
+  let g:quickrun_config["markdown-html"] = {
+  \ "hook/cd/directory": "%S:p:h",
+  \ "type": "markdown/pandoc",
+  \ "outputter": "null",
+  \ "exec": "pandoc %s --standalone --self-contained --toc-depth=6 --to=html5 --css=" . expand("~/.vim/markdown.css") . " --output=%s-standalone.html"
+  \}
+
+  " Word docx 出力
+  let g:quickrun_config["markdown-docx"] = {
+  \ "hook/cd/directory": "%S:p:h",
+  \ "outputter": "null",
+  \ "type": "markdown/pandoc",
+  \ "exec": "pandoc %s --standalone --self-contained --toc-depth=6 --to=docx --highlight-style=zenburn --output=%s.docx"
+  \}
+endif
+
 augroup markdown-setting
   autocmd!
 
@@ -990,6 +886,8 @@ augroup END
 " shの設定
 "-----------------------------------
 
+let g:sh_indent_case_labels = 1
+
 augroup sh-setting
   autocmd!
 
@@ -999,7 +897,6 @@ augroup sh-setting
   " プラグイン読み込み
   autocmd FileType sh packadd Super-Shell-Indent
   autocmd FileType sh packadd sh.vim
-  let g:sh_indent_case_labels=1
 augroup END
 
 "-----------------------------------
@@ -1023,6 +920,19 @@ augroup END
 " sqlの設定
 "-----------------------------------
 
+" quickrun - mysql
+if executable("mysql")
+  let g:quickrun_config["sql"] = {
+  \ "type": "sql/mysql"
+  \}
+
+  let g:quickrun_config["sql/mysql"] = {
+  \ "command": "mysql",
+  \ "cmdopt": "--defaults-extra-file=" . expand("~/.mysql/local.conf"),
+  \ "exec": ["%c %o < %s"]
+  \}
+endif
+
 augroup sql-setting
   autocmd!
 
@@ -1038,6 +948,20 @@ augroup END
 "-----------------------------------
 " htmlの設定
 "-----------------------------------
+
+" quickrun - html
+if executable("w3m")
+  " text 出力
+  let g:quickrun_config["html"] = {
+  \ "type": "html/w3m"
+  \}
+
+  let g:quickrun_config["html/w3m"] = {
+  \ "command": "w3m",
+  \ "cmdopt": "-dump",
+  \ "exec": '%c %o %s'
+  \}
+endif
 
 augroup html-setting
   autocmd!
@@ -1120,6 +1044,21 @@ augroup graphql-setting
 
   " プラグイン読み込み
   autocmd FileType graphql packadd vim-graphql
+augroup END
+
+"-----------------------------------
+" バイナリエディタの設定
+"-----------------------------------
+
+augroup binary-setting
+  autocmd!
+  autocmd BufReadPre  *.{bin,dll,exe} let &bin=1
+  autocmd BufReadPost *.{bin,dll,exe} if &bin | %!xxd
+  autocmd BufReadPost *.{bin,dll,exe} set ft=xxd | endif
+  autocmd BufWritePre *.{bin,dll,exe} if &bin | %!xxd -r
+  autocmd BufWritePre *.{bin,dll,exe} endif
+  autocmd BufWritePost *.{bin,dll,exe} if &bin | %!xxd
+  autocmd BufWritePost *.{bin,dll,exe} set nomod | endif
 augroup END
 
 "-----------------------------------
@@ -1209,7 +1148,7 @@ if isdirectory(expand("~/.vim/undo"))
 endif
 
 "-----------------------------------
-" gvimの設定
+" gVimの設定
 "-----------------------------------
 
 if has("gui_running")
@@ -1310,8 +1249,10 @@ set pumheight=20
 " シンタックスON
 syntax enable
 
-" 背景設定
-" カラースキーム設定
+" material.vim
+let g:material_theme_style = "darker"
+let g:material_terminal_italics = 0
+
 try
   set background=dark
   colorscheme iceberg
