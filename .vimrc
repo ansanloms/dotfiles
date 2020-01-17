@@ -388,7 +388,7 @@ function! LightlineFilename()
 
   " https://bitbucket.org/ns9tks/vim-fuzzyfinder/src/tip/autoload/fuf.vim
   let l:str = expand("%:p")
-  let l:len = (winwidth(0)/2) - len(expand("%:p:t"))
+  let l:len = (winwidth(0)/3) - len(expand("%:p:t"))
   let l:mask = "..."
 
   if l:len >= len(l:str)
@@ -605,7 +605,7 @@ endfunction
 command! OpenFilemanager call AnsanlomsFunctions().filemanager()
 command! OpenHosts call AnsanlomsFunctions().hosts()
 command! Ctags call AnsanlomsFunctions().ctags()
-command! -nargs=? TermAlias call AnsanlomsFunctions().terminal.exec(<f-args>)
+command! -nargs=? Terminal call AnsanlomsFunctions().terminal.exec(<f-args>)
 
 " Leaderの設定
 let g:mapleader = ","
@@ -624,6 +624,7 @@ nnoremap ZQ <Nop>
 
 " 検索のハイライト削除
 nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
+"nnoremap <silent> <Esc><Esc> :<C-u>call popup_clear()<CR>
 
 " very magic
 nnoremap / /\v
@@ -690,23 +691,24 @@ let g:lsp_signs_information = {"text": "❗"}
 let g:lsp_signs_hint = {"text": "❓"}
 
 " asyncomplete.vim
-let g:asyncomplete_auto_popup = 1
-let g:asyncomplete_auto_completeopt = 0
-let g:asyncomplete_popup_delay = 200
+let g:asyncomplete_auto_popup = 0
+"let g:asyncomplete_auto_completeopt = 0
+"let g:asyncomplete_popup_delay = 200
 
 augroup lsp-setting
   autocmd!
 
-  autocmd User lsp_buffer_enabled setlocal signcolumn=yes
   autocmd User lsp_buffer_enabled setlocal omnifunc=lsp#complete
-  autocmd User lsp_buffer_enabled nnoremap <silent> <c-]> <plug>(lsp-definition)
+  autocmd User lsp_buffer_enabled nmap <buffer> <C-]> <plug>(lsp-definition)
+  autocmd User lsp_buffer_enabled nmap <buffer> <C-n> <plug>(lsp-next-error)
+  autocmd User lsp_buffer_enabled nmap <buffer> <C-p> <plug>(lsp-previous-error)
+  autocmd User lsp_buffer_enabled nmap <buffer> K <Plug>(lsp-hover)
 augroup END
 
 "-----------------------------------
 " Javaの設定
 "-----------------------------------
 
-let g:ansanloms_eclipse_workspace = expand("/dev/eclipse_workspace")
 let g:java_highlight_all = 1
 
 " quickrun - java
