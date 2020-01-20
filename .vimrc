@@ -269,6 +269,9 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
   call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
 
+  " vue
+  call minpac#add("https://github.com/posva/vim-vue.git", {"type": "opt"})
+
   " gradle
   call minpac#add("https://github.com/vim-scripts/groovyindent.git", {"type": "opt"})
 
@@ -454,7 +457,7 @@ function! AnsanlomsFunctions()
       let l:hosts_path = expand("C:/Windows/System32/drivers/etc/hosts")
     endif
 
-    execute "edit " . l:hosts_path
+    silent execute "edit " . l:hosts_path
   endfunction
 
   " メモ関連
@@ -761,7 +764,24 @@ augroup typescript-setting
 
   " プラグイン読み込み
   autocmd FileType typescript packadd vim-jsx-pretty
-  autocmd FileType javascript packadd typescript-vim
+  autocmd FileType typescript packadd typescript-vim
+augroup END
+
+"-----------------------------------
+" vueの設定
+"-----------------------------------
+
+augroup vue-setting
+  autocmd!
+
+  " 拡張子設定
+  autocmd BufNewFile,BufRead *.{vue} setlocal filetype=vue
+
+  " インデントセット
+  autocmd FileType vue setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+
+  " プラグイン読み込み
+  autocmd FileType vue packadd vim-vue
 augroup END
 
 "-----------------------------------
