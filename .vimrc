@@ -304,8 +304,6 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
   call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
   call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
-  call minpac#add("https://github.com/hrsh7th/vim-vsnip.git")
-  call minpac#add("https://github.com/hrsh7th/vim-vsnip-integ.git")
 endif
 
 " Align
