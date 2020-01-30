@@ -345,6 +345,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/itchyny/lightline.vim.git")
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
   call minpac#add("https://github.com/mattn/vimtweak.git")
+  call minpac#add("https://github.com/ryanoasis/vim-devicons.git")
 
   " colorscheme
   call minpac#add("https://github.com/morhetz/gruvbox.git")
@@ -418,13 +419,19 @@ let g:lightline = {
 \ },
 \ "component": {
 \   "modified": "%{(LightlineIsVisible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
-\   "fileformat": "%{LightlineIsVisible() ? &fileformat : ''}",
-\   "filetype": "%{LightlineIsVisible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
+\   "fileformat": "%{LightlineIsVisible() ? &fileformat . ' ' . WebDevIconsGetFileFormatSymbol() : ''}",
+\   "filetype": "%{LightlineIsVisible() ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''}",
 \   "fileencoding": "%{LightlineIsVisible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
 \   "sky_color_clock": "%#SkyColorClock#%{' ' . sky_color_clock#statusline() . ' '}%#SkyColorClockTemp# ",
 \ },
 \ "component_raw": {
 \   "sky_color_clock": 1,
+\ },
+\ "tab_component_function": {
+\   "filename": "LightlineTabFilename",
+\   "modified": "lightline#tab#modified",
+\   "readonly": "lightline#tab#readonly",
+\   "tabnum": "lightline#tab#tabnum"
 \ },
 \ "separator": {
 \   "left": "",
@@ -473,6 +480,19 @@ function! LightlineTab()
 
   return [x, y, z]
 endfunction
+
+function! LightlineTabFilename(n)
+  let buflist = tabpagebuflist(a:n)
+  let winnr = tabpagewinnr(a:n)
+  let filepath = expand("#".buflist[winnr - 1].":f")
+  let filename = expand("#".buflist[winnr - 1].":t")
+
+  return WebDevIconsGetFileTypeSymbol(filepath) . (filename !=# '' ? filename : '[No Name]')
+endfunction
+
+" vim-devicons
+
+let g:webdevicons_enable_ctrlp = 1
 
 "-----------------------------------
 " functions
