@@ -17,26 +17,6 @@ endif
 scriptencoding utf-8
 
 "-----------------------------------
-" 他のvimが起動済ならそれを使う
-" http://tyru.hatenablog.com/entry/20130430/vim_resident
-"-----------------------------------
-
-if argc() && (has("mac") || has("win32") || has("win64"))
-  let s:running_vim_list = filter(split(serverlist(), "\n"), "v:val !=? v:servername")
-
-  if !empty(s:running_vim_list)
-    silent execute
-    \ (has("gui_running") ? "!gvim" : "!vim")
-    \ "--servername" s:running_vim_list[0]
-    \ "--remote-tab-silent"
-    \ join(map(argv(), "shellescape(v:val, 1)"), " ")
-    qa!
-  endif
-
-  unlet s:running_vim_list
-endif
-
-"-----------------------------------
 " ディレクトリ作成
 "-----------------------------------
 
@@ -58,13 +38,8 @@ if has("vim_starting")
 endif
 
 "-----------------------------------
-" 基本設定
+" 各種パスの設定
 "-----------------------------------
-
-" defaults.vim の読み込み
-if filereadable(expand($VIMRUNTIME . "/defaults.vim"))
-  source $VIMRUNTIME/defaults.vim
-endif
 
 " 読み込みディレクトリの追記
 set runtimepath^=~/.vim
@@ -74,6 +49,79 @@ set packpath^=~/.vim
 
 " viminfoの保存先を変更
 set viminfo+=n~/.vim/viminfo
+
+"-----------------------------------
+" バックアップファイルとスワップファイル設定
+"-----------------------------------
+
+if isdirectory(expand("~/.vim/backup"))
+  set backupdir=~/.vim/backup
+  set directory=~/.vim/backup
+
+  " バックアップ作成
+  set backup
+
+  " 上書き前にバックアップ作成
+  set writebackup
+
+  " スワップファイル作成
+  set swapfile
+endif
+
+"-----------------------------------
+" mkviewの設定
+"-----------------------------------
+
+if isdirectory(expand("~/.vim/view"))
+  " 保存先
+  set viewdir=~/.vim/view
+
+  " :mkviewで保存する設定
+  set viewoptions=cursor,folds
+
+  augroup vim-view
+    autocmd!
+
+    " ファイルを閉じる際に mkview 実施
+    autocmd BufWritePost * if expand("%") != "" && &buftype !~ "nofile" | mkview | endif
+
+    " ファイルを開いたら読み込む
+    autocmd BufRead * if expand("%") != "" && &buftype !~ "nofile" | silent loadview | endif
+  augroup END
+endif
+
+"-----------------------------------
+" undo管理設定
+"-----------------------------------
+
+if isdirectory(expand("~/.vim/undo"))
+  set undodir=~/.vim/undo
+  set undofile
+endif
+
+"-----------------------------------
+" 他のvimが起動済ならそれを使う
+" http://tyru.hatenablog.com/entry/20130430/vim_resident
+"-----------------------------------
+
+if argc() && (has("mac") || has("win32") || has("win64"))
+  let s:running_vim_list = filter(split(serverlist(), "\n"), "v:val !=? v:servername")
+
+  if !empty(s:running_vim_list)
+    silent execute
+    \ (has("gui_running") ? "!gvim" : "!vim")
+    \ "--servername" s:running_vim_list[0]
+    \ "--remote-tab-silent"
+    \ join(map(argv(), "shellescape(v:val, 1)"), " ")
+    qa!
+  endif
+
+  unlet s:running_vim_list
+endif
+
+"-----------------------------------
+" 基本設定
+"-----------------------------------
 
 " コマンドの保存履歴数
 set history=1000
@@ -279,7 +327,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/aklt/plantuml-syntax.git", {"type": "opt"})
 
   " toml
-  call minpac#add("https://github.com/cespare/vim-toml.git")
+  call minpac#add("https://github.com/cespare/vim-toml.git", {"type": "opt"})
 
   " apache
   call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
@@ -289,6 +337,9 @@ if exists("*minpac#init")
 
   " html
   call minpac#add("https://github.com/mattn/emmet-vim.git")
+
+  " yaml
+  call minpac#add("https://github.com/stephpy/vim-yaml.git", {"type": "opt"})
 
   " appearance
   call minpac#add("https://github.com/itchyny/lightline.vim.git")
@@ -337,7 +388,11 @@ let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォ
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 " vimtweak
-autocmd guienter * silent! VimTweakSetAlpha 230
+augroup vimtweak-setting
+  autocmd!
+
+  autocmd guienter * silent! VimTweakSetAlpha 230
+augroup END
 
 " lightline
 let g:lightline = {
@@ -352,6 +407,9 @@ let g:lightline = {
 \     ["percent"],
 \     ["fileformat", "fileencoding", "filetype"],
 \   ]
+\ },
+\ "component_expand": {
+\   "tabs": "LightlineTab"
 \ },
 \ "component_function": {
 \   "mode": "lightline#mode",
@@ -378,7 +436,7 @@ let g:lightline = {
 \ }
 \}
 
-function! LightlineIsVisible() abort
+function! LightlineIsVisible()
   return (60 <= winwidth(0)) && (&filetype !~? "help")
 endfunction
 
@@ -402,6 +460,18 @@ function! LightlineFilename()
   let l:tail = l:len - len(l:mask) - l:head
 
   return (l:head > 0 ? l:str[: l:head - 1] : "") . l:mask . (l:tail > 0 ? l:str[-l:tail :] : "")
+endfunction
+
+function! LightlineTab()
+  let [x, y, z] = [[], [], []]
+  let nr = tabpagenr()
+  let cnt = tabpagenr('$')
+
+  for i in range(1, cnt)
+    call add(i < nr ? x : i == nr ? y : z, (i > nr + 3 ? '%<' : '') . '%'. i . 'T%{lightline#onetab(' . i . ',' . (i == nr) . ')}' . (i == cnt ? '%T' : ''))
+  endfor
+
+  return [x, y, z]
 endfunction
 
 "-----------------------------------
@@ -701,9 +771,13 @@ augroup lsp-setting
 
   autocmd User lsp_buffer_enabled setlocal omnifunc=lsp#complete
   autocmd User lsp_buffer_enabled nmap <buffer> <C-]> <plug>(lsp-definition)
-  autocmd User lsp_buffer_enabled nmap <buffer> <C-n> <plug>(lsp-next-error)
-  autocmd User lsp_buffer_enabled nmap <buffer> <C-p> <plug>(lsp-previous-error)
   autocmd User lsp_buffer_enabled nmap <buffer> K <Plug>(lsp-hover)
+
+  autocmd User lsp_setup call lsp#register_server({
+  \ "name": "efm-langserver",
+  \ "cmd": {server_info->["efm-langserver", "-c=" . expand("~/.config/efm-langserver/config.yaml"), "-log=" . expand("~/.vim/efm-langserver.log")]},
+  \ "whitelist": ["markdown"],
+  \})
 augroup END
 
 "-----------------------------------
@@ -920,7 +994,7 @@ augroup sh-setting
 augroup END
 
 "-----------------------------------
-" VimScriptの設定
+" Vim scriptの設定
 "-----------------------------------
 
 " \ を入力した際のインデント量
@@ -1067,6 +1141,34 @@ augroup graphql-setting
 augroup END
 
 "-----------------------------------
+" tomlの設定
+"-----------------------------------
+
+augroup toml-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType toml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+
+  " プラグイン読み込み
+  autocmd FileType toml packadd vim-toml
+augroup END
+
+"-----------------------------------
+" yamlの設定
+"-----------------------------------
+
+augroup yaml-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+
+  " プラグイン読み込み
+  autocmd FileType yaml packadd vim-yaml
+augroup END
+
+"-----------------------------------
 " バイナリエディタの設定
 "-----------------------------------
 
@@ -1127,45 +1229,6 @@ augroup vimrc-auto-mkdir
   endfunction
 augroup END
 
-" バックアップファイルとスワップファイル設定
-if isdirectory(expand("~/.vim/backup"))
-  set backupdir=~/.vim/backup
-  set directory=~/.vim/backup
-
-  " バックアップ作成
-  set backup
-
-  " 上書き前にバックアップ作成
-  set writebackup
-
-  " スワップファイル作成
-  set swapfile
-endif
-
-" mkviewの設定
-if isdirectory(expand("~/.vim/view"))
-  " 保存先
-  set viewdir=~/.vim/view
-
-  " :mkviewで保存する設定
-  set viewoptions=cursor,folds
-
-  augroup vim-view
-    autocmd!
-
-    " ファイルを閉じる際に mkview 実施
-    autocmd BufWritePost * if expand("%") != "" && &buftype !~ "nofile" | mkview | endif
-
-    " ファイルを開いたら読み込む
-    autocmd BufRead * if expand("%") != "" && &buftype !~ "nofile" | silent loadview | endif
-  augroup END
-endif
-
-" undo管理設定
-if isdirectory(expand("~/.vim/undo"))
-  set undodir=~/.vim/undo
-  set undofile
-endif
 
 "-----------------------------------
 " gVimの設定
