@@ -443,11 +443,11 @@ let g:lightline = {
 \ }
 \}
 
-function! LightlineIsVisible()
+function! LightlineIsVisible() abort
   return (60 <= winwidth(0)) && (&filetype !~? "help")
 endfunction
 
-function! LightlineFilename()
+function! LightlineFilename() abort
   if expand("%:t") == ""
     return "[No Name]"
   endif
@@ -469,7 +469,7 @@ function! LightlineFilename()
   return (l:head > 0 ? l:str[: l:head - 1] : "") . l:mask . (l:tail > 0 ? l:str[-l:tail :] : "")
 endfunction
 
-function! LightlineTab()
+function! LightlineTab() abort
   let [x, y, z] = [[], [], []]
   let nr = tabpagenr()
   let cnt = tabpagenr('$')
@@ -481,13 +481,13 @@ function! LightlineTab()
   return [x, y, z]
 endfunction
 
-function! LightlineTabFilename(n)
+function! LightlineTabFilename(n) abort
   let buflist = tabpagebuflist(a:n)
   let winnr = tabpagewinnr(a:n)
-  let filepath = expand("#".buflist[winnr - 1].":f")
-  let filename = expand("#".buflist[winnr - 1].":t")
+  let filepath = expand("#" . buflist[winnr - 1] . ":f")
+  let filename = expand("#" . buflist[winnr - 1] . ":t")
 
-  return WebDevIconsGetFileTypeSymbol(filepath) . (filename !=# '' ? filename : '[No Name]')
+  return WebDevIconsGetFileTypeSymbol(filepath) . (filename !=# "" ? filename : "[No Name]")
 endfunction
 
 " vim-devicons
@@ -994,7 +994,6 @@ augroup plantuml-setting
   " プラグイン読み込み
   autocmd FileType plantuml packadd plantuml-syntax
 augroup END
-
 
 "-----------------------------------
 " shの設定
