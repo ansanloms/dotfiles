@@ -290,6 +290,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
   call minpac#add("https://github.com/twitvim/twitvim.git")
   call minpac#add("https://github.com/junegunn/vim-easy-align.git")
+  call minpac#add("https://github.com/mattn/vim-fz.git")
 
   " git
   call minpac#add("https://github.com/tpope/vim-fugitive.git")
@@ -303,8 +304,8 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
   call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
 
-  " php
-  call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git")
+  " php / volt
+  call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git", {"type": "opt"})
 
   " Java
   call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
@@ -359,6 +360,9 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
   call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
   call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
+
+  " dap
+  call minpac#add("https://github.com/puremourning/vimspector.git", {"type": "opt", "do": {-> system("./install_gadget.py --force-enable-php")}})
 endif
 
 " Align
@@ -454,7 +458,7 @@ function! LightlineFilename() abort
 
   " https://bitbucket.org/ns9tks/vim-fuzzyfinder/src/tip/autoload/fuf.vim
   let l:str = expand("%:p")
-  let l:len = (winwidth(0)/3) - len(expand("%:p:t"))
+  let l:len = (winwidth(0) / 2) - len(expand("%:p:t"))
   let l:mask = "..."
 
   if l:len >= len(l:str)
@@ -697,6 +701,9 @@ command! OpenFilemanager call AnsanlomsFunctions().filemanager()
 command! OpenHosts call AnsanlomsFunctions().hosts()
 command! Ctags call AnsanlomsFunctions().ctags()
 command! -nargs=? Terminal call AnsanlomsFunctions().terminal.exec(<f-args>)
+command! -nargs=? Memo call AnsanlomsFunctions().memo.open(<f-args>)
+command! MemoDaily call AnsanlomsFunctions().memo.open()
+command! MemoList call AnsanlomsFunctions().memo.list()
 
 " Leaderの設定
 let g:mapleader = ","
@@ -754,6 +761,8 @@ command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
 " あんまよくわかってない
 " 取り急ぎ鬱陶しいやつだけ
 tnoremap <S-space> <space>
+tnoremap <C-BS> <BS>
+tnoremap <C-CR> <CR>
 
 "-----------------------------------
 " Quickfixの設定
@@ -783,6 +792,7 @@ let g:lsp_signs_hint = {"text": "❓"}
 
 " asyncomplete.vim
 let g:asyncomplete_auto_popup = 0
+"let g:asyncomplete_auto_popup = 1
 "let g:asyncomplete_auto_completeopt = 0
 "let g:asyncomplete_popup_delay = 200
 
@@ -905,6 +915,9 @@ augroup php-setting
 
   " ハイライト行指定
   autocmd FileType php syntax sync minlines=300 maxlines=500
+
+  " プラグイン読み込み
+  autocmd FileType php packadd vimspector
 augroup END
 
 "-----------------------------------
@@ -922,6 +935,9 @@ augroup volt-setting
 
   " ハイライト行指定
   autocmd filetype volt syntax sync minlines=300 maxlines=500
+
+  " プラグイン読み込み
+  autocmd FileType volt packadd vim-volt-syntax
 augroup END
 
 "-----------------------------------
@@ -1247,7 +1263,6 @@ augroup vimrc-auto-mkdir
     endif
   endfunction
 augroup END
-
 
 "-----------------------------------
 " gVimの設定
