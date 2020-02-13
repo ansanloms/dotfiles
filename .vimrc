@@ -290,7 +290,6 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
   call minpac#add("https://github.com/twitvim/twitvim.git")
   call minpac#add("https://github.com/junegunn/vim-easy-align.git")
-  call minpac#add("https://github.com/mattn/vim-fz.git")
 
   " git
   call minpac#add("https://github.com/tpope/vim-fugitive.git")
@@ -520,6 +519,11 @@ function! AnsanlomsFunctions()
     endif
   endfunction
 
+  " VSCode で開く
+  function! l:func.vscode() dict
+    silent execute "!code" expand("%:p")
+  endfunction
+
   " タグファイル生成
   function! l:func.ctags(...) dict
     if !executable("ctags")
@@ -698,6 +702,7 @@ endfunction
 
 " functions
 command! OpenFilemanager call AnsanlomsFunctions().filemanager()
+command! OpenVscode call AnsanlomsFunctions().vscode()
 command! OpenHosts call AnsanlomsFunctions().hosts()
 command! Ctags call AnsanlomsFunctions().ctags()
 command! -nargs=? Terminal call AnsanlomsFunctions().terminal.exec(<f-args>)
