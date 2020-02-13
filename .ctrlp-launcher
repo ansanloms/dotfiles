@@ -9,9 +9,3 @@ terminal wsl Ubuntu			tabnew | call AnsanlomsFunctions().terminal.ubuntu()
 terminal wsl SLES-12		tabnew | call AnsanlomsFunctions().terminal.sles12()
 terminal cmd				tabnew | call AnsanlomsFunctions().terminal.cmd()
 terminal powershell			tabnew | call AnsanlomsFunctions().terminal.powershell()
-
-# functions
-OpenDailyMemo			tabnew | call AnsanlomsFunctions().memo.open()
-OpenMemo				tabnew | call AnsanlomsFunctions().memo.open("memo")
-OpenReport				tabnew | call AnsanlomsFunctions().memo.Open("report/" . strftime("%Y%m%d"))
-OpenMemoList			call AnsanlomsFunctions().memo.list()
