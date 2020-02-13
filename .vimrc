@@ -346,6 +346,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
   call minpac#add("https://github.com/mattn/vimtweak.git")
   call minpac#add("https://github.com/ryanoasis/vim-devicons.git")
+  call minpac#add("https://github.com/itchyny/vim-cursorword.git")
 
   " colorscheme
   call minpac#add("https://github.com/morhetz/gruvbox.git")
