@@ -360,9 +360,6 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
   call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
   call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
-
-  " dap
-  call minpac#add("https://github.com/puremourning/vimspector.git", {"type": "opt", "do": {-> system("./install_gadget.py --force-enable-php")}})
 endif
 
 " Align
@@ -522,13 +519,17 @@ function! AnsanlomsFunctions()
 
   " VSCode で開く
   function! l:func.vscode() dict
-    silent execute "!code" expand("%:p")
+    if !executable("code")
+      echoerr "code command not found."
+      return
+    endif
+    silent execute "!code --goto" expand("%:p").":".line(".").":".col(".")
   endfunction
 
   " タグファイル生成
   function! l:func.ctags(...) dict
     if !executable("ctags")
-      echoerr "ctags command not found"
+      echoerr "ctags command not found."
       return
     endif
 
@@ -797,10 +798,9 @@ let g:lsp_signs_information = {"text": "❗"}
 let g:lsp_signs_hint = {"text": "❓"}
 
 " asyncomplete.vim
-let g:asyncomplete_auto_popup = 0
-"let g:asyncomplete_auto_popup = 1
-"let g:asyncomplete_auto_completeopt = 0
-"let g:asyncomplete_popup_delay = 200
+let g:asyncomplete_auto_popup = 1
+let g:asyncomplete_auto_completeopt = 1
+let g:asyncomplete_popup_delay = 200
 
 augroup lsp-setting
   autocmd!
@@ -808,16 +808,10 @@ augroup lsp-setting
   autocmd User lsp_buffer_enabled setlocal omnifunc=lsp#complete
   autocmd User lsp_buffer_enabled nmap <buffer> <C-]> <plug>(lsp-definition)
   autocmd User lsp_buffer_enabled nmap <buffer> K <Plug>(lsp-hover)
-
-  autocmd User lsp_setup call lsp#register_server({
-  \ "name": "efm-langserver",
-  \ "cmd": {server_info->["efm-langserver", "-c=" . expand("~/.config/efm-langserver/config.yaml"), "-log=" . expand("~/.vim/efm-langserver.log")]},
-  \ "whitelist": ["markdown"],
-  \})
 augroup END
 
 "-----------------------------------
-" Javaの設定
+" Java の設定
 "-----------------------------------
 
 let g:java_highlight_all = 1
@@ -842,7 +836,7 @@ augroup java-setting
 augroup END
 
 "-----------------------------------
-" JavaScriptの設定
+" JavaScript の設定
 "-----------------------------------
 
 augroup javascript-setting
@@ -860,7 +854,7 @@ augroup javascript-setting
 augroup END
 
 "-----------------------------------
-" TypeScriptの設定
+" TypeScript の設定
 "-----------------------------------
 
 augroup typescript-setting
@@ -878,7 +872,7 @@ augroup typescript-setting
 augroup END
 
 "-----------------------------------
-" vueの設定
+" vue の設定
 "-----------------------------------
 
 augroup vue-setting
@@ -895,7 +889,7 @@ augroup vue-setting
 augroup END
 
 "-----------------------------------
-" PHPの設定
+" PHP の設定
 "-----------------------------------
 
 " case文対応
@@ -927,7 +921,7 @@ augroup php-setting
 augroup END
 
 "-----------------------------------
-" voltの設定
+" volt (PHP) の設定
 "-----------------------------------
 
 augroup volt-setting
@@ -947,7 +941,7 @@ augroup volt-setting
 augroup END
 
 "-----------------------------------
-" markdownの設定
+" markdown の設定
 "-----------------------------------
 
 " quickrun - markdown
@@ -1001,7 +995,7 @@ augroup markdown-setting
 augroup END
 
 "-----------------------------------
-" plantumlの設定
+" plantuml の設定
 "-----------------------------------
 
 augroup plantuml-setting
@@ -1018,7 +1012,7 @@ augroup plantuml-setting
 augroup END
 
 "-----------------------------------
-" shの設定
+" sh の設定
 "-----------------------------------
 
 let g:sh_indent_case_labels = 1
@@ -1035,7 +1029,7 @@ augroup sh-setting
 augroup END
 
 "-----------------------------------
-" Vim scriptの設定
+" Vim script の設定
 "-----------------------------------
 
 " \ を入力した際のインデント量
@@ -1052,7 +1046,7 @@ augroup vim-setting
 augroup END
 
 "-----------------------------------
-" sqlの設定
+" sql の設定
 "-----------------------------------
 
 " quickrun - mysql
@@ -1081,7 +1075,7 @@ augroup sql-setting
 augroup END
 
 "-----------------------------------
-" htmlの設定
+" html の設定
 "-----------------------------------
 
 " quickrun - html
@@ -1106,7 +1100,7 @@ augroup html-setting
 augroup END
 
 "-----------------------------------
-" xmlの設定
+" xml の設定
 "-----------------------------------
 
 augroup xml-setting
@@ -1124,7 +1118,7 @@ augroup xml-setting
 augroup END
 
 "-----------------------------------
-" jsonの設定
+" json の設定
 "-----------------------------------
 
 " conceal表示を無効にする
@@ -1146,7 +1140,7 @@ augroup json-setting
 augroup END
 
 "-----------------------------------
-" apache confの設定
+" apache conf の設定
 "-----------------------------------
 
 augroup apache-setting
@@ -1157,7 +1151,7 @@ augroup apache-setting
 augroup END
 
 "-----------------------------------
-" groovyの設定
+" groovy の設定
 "-----------------------------------
 
 augroup groovy-setting
@@ -1168,7 +1162,7 @@ augroup groovy-setting
 augroup END
 
 "-----------------------------------
-" graphqlの設定
+" graphql の設定
 "-----------------------------------
 
 augroup graphql-setting
@@ -1182,7 +1176,7 @@ augroup graphql-setting
 augroup END
 
 "-----------------------------------
-" tomlの設定
+" toml の設定
 "-----------------------------------
 
 augroup toml-setting
@@ -1196,7 +1190,7 @@ augroup toml-setting
 augroup END
 
 "-----------------------------------
-" yamlの設定
+" yaml の設定
 "-----------------------------------
 
 augroup yaml-setting
@@ -1225,7 +1219,7 @@ augroup binary-setting
 augroup END
 
 "-----------------------------------
-" netrwの設定
+" netrw の設定
 "-----------------------------------
 
 " netrwは常にtree view
@@ -1271,7 +1265,7 @@ augroup vimrc-auto-mkdir
 augroup END
 
 "-----------------------------------
-" gVimの設定
+" gVim の設定
 "-----------------------------------
 
 if has("gui_running")
