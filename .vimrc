@@ -420,8 +420,8 @@ let g:lightline = {
 \ },
 \ "component": {
 \   "modified": "%{(LightlineIsVisible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
-\   "fileformat": "%{LightlineIsVisible() ? &fileformat . ' ' . WebDevIconsGetFileFormatSymbol() : ''}",
-\   "filetype": "%{LightlineIsVisible() ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''}",
+\   "fileformat": "%{LightlineIsVisible() ? &fileformat : ''}",
+\   "filetype": "%{LightlineIsVisible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
 \   "fileencoding": "%{LightlineIsVisible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
 \   "sky_color_clock": "%#SkyColorClock#%{' ' . sky_color_clock#statusline() . ' '}%#SkyColorClockTemp# ",
 \ },
