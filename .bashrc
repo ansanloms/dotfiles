@@ -1,7 +1,6 @@
 PS1='\n'
-PS1+='\w\n'
-PS1+=' $(git show --format="%D" --no-patch --no-color 2> /dev/null)\n'
-PS1+='\u@\h > '
+PS1+='\w $(git show --format="%D" --no-patch --no-color 2> /dev/null)\n'
+PS1+='\u@\h ❯ '
 
 alias rm='rm -i'
 alias cp='cp -i'
