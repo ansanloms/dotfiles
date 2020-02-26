@@ -290,6 +290,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
   call minpac#add("https://github.com/twitvim/twitvim.git")
   call minpac#add("https://github.com/junegunn/vim-easy-align.git")
+  call minpac#add("https://github.com/skanehira/translate.vim.git")
 
   " git
   call minpac#add("https://github.com/tpope/vim-fugitive.git")
@@ -353,6 +354,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/pasela/edark.vim.git")
   call minpac#add("https://github.com/kaicataldo/material.vim.git")
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
+  call minpac#add("https://github.com/yuttie/hydrangea-vim.git")
 
   " lsp
   call minpac#add("https://github.com/prabirshrestha/async.vim.git")
@@ -401,7 +403,7 @@ let g:lightline = {
 \ "colorscheme": "iceberg",
 \ "active": {
 \   "left": [
-\     ["mode", "paste"],
+\     ["mode", "readonly", "paste"],
 \     ["gitbranch", "filename"],
 \   ],
 \   "right": [
@@ -420,6 +422,7 @@ let g:lightline = {
 \ },
 \ "component": {
 \   "modified": "%{(LightlineIsVisible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
+\   "readonly": "%{&readonly ? '' : ''}",
 \   "fileformat": "%{LightlineIsVisible() ? &fileformat : ''}",
 \   "filetype": "%{LightlineIsVisible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
 \   "fileencoding": "%{LightlineIsVisible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
@@ -443,6 +446,7 @@ let g:lightline = {
 \   "right": ""
 \ }
 \}
+
 
 function! LightlineIsVisible() abort
   return (60 <= winwidth(0)) && (&filetype !~? "help")
