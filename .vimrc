@@ -3,7 +3,7 @@
 "-----------------------------------
 
 if has("vim_starting")
-  " vim内部で通常使用する文字エンコーディング
+  " vim 内部で通常使用する文字エンコーディング
   set encoding=utf-8
 
   " 既存ファイルを開く際の文字コード自動判別
@@ -284,13 +284,9 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
   call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
   call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
-  call minpac#add("https://github.com/tyru/open-browser.vim.git")
-  call minpac#add("https://github.com/mattn/webapi-vim.git")
   call minpac#add("https://github.com/thinca/vim-quickrun.git")
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
-  call minpac#add("https://github.com/twitvim/twitvim.git")
   call minpac#add("https://github.com/junegunn/vim-easy-align.git")
-  call minpac#add("https://github.com/skanehira/translate.vim.git")
 
   " git
   call minpac#add("https://github.com/tpope/vim-fugitive.git")
@@ -345,16 +341,13 @@ if exists("*minpac#init")
   " appearance
   call minpac#add("https://github.com/itchyny/lightline.vim.git")
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-  call minpac#add("https://github.com/mattn/vimtweak.git")
+  "call minpac#add("https://github.com/mattn/vimtweak.git")
   call minpac#add("https://github.com/ryanoasis/vim-devicons.git")
   call minpac#add("https://github.com/itchyny/vim-cursorword.git")
 
   " colorscheme
-  call minpac#add("https://github.com/morhetz/gruvbox.git")
-  call minpac#add("https://github.com/pasela/edark.vim.git")
   call minpac#add("https://github.com/kaicataldo/material.vim.git")
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
-  call minpac#add("https://github.com/yuttie/hydrangea-vim.git")
 
   " lsp
   call minpac#add("https://github.com/prabirshrestha/async.vim.git")
@@ -392,11 +385,11 @@ let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォ
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 " vimtweak
-augroup vimtweak-setting
-  autocmd!
-
-  autocmd guienter * silent! VimTweakSetAlpha 230
-augroup END
+"augroup vimtweak-setting
+"  autocmd!
+"
+"  autocmd guienter * silent! VimTweakSetAlpha 230
+"augroup END
 
 " lightline
 let g:lightline = {
