@@ -6,7 +6,7 @@
 	autoCRLF = false
 	preloadindex = true
 	fscache = false
-	editor = gvim
+	editor = vim
 	quotepath = false
 [diff]
 	algorithm = histogram
