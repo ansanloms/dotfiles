@@ -348,6 +348,7 @@ if exists("*minpac#init")
   " colorscheme
   call minpac#add("https://github.com/kaicataldo/material.vim.git")
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
+  call minpac#add("https://github.com/Rigellute/rigel.git")
 
   " lsp
   call minpac#add("https://github.com/prabirshrestha/async.vim.git")
@@ -393,7 +394,7 @@ let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表
 
 " lightline
 let g:lightline = {
-\ "colorscheme": "iceberg",
+\ "colorscheme": "rigel",
 \ "active": {
 \   "left": [
 \     ["mode", "readonly", "paste"],
@@ -1369,6 +1370,6 @@ let g:material_terminal_italics = 0
 
 try
   set background=dark
-  colorscheme iceberg
+  colorscheme rigel
 catch
 endtry
