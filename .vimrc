@@ -1371,5 +1371,13 @@ let g:material_terminal_italics = 0
 try
   set background=dark
   colorscheme rigel
+
+  hi! DiffAdd cterm=NONE ctermbg=29 ctermfg=158 gui=NONE guibg=#45493e guifg=#c0c5b9
+  hi! DiffChange cterm=NONE ctermbg=23 ctermfg=159 gui=NONE guibg=#384851 guifg=#b3c3cc
+  hi! DiffDelete cterm=NONE ctermbg=95 ctermfg=224 gui=NONE guibg=#53343b guifg=#ceb0b6
+  hi! DiffText cterm=NONE ctermbg=30 ctermfg=195 gui=NONE guibg=#5b7881 guifg=#c6c8d1
+  hi! diffAdded cterm=NONE ctermfg=150 gui=NONE guifg=#b4be82
+  hi! diffRemoved cterm=NONE ctermfg=203 gui=NONE guifg=#e27878
+  hi! link FoldColumn Folded
 catch
 endtry
