@@ -287,6 +287,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/thinca/vim-quickrun.git")
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
   call minpac#add("https://github.com/junegunn/vim-easy-align.git")
+  call minpac#add("https://github.com/tyru/open-browser.vim.git")
 
   " git
   call minpac#add("https://github.com/tpope/vim-fugitive.git")
@@ -441,7 +442,6 @@ let g:lightline = {
 \ }
 \}
 
-
 function! LightlineIsVisible() abort
   return (60 <= winwidth(0)) && (&filetype !~? "help")
 endfunction
@@ -522,6 +522,13 @@ function! AnsanlomsFunctions()
       return
     endif
     silent execute "!code --goto" expand("%:p").":".line(".").":".col(".")
+  endfunction
+
+  " BitBucket で開く
+  function! l:func.bitbucket() dict
+    packadd vital.vim
+    let l:path = vital#vital#new().import("Prelude").path2project_directory(expand("%:p"))
+    execute "!git -C" l:path "bitbucket-browse" expand("%:p") line(".")
   endfunction
 
   " タグファイル生成
@@ -703,6 +710,7 @@ endfunction
 " functions
 command! OpenFilemanager call AnsanlomsFunctions().filemanager()
 command! OpenVscode call AnsanlomsFunctions().vscode()
+command! OpenBitbucket call AnsanlomsFunctions().bitbucket()
 command! OpenHosts call AnsanlomsFunctions().hosts()
 command! Ctags call AnsanlomsFunctions().ctags()
 command! -nargs=? Terminal call AnsanlomsFunctions().terminal.exec(<f-args>)
