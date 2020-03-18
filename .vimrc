@@ -287,7 +287,6 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/thinca/vim-quickrun.git")
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
   call minpac#add("https://github.com/junegunn/vim-easy-align.git")
-  call minpac#add("https://github.com/tyru/open-browser.vim.git")
 
   " git
   call minpac#add("https://github.com/tpope/vim-fugitive.git")
@@ -342,7 +341,7 @@ if exists("*minpac#init")
   " appearance
   call minpac#add("https://github.com/itchyny/lightline.vim.git")
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-  "call minpac#add("https://github.com/mattn/vimtweak.git")
+  call minpac#add("https://github.com/mattn/vimtweak.git")
   call minpac#add("https://github.com/ryanoasis/vim-devicons.git")
   call minpac#add("https://github.com/itchyny/vim-cursorword.git")
 
@@ -387,11 +386,11 @@ let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォ
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 " vimtweak
-"augroup vimtweak-setting
-"  autocmd!
-"
-"  autocmd guienter * silent! VimTweakSetAlpha 230
-"augroup END
+augroup vimtweak-setting
+  autocmd!
+
+  autocmd guienter * silent! VimTweakSetAlpha 230
+augroup END
 
 " lightline
 let g:lightline = {
@@ -408,26 +407,26 @@ let g:lightline = {
 \   ]
 \ },
 \ "component_expand": {
-\   "tabs": "LightlineTab"
+\   "tabs": "ansanloms#lightline#tab"
 \ },
 \ "component_function": {
 \   "mode": "lightline#mode",
 \   "gitbranch": "fugitive#head",
-\   "filename": "LightlineFilename",
+\   "filename": "ansanloms#lightline#filename",
 \ },
 \ "component": {
-\   "modified": "%{(LightlineIsVisible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
+\   "modified": "%{(ansanloms#lightline#is_visible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
 \   "readonly": "%{&readonly ? '' : ''}",
-\   "fileformat": "%{LightlineIsVisible() ? &fileformat : ''}",
-\   "filetype": "%{LightlineIsVisible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
-\   "fileencoding": "%{LightlineIsVisible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
+\   "fileformat": "%{ansanloms#lightline#is_visible() ? &fileformat : ''}",
+\   "filetype": "%{ansanloms#lightline#is_visible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
+\   "fileencoding": "%{ansanloms#lightline#is_visible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
 \   "sky_color_clock": "%#SkyColorClock#%{' ' . sky_color_clock#statusline() . ' '}%#SkyColorClockTemp# ",
 \ },
 \ "component_raw": {
 \   "sky_color_clock": 1,
 \ },
 \ "tab_component_function": {
-\   "filename": "LightlineTabFilename",
+\   "filename": "ansanloms#lightline#tabfilename",
 \   "modified": "lightline#tab#modified",
 \   "readonly": "lightline#tab#readonly",
 \   "tabnum": "lightline#tab#tabnum"
@@ -442,251 +441,10 @@ let g:lightline = {
 \ }
 \}
 
-function! LightlineIsVisible() abort
-  return (60 <= winwidth(0)) && (&filetype !~? "help")
-endfunction
-
-function! LightlineFilename() abort
-  if expand("%:t") == ""
-    return "[No Name]"
-  endif
-
-  " https://bitbucket.org/ns9tks/vim-fuzzyfinder/src/tip/autoload/fuf.vim
-  let l:str = expand("%:p")
-  let l:len = (winwidth(0) / 2) - len(expand("%:p:t"))
-  let l:mask = "..."
-
-  if l:len >= len(l:str)
-    return l:str
-  elseif l:len <= len(l:mask)
-    return l:mask
-  endif
-
-  let l:head = (l:len - len(l:mask)) / 2
-  let l:tail = l:len - len(l:mask) - l:head
-
-  return (l:head > 0 ? l:str[: l:head - 1] : "") . l:mask . (l:tail > 0 ? l:str[-l:tail :] : "")
-endfunction
-
-function! LightlineTab() abort
-  let [x, y, z] = [[], [], []]
-  let nr = tabpagenr()
-  let cnt = tabpagenr('$')
-
-  for i in range(1, cnt)
-    call add(i < nr ? x : i == nr ? y : z, (i > nr + 3 ? '%<' : '') . '%'. i . 'T%{lightline#onetab(' . i . ',' . (i == nr) . ')}' . (i == cnt ? '%T' : ''))
-  endfor
-
-  return [x, y, z]
-endfunction
-
-function! LightlineTabFilename(n) abort
-  let buflist = tabpagebuflist(a:n)
-  let winnr = tabpagewinnr(a:n)
-  let filepath = expand("#" . buflist[winnr - 1] . ":f")
-  let filename = expand("#" . buflist[winnr - 1] . ":t")
-
-  return WebDevIconsGetFileTypeSymbol(filepath) . (filename !=# "" ? filename : "[No Name]")
-endfunction
 
 " vim-devicons
 
 let g:webdevicons_enable_ctrlp = 1
-
-"-----------------------------------
-" functions
-"-----------------------------------
-
-" memoを設置するディレクトリ
-if has("win32") || has("win64")
-  let g:ansanloms_memo_base_dir = expand("c:/dev/work/memo")
-endif
-
-" 自分用関数群
-function! AnsanlomsFunctions()
-  let l:func = {}
-
-  " ファイルマネージャで開く
-  function! l:func.filemanager() dict
-    if has("win32") || has("win64")
-      silent execute "!start explorer.exe /select," expand("%:p")
-    elseif has("mac")
-      silent execute "!open" expand("%:p")
-    endif
-  endfunction
-
-  " VSCode で開く
-  function! l:func.vscode() dict
-    if !executable("code")
-      echoerr "code command not found."
-      return
-    endif
-    silent execute "!code --goto" expand("%:p").":".line(".").":".col(".")
-  endfunction
-
-  " BitBucket で開く
-  function! l:func.bitbucket() dict
-    packadd vital.vim
-    let l:path = vital#vital#new().import("Prelude").path2project_directory(expand("%:p"))
-    execute "!git -C" l:path "bitbucket-browse" expand("%:p") line(".")
-  endfunction
-
-  " タグファイル生成
-  function! l:func.ctags(...) dict
-    if !executable("ctags")
-      echoerr "ctags command not found."
-      return
-    endif
-
-    packadd vital.vim
-    let l:path = vital#vital#new().import("Prelude").path2project_directory(expand("%:p"))
-    let l:ctags_cmd = "ctags --output-format=e-ctags -R -f " . l:path . "/tags " . l:path
-
-    if &filetype == "php"
-      let l:ctags_cmd = "ctags --languages=PHP --php-types=c+f+d --langmap=PHP:.php.inc.volt --output-format=e-ctags -R -f " . l:path . "/tags " . l:path
-    endif
-
-    echo l:ctags_cmd
-    let l:job_ctags = job_start(l:ctags_cmd, {})
-  endfunction
-
-  " hostsを開く
-  function! l:func.hosts() dict
-    let l:hosts_path = expand("/etc/hosts")
-
-    if has("mac")
-      " mac
-      let l:hosts_path = expand("/private/etc/hosts")
-    elseif has("win32") || has("win64")
-      " windows
-      let l:hosts_path = expand("C:/Windows/System32/drivers/etc/hosts")
-    endif
-
-    silent execute "edit " . l:hosts_path
-  endfunction
-
-  " メモ関連
-  let l:func.memo = {}
-
-  " メモ関連: memoを設置するディレクトリを取得
-  function! l:func.memo.dir() dict
-    let l:memo_base_dir = get(g:, "ansanloms_memo_base_dir", expand("~/memo"))
-
-    if !isdirectory(expand(l:memo_base_dir))
-      call mkdir(l:memo_base_dir, "p")
-    endif
-
-    if !isdirectory(expand(l:memo_base_dir))
-      echoerr l:memo_base_dir . " is not a directory."
-    endif
-
-    return l:memo_base_dir
-  endfunction
-
-  " メモ関連: 開く
-  function! l:func.memo.open(...) dict
-    execute "edit " . expand(self.dir()) . "/" . get(a:, "1", strftime("%Y%m%d")) . ".md"
-  endfunction
-
-  " メモ関連: CtrlPで開く
-  function! l:func.memo.list() dict
-    execute "CtrlP " . expand(self.dir())
-  endfunction
-
-  " ターミナル関連
-  let l:func.terminal = {}
-
-  " ssh
-  function! l:func.terminal.ssh(ssh) dict
-    let l:cmd = "ssh " . a:ssh
-    call term_start(l:cmd, {
-    \ "term_name": l:cmd,
-    \ "term_finish": "close",
-    \ "curwin": 1
-    \})
-  endfunction
-
-  " cmd
-  function! l:func.terminal.cmd() dict
-    call term_start("cmd", {
-    \ "term_name": "cmd",
-    \ "term_finish": "close",
-    \ "curwin": 1
-    \})
-  endfunction
-
-  " powershell
-  function! l:func.terminal.powershell() dict
-    call term_start("powershell", {
-    \ "term_name": "powershell",
-    \ "term_finish": "close",
-    \ "curwin": 1
-    \})
-  endfunction
-
-  " nyagos
-  function! l:func.terminal.nyagos() dict
-    call term_start([$HOME . "/scoop/apps/nyagos/current/nyagos"], {
-    \ "term_name": "NYAGOS",
-    \ "term_finish": "close",
-    \ "curwin": 1
-    \})
-  endfunction
-
-  " ubuntu
-  function! l:func.terminal.ubuntu() dict
-    call term_start("Ubuntu", {
-    \ "term_name": "WSL (Ubuntu)",
-    \ "term_finish": "close",
-    \ "curwin": 1
-    \})
-  endfunction
-
-  " debian
-  function! l:func.terminal.debian() dict
-    call term_start("Debian", {
-    \ "term_name": "WSL (Debian)",
-    \ "term_finish": "close",
-    \ "curwin": 1
-    \})
-  endfunction
-
-  " fedoraremix
-  function! l:func.terminal.fedoraremix() dict
-    call term_start("fedoraremix", {
-    \ "term_name": "WSL (Fedora)",
-    \ "term_finish": "close",
-    \ "curwin": 1
-    \})
-  endfunction
-
-  " sles12
-  function! l:func.terminal.sles12() dict
-    call term_start("sles12", {
-    \ "term_name": "WSL (SLES-12)",
-    \ "term_finish": "close",
-    \ "curwin": 1
-    \})
-  endfunction
-
-  " default
-  function! l:func.terminal.default() dict
-    if has("win32") || has("win64")
-      if executable("nyagos")
-        call self.nyagos()
-      else
-        call self.cmd()
-      endif
-    endif
-  endfunction
-
-  " exec
-  function! l:func.terminal.exec(...) dict
-    call self[get(a:, "1", "default")]()
-  endfunction
-
-  return l:func
-endfunction
 
 "-----------------------------------
 " mapの設定
@@ -707,16 +465,19 @@ endfunction
 " | tmap / tnoremap | -      | -      | @        | -              | -      | -    | -        |
 " +-----------------+--------+--------+----------+----------------+--------+------+----------+
 
-" functions
-command! OpenFilemanager call AnsanlomsFunctions().filemanager()
-command! OpenVscode call AnsanlomsFunctions().vscode()
-command! OpenBitbucket call AnsanlomsFunctions().bitbucket()
-command! OpenHosts call AnsanlomsFunctions().hosts()
-command! Ctags call AnsanlomsFunctions().ctags()
-command! -nargs=? Terminal call AnsanlomsFunctions().terminal.exec(<f-args>)
-command! -nargs=? Memo call AnsanlomsFunctions().memo.open(<f-args>)
-command! MemoDaily call AnsanlomsFunctions().memo.open()
-command! MemoList call AnsanlomsFunctions().memo.list()
+" memoを設置するディレクトリ
+if has("win32") || has("win64")
+  let g:ansanloms_memo_base_dir = expand("c:/dev/work/memo")
+endif
+
+command! OpenFilemanager call ansanloms#filemanager#open()
+command! OpenVscode call ansanloms#vscode#open()
+command! -range OpenBitbucket <line1>,<line2>call ansanloms#bitbucket#open()
+command! OpenHosts call ansanloms#hosts#open()
+command! Ctags call ansanloms#ctags#create()
+command! -nargs=? Memo call ansanloms#memo#open(<f-args>)
+command! MemoDaily call ansanloms#memo#open()
+command! MemoList call ansanloms#memo#list()
 
 " Leaderの設定
 let g:mapleader = ","
@@ -735,7 +496,6 @@ nnoremap ZQ <Nop>
 
 " 検索のハイライト削除
 nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
-"nnoremap <silent> <Esc><Esc> :<C-u>call popup_clear()<CR>
 
 " very magic
 nnoremap / /\v
