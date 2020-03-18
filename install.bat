@@ -14,13 +14,14 @@ if "%ELEVATED%" neq "yes" (
 )
 
 :admins
-    mklink C:%HOMEPATH%\.bashrc             %~d0%~p0.bashrc
-    mklink C:%HOMEPATH%\.bash_profile       %~d0%~p0.bash_profile
-    mklink C:%HOMEPATH%\.vimrc              %~d0%~p0.vimrc
-    mklink C:%HOMEPATH%\.gitconfig          %~d0%~p0.gitconfig
-    mklink C:%HOMEPATH%\.minttyrc           %~d0%~p0.minttyrc
-    mklink C:%HOMEPATH%\.ctrlp-launcher     %~d0%~p0.ctrlp-launcher
-    mklink C:%HOMEPATH%\.nyagos             %~d0%~p0.nyagos
+    mklink    C:%HOMEPATH%\.bashrc             %~d0%~p0.bashrc
+    mklink    C:%HOMEPATH%\.bash_profile       %~d0%~p0.bash_profile
+    mklink /D C:%HOMEPATH%\.vim                %~d0%~p0.vim
+    mklink    C:%HOMEPATH%\.vimrc              %~d0%~p0.vimrc
+    mklink    C:%HOMEPATH%\.gitconfig          %~d0%~p0.gitconfig
+    mklink    C:%HOMEPATH%\.minttyrc           %~d0%~p0.minttyrc
+    mklink    C:%HOMEPATH%\.ctrlp-launcher     %~d0%~p0.ctrlp-launcher
+    mklink    C:%HOMEPATH%\.nyagos             %~d0%~p0.nyagos
 
     goto exit1
 
