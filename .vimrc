@@ -287,7 +287,6 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/thinca/vim-quickrun.git")
   call minpac#add("https://github.com/vim-scripts/renamer.vim.git")
   call minpac#add("https://github.com/junegunn/vim-easy-align.git")
-  call minpac#add("https://github.com/mopp/autodirmake.vim.git")
 
   " git
   call minpac#add("https://github.com/tpope/vim-fugitive.git")
@@ -1014,6 +1013,20 @@ augroup remove-dust
     %s/\s\+$//ge
     call setpos(".", cursor)
     unlet l:cursor
+  endfunction
+augroup END
+
+" ディレクトリ作成
+augroup vimrc-auto-mkdir
+  autocmd!
+
+  " ファイルを保存する直前に実施
+  autocmd BufWritePre * call s:auto_mkdir(expand("<afile>:p:h"), v:cmdbang)
+
+  function! s:auto_mkdir(dir, force)
+    if !isdirectory(a:dir)
+      call mkdir(iconv(a:dir, &encoding, &termencoding), "p")
+    endif
   endfunction
 augroup END
 
