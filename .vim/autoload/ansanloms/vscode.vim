@@ -5,5 +5,6 @@ function! ansanloms#vscode#open()
     return
   endif
 
-  silent execute "!code --goto" expand("%:p").":".line(".").":".col(".")
+  packadd vital.vim
+  execute "!code --goto" expand("%:p").":".line(".").":".col(".") vital#vital#new().import("Prelude").path2project_directory(expand("%:p"))
 endfunction
