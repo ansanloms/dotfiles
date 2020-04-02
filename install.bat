@@ -22,6 +22,7 @@ if "%ELEVATED%" neq "yes" (
     mklink    C:%HOMEPATH%\.minttyrc           %~d0%~p0.minttyrc
     mklink    C:%HOMEPATH%\.ctrlp-launcher     %~d0%~p0.ctrlp-launcher
     mklink    C:%HOMEPATH%\.nyagos             %~d0%~p0.nyagos
+    mklink    C:%HOMEPATH%\.starship           %~d0%~p0.starship
 
     goto exit1
 

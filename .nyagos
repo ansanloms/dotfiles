@@ -1,30 +1,32 @@
--- vim:set ft=lua:
-
 -- set envs
 set {
-	EDITOR = "vim"
-	,LESSCHARSET = "UTF-8"
+	EDITOR = "vim",
+	LESSCHARSET = "UTF-8",
+	STARSHIP_CONFIG = nyagos.env.homepath .. "\\.starship"
 }
 
 nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homepath .. "\\scoop\\apps\\msys2\\current\\usr\\bin"
 nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homepath .. "\\scoop\\apps\\msys2\\current\\mingw64\\bin"
 
--- set prompt
+-- prompt
 nyagos.prompt = function(this)
-	local prompt = "\n"
-
 	-- path
-	prompt = prompt .. nyagos.eval("pwd"):gsub("\\", "/")
+	local path = nyagos.getwd():gsub("\\", "/")
 
-	-- git
-	prompt = prompt .. " " .. nyagos.eval("git show --format='[%D]' --no-patch 2>nul") .. "\n"
+	-- title
+	local title = "NYAGOS - " .. path
 
 	-- prompt
-	prompt = prompt .. "❯ "
+	local prompt = "\n"
+	if nyagos.which("starship") then
+		prompt = prompt .. nyagos.eval("starship prompt 2> nul") .. " "
+	else
+		-- git
+		local git = " " .. nyagos.eval("git show --format='[%D]' --no-patch 2> nul")
+		prompt = prompt .. path .. git .. "\n" .. "❯❯❯ "
+	end
 
-	-- nyagos.default_prompt はデフォルトのプロンプト表示関数です。
-	-- 第二引数でターミナルのタイトルを変更することができます。
-	return nyagos.default_prompt(prompt, "NYAGOS - " .. nyagos.getwd():gsub("\\", "/"))
+	return nyagos.default_prompt(prompt, title)
 end
 
 -- set alias
@@ -43,3 +45,5 @@ nyagos.alias.convert = [[~\scoop\shims\convert.exe]]
 
 nyagos.alias.vi = "gvim"
 nyagos.alias.vim = "gvim"
+
+-- vim:set ft=lua:

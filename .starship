@@ -1,0 +1,51 @@
+add_newline = false
+
+scan_timeout = 10
+
+prompt_order = [
+  "line_break",
+  "directory",
+  "git_branch",
+  "git_commit",
+  "line_break",
+  "time",
+  "character",
+]
+
+[username]
+show_always = true
+disabled = false
+
+[hostname]
+disabled = false
+ssh_only = false
+
+[character]
+disabled = false
+symbol = "❯❯❯"
+
+[directory]
+disabled = false
+truncation_length = 0
+truncate_to_repo = false
+prefix = ""
+
+[time]
+disabled = false
+format = "[%F %T]"
+
+[git_branch]
+disabled = false
+symbol = ""
+truncation_length = -1
+truncation_symbol = ""
+
+[git_commit]
+disabled = false
+only_detached = false
+commit_hash_length = 40
+prefix = ""
+suffix = ""
+
+
+# vim:set filetype=toml:
