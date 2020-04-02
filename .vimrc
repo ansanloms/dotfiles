@@ -834,6 +834,9 @@ augroup sql-setting
   " インデントセット
   autocmd FileType sql setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
+  " 折り返さない
+  autocmd FileType sql setlocal nowrap
+
   " フォーマット指定
   if executable("sql-formatter")
     autocmd FileType sql setlocal formatprg=sql-formatter
@@ -947,6 +950,9 @@ augroup END
 
 augroup toml-setting
   autocmd!
+
+  " 拡張子設定
+  autocmd BufNewFile,BufRead *.{toml} setlocal filetype=toml
 
   " インデントセット
   autocmd FileType toml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
