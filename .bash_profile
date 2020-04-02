@@ -17,6 +17,8 @@ export MYSQL_PS1="(\u@\h) [\d]> "
 
 export STARSHIP_CONFIG=~/.starship
 
+export NVM_DIR="$HOME/.nvm"
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	/etc/bashrc
