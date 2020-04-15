@@ -571,9 +571,9 @@ augroup lsp-setting
   autocmd!
 
   autocmd User lsp_buffer_enabled setlocal omnifunc=lsp#complete
-  autocmd User lsp_buffer_enabled nmap <buffer> <C-]> <plug>(lsp-definition)
-  autocmd User lsp_buffer_enabled nmap <buffer> <leader>lk <Plug>(lsp-hover)
-  autocmd User lsp_buffer_enabled nmap <buffer> <leader>lp <Plug>(lsp-peek-definition)
+  autocmd User lsp_buffer_enabled nmap <buffer> gD <plug>(lsp-definition)
+  autocmd User lsp_buffer_enabled nmap <buffer> gd <Plug>(lsp-peek-definition)
+  autocmd User lsp_buffer_enabled nmap <buffer> K <Plug>(lsp-hover)
 augroup END
 
 "-----------------------------------
