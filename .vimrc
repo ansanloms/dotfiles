@@ -494,7 +494,9 @@ nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
 " 検索のハイライト削除
-nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
+" ポップアップを消す
+command! Clear nohlsearch | call popup_clear()
+nnoremap <silent> <Esc><Esc> :<C-u>Clear<CR>
 
 " very magic
 nnoremap / /\v
