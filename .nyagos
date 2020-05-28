@@ -2,7 +2,7 @@
 set {
 	EDITOR = "vim",
 	LESSCHARSET = "UTF-8",
-	STARSHIP_CONFIG = nyagos.env.homepath .. "\\.starship"
+	STARSHIP_CONFIG = nyagos.env.homedrive .. nyagos.env.homepath .. "\\.starship"
 }
 
 nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homepath .. "\\scoop\\apps\\msys2\\current\\usr\\bin"
