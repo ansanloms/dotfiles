@@ -1,0 +1,32 @@
+[user]
+	useConfigOnly = true
+	name = ansanloms
+	email = ansanloms@users.noreply.github.com
+[core]
+	autoCRLF = false
+	preloadindex = true
+	fscache = false
+	editor = vim
+	quotepath = false
+[diff]
+	algorithm = histogram
+[color]
+	ui = true
+[merge]
+	ff = false
+[gui]
+	encoding = utf-8
+[pull]
+	ff = only
+[github]
+	name = ansanloms
+	email = ansanloms@users.noreply.github.com
+[url "git@github.com:"]
+	pushinsteadof = https://github.com/
+[credential]
+	helper = store
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
