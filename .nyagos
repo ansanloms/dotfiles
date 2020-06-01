@@ -5,8 +5,8 @@ set {
 	STARSHIP_CONFIG = nyagos.env.homedrive .. nyagos.env.homepath .. "\\.starship"
 }
 
-nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homepath .. "\\scoop\\apps\\msys2\\current\\usr\\bin"
-nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homepath .. "\\scoop\\apps\\msys2\\current\\mingw64\\bin"
+nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. nyagos.env.homepath .. "\\scoop\\apps\\msys2\\current\\usr\\bin"
+nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. nyagos.env.homepath .. "\\scoop\\apps\\msys2\\current\\mingw64\\bin"
 
 -- prompt
 nyagos.prompt = function(this)
