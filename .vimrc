@@ -534,17 +534,6 @@ tnoremap <C-BS> <BS>
 tnoremap <C-CR> <CR>
 
 "-----------------------------------
-" Quickfixの設定
-"-----------------------------------
-
-augroup quickfix-setting
-  autocmd!
-
-  " ステータスラインを更新
-  autocmd FileType qf setlocal statusline=%t%{exists('w:quickfix_title')\ ?\ '\ '.w:quickfix_title\ :\ ''}\ %=[%l/%L\ %p%%]
-augroup END
-
-"-----------------------------------
 " lsp の設定
 "-----------------------------------
 
