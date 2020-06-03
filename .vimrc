@@ -218,8 +218,7 @@ set tabstop=4
 " 自動インデントでずれる幅
 set shiftwidth=4
 
-" Insertモードで <Tab> を挿入するとき代わりに
-" 適切な数の空白(ソフトTAB)を使わない
+" ソフトTABの設定
 "set expandtab
 set noexpandtab
 
@@ -345,9 +344,9 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/itchyny/vim-cursorword.git")
 
   " colorscheme
-  call minpac#add("https://github.com/kaicataldo/material.vim.git")
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
   call minpac#add("https://github.com/Rigellute/rigel.git")
+  call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
 
   " lsp
   call minpac#add("https://github.com/prabirshrestha/async.vim.git")
@@ -356,9 +355,6 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
   call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
 endif
-
-" Align
-let g:Align_xstrlen = 3 " 幅広文字に対応する
 
 " CtrlP
 let g:ctrlp_use_caching = 1                                     " キャッシュを使用する
@@ -393,7 +389,7 @@ augroup END
 
 " lightline
 let g:lightline = {
-\ "colorscheme": "rigel",
+\ "colorscheme": "gotham",
 \ "active": {
 \   "left": [
 \     ["mode", "readonly", "paste"],
@@ -442,7 +438,6 @@ let g:lightline = {
 
 
 " vim-devicons
-
 let g:webdevicons_enable_ctrlp = 1
 
 "-----------------------------------
@@ -464,6 +459,9 @@ let g:webdevicons_enable_ctrlp = 1
 " | tmap / tnoremap | -      | -      | @        | -              | -      | -    | -        |
 " +-----------------+--------+--------+----------+----------------+--------+------+----------+
 
+" Leaderの設定
+let g:mapleader = ","
+
 " memoを設置するディレクトリ
 if has("win32") || has("win64")
   let g:ansanloms_memo_base_dir = expand("c:/dev/work/memo")
@@ -477,9 +475,6 @@ command! Ctags call ansanloms#ctags#create()
 command! -nargs=? Memo call ansanloms#memo#open(<f-args>)
 command! MemoDaily call ansanloms#memo#open()
 command! MemoList call ansanloms#memo#list()
-
-" Leaderの設定
-let g:mapleader = ","
 
 " 検索などで飛んだらそこを真ん中に
 nnoremap n nzz
@@ -674,12 +669,6 @@ augroup php-setting
 
   " インデントセット
   autocmd FileType php setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
-
-  " phpcbfを用いた更新
-  if executable("phpcbf")
-    autocmd FileType php nnoremap <silent><leader>pcf :w!<CR>:echo system("phpcbf --standard=PSR2 " . expand("%:p"))<CR>:e!<CR>
-    autocmd FileType php nnoremap <silent><leader>pcd :w!<CR>:echo system("phpcbf --standard=PSR2 " . expand("%:p:h"))<CR>:e!<CR>
-  endif
 
   " ハイライト行指定
   autocmd FileType php syntax sync minlines=300 maxlines=500
@@ -1140,20 +1129,8 @@ set pumheight=20
 " シンタックスON
 syntax enable
 
-" material.vim
-let g:material_theme_style = "darker"
-let g:material_terminal_italics = 0
-
 try
   set background=dark
-  colorscheme rigel
-
-  hi! DiffAdd cterm=NONE ctermbg=29 ctermfg=158 gui=NONE guibg=#45493e guifg=#c0c5b9
-  hi! DiffChange cterm=NONE ctermbg=23 ctermfg=159 gui=NONE guibg=#384851 guifg=#b3c3cc
-  hi! DiffDelete cterm=NONE ctermbg=95 ctermfg=224 gui=NONE guibg=#53343b guifg=#ceb0b6
-  hi! DiffText cterm=NONE ctermbg=30 ctermfg=195 gui=NONE guibg=#5b7881 guifg=#c6c8d1
-  hi! diffAdded cterm=NONE ctermfg=150 gui=NONE guifg=#b4be82
-  hi! diffRemoved cterm=NONE ctermfg=203 gui=NONE guifg=#e27878
-  hi! link FoldColumn Folded
+  colorscheme gotham
 catch
 endtry
