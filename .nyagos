@@ -33,15 +33,15 @@ nyagos.prompt = function(this)
 	return nyagos.default_prompt(prompt, title)
 end
 
--- set alias
+-- ffmpeg
 nyagos.alias.hlsdl = function(args)
 	nyagos.exec("start ffmpeg -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
 end
 
--- docker-machine env default
-nyagos.alias["docker-env-default"] = function()
+-- docker-machine env
+nyagos.alias["docker-env"] = function(args)
 	if nyagos.which("docker-machine") then
-		local cmd = nyagos.eval("docker-machine env default --shell cmd")
+		local cmd = nyagos.eval("docker-machine env " .. args[1] .. " --shell cmd")
 		print(cmd)
 
 		for k, v in string.gmatch(cmd, "SET (.-)=(.-)\n") do
