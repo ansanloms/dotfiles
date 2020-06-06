@@ -264,6 +264,9 @@ set completeopt=menuone
 if has("terminal")
   " 端末のエンコーディング
   set termencoding="utf-8"
+
+  " pty 指定
+  set termwintype="conpty"
 endif
 
 "-----------------------------------
@@ -339,8 +342,7 @@ if exists("*minpac#init")
   " appearance
   call minpac#add("https://github.com/itchyny/lightline.vim.git")
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-  call minpac#add("https://github.com/mattn/vimtweak.git")
-  call minpac#add("https://github.com/ryanoasis/vim-devicons.git")
+  " call minpac#add("https://github.com/mattn/vimtweak.git")
   call minpac#add("https://github.com/itchyny/vim-cursorword.git")
 
   " colorscheme
@@ -435,10 +437,6 @@ let g:lightline = {
 \   "right": ""
 \ }
 \}
-
-
-" vim-devicons
-let g:webdevicons_enable_ctrlp = 1
 
 "-----------------------------------
 " mapの設定
@@ -1092,7 +1090,7 @@ set breakindent
 
 " 文字幅の設定
 " マルチバイト文字等でずれないようにする
-set ambiwidth=double
+set ambiwidth=single
 
 " 上下の視界確保
 set scrolloff=4

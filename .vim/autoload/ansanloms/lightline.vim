@@ -42,5 +42,5 @@ function! ansanloms#lightline#tabfilename(n) abort
   let filepath = expand("#" . buflist[winnr - 1] . ":f")
   let filename = expand("#" . buflist[winnr - 1] . ":t")
 
-  return WebDevIconsGetFileTypeSymbol(filepath) . (filename !=# "" ? filename : "[No Name]")
+  return filename !=# "" ? filename : "[No Name]"
 endfunction

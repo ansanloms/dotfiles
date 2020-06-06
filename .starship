@@ -36,7 +36,7 @@ format = "[%F %T]"
 
 [git_branch]
 disabled = false
-symbol = ""
+symbol = ""
 truncation_length = -1
 truncation_symbol = ""
 
@@ -46,6 +46,5 @@ only_detached = false
 commit_hash_length = 40
 prefix = ""
 suffix = ""
-
 
 # vim:set filetype=toml:
