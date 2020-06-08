@@ -340,9 +340,8 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/stephpy/vim-yaml.git", {"type": "opt"})
 
   " appearance
-  call minpac#add("https://github.com/itchyny/lightline.vim.git")
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-  " call minpac#add("https://github.com/mattn/vimtweak.git")
+  call minpac#add("https://github.com/mattn/vimtweak.git")
   call minpac#add("https://github.com/itchyny/vim-cursorword.git")
 
   " colorscheme
@@ -383,60 +382,42 @@ let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォ
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 " vimtweak
-"augroup vimtweak-setting
-"  autocmd!
-"
-"  autocmd guienter * silent! VimTweakSetAlpha 230
-"augroup END
+augroup vimtweak-setting
+  autocmd!
 
-" lightline
-let g:lightline = {
-\ "colorscheme": "gotham",
-\ "active": {
-\   "left": [
-\     ["mode", "readonly", "paste"],
-\     ["gitbranch", "filename"],
-\   ],
-\   "right": [
-\     ["sky_color_clock"],
-\     ["percent"],
-\     ["fileformat", "fileencoding", "filetype"],
-\   ]
-\ },
-\ "component_expand": {
-\   "tabs": "ansanloms#lightline#tab"
-\ },
-\ "component_function": {
-\   "mode": "lightline#mode",
-\   "gitbranch": "fugitive#head",
-\   "filename": "ansanloms#lightline#filename",
-\ },
-\ "component": {
-\   "modified": "%{(ansanloms#lightline#is_visible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
-\   "readonly": "%{&readonly ? '' : ''}",
-\   "fileformat": "%{ansanloms#lightline#is_visible() ? &fileformat : ''}",
-\   "filetype": "%{ansanloms#lightline#is_visible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
-\   "fileencoding": "%{ansanloms#lightline#is_visible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
-\   "sky_color_clock": "%#SkyColorClock#%{' ' . sky_color_clock#statusline() . ' '}%#SkyColorClockTemp# ",
-\ },
-\ "component_raw": {
-\   "sky_color_clock": 1,
-\ },
-\ "tab_component_function": {
-\   "filename": "ansanloms#lightline#tabfilename",
-\   "modified": "lightline#tab#modified",
-\   "readonly": "lightline#tab#readonly",
-\   "tabnum": "lightline#tab#tabnum"
-\ },
-\ "separator": {
-\   "left": "",
-\   "right": ""
-\ },
-\ "subseparator": {
-\   "left": "",
-\   "right": ""
-\ }
-\}
+  autocmd guienter * silent! VimTweakSetAlpha 230
+augroup END
+
+"-----------------------------------
+" ステータスラインの設定
+"-----------------------------------
+
+" ステータスラインを常に表示
+set laststatus=2
+
+" 表示設定
+set statusline=\ %{ansanloms#statusline#statusline_mode()}          " モード表示
+set statusline+=%{ansanloms#statusline#paste_mode()}                " ペーストモード
+set statusline+=\ %{ansanloms#statusline#filename()}                " ファイルパス
+set statusline+=%m                                                  " 修正フラグ
+set statusline+=%r                                                  " 読み込み専用フラグ
+set statusline+=%h                                                  " ヘルプバッファフラグ
+set statusline+=%w                                                  " プレビューウィンドウフラグ
+set statusline+=%=                                                  " 左寄せ項目と右寄せ項目の区切り
+set statusline+=\ %{&filetype}                                      " ファイルタイプ
+set statusline+=\ %{&fileformat}                                    " 改行コード
+set statusline+=\ %{&fileencoding}\     " <-- 行末にSP有            " 文字コード
+set statusline+=%#SkyColorClock#\ %{sky_color_clock#statusline()}\  " <-- 行末にSP有   " 日付と月齢表示
+
+"-----------------------------------
+" タブラインの設定
+"-----------------------------------
+
+" タブラインを常に表示
+set showtabline=2
+
+" タブラインの設定
+set tabline=%!ansanloms#tabline#tabline()
 
 "-----------------------------------
 " mapの設定
@@ -558,6 +539,15 @@ augroup lsp-setting
   autocmd User lsp_buffer_enabled nmap <buffer> gD <plug>(lsp-definition)
   autocmd User lsp_buffer_enabled nmap <buffer> gd <Plug>(lsp-peek-definition)
   autocmd User lsp_buffer_enabled nmap <buffer> K <Plug>(lsp-hover)
+augroup END
+
+"-----------------------------------
+" Quickfixの設定
+"-----------------------------------
+augroup quickfix-setting
+  autocmd!
+  " ステータスラインを更新
+  autocmd FileType qf setlocal statusline=%t%{exists('w:quickfix_title')\ ?\ '\ '.w:quickfix_title\ :\ ''}\ %=[%l/%L\ %p%%]
 augroup END
 
 "-----------------------------------
