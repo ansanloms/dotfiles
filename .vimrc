@@ -396,18 +396,7 @@ augroup END
 set laststatus=2
 
 " 表示設定
-set statusline=\ %{ansanloms#statusline#statusline_mode()}          " モード表示
-set statusline+=%{ansanloms#statusline#paste_mode()}                " ペーストモード
-set statusline+=\ %{ansanloms#statusline#filename()}                " ファイルパス
-set statusline+=%m                                                  " 修正フラグ
-set statusline+=%r                                                  " 読み込み専用フラグ
-set statusline+=%h                                                  " ヘルプバッファフラグ
-set statusline+=%w                                                  " プレビューウィンドウフラグ
-set statusline+=%=                                                  " 左寄せ項目と右寄せ項目の区切り
-set statusline+=\ %{&filetype}                                      " ファイルタイプ
-set statusline+=\ %{&fileformat}                                    " 改行コード
-set statusline+=\ %{&fileencoding}\     " <-- 行末にSP有            " 文字コード
-set statusline+=%#SkyColorClock#\ %{sky_color_clock#statusline()}\  " <-- 行末にSP有   " 日付と月齢表示
+set statusline=%!ansanloms#statusline#statusline()
 
 "-----------------------------------
 " タブラインの設定
@@ -546,8 +535,9 @@ augroup END
 "-----------------------------------
 augroup quickfix-setting
   autocmd!
+
   " ステータスラインを更新
-  autocmd FileType qf setlocal statusline=%t%{exists('w:quickfix_title')\ ?\ '\ '.w:quickfix_title\ :\ ''}\ %=[%l/%L\ %p%%]
+  autocmd FileType qf setlocal statusline=%!ansanloms#statusline#statusline_quickfix()
 augroup END
 
 "-----------------------------------
@@ -632,10 +622,10 @@ augroup END
 " PHP の設定
 "-----------------------------------
 
-" case文対応
+" case 文対応
 let g:PHP_vintage_case_default_indent = 1
 
-" 使用するDB
+" 使用する DB
 let g:sql_type_default = "mysql"
 
 augroup php-setting

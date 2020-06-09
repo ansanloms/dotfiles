@@ -1,3 +1,11 @@
+function! ansanloms#statusline#statusline() abort
+  return " " . ansanloms#statusline#statusline_mode() . ansanloms#statusline#paste_mode() . " " . ansanloms#statusline#filename() . "%m%r%h%w%=" . " " . &filetype . " " . &fileformat . " " . &fileencoding . " " . "%#SkyColorClock#" . " " . sky_color_clock#statusline() . " "
+endfunction
+
+function! ansanloms#statusline#statusline_quickfix() abort
+  return "%t" . (exists("w:quickfix_title") ? w:quickfix_title : "") . " " . "%=[%l/%L\ %p%%]"
+endfunction
+
 function! ansanloms#statusline#statusline_mode() abort
   let l:mode_list = {
   \ "n":       "NORMAL"
