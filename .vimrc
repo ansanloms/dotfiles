@@ -348,6 +348,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/cocopon/iceberg.vim.git")
   call minpac#add("https://github.com/Rigellute/rigel.git")
   call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
+  call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
 
   " lsp
   call minpac#add("https://github.com/prabirshrestha/async.vim.git")
@@ -1098,6 +1099,6 @@ syntax enable
 
 try
   set background=dark
-  colorscheme gotham
+  colorscheme nord
 catch
 endtry
