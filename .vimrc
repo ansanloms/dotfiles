@@ -351,7 +351,6 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
 
   " lsp
-  call minpac#add("https://github.com/prabirshrestha/async.vim.git")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
   call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
@@ -526,6 +525,8 @@ augroup lsp-setting
   autocmd!
 
   autocmd User lsp_buffer_enabled setlocal omnifunc=lsp#complete
+  autocmd User lsp_buffer_enabled setlocal signcolumn=yes
+  autocmd User lsp_buffer_enabled setlocal tagfunc=lsp#tagfunc
   autocmd User lsp_buffer_enabled nmap <buffer> gD <plug>(lsp-definition)
   autocmd User lsp_buffer_enabled nmap <buffer> gd <Plug>(lsp-peek-definition)
   autocmd User lsp_buffer_enabled nmap <buffer> K <Plug>(lsp-hover)
