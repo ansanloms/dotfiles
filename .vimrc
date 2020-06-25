@@ -295,7 +295,6 @@ if exists("*minpac#init")
   " ctrlp
   call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
   call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
-  call minpac#add("https://github.com/ivalkeen/vim-ctrlp-tjump.git")
 
   " sh
   call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
@@ -365,7 +364,6 @@ let g:ctrlp_lazy_update = 1                                     " 遅延再描�
 let g:ctrlp_max_height = 20                                     " 20行表示
 let g:ctrlp_open_new_file = 1                                   " ファイルの新規作成時は別タブで開く
 let g:ctrlp_launcher_file_list = ["~/.ctrlp-launcher", "~/.ctrlp-launcher-work", "~/.ctrlp-launcher-gcp"]  " ランチャーで読み込むファイルパス
-let g:ctrlp_tjump_only_silent = 0                               " タグジャンプ時にジャンプ先が1つしかない場合はCtrlPウィンドウを開かずジャンプしない
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|git)$'   " 除外
 
 " quickrun
@@ -480,20 +478,14 @@ nnoremap <C-h> :<C-u>CtrlPMRUFiles<CR>
 " CtrlPBuffer
 nnoremap <C-s> :<C-u>CtrlPBuffer<CR>
 
-" CtrlPtjump
-nnoremap <C-]> :<C-u>CtrlPtjump<CR>
-vnoremap <C-]> :<C-u>CtrlPtjumpVisual<CR>
-
 " タグジャンプの際に新しいタブで開く
-"nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
+nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
 
 " minpac
 command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update("", {"do": "call minpac#status()"})
 command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
 
-" libtermkeyのサポートを無効にする？
-" https://gitlab.com/gnachman/iterm2/issues/3519
 " <S-space>とか押すと ^[[32;2u[ とかはいるやつの対策
 " あんまよくわかってない
 " 取り急ぎ鬱陶しいやつだけ
