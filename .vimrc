@@ -1045,10 +1045,12 @@ endif
 set number
 
 " 行可視化
-set cursorline
+"set cursorline
+set nocursorline
 
 " 列可視化
 "set cursorcolumn
+set norelativenumber
 
 " 相対行で表示
 "set relativenumber
