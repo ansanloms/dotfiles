@@ -338,6 +338,9 @@ if exists("*minpac#init")
   " yaml
   call minpac#add("https://github.com/stephpy/vim-yaml.git", {"type": "opt"})
 
+  " powershell
+  call minpac#add("https://github.com/PProvost/vim-ps1.git", {"type": "opt"})
+
   " appearance
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
   call minpac#add("https://github.com/mattn/vimtweak.git")
@@ -925,6 +928,20 @@ augroup yaml-setting
 
   " プラグイン読み込み
   autocmd FileType yaml packadd vim-yaml
+augroup END
+
+"-----------------------------------
+" powershell の設定
+"-----------------------------------
+
+augroup powershell-setting
+  autocmd!
+
+  " 拡張子設定
+  autocmd BufNewFile,BufRead *.{ps1} setlocal filetype=ps1
+
+  " プラグイン読み込み
+  autocmd FileType ps1 packadd vim-ps1
 augroup END
 
 "-----------------------------------
