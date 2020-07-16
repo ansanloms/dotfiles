@@ -1,0 +1,17 @@
+- defaults:
+    link:
+        relink: true
+        create: true
+
+- clean: ['~']
+
+- link:
+    ~/.bashrc: .bashrc
+    ~/.bash_profile: .bash_profile
+    ~/.gitconfig: .gitconfig
+    ~/.vim: .vim
+    ~/.vimrc: .vimrc
+    ~/.minttyrc: .minttyrc
+    ~/.ctrlp-launcher: .ctrlp-launcher
+    ~/.nyagos: .nyagos
+    ~/.starship: .starship

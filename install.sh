@@ -1,14 +1,15 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
+set -e
 
-ln -sf ${SCRIPT_DIR}/.inputrc           ~/.inputrc
-ln -sf ${SCRIPT_DIR}/.bashrc            ~/.bashrc
-ln -sf ${SCRIPT_DIR}/.bash_profile      ~/.bash_profile
-ln -sf ${SCRIPT_DIR}/.vim               ~/.vim
-ln -sf ${SCRIPT_DIR}/.vimrc             ~/.vimrc
-ln -sf ${SCRIPT_DIR}/.gitconfig         ~/.gitconfig
-ln -sf ${SCRIPT_DIR}/.ctrlp-launcher    ~/.ctrlp-launcher
-ln -sf ${SCRIPT_DIR}/.starship          ~/.starship
+CONFIG="install.conf.yaml"
+DOTBOT_DIR="dotbot"
 
-mkdir -p ~/bin
+DOTBOT_BIN="bin/dotbot"
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+cd "${BASEDIR}"
+git -C "${DOTBOT_DIR}" submodule sync --quiet --recursive
+git submodule update --init --recursive "${DOTBOT_DIR}"
+
+"${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
