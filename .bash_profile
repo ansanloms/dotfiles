@@ -15,8 +15,6 @@ export PS1_COLOR_RESET="$(tput sgr0)"
 
 export MYSQL_PS1="(\u@\h) [\d]> "
 
-export STARSHIP_CONFIG=~/.starship
-
 export NVM_DIR="$HOME/.nvm"
 
 # Source global definitions

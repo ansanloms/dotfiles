@@ -14,4 +14,4 @@
     ~/.minttyrc: .minttyrc
     ~/.ctrlp-launcher: .ctrlp-launcher
     ~/.nyagos: .nyagos
-    ~/.starship: .starship
+    ~/.config/starship.toml: starship.toml
