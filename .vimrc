@@ -358,6 +358,9 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
   call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
   call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
+
+  " growi
+  call minpac#add("https://github.com/ansanloms/vim-growi.git")
 endif
 
 " CtrlP
