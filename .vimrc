@@ -438,6 +438,7 @@ endif
 
 command! OpenFilemanager call ansanloms#filemanager#open()
 command! OpenVscode call ansanloms#vscode#open()
+command! OpenPhpstorm call ansanloms#phpstorm#open()
 command! -range OpenBitbucket <line1>,<line2>call ansanloms#bitbucket#open()
 command! OpenHosts call ansanloms#hosts#open()
 command! Ctags call ansanloms#ctags#create()
