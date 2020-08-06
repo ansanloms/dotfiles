@@ -288,6 +288,7 @@ if exists("*minpac#init")
   call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
   call minpac#add("https://github.com/thinca/vim-quickrun.git")
   call minpac#add("https://github.com/junegunn/vim-easy-align.git")
+  call minpac#add("https://github.com/tyru/open-browser.vim.git")
 
   " git
   call minpac#add("https://github.com/tpope/vim-fugitive.git")
