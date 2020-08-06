@@ -70,3 +70,30 @@ function! ansanloms#terminal#sles12()
   \ "curwin": 1
   \})
 endfunction
+
+" msys2
+function! ansanloms#terminal#msys2()
+  call term_start("msys2_shell.cmd -msys -defterm -no-start", {
+  \ "term_name": "MSYS2",
+  \ "term_finish": "close",
+  \ "curwin": 1
+  \})
+endfunction
+
+" mingw32
+function! ansanloms#terminal#mingw32()
+  call term_start("msys2_shell.cmd -mingw32 -defterm -no-start", {
+  \ "term_name": "MinGW-w64 Win32",
+  \ "term_finish": "close",
+  \ "curwin": 1
+  \})
+endfunction
+
+" mingw64
+function! ansanloms#terminal#mingw64()
+  call term_start("msys2_shell.cmd -mingw64 -defterm -no-start", {
+  \ "term_name": "MinGW-w64 Win64",
+  \ "term_finish": "close",
+  \ "curwin": 1
+  \})
+endfunction
