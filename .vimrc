@@ -1012,7 +1012,7 @@ augroup END
 
 " お仕事用設定
 if filereadable(expand("~/.vim/work.vim"))
-  source expand("~/.vim/work.vim")
+  source ~/.vim/work.vim
 endif
 
 "-----------------------------------
