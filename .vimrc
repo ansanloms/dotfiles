@@ -570,18 +570,14 @@ augroup javascript-setting
   autocmd!
 
   " 拡張子設定
-  autocmd BufNewFile,BufRead *.js setlocal filetype=javascript
-  autocmd BufNewFile,BufRead *.jsx setlocal filetype=javascript.jsx
+  autocmd BufNewFile,BufRead *.{js,jsx} setlocal filetype=javascript
 
   " インデントセット
   autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-  autocmd FileType javascript.jsx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
   autocmd FileType javascript packadd vim-javascript
   autocmd FileType javascript packadd vim-jsx-pretty
-  autocmd FileType javascript.jsx packadd vim-javascript
-  autocmd FileType javascript.jsx packadd vim-jsx-pretty
 augroup END
 
 "-----------------------------------
@@ -592,18 +588,14 @@ augroup typescript-setting
   autocmd!
 
   " 拡張子設定
-  autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
-  autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
+  autocmd BufNewFile,BufRead *.{ts,tsx} setlocal filetype=typescript
 
   " インデントセット
   autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-  autocmd FileType typescript.tsx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
   autocmd FileType typescript packadd vim-jsx-pretty
   autocmd FileType typescript packadd typescript-vim
-  autocmd FileType typescript.tsx packadd vim-jsx-pretty
-  autocmd FileType typescript.tsx packadd typescript-vim
 augroup END
 
 "-----------------------------------
