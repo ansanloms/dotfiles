@@ -343,6 +343,9 @@ if exists("*minpac#init")
   " powershell
   call minpac#add("https://github.com/PProvost/vim-ps1.git", {"type": "opt"})
 
+  " json / json5
+  call minpac#add("https://github.com/gutenye/json5.vim.git", {"type": "opt"})
+
   " appearance
   call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
   call minpac#add("https://github.com/mattn/vimtweak.git")
@@ -875,6 +878,20 @@ augroup json-setting
   if executable("python")
     autocmd FileType json setlocal formatprg=python\ -m\ json.tool
   endif
+augroup END
+
+"-----------------------------------
+" json5 の設定
+"-----------------------------------
+
+augroup json5-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType json5 setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+
+  " プラグイン読み込み
+  autocmd FileType json5 packadd json5.vim
 augroup END
 
 "-----------------------------------
