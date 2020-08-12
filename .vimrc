@@ -24,6 +24,7 @@ if has("vim_starting")
   for dir in [
   \ "~/.vim"
   \ ,"~/.vim/autoload"
+  \ ,"~/.vim/plugin"
   \ ,"~/.vim/backup"
   \ ,"~/.vim/view"
   \ ,"~/.vim/undo"
