@@ -391,11 +391,11 @@ let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォ
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 " vimtweak
-augroup vimtweak-setting
-  autocmd!
-
-  autocmd guienter * silent! VimTweakSetAlpha 230
-augroup END
+"augroup vimtweak-setting
+"  autocmd!
+"
+"  autocmd guienter * silent! VimTweakSetAlpha 230
+"augroup END
 
 "-----------------------------------
 " ステータスラインの設定
