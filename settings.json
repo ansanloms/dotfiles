@@ -1,0 +1,89 @@
+{
+  "$schema": "https://aka.ms/terminal-profiles-schema",
+  "defaultProfile": "{d5171fe5-5931-4d31-85d1-88be404f0a3c}",
+  "profiles": {
+    "defaults": {
+      "useAcrylic": true,
+      "acrylicOpacity": 1,
+      "fontFace": "Cica",
+      "fontSize": 10,
+      "historySize": 9001,
+      "cursorShape": "filledBox",
+      "padding": "0,0,0,0"
+    },
+    "list": [
+      {
+        "guid": "{9dc9967a-45c0-48df-93f2-ad380d993070}",
+        "hidden": false,
+        "name": "vim",
+        "icon": "%USERPROFILE%\\.vim\\bitmaps\\vim.ico",
+        "commandline": "vim.exe",
+        "scrollbarState": "hidden"
+      },
+      {
+        "guid": "{d5171fe5-5931-4d31-85d1-88be404f0a3c}",
+        "hidden": false,
+        "name": "NYAGOS",
+        "icon": "https://raw.githubusercontent.com/zetamatta/nyagos/master/Etc/nyagos.ico",
+        "commandline": "nyagos.exe"
+      },
+      {
+        "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+        "hidden": false,
+        "name": "cmd",
+        "commandline": "cmd.exe"
+      },
+      {
+        "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+        "hidden": false,
+        "name": "Windows PowerShell",
+        "commandline": "powershell.exe"
+      },
+      {
+        "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
+        "hidden": false,
+        "name": "Ubuntu",
+        "source": "Windows.Terminal.Wsl"
+      },
+      {
+        "guid": "{0110db4a-cf7b-5647-9a03-7232d80cd09e}",
+        "hidden": true,
+        "name": "openSUSE-Leap-15-1",
+        "source": "Windows.Terminal.Wsl"
+      },
+      {
+        "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+        "hidden": true,
+        "name": "Azure Cloud Shell",
+        "source": "Windows.Terminal.Azure"
+      },
+      {
+        "guid": "{bae083f2-8da7-4234-a2c8-c530116345e5}",
+        "hidden": false,
+        "name": "MSYS2",
+        "icon": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2.ico",
+        "commandline": "msys2_shell.cmd -msys -defterm -no-start"
+      },
+      {
+        "guid": "{db1fef1b-36e9-42e5-805f-316443b23164}",
+        "hidden": false,
+        "name": "MinGW-w64 Win32",
+        "commandline": "msys2_shell.cmd -mingw32 -defterm -no-start"
+      },
+      {
+        "guid": "{965c5402-f0b0-4c06-88b6-8fb41dfa3046}",
+        "hidden": false,
+        "name": "MinGW-w64 Win64",
+        "commandline": "msys2_shell.cmd -mingw64 -defterm -no-start"
+      },
+      {
+          "guid": "{d3f31bee-5823-5ed8-8e04-f31ed54f2cd9}",
+          "hidden": false,
+          "name": "fedoraremix",
+          "source": "Windows.Terminal.Wsl"
+      }
+    ]
+  },
+  "schemes": [],
+  "keybindings": []
+}

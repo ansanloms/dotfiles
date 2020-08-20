@@ -15,3 +15,4 @@
     ~/.ctrlp-launcher: .ctrlp-launcher
     ~/.nyagos: .nyagos
     ~/.config/starship.toml: starship.toml
+    "~/AppData/Local/Microsoft/Windows Terminal/settings.json": settings.json
