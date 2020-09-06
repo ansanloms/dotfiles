@@ -91,21 +91,23 @@
         "hidden": false,
         "name": "MSYS2",
         "icon": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2.ico",
-        "commandline": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2_shell.cmd -msys -defterm -no-start"
+        "commandline": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2_shell.cmd -defterm -here -no-start -msys"
       },
-      // mingw64
+      // mingw32
       {
         "guid": "{db1fef1b-36e9-42e5-805f-316443b23164}",
         "hidden": false,
         "name": "MinGW-w64 Win32",
-        "commandline": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2_shell.cmd -mingw32 -defterm -no-start"
+        "icon": "https://raw.githubusercontent.com/msys2/MSYS2-packages/master/filesystem/mingw32.ico",
+        "commandline": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2_shell.cmd -defterm -here -no-start -mingw32"
       },
-      // mingw32
+      // mingw64
       {
         "guid": "{965c5402-f0b0-4c06-88b6-8fb41dfa3046}",
         "hidden": false,
         "name": "MinGW-w64 Win64",
-        "commandline": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2_shell.cmd -mingw64 -defterm -no-start"
+        "icon": "https://raw.githubusercontent.com/msys2/MSYS2-packages/master/filesystem/mingw64.ico",
+        "commandline": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2_shell.cmd -defterm -here -no-start -mingw64"
       },
       // fedora remix
       {
