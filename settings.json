@@ -91,21 +91,21 @@
         "hidden": false,
         "name": "MSYS2",
         "icon": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2.ico",
-        "commandline": "msys2_shell.cmd -msys -defterm -no-start"
+        "commandline": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2_shell.cmd -msys -defterm -no-start"
       },
       // mingw64
       {
         "guid": "{db1fef1b-36e9-42e5-805f-316443b23164}",
         "hidden": false,
         "name": "MinGW-w64 Win32",
-        "commandline": "msys2_shell.cmd -mingw32 -defterm -no-start"
+        "commandline": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2_shell.cmd -mingw32 -defterm -no-start"
       },
       // mingw32
       {
         "guid": "{965c5402-f0b0-4c06-88b6-8fb41dfa3046}",
         "hidden": false,
         "name": "MinGW-w64 Win64",
-        "commandline": "msys2_shell.cmd -mingw64 -defterm -no-start"
+        "commandline": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2_shell.cmd -mingw64 -defterm -no-start"
       },
       // fedora remix
       {
