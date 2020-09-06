@@ -91,6 +91,7 @@
         "hidden": false,
         "name": "MSYS2",
         "icon": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2.ico",
+        "startingDirectory": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\home\\%USERNAME%",
         "commandline": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2_shell.cmd -defterm -here -no-start -msys"
       },
       // mingw32
@@ -99,6 +100,7 @@
         "hidden": false,
         "name": "MinGW-w64 Win32",
         "icon": "https://raw.githubusercontent.com/msys2/MSYS2-packages/master/filesystem/mingw32.ico",
+        "startingDirectory": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\home\\%USERNAME%",
         "commandline": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2_shell.cmd -defterm -here -no-start -mingw32"
       },
       // mingw64
@@ -107,6 +109,7 @@
         "hidden": false,
         "name": "MinGW-w64 Win64",
         "icon": "https://raw.githubusercontent.com/msys2/MSYS2-packages/master/filesystem/mingw64.ico",
+        "startingDirectory": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\home\\%USERNAME%",
         "commandline": "%USERPROFILE%\\scoop\\apps\\msys2\\current\\msys2_shell.cmd -defterm -here -no-start -mingw64"
       },
       // fedora remix
