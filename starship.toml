@@ -1,28 +1,13 @@
+format = """
+$directory$git_branch$git_commit
+$time$character"""
+
 add_newline = false
-
-scan_timeout = 10
-
-prompt_order = [
-  "line_break",
-  "directory",
-  "git_branch",
-  "git_commit",
-  "line_break",
-  "time",
-  "character",
-]
-
-[username]
-show_always = true
-disabled = false
-
-[hostname]
-disabled = false
-ssh_only = false
 
 [character]
 disabled = false
-symbol = "❯❯❯"
+success_symbol = "[❯❯❯](bold green) "
+error_symbol = "[❯❯❯](bold red) "
 
 [directory]
 disabled = false
@@ -32,7 +17,8 @@ prefix = ""
 
 [time]
 disabled = false
-format = "[%F %T]"
+format = "[\\[$time\\]]($style) "
+time_format = "%F %T"
 
 [git_branch]
 disabled = false
