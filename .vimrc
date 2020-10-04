@@ -278,94 +278,94 @@ endif
 if !isdirectory(expand("~/.vim/pack/minpac/opt/minpac"))
   call system("git clone https://github.com/k-takata/minpac.git " . expand("~/.vim/pack/minpac/opt/minpac"))
 endif
+packadd minpac
 
-if exists("*minpac#init")
-  call minpac#init()
-  call minpac#add("https://github.com/k-takata/minpac.git", {"type": "opt"})
+call minpac#init()
 
-  " general
-  call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
-  call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
-  call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
-  call minpac#add("https://github.com/thinca/vim-quickrun.git")
-  call minpac#add("https://github.com/junegunn/vim-easy-align.git")
-  call minpac#add("https://github.com/tyru/open-browser.vim.git")
+call minpac#add("https://github.com/k-takata/minpac.git", {"type": "opt"})
 
-  " git
-  call minpac#add("https://github.com/tpope/vim-fugitive.git")
+" general
+call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
+call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
+call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
+call minpac#add("https://github.com/thinca/vim-quickrun.git")
+call minpac#add("https://github.com/junegunn/vim-easy-align.git")
+call minpac#add("https://github.com/tyru/open-browser.vim.git")
 
-  " ctrlp
-  call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
-  call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
+" git
+call minpac#add("https://github.com/tpope/vim-fugitive.git")
 
-  " sh
-  call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
-  call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
+" ctrlp
+call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
+call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
 
-  " php / volt
-  call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git", {"type": "opt"})
+" sh
+call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
+call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
 
-  " Java
-  call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
-  if !filereadable(expand("~/.vim/syntax/javaid.vim"))
-    call system("curl https://fleiner.com/vim/syntax/javaid.vim -o " . expand("~/.vim/syntax/javaid.vim"))
-  endif
+" php / volt
+call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git", {"type": "opt"})
 
-  " JavaScript / TypeScript
-  call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
-  call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
-  call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
-
-  " vue
-  call minpac#add("https://github.com/posva/vim-vue.git", {"type": "opt"})
-
-  " gradle
-  call minpac#add("https://github.com/vim-scripts/groovyindent.git", {"type": "opt"})
-
-  " plantuml
-  call minpac#add("https://github.com/aklt/plantuml-syntax.git", {"type": "opt"})
-
-  " toml
-  call minpac#add("https://github.com/cespare/vim-toml.git", {"type": "opt"})
-
-  " apache
-  call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
-
-  " graphql
-  call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
-
-  " html
-  call minpac#add("https://github.com/mattn/emmet-vim.git")
-
-  " yaml
-  call minpac#add("https://github.com/stephpy/vim-yaml.git", {"type": "opt"})
-
-  " powershell
-  call minpac#add("https://github.com/PProvost/vim-ps1.git", {"type": "opt"})
-
-  " json / json5
-  call minpac#add("https://github.com/gutenye/json5.vim.git", {"type": "opt"})
-
-  " appearance
-  call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-  call minpac#add("https://github.com/mattn/vimtweak.git")
-  call minpac#add("https://github.com/itchyny/vim-cursorword.git")
-
-  " colorscheme
-  call minpac#add("https://github.com/cocopon/iceberg.vim.git")
-  call minpac#add("https://github.com/Rigellute/rigel.git")
-  call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
-  call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
-
-  " lsp
-  call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
-  call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
-  call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
-  call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
-
-  " growi
-  call minpac#add("https://github.com/ansanloms/vim-growi.git")
+" Java
+call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
+if !filereadable(expand("~/.vim/syntax/javaid.vim"))
+  call system("curl https://fleiner.com/vim/syntax/javaid.vim -o " . expand("~/.vim/syntax/javaid.vim"))
 endif
+
+" JavaScript / TypeScript
+call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
+call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
+call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
+
+" vue
+call minpac#add("https://github.com/posva/vim-vue.git", {"type": "opt"})
+
+" gradle
+call minpac#add("https://github.com/vim-scripts/groovyindent.git", {"type": "opt"})
+
+" plantuml
+call minpac#add("https://github.com/aklt/plantuml-syntax.git", {"type": "opt"})
+
+" toml
+call minpac#add("https://github.com/cespare/vim-toml.git", {"type": "opt"})
+
+" apache
+call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
+
+" graphql
+call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
+
+" html
+call minpac#add("https://github.com/mattn/emmet-vim.git")
+
+" yaml
+call minpac#add("https://github.com/stephpy/vim-yaml.git", {"type": "opt"})
+
+" powershell
+call minpac#add("https://github.com/PProvost/vim-ps1.git", {"type": "opt"})
+
+" json / json5
+call minpac#add("https://github.com/gutenye/json5.vim.git", {"type": "opt"})
+
+" appearance
+call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
+call minpac#add("https://github.com/mattn/vimtweak.git")
+call minpac#add("https://github.com/itchyny/vim-cursorword.git")
+
+" colorscheme
+call minpac#add("https://github.com/cocopon/iceberg.vim.git")
+call minpac#add("https://github.com/Rigellute/rigel.git")
+call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
+call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
+
+" lsp
+call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
+call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
+call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
+call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
+
+" growi
+call minpac#add("https://github.com/ansanloms/vim-growi.git")
 
 " CtrlP
 let g:ctrlp_use_caching = 1                                     " キャッシュを使用する
