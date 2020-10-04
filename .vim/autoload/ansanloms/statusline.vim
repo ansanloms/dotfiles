@@ -1,9 +1,10 @@
 function! ansanloms#statusline#statusline() abort
   let l:s = " " . ansanloms#statusline#statusline_mode_minimum() . ansanloms#statusline#paste_mode() . " " . ansanloms#statusline#filename() . "%m%r%h%w%=" . " " . &filetype . " " . &fileformat . " " . &fileencoding
 
-  if exists("*sky_color_clock#statusline()")
+  try
     let l:s = l:s . " " . "%#SkyColorClock#" . " " . sky_color_clock#statusline() . " "
-  endif
+  catch /E117.*/
+  endtry
 
   return l:s
 endfunction
