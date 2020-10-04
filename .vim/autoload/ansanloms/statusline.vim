@@ -1,5 +1,11 @@
 function! ansanloms#statusline#statusline() abort
-  return " " . ansanloms#statusline#statusline_mode_minimum() . ansanloms#statusline#paste_mode() . " " . ansanloms#statusline#filename() . "%m%r%h%w%=" . " " . &filetype . " " . &fileformat . " " . &fileencoding . " " . "%#SkyColorClock#" . " " . sky_color_clock#statusline() . " "
+  let l:s = " " . ansanloms#statusline#statusline_mode_minimum() . ansanloms#statusline#paste_mode() . " " . ansanloms#statusline#filename() . "%m%r%h%w%=" . " " . &filetype . " " . &fileformat . " " . &fileencoding
+
+  if exists("*sky_color_clock#statusline()")
+    let l:s = l:s . " " . "%#SkyColorClock#" . " " . sky_color_clock#statusline() . " "
+  endif
+
+  return l:s
 endfunction
 
 function! ansanloms#statusline#statusline_quickfix() abort
