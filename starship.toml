@@ -2,18 +2,17 @@ format = """
 $directory$git_branch$git_commit
 $time$character"""
 
-add_newline = false
+add_newline = true
 
 [character]
 disabled = false
-success_symbol = "[❯❯❯](bold green) "
-error_symbol = "[❯❯❯](bold red) "
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
 
 [directory]
 disabled = false
 truncation_length = 0
 truncate_to_repo = false
-prefix = ""
 
 [time]
 disabled = false
@@ -23,15 +22,12 @@ time_format = "%F %T"
 [git_branch]
 disabled = false
 symbol = ""
-truncation_length = -1
 truncation_symbol = ""
 
 [git_commit]
 disabled = false
 only_detached = false
 commit_hash_length = 40
-prefix = ""
-suffix = ""
 
 [git_status]
 enabled = true
