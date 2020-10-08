@@ -648,6 +648,16 @@ augroup END
 " markdown の設定
 "-----------------------------------
 
+augroup markdown-setting
+  autocmd!
+
+  " 拡張子設定
+  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+
+  " インデントセット
+  autocmd FileType markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+augroup END
+
 " quickrun - markdown
 if executable("pandoc")
   " cssの取得
@@ -659,44 +669,26 @@ if executable("pandoc")
   let g:quickrun_config["markdown"] = {
   \ "hook/cd/directory": "%S:p:h",
   \ "type": "markdown/pandoc",
-  \ "outputter": "null",
-  \ "exec": "pandoc %s --standalone --toc-depth=6 --to=html5 --css=" . expand("~/.vim/markdown.css") . " --output=%s.html"
+  \ "outputter": "browser",
+  \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --css=" . expand("~/.vim/markdown.css") . " --metadata title=%s"
   \}
 
   " slidy 出力
   let g:quickrun_config["markdown-slidy"] = {
   \ "hook/cd/directory": "%S:p:h",
-  \ "type": "markdown/pandoc",
-  \ "outputter": "null",
-  \ "exec": "pandoc %s --standalone --self-contained --toc-depth=6 --to=slidy --output=%s-slidy.html"
-  \}
-
-  " html 出力 (1つのファイルに纏める)
-  let g:quickrun_config["markdown-html"] = {
-  \ "hook/cd/directory": "%S:p:h",
-  \ "type": "markdown/pandoc",
-  \ "outputter": "null",
-  \ "exec": "pandoc %s --standalone --self-contained --toc-depth=6 --to=html5 --css=" . expand("~/.vim/markdown.css") . " --output=%s-standalone.html"
+  \ "type": "markdown/pandoc-slidy",
+  \ "outputter": "browser",
+  \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=slidy --toc-depth=6 --metadata title=%s"
   \}
 
   " Word docx 出力
   let g:quickrun_config["markdown-docx"] = {
   \ "hook/cd/directory": "%S:p:h",
   \ "outputter": "null",
-  \ "type": "markdown/pandoc",
-  \ "exec": "pandoc %s --standalone --self-contained --toc-depth=6 --to=docx --highlight-style=zenburn --output=%s.docx"
+  \ "type": "markdown/pandoc-docx",
+  \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=docx --toc-depth=6 --highlight-style=zenburn --output=%s.docx"
   \}
 endif
-
-augroup markdown-setting
-  autocmd!
-
-  " 拡張子設定
-  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-
-  " インデントセット
-  autocmd FileType markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-augroup END
 
 "-----------------------------------
 " plantuml の設定
@@ -716,6 +708,18 @@ augroup plantuml-setting
   " プラグイン読み込み
   autocmd FileType plantuml packadd plantuml-syntax
 augroup END
+
+" quickrun - plantuml
+if executable("plantuml")
+
+  " html 出力
+  let g:quickrun_config["plantuml"] = {
+  \ "hook/cd/directory": "%S:p:h",
+  \ "type": "plantuml/svg",
+  \ "outputter": "browser",
+  \ "exec": (has("win32") || has("win64") ? "type" : "cat") . " %s | plantuml -tsvg -charset UTF-8 -pipe"
+  \}
+endif
 
 "-----------------------------------
 " sh の設定
