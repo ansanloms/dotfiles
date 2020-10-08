@@ -282,92 +282,35 @@ packadd minpac
 
 call minpac#init()
 
+" minpac
 call minpac#add("https://github.com/k-takata/minpac.git", {"type": "opt"})
 
 " general
 call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
 call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
-call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
-call minpac#add("https://github.com/thinca/vim-quickrun.git")
 call minpac#add("https://github.com/junegunn/vim-easy-align.git")
 call minpac#add("https://github.com/tyru/open-browser.vim.git")
 
+" parenmatch
+call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
+
+let g:loaded_matchparen = 1     " matchparenを無効にする
+
 " git
 call minpac#add("https://github.com/tpope/vim-fugitive.git")
+
+" quickrun
+call minpac#add("https://github.com/thinca/vim-quickrun.git")
+
+let g:quickrun_config = {}
+let g:quickrun_config["_"] = {
+\ "runner": "job",
+\}
 
 " ctrlp
 call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
 call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
 
-" sh
-call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
-call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
-
-" php / volt
-call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git", {"type": "opt"})
-
-" Java
-call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
-if !filereadable(expand("~/.vim/syntax/javaid.vim"))
-  call system("curl https://fleiner.com/vim/syntax/javaid.vim -o " . expand("~/.vim/syntax/javaid.vim"))
-endif
-
-" JavaScript / TypeScript
-call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
-call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
-call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
-
-" vue
-call minpac#add("https://github.com/posva/vim-vue.git", {"type": "opt"})
-
-" gradle
-call minpac#add("https://github.com/vim-scripts/groovyindent.git", {"type": "opt"})
-
-" plantuml
-call minpac#add("https://github.com/aklt/plantuml-syntax.git", {"type": "opt"})
-
-" toml
-call minpac#add("https://github.com/cespare/vim-toml.git", {"type": "opt"})
-
-" apache
-call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
-
-" graphql
-call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
-
-" html
-call minpac#add("https://github.com/mattn/emmet-vim.git")
-
-" yaml
-call minpac#add("https://github.com/stephpy/vim-yaml.git", {"type": "opt"})
-
-" powershell
-call minpac#add("https://github.com/PProvost/vim-ps1.git", {"type": "opt"})
-
-" json / json5
-call minpac#add("https://github.com/gutenye/json5.vim.git", {"type": "opt"})
-
-" appearance
-call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-call minpac#add("https://github.com/mattn/vimtweak.git")
-call minpac#add("https://github.com/itchyny/vim-cursorword.git")
-
-" colorscheme
-call minpac#add("https://github.com/cocopon/iceberg.vim.git")
-call minpac#add("https://github.com/Rigellute/rigel.git")
-call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
-call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
-
-" lsp
-call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
-call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
-call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
-call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
-
-" growi
-call minpac#add("https://github.com/ansanloms/vim-growi.git")
-
-" CtrlP
 let g:ctrlp_use_caching = 1                                     " キャッシュを使用する
 let g:ctrlp_cache_dir = expand("~/.cache/ctrlp")                " キャッシュディレクトリ
 let g:ctrlp_clear_cache_on_exit = 0                             " 終了時にキャッシュを削除しない
@@ -377,25 +320,32 @@ let g:ctrlp_open_new_file = 1                                   " ファイル�
 let g:ctrlp_launcher_file_list = ["~/.ctrlp-launcher", "~/.ctrlp-launcher-work", "~/.ctrlp-launcher-gcp"]  " ランチャーで読み込むファイルパス
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|git)$'   " 除外
 
-" quickrun
-let g:quickrun_config = {}
-let g:quickrun_config["_"] = {
-\ "runner": "job",
-\}
-
-" parenmatch
-let g:loaded_matchparen = 1     " matchparenを無効にする
-
 " sky-color-clock.vim
+call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
+
 let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 " vimtweak
+call minpac#add("https://github.com/mattn/vimtweak.git")
+
 "augroup vimtweak-setting
 "  autocmd!
 "
 "  autocmd guienter * silent! VimTweakSetAlpha 230
 "augroup END
+
+" appearance
+call minpac#add("https://github.com/itchyny/vim-cursorword.git")
+
+" colorscheme
+call minpac#add("https://github.com/cocopon/iceberg.vim.git")
+call minpac#add("https://github.com/Rigellute/rigel.git")
+call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
+call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
+
+" growi
+call minpac#add("https://github.com/ansanloms/vim-growi.git")
 
 "-----------------------------------
 " ステータスラインの設定
@@ -509,6 +459,11 @@ tnoremap <C-CR> <CR>
 " lsp の設定
 "-----------------------------------
 
+call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
+call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
+call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
+call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
+
 " vim-lsp
 let g:lsp_diagnostics_enabled = 1
 let g:lsp_diagnostics_echo_cursor = 1
@@ -539,6 +494,7 @@ augroup END
 "-----------------------------------
 " Quickfixの設定
 "-----------------------------------
+
 augroup quickfix-setting
   autocmd!
 
@@ -549,6 +505,12 @@ augroup END
 "-----------------------------------
 " Java の設定
 "-----------------------------------
+
+call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
+
+if !filereadable(expand("~/.vim/syntax/javaid.vim"))
+  call system("curl https://fleiner.com/vim/syntax/javaid.vim -o " . expand("~/.vim/syntax/javaid.vim"))
+endif
 
 let g:java_highlight_all = 1
 
@@ -572,8 +534,12 @@ augroup java-setting
 augroup END
 
 "-----------------------------------
-" JavaScript の設定
+" JavaScript / TypeScript の設定
 "-----------------------------------
+
+call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
+call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
+call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
 
 augroup javascript-setting
   autocmd!
@@ -592,10 +558,6 @@ augroup javascript-setting
   autocmd FileType javascript.jsx packadd vim-javascript
   autocmd FileType javascript.jsx packadd vim-jsx-pretty
 augroup END
-
-"-----------------------------------
-" TypeScript の設定
-"-----------------------------------
 
 augroup typescript-setting
   autocmd!
@@ -618,6 +580,8 @@ augroup END
 "-----------------------------------
 " vue の設定
 "-----------------------------------
+
+call minpac#add("https://github.com/posva/vim-vue.git", {"type": "opt"})
 
 augroup vue-setting
   autocmd!
@@ -661,6 +625,8 @@ augroup END
 "-----------------------------------
 " volt (PHP) の設定
 "-----------------------------------
+
+call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git", {"type": "opt"})
 
 augroup volt-setting
   autocmd!
@@ -729,12 +695,14 @@ augroup markdown-setting
   autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 
   " インデントセット
-  autocmd FileType markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
+  autocmd FileType markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
 "-----------------------------------
 " plantuml の設定
 "-----------------------------------
+
+call minpac#add("https://github.com/aklt/plantuml-syntax.git", {"type": "opt"})
 
 augroup plantuml-setting
   autocmd!
@@ -753,13 +721,16 @@ augroup END
 " sh の設定
 "-----------------------------------
 
+call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
+call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
+
 let g:sh_indent_case_labels = 1
 
 augroup sh-setting
   autocmd!
 
   " インデントセット
-  autocmd FileType sh setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
+  autocmd FileType sh setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
   autocmd FileType sh packadd Super-Shell-Indent
@@ -818,6 +789,8 @@ augroup END
 "-----------------------------------
 " html の設定
 "-----------------------------------
+
+call minpac#add("https://github.com/mattn/emmet-vim.git")
 
 " quickrun - html
 if executable("w3m")
@@ -884,6 +857,8 @@ augroup END
 " json5 の設定
 "-----------------------------------
 
+call minpac#add("https://github.com/gutenye/json5.vim.git", {"type": "opt"})
+
 augroup json5-setting
   autocmd!
 
@@ -898,6 +873,8 @@ augroup END
 " apache conf の設定
 "-----------------------------------
 
+call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
+
 augroup apache-setting
   autocmd!
 
@@ -909,6 +886,8 @@ augroup END
 " groovy の設定
 "-----------------------------------
 
+call minpac#add("https://github.com/vim-scripts/groovyindent.git", {"type": "opt"})
+
 augroup groovy-setting
   autocmd!
 
@@ -919,6 +898,9 @@ augroup END
 "-----------------------------------
 " graphql の設定
 "-----------------------------------
+
+" graphql
+call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
 
 augroup graphql-setting
   autocmd!
@@ -933,6 +915,8 @@ augroup END
 "-----------------------------------
 " toml の設定
 "-----------------------------------
+
+call minpac#add("https://github.com/cespare/vim-toml.git", {"type": "opt"})
 
 augroup toml-setting
   autocmd!
@@ -951,6 +935,8 @@ augroup END
 " yaml の設定
 "-----------------------------------
 
+call minpac#add("https://github.com/stephpy/vim-yaml.git", {"type": "opt"})
+
 augroup yaml-setting
   autocmd!
 
@@ -964,6 +950,8 @@ augroup END
 "-----------------------------------
 " powershell の設定
 "-----------------------------------
+
+call minpac#add("https://github.com/PProvost/vim-ps1.git", {"type": "opt"})
 
 augroup powershell-setting
   autocmd!
