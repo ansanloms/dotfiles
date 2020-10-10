@@ -691,6 +691,20 @@ if executable("pandoc")
 endif
 
 "-----------------------------------
+" asciidoc の設定
+"-----------------------------------
+
+augroup asciidoc-setting
+  autocmd!
+
+  " 拡張子設定
+  autocmd BufNewFile,BufRead *.adoc set filetype=asciidoc
+
+  " インデントセット
+  autocmd FileType asciidoc setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+augroup END
+
+"-----------------------------------
 " plantuml の設定
 "-----------------------------------
 
