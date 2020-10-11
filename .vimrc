@@ -688,6 +688,13 @@ if executable("pandoc")
   \ "type": "markdown/pandoc-docx",
   \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=docx --toc-depth=6 --highlight-style=zenburn --output=%s.docx"
   \}
+
+  " 単一 markdown 出力
+  let g:quickrun_config["markdown-self-contained"] = {
+  \ "hook/cd/directory": "%S:p:h",
+  \ "type": "markdown/pandoc-self-contained",
+  \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --metadata title=%s | pandoc --from html --to markdown --wrap none --atx-headers"
+  \}
 endif
 
 "-----------------------------------
