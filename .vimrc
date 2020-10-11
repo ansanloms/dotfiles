@@ -693,6 +693,7 @@ if executable("pandoc")
   let g:quickrun_config["markdown-self-contained"] = {
   \ "hook/cd/directory": "%S:p:h",
   \ "type": "markdown/pandoc-self-contained",
+  \ "outputter/buffer/filetype": "markdown",
   \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --metadata title=%s | pandoc --from html --to markdown --wrap none --atx-headers"
   \}
 endif
