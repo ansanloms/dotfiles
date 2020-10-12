@@ -307,7 +307,7 @@ let g:quickrun_config["_"] = {
 \ "runner": "job",
 \}
 
-" ctrlp
+" CtrlP
 call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
 call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
 
@@ -317,7 +317,8 @@ let g:ctrlp_clear_cache_on_exit = 0                             " 終了時に�
 let g:ctrlp_lazy_update = 1                                     " 遅延再描画
 let g:ctrlp_max_height = 20                                     " 20行表示
 let g:ctrlp_open_new_file = 1                                   " ファイルの新規作成時は別タブで開く
-let g:ctrlp_launcher_file_list = ["~/.ctrlp-launcher", "~/.ctrlp-launcher-work", "~/.ctrlp-launcher-gcp"]  " ランチャーで読み込むファイルパス
+" ランチャーで読み込むファイルパス
+let g:ctrlp_launcher_file_list = ["~/.vim/ctrlp-launcher/config.conf", "~/.vim/ctrlp-launcher/work.conf", "~/.vim/ctrlp-launcher/gcp.conf"]
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|git)$'   " 除外
 
 " sky-color-clock.vim
