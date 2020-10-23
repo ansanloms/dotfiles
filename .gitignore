@@ -1,3 +1,6 @@
 .vim/*
 !autoload
 !bitmaps
+
+.ctrlp-launcher-*
+!.ctrlp-launcher

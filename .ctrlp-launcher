@@ -1,0 +1,13 @@
+# vim:set ft=conf:
+# vim:set noexpandtab:
+
+💻 terminal nyagos				tabnew | call ansanloms#terminal#nyagos()
+💻 terminal wsl fedoraremix	tabnew | call ansanloms#terminal#fedoraremix()
+💻 terminal wsl Debian			tabnew | call ansanloms#terminal#debian()
+💻 terminal wsl Ubuntu			tabnew | call ansanloms#terminal#ubuntu()
+💻 terminal wsl SLES-12		tabnew | call ansanloms#terminal#sles12()
+💻 terminal cmd				tabnew | call ansanloms#terminal#cmd()
+💻 terminal powershell			tabnew | call ansanloms#terminal#powershell()
+💻 terminal MSYS2				tabnew | call ansanloms#terminal#msys2()
+💻 terminal MinGW-w64 Win32	tabnew | call ansanloms#terminal#mingw32()
+💻 terminal MinGW-w64 Win64	tabnew | call ansanloms#terminal#mingw64()

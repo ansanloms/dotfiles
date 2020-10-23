@@ -309,7 +309,7 @@ let g:quickrun_config["_"] = {
 
 " CtrlP
 call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
-call minpac#add("https://github.com/ansanloms/ctrlp-launcher.git")
+call minpac#add("https://github.com/mattn/ctrlp-launcher.git")
 
 let g:ctrlp_use_caching = 1                                     " キャッシュを使用する
 let g:ctrlp_cache_dir = expand("~/.cache/ctrlp")                " キャッシュディレクトリ
@@ -317,8 +317,6 @@ let g:ctrlp_clear_cache_on_exit = 0                             " 終了時に�
 let g:ctrlp_lazy_update = 1                                     " 遅延再描画
 let g:ctrlp_max_height = 20                                     " 20行表示
 let g:ctrlp_open_new_file = 1                                   " ファイルの新規作成時は別タブで開く
-" ランチャーで読み込むファイルパス
-let g:ctrlp_launcher_file_list = ["~/.vim/ctrlp-launcher/config.conf", "~/.vim/ctrlp-launcher/work.conf", "~/.vim/ctrlp-launcher/gcp.conf"]
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|git)$'   " 除外
 
 " sky-color-clock.vim
@@ -433,7 +431,19 @@ nnoremap <C-r> g+
 nnoremap <Leader>b :<C-u>ls<CR>:<C-u>buf<Space>
 
 " CtrlPLauncher
-nnoremap <C-e> :<C-u>CtrlPLauncher<CR>
+"nnoremap <C-e> :<C-u>CtrlPLauncher<CR>
+nnoremap <C-e> :<C-u>CtrlPLauncherSelect<CR>
+
+command! CtrlPLauncherSelect call s:ctrlp_launcher_select()
+function s:ctrlp_launcher_select() abort
+  let s:list = ["", "work", "gcp"]
+
+  let s:profile_key = confirm("profile", join(map(copy(s:list), { k, v -> "&" . k . (v == "" ? "(none)" : v) }), "\n")) - 1
+  let s:profile = s:list[s:profile_key]
+
+  call ctrlp#launcher#launch("!", s:profile)
+endfunction
+
 
 " CtrlPMRUFile
 nnoremap <C-h> :<C-u>CtrlPMRUFiles<CR>
