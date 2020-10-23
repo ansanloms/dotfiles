@@ -439,9 +439,11 @@ function s:ctrlp_launcher_select() abort
   let s:list = ["", "work", "gcp"]
 
   let s:profile_key = confirm("profile", join(map(copy(s:list), { k, v -> "&" . k . (v == "" ? "(none)" : v) }), "\n")) - 1
-  let s:profile = s:list[s:profile_key]
+  if s:profile_key < 0
+    return
+  endif
 
-  call ctrlp#launcher#launch("!", s:profile)
+  call ctrlp#launcher#launch("!", s:list[s:profile_key])
 endfunction
 
 
