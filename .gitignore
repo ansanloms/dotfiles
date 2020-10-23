@@ -1,9 +1,3 @@
-.vim/.netrwhist
-.vim/backup
-.vim/logs
-.vim/pack
-.vim/syntax
-.vim/undo
-.vim/view
-.vim/viminfo
-.vim/work.vim
+.vim/*
+!autoload
+!bitmaps
