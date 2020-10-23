@@ -17,5 +17,3 @@
     "~/AppData/Local/Microsoft/Windows Terminal/settings.json": settings.json
     "~/AppData/Roaming/PuTTY/putty.ini": putty.ini
     ~/.ctrlp-launcher: .ctrlp-launcher
-    ~/.ctrlp-launcher-work: .ctrlp-launcher-work
-    ~/.ctrlp-launcher-gcp: .ctrlp-launcher-gcp
