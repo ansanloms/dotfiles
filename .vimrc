@@ -318,6 +318,7 @@ let g:ctrlp_lazy_update = 1                                     " 遅延再描�
 let g:ctrlp_max_height = 20                                     " 20行表示
 let g:ctrlp_open_new_file = 1                                   " ファイルの新規作成時は別タブで開く
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|git)$'   " 除外
+let g:ctrlp_launcher_file = "~/.vim/ctrlp-launcher/conf"        " ランチャ
 
 " sky-color-clock.vim
 call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
@@ -436,7 +437,10 @@ nnoremap <C-e> :<C-u>CtrlPLauncherSelect<CR>
 
 command! CtrlPLauncherSelect call s:ctrlp_launcher_select()
 function s:ctrlp_launcher_select() abort
-  let s:list = ["", "work", "gcp"]
+  packadd vital.vim
+
+  let s:list = map(vital#vital#new().import("Prelude").glob(expand(get(g:, "ctrlp_launcher_file", "~/.ctrlp-launcher")) . "-*"), { k, v, -> strpart(v, strlen(expand(get(g:, "ctrlp_launcher_file", "~/.ctrlp-launcher")) . "-")) })
+  call insert(s:list, "", 0)
 
   let s:profile_key = confirm("profile", join(map(copy(s:list), { k, v -> "&" . k . (v == "" ? "(none)" : v) }), "\n")) - 1
   let s:profile = s:list[s:profile_key]
