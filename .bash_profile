@@ -1,6 +1,8 @@
 export PATH=$HOME/bin:$PATH
 
-export LANG=ja_JP.utf8
+export LC_ALL=ja_JP.UTF-8
+export LANG=ja_JP.UTF-8
+
 export LESSCHARSET=utf-8
 
 export PS1_COLOR_BLACK="$(tput setaf 0)"
