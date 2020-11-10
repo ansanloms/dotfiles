@@ -3,7 +3,7 @@
 ## Install
 
 ```sh
-git clone https://github.com/mopp/dotfiles.git
+git clone https://github.com/ansanloms/dotfiles.git
 cd dotfiles
 ```
 
