@@ -58,23 +58,5 @@ function! ansanloms#statusline#paste_mode() abort
 endfunction
 
 function! ansanloms#statusline#filename() abort
-  if expand("%:t") == ""
-    return "[No Name]"
-  endif
-
-  " https://bitbucket.org/ns9tks/vim-fuzzyfinder/src/tip/autoload/fuf.vim
-  let l:str = expand("%:p")
-  let l:len = (winwidth(0) / 2) - len(expand("%:p:t"))
-  let l:mask = "..."
-
-  if l:len >= len(l:str)
-    return l:str
-  elseif l:len <= len(l:mask)
-    return l:mask
-  endif
-
-  let l:head = (l:len - len(l:mask)) / 2
-  let l:tail = l:len - len(l:mask) - l:head
-
-  return (l:head > 0 ? l:str[: l:head - 1] : "") . l:mask . (l:tail > 0 ? l:str[-l:tail :] : "")
+  return "%F"
 endfunction
