@@ -178,9 +178,8 @@ endif
 set nofoldenable
 
 " 外部grepの設定
-if executable("grep")
-  set grepprg=grep\ -Hnd\ skip\ -r
-  set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
+if executable("ack")
+  set grepprg=ack\ -k
 endif
 
 " beep音を消す
@@ -514,6 +513,9 @@ augroup END
 
 augroup quickfix-setting
   autocmd!
+
+  " :grep で quickfix を開く
+  autocmd QuickFixCmdPost *grep* cwindow
 
   " ステータスラインを更新
   autocmd FileType qf setlocal statusline=%!ansanloms#statusline#statusline_quickfix()
