@@ -1,5 +1,6 @@
 -- set envs
 set {
+	LANG = "ja",
 	EDITOR = "vim",
 	LESSCHARSET = "UTF-8"
 }
@@ -53,6 +54,7 @@ nyagos.alias.grep = "grep --color=auto"
 nyagos.alias.egrep = "egrep --color=auto"
 nyagos.alias.fgrep = "fgrep --color=auto"
 
+nyagos.alias.echo = [[~\scoop\apps\msys2\current\usr\bin\echo.exe]]
 nyagos.alias.find = [[~\scoop\apps\msys2\current\usr\bin\find.exe]]
 
 nyagos.alias.vi = "vim"
