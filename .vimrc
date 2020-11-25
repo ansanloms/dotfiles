@@ -713,7 +713,7 @@ if executable("pandoc")
   \ "hook/cd/directory": "%S:p:h",
   \ "type": "markdown/pandoc-self-contained",
   \ "outputter/buffer/filetype": "markdown",
-  \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --no-highlight --metadata title=%s | pandoc --from html --to markdown --wrap none --atx-headers" . ' | sed -r -e "s/```\s*\{\.(.*)\}/```\1/g"'
+  \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --no-highlight --metadata title=%s | pandoc --from html --to markdown --wrap none --markdown-headings=atx" . ' | sed -r -e "s/```\s*\{\.(.*)\}/```\1/g"'
   \}
 endif
 
@@ -949,6 +949,9 @@ call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
 
 augroup graphql-setting
   autocmd!
+
+  " 拡張子設定
+  autocmd BufNewFile,BufRead *.graphql setlocal filetype=graphql
 
   " インデントセット
   autocmd FileType graphql setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
