@@ -179,7 +179,7 @@ set nofoldenable
 
 " 外部grepの設定
 if executable("ack")
-  set grepprg=ack\ -k
+  set grepprg=ack
 endif
 
 " beep音を消す
@@ -328,11 +328,11 @@ let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表
 " vimtweak
 call minpac#add("https://github.com/mattn/vimtweak.git")
 
-"augroup vimtweak-setting
-"  autocmd!
-"
-"  autocmd guienter * silent! VimTweakSetAlpha 230
-"augroup END
+augroup vimtweak-setting
+  autocmd!
+
+  autocmd guienter * silent! VimTweakSetAlpha 230
+augroup END
 
 " appearance
 call minpac#add("https://github.com/itchyny/vim-cursorword.git")
@@ -515,7 +515,7 @@ augroup quickfix-setting
   autocmd!
 
   " :grep で quickfix を開く
-  autocmd QuickFixCmdPost *grep* cwindow
+  "autocmd QuickFixCmdPost *grep* cwindow
 
   " ステータスラインを更新
   autocmd FileType qf setlocal statusline=%!ansanloms#statusline#statusline_quickfix()
@@ -744,7 +744,7 @@ augroup plantuml-setting
   autocmd BufNewFile,BufRead *.{pu,uml,puml,iuml,plantuml} set filetype=plantuml
 
   " インデントセット
-  autocmd FileType plantuml setlocal shiftwidth=2 tabstop=2 softtabstop=2 noexpandtab
+  autocmd FileType plantuml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
   autocmd FileType plantuml packadd plantuml-syntax
