@@ -178,7 +178,10 @@ endif
 set nofoldenable
 
 " 外部grepの設定
-if executable("ack")
+if executable("rg")
+  set grepprg=rg\ --vimgrep
+  set grepformat=%f:%l:%c:%m
+elseif executable("ack")
   set grepprg=ack
 endif
 
@@ -328,11 +331,11 @@ let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表
 " vimtweak
 call minpac#add("https://github.com/mattn/vimtweak.git")
 
-augroup vimtweak-setting
-  autocmd!
-
-  autocmd guienter * silent! VimTweakSetAlpha 230
-augroup END
+"augroup vimtweak-setting
+"  autocmd!
+"
+"  autocmd guienter * silent! VimTweakSetAlpha 230
+"augroup END
 
 " appearance
 call minpac#add("https://github.com/itchyny/vim-cursorword.git")
