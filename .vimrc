@@ -581,6 +581,20 @@ augroup javascript-setting
   autocmd FileType javascript.jsx packadd vim-jsx-pretty
 augroup END
 
+" quickrun - typescript
+if executable("tsc")
+  let g:quickrun_config["typescript"] = {
+  \ "type": "typescript/tsc"
+  \}
+
+  let g:quickrun_config["typescript/tsc"] = {
+  \ "command": "tsc",
+  \ "exec": ["%c --target esnext --module commonjs %o %s", "node %s:r.js"],
+  \ "tempfile": "%{tempname()}.ts",
+  \ "hook/sweep/files": ["%S:p:r.js"],
+  \}
+endif
+
 augroup typescript-setting
   autocmd!
 
@@ -687,34 +701,34 @@ if executable("pandoc")
     call system("curl https://gist.githubusercontent.com/tuzz/3331384/raw/d1771755a3e26b039bff217d510ee558a8a1e47d/github.css -o " . expand("~/.vim/markdown.css"))
   endif
 
-  " html 出力
   let g:quickrun_config["markdown"] = {
+  \ "type": "markdown/pandoc"
+  \}
+
+  " html 出力
+  let g:quickrun_config["markdown/pandoc"] = {
   \ "hook/cd/directory": "%S:p:h",
-  \ "type": "markdown/pandoc",
   \ "outputter": "browser",
   \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --css=" . expand("~/.vim/markdown.css") . " --metadata title=%s"
   \}
 
   " slidy 出力
-  let g:quickrun_config["markdown-slidy"] = {
+  let g:quickrun_config["markdown/pandoc-slidy"] = {
   \ "hook/cd/directory": "%S:p:h",
-  \ "type": "markdown/pandoc-slidy",
   \ "outputter": "browser",
   \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=slidy --toc-depth=6 --metadata title=%s"
   \}
 
   " Word docx 出力
-  let g:quickrun_config["markdown-docx"] = {
+  let g:quickrun_config["markdown/pandoc-docx"] = {
   \ "hook/cd/directory": "%S:p:h",
   \ "outputter": "null",
-  \ "type": "markdown/pandoc-docx",
   \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=docx --toc-depth=6 --highlight-style=zenburn --output=%s.docx"
   \}
 
   " 単一 markdown 出力
-  let g:quickrun_config["markdown-self-contained"] = {
+  let g:quickrun_config["markdown/pandoc-self-contained"] = {
   \ "hook/cd/directory": "%S:p:h",
-  \ "type": "markdown/pandoc-self-contained",
   \ "outputter/buffer/filetype": "markdown",
   \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --no-highlight --metadata title=%s | pandoc --from html --to markdown --wrap none --markdown-headings=atx" . ' | sed -r -e "s/```\s*\{\.(.*)\}/```\1/g"'
   \}
@@ -755,11 +769,13 @@ augroup END
 
 " quickrun - plantuml
 if executable("plantuml")
-
-  " html 出力
   let g:quickrun_config["plantuml"] = {
+  \ "type": "plantuml/svg"
+  \}
+
+  " svg 出力
+  let g:quickrun_config["plantuml/svg"] = {
   \ "hook/cd/directory": "%S:p:h",
-  \ "type": "plantuml/svg",
   \ "outputter": "browser",
   \ "exec": (has("win32") || has("win64") ? "type" : "cat") . " %s | plantuml -tsvg -charset UTF-8 -pipe"
   \}
@@ -812,6 +828,7 @@ if executable("mysql")
   \ "type": "sql/mysql"
   \}
 
+  " mysql
   let g:quickrun_config["sql/mysql"] = {
   \ "command": "mysql",
   \ "cmdopt": "--defaults-extra-file=" . expand("~/.mysql/local.conf"),
@@ -842,11 +859,11 @@ call minpac#add("https://github.com/mattn/emmet-vim.git")
 
 " quickrun - html
 if executable("w3m")
-  " text 出力
   let g:quickrun_config["html"] = {
   \ "type": "html/w3m"
   \}
 
+  " text 出力
   let g:quickrun_config["html/w3m"] = {
   \ "command": "w3m",
   \ "cmdopt": "-dump",
