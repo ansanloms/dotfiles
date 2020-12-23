@@ -311,6 +311,11 @@ let g:quickrun_config["_"] = {
 
 " CtrlP
 call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
+
+call minpac#add("https://github.com/mattn/ctrlp-matchfuzzy.git")
+
+let g:ctrlp_match_func = {"match": "ctrlp_matchfuzzy#matcher"}
+
 call minpac#add("https://github.com/mattn/ctrlp-launcher.git")
 
 let g:ctrlp_use_caching = 1                                     " キャッシュを使用する
@@ -498,6 +503,7 @@ let g:lsp_signs_hint = {"text": "❓"}
 let g:asyncomplete_auto_popup = 1
 let g:asyncomplete_auto_completeopt = 1
 let g:asyncomplete_popup_delay = 200
+let g:asyncomplete_matchfuzzy = 1
 
 augroup lsp-setting
   autocmd!
