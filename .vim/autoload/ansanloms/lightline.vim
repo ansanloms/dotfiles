@@ -2,8 +2,12 @@ function! ansanloms#lightline#is_visible() abort
   return (60 <= winwidth(0)) && (&filetype !~? "help")
 endfunction
 
+function! ansanloms#lightline#statusline_mode() abort
+  return ansanloms#statusline#statusline_mode()
+endfunction
+
 function! ansanloms#lightline#filename() abort
-  return ansanloms#statusline#filename()
+  return expand("%:p") != "" ? expand("%:p") : "[No Name]"
 endfunction
 
 function! ansanloms#lightline#tab() abort

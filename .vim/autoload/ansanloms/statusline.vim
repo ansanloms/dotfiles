@@ -1,5 +1,5 @@
 function! ansanloms#statusline#statusline() abort
-  let l:s = " " . ansanloms#statusline#statusline_mode_minimum() . ansanloms#statusline#paste_mode() . " " . ansanloms#statusline#filename() . "%m%r%h%w%=" . " " . &filetype . " " . &fileformat . " " . &fileencoding
+  let l:s = " " . ansanloms#statusline#mode_minimum() . ansanloms#statusline#paste() . " " . ansanloms#statusline#filename() . "%m%r%h%w%=" . " " . &filetype . " " . &fileformat . " " . &fileencoding
 
   try
     let l:s = l:s . " " . "%#SkyColorClock#" . " " . sky_color_clock#statusline() . " "
@@ -9,11 +9,11 @@ function! ansanloms#statusline#statusline() abort
   return l:s
 endfunction
 
-function! ansanloms#statusline#statusline_quickfix() abort
+function! ansanloms#statusline#quickfix() abort
   return "%t" . (exists("w:quickfix_title") ? w:quickfix_title : "") . " " . "%=[%l/%L\ %p%%]"
 endfunction
 
-function! ansanloms#statusline#statusline_mode_minimum() abort
+function! ansanloms#statusline#mode_minimum() abort
   let l:mode_list = {
   \ "n":       "N"
   \ ,"i":      "I"
@@ -33,7 +33,7 @@ function! ansanloms#statusline#statusline_mode_minimum() abort
   return has_key(l:mode_list, l:current_mode) ? l:mode_list[l:current_mode] : (l:current_mode . "?")
 endfunction
 
-function! ansanloms#statusline#statusline_mode() abort
+function! ansanloms#statusline#mode() abort
   let l:mode_list = {
   \ "n":       "NORMAL"
   \ ,"i":      "INSERT"
@@ -53,7 +53,7 @@ function! ansanloms#statusline#statusline_mode() abort
   return has_key(l:mode_list, l:current_mode) ? l:mode_list[l:current_mode] : (l:current_mode . "?")
 endfunction
 
-function! ansanloms#statusline#paste_mode() abort
+function! ansanloms#statusline#paste() abort
   return (&paste) ? "(PASTE)" : ""
 endfunction
 

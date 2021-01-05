@@ -327,6 +327,57 @@ let g:ctrlp_open_new_file = 1                                   " ファイル�
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|git)$'   " 除外
 let g:ctrlp_launcher_file = "~/.vim/ctrlp-launcher/conf"        " ランチャ
 
+" lightline
+call minpac#add("https://github.com/itchyny/lightline.vim.git")
+
+let g:lightline = {
+\ "colorscheme": "nord",
+\ "active": {
+\   "left": [
+\     ["mode", "readonly", "paste"],
+\     ["gitbranch", "filename"],
+\   ],
+\   "right": [
+\     ["sky_color_clock"],
+\     ["percent"],
+\     ["fileformat", "fileencoding", "filetype"],
+\   ]
+\ },
+\ "component_expand": {
+\   "tabs": "ansanloms#lightline#tab"
+\ },
+\ "component_function": {
+\   "mode": "ansanloms#statusline#mode_minimum",
+\   "gitbranch": "fugitive#head",
+\   "filename": "ansanloms#lightline#filename",
+\ },
+\ "component": {
+\   "modified": "%{(ansanloms#lightline#is_visible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
+\   "readonly": "%{&readonly ? '' : ''}",
+\   "fileformat": "%{ansanloms#lightline#is_visible() ? &fileformat : ''}",
+\   "filetype": "%{ansanloms#lightline#is_visible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
+\   "fileencoding": "%{ansanloms#lightline#is_visible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
+\   "sky_color_clock": "%#SkyColorClock#%{' ' . sky_color_clock#statusline() . ' '}%#SkyColorClockTemp# ",
+\ },
+\ "component_raw": {
+\   "sky_color_clock": 1,
+\ },
+\ "tab_component_function": {
+\   "filename": "ansanloms#lightline#tabfilename",
+\   "modified": "lightline#tab#modified",
+\   "readonly": "lightline#tab#readonly",
+\   "tabnum": ""
+\ },
+\ "separator": {
+\   "left": "",
+\   "right": ""
+\ },
+\ "subseparator": {
+\   "left": "",
+\   "right": ""
+\ },
+\}
+
 " sky-color-clock.vim
 call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
 
@@ -527,7 +578,7 @@ augroup quickfix-setting
   "autocmd QuickFixCmdPost *grep* cwindow
 
   " ステータスラインを更新
-  autocmd FileType qf setlocal statusline=%!ansanloms#statusline#statusline_quickfix()
+  autocmd FileType qf setlocal statusline=%!ansanloms#statusline#quickfix()
 augroup END
 
 "-----------------------------------
