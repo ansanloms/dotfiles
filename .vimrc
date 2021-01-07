@@ -1167,10 +1167,10 @@ if has("gui_running")
     endif
 
     " 縦幅 デフォルトは24
-    set lines=40
+    set lines=60
 
     " 横幅 デフォルトは80
-    set columns=120
+    set columns=180
   endif
 
   " GUIオプション
