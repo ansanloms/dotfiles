@@ -331,7 +331,7 @@ let g:ctrlp_launcher_file = "~/.vim/ctrlp-launcher/conf"        " ランチャ
 call minpac#add("https://github.com/itchyny/lightline.vim.git")
 
 let g:lightline = {
-\ "colorscheme": "nord",
+\ "colorscheme": "gotham",
 \ "active": {
 \   "left": [
 \     ["mode", "readonly", "paste"],
@@ -1162,15 +1162,15 @@ if has("gui_running")
   if has("vim_starting")
     " フォント設定
     if has("win32") || has("win64")
-      set guifont=Cica:h10:cSHIFTJIS:qDRAFT
+      set guifont=Cica:h12:cSHIFTJIS:qDRAFT
       set renderoptions=type:directx,gamma:1.0,contrast:0,level:0.0,geom:1,renmode:5,taamode:1
     endif
 
     " 縦幅 デフォルトは24
-    set lines=60
+    set lines=40
 
     " 横幅 デフォルトは80
-    set columns=180
+    set columns=120
   endif
 
   " GUIオプション
@@ -1260,6 +1260,6 @@ syntax enable
 
 try
   set background=dark
-  colorscheme nord
+  colorscheme gotham
 catch
 endtry
