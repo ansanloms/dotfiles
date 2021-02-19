@@ -9,9 +9,6 @@ set {
 nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. nyagos.env.homepath .. "\\scoop\\apps\\msys2\\current\\usr\\bin"
 nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. nyagos.env.homepath .. "\\scoop\\apps\\msys2\\current\\mingw64\\bin"
 
--- rust (cargo)
-nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. nyagos.env.homepath .. "\\.cargo\\bin"
-
 -- prompt
 nyagos.prompt = function(this)
 	-- path
@@ -38,24 +35,13 @@ nyagos.alias.hlsdl = function(args)
 	nyagos.exec("start ffmpeg -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
 end
 
--- docker-machine env
-nyagos.alias["docker-env"] = function(args)
-	if nyagos.which("docker-machine") then
-		local cmd = nyagos.eval("docker-machine env " .. args[1] .. " --shell cmd")
-		print(cmd)
-
-		for k, v in string.gmatch(cmd, "SET (.-)=(.-)\n") do
-			nyagos.env[k] = v
-		end
-	end
-end
-
 nyagos.alias.grep = "grep --color=auto"
 nyagos.alias.egrep = "egrep --color=auto"
 nyagos.alias.fgrep = "fgrep --color=auto"
 
 nyagos.alias.echo = [[~\scoop\apps\msys2\current\usr\bin\echo.exe]]
 nyagos.alias.find = [[~\scoop\apps\msys2\current\usr\bin\find.exe]]
+nyagos.alias.tree = [[~\scoop\apps\msys2\current\usr\bin\tree.exe]]
 
 nyagos.alias.vi = "vim"
 nyagos.alias.vim = "vim"
