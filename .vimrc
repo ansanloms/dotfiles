@@ -508,6 +508,10 @@ function s:ctrlp_launcher_select() abort
   call ctrlp#launcher#launch("!", s:list[s:profile_key])
 endfunction
 
+" tab
+nnoremap gr gT
+nnoremap <C-w>gr <C-w>gT
+tnoremap <C-w>gr <C-w>gT
 
 " CtrlPMRUFile
 nnoremap <C-h> :<C-u>CtrlPMRUFiles<CR>
@@ -1232,7 +1236,7 @@ set breakindent
 
 " 文字幅の設定
 " マルチバイト文字等でずれないようにする
-set ambiwidth=single
+set ambiwidth=double
 
 " 上下の視界確保
 set scrolloff=4
