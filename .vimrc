@@ -52,6 +52,18 @@ set packpath^=~/.vim
 set viminfo+=n~/.vim/viminfo
 
 "-----------------------------------
+" 他のvimが起動済ならそれを使う
+"-----------------------------------
+
+try
+  packadd vim-singleton
+  let g:singleton#opener = "drop"
+
+  call singleton#enable()
+catch /E117.*/
+endtry
+
+"-----------------------------------
 " バックアップファイルとスワップファイル設定
 "-----------------------------------
 
@@ -98,26 +110,6 @@ endif
 if isdirectory(expand("~/.vim/undo"))
   set undodir=~/.vim/undo
   set undofile
-endif
-
-"-----------------------------------
-" 他のvimが起動済ならそれを使う
-" http://tyru.hatenablog.com/entry/20130430/vim_resident
-"-----------------------------------
-
-if argc() && (has("mac") || has("win32") || has("win64"))
-  let s:running_vim_list = filter(split(serverlist(), "\n"), "v:val !=? v:servername")
-
-  if !empty(s:running_vim_list)
-    silent execute
-    \ (has("gui_running") ? "!gvim" : "!vim")
-    \ "--servername" s:running_vim_list[0]
-    \ "--remote-tab-silent"
-    \ join(map(argv(), "shellescape(v:val, 1)"), " ")
-    qa!
-  endif
-
-  unlet s:running_vim_list
 endif
 
 "-----------------------------------
@@ -284,24 +276,30 @@ packadd minpac
 
 call minpac#init()
 
-" minpac
 call minpac#add("https://github.com/k-takata/minpac.git", {"type": "opt"})
 
-" general
 call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
+
 call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
+
 call minpac#add("https://github.com/junegunn/vim-easy-align.git")
+
+call minpac#add("https://github.com/lambdalisue/suda.vim.git")
+
 call minpac#add("https://github.com/tyru/open-browser.vim.git")
 
-" parenmatch
+call minpac#add("https://github.com/thinca/vim-singleton.git", {"type": "opt"})
+
+call minpac#add("https://github.com/vim-denops/denops.vim.git")
+
 call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
 
 let g:loaded_matchparen = 1     " matchparenを無効にする
 
-" git
-call minpac#add("https://github.com/tpope/vim-fugitive.git")
+call minpac#add("https://github.com/itchyny/vim-cursorword.git")
 
-" quickrun
+call minpac#add("https://github.com/lambdalisue/gina.vim.git")
+
 call minpac#add("https://github.com/thinca/vim-quickrun.git")
 
 let g:quickrun_config = {}
@@ -309,14 +307,7 @@ let g:quickrun_config["_"] = {
 \ "runner": "job",
 \}
 
-" CtrlP
 call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
-
-call minpac#add("https://github.com/mattn/ctrlp-matchfuzzy.git")
-
-let g:ctrlp_match_func = {"match": "ctrlp_matchfuzzy#matcher"}
-
-call minpac#add("https://github.com/mattn/ctrlp-launcher.git")
 
 let g:ctrlp_use_caching = 1                                     " キャッシュを使用する
 let g:ctrlp_cache_dir = expand("~/.cache/ctrlp")                " キャッシュディレクトリ
@@ -325,9 +316,26 @@ let g:ctrlp_lazy_update = 1                                     " 遅延再描�
 let g:ctrlp_max_height = 20                                     " 20行表示
 let g:ctrlp_open_new_file = 1                                   " ファイルの新規作成時は別タブで開く
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|git)$'   " 除外
+
+call minpac#add("https://github.com/mattn/ctrlp-launcher.git")
+
 let g:ctrlp_launcher_file = "~/.vim/ctrlp-launcher/conf"        " ランチャ
 
-" lightline
+call minpac#add("https://github.com/prabirshrestha/quickpick.vim.git")
+
+call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
+
+let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
+let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
+
+call minpac#add("https://github.com/mattn/vimtweak.git")
+
+"augroup vimtweak-setting
+"  autocmd!
+"
+"  autocmd guienter * silent! VimTweakSetAlpha 230
+"augroup END
+
 call minpac#add("https://github.com/itchyny/lightline.vim.git")
 
 let g:lightline = {
@@ -348,7 +356,7 @@ let g:lightline = {
 \ },
 \ "component_function": {
 \   "mode": "ansanloms#statusline#mode_minimum",
-\   "gitbranch": "fugitive#head",
+\   "gitbranch": "gina#component#repo#branch",
 \   "filename": "ansanloms#lightline#filename",
 \ },
 \ "component": {
@@ -378,31 +386,11 @@ let g:lightline = {
 \ },
 \}
 
-" sky-color-clock.vim
-call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-
-let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
-let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
-
-" vimtweak
-call minpac#add("https://github.com/mattn/vimtweak.git")
-
-"augroup vimtweak-setting
-"  autocmd!
-"
-"  autocmd guienter * silent! VimTweakSetAlpha 230
-"augroup END
-
-" appearance
-call minpac#add("https://github.com/itchyny/vim-cursorword.git")
-
-" colorscheme
 call minpac#add("https://github.com/cocopon/iceberg.vim.git")
 call minpac#add("https://github.com/Rigellute/rigel.git")
 call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
 call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
 
-" growi
 call minpac#add("https://github.com/ansanloms/vim-growi.git")
 
 "-----------------------------------
@@ -541,12 +529,24 @@ tnoremap <C-CR> <CR>
 call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
 call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
 call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
+call minpac#add("https://github.com/prabirshrestha/quickpick-lsp.vim.git")
 call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
 
 " vim-lsp
 let g:lsp_diagnostics_enabled = 1
 let g:lsp_diagnostics_echo_cursor = 1
 let g:lsp_text_edit_enabled = 1
+
+" 検索対象が定義されている箇所
+" 検索対象が宣言されている箇所
+" 検索対象が実装されている箇所
+" 検索対象の型が定義されている箇所
+let g:lsp_tagfunc_source_methods = [
+\ "definition"
+\ ,"declaration"
+\ ,"implementation"
+\ ,"typeDefinition"
+\]
 
 let g:lsp_diagnostics_signs_enabled = 1
 let g:lsp_diagnostics_signs_error = {"text": "❌"}
@@ -566,8 +566,6 @@ augroup lsp-setting
   autocmd User lsp_buffer_enabled setlocal omnifunc=lsp#complete
   autocmd User lsp_buffer_enabled setlocal signcolumn=yes
   autocmd User lsp_buffer_enabled setlocal tagfunc=lsp#tagfunc
-  autocmd User lsp_buffer_enabled nmap <buffer> gD <plug>(lsp-definition)
-  autocmd User lsp_buffer_enabled nmap <buffer> gd <Plug>(lsp-peek-definition)
   autocmd User lsp_buffer_enabled nmap <buffer> K <Plug>(lsp-hover)
 augroup END
 
