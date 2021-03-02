@@ -1,10 +1,10 @@
 # vim:set ft=conf:
 # vim:set noexpandtab:
 
-💻 nyagos			tabnew | call ansanloms#terminal#nyagos()
-💻 cmd				tabnew | call ansanloms#terminal#cmd()
-💻 powershell		tabnew | call ansanloms#terminal#powershell()
-💻 Ubuntu			tabnew | call ansanloms#terminal#wsl("Ubuntu")
-💻 MSYS2			tabnew | call ansanloms#terminal#msys2()
-💻 MinGW-w64 32bit	tabnew | call ansanloms#terminal#mingw32()
-💻 MinGW-w64 64bit	tabnew | call ansanloms#terminal#mingw64()
+💻 nyagos			call ansanloms#terminal#nyagos()
+💻 cmd				call ansanloms#terminal#cmd()
+💻 powershell		call ansanloms#terminal#powershell()
+💻 Ubuntu			call ansanloms#terminal#wsl("Ubuntu")
+💻 MSYS2			call ansanloms#terminal#msys2()
+💻 MinGW-w64 32bit	call ansanloms#terminal#mingw32()
+💻 MinGW-w64 64bit	call ansanloms#terminal#mingw64()
