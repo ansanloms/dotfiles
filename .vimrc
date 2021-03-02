@@ -61,6 +61,7 @@ try
 
   call singleton#enable()
 catch /E117.*/
+catch /E919.*/
 endtry
 
 "-----------------------------------
