@@ -42,6 +42,7 @@ nyagos.alias.fgrep = "fgrep --color=auto"
 nyagos.alias.echo = [[~\scoop\apps\msys2\current\usr\bin\echo.exe]]
 nyagos.alias.find = [[~\scoop\apps\msys2\current\usr\bin\find.exe]]
 nyagos.alias.tree = [[~\scoop\apps\msys2\current\usr\bin\tree.exe]]
+nyagos.alias.mkdir = [[~\scoop\apps\msys2\current\usr\bin\mkdir.exe]]
 
 nyagos.alias.vi = "vim"
 nyagos.alias.vim = "vim"
