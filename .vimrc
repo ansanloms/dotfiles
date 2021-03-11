@@ -172,8 +172,8 @@ set nofoldenable
 
 " 外部grepの設定
 if executable("rg")
-  set grepprg=rg\ --vimgrep
-  set grepformat=%f:%l:%c:%m
+  set grepprg=rg\ --vimgrep\ --no-heading
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
 elseif executable("ack")
   set grepprg=ack
 endif
@@ -285,8 +285,6 @@ call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
 
 call minpac#add("https://github.com/junegunn/vim-easy-align.git")
 
-call minpac#add("https://github.com/lambdalisue/suda.vim.git")
-
 call minpac#add("https://github.com/tyru/open-browser.vim.git")
 
 call minpac#add("https://github.com/thinca/vim-singleton.git", {"type": "opt"})
@@ -299,7 +297,8 @@ let g:loaded_matchparen = 1     " matchparenを無効にする
 
 call minpac#add("https://github.com/itchyny/vim-cursorword.git")
 
-call minpac#add("https://github.com/lambdalisue/gina.vim.git")
+call minpac#add("https://github.com/tpope/vim-fugitive.git")
+call minpac#add("https://github.com/airblade/vim-gitgutter.git")
 
 call minpac#add("https://github.com/thinca/vim-quickrun.git")
 
@@ -348,7 +347,6 @@ let g:lightline = {
 \   ],
 \   "right": [
 \     ["sky_color_clock"],
-\     ["percent"],
 \     ["fileformat", "fileencoding", "filetype"],
 \   ]
 \ },
@@ -357,7 +355,7 @@ let g:lightline = {
 \ },
 \ "component_function": {
 \   "mode": "ansanloms#statusline#mode_minimum",
-\   "gitbranch": "gina#component#repo#branch",
+\   "gitbranch": "fugitive#head",
 \   "filename": "ansanloms#lightline#filename",
 \ },
 \ "component": {
@@ -1089,6 +1087,22 @@ augroup powershell-setting
 
   " プラグイン読み込み
   autocmd FileType ps1 packadd vim-ps1
+augroup END
+
+"-----------------------------------
+" prisma の設定
+"-----------------------------------
+
+call minpac#add("https://github.com/pantharshit00/vim-prisma.git", {"type": "opt"})
+
+augroup powershell-setting
+  autocmd!
+
+  " 拡張子設定
+  autocmd BufNewFile,BufRead *.{prisma} setlocal filetype=prisma
+
+  " プラグイン読み込み
+  autocmd FileType prisma packadd vim-prisma
 augroup END
 
 "-----------------------------------
