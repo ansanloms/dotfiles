@@ -1,6 +1,5 @@
-"-----------------------------------
-" 文字コード設定
-"-----------------------------------
+
+" 文字コード {{{
 
 if has("vim_starting")
   " vim 内部で通常使用する文字エンコーディング
@@ -16,9 +15,9 @@ endif
 " set encoding の後に記述する
 scriptencoding utf-8
 
-"-----------------------------------
-" ディレクトリ作成
-"-----------------------------------
+" }}}
+
+" ディレクトリ {{{
 
 if has("vim_starting")
   for dir in [
@@ -38,9 +37,9 @@ if has("vim_starting")
   endfor
 endif
 
-"-----------------------------------
-" 各種パスの設定
-"-----------------------------------
+" }}}
+
+" 初期設定 {{{
 
 " 読み込みディレクトリの追記
 set runtimepath^=~/.vim
@@ -51,46 +50,38 @@ set packpath^=~/.vim
 " viminfoの保存先を変更
 set viminfo+=n~/.vim/viminfo
 
-"-----------------------------------
-" 他のvimが起動済ならそれを使う
-"-----------------------------------
+" }}}
 
-try
-  packadd vim-singleton
-  let g:singleton#opener = "drop"
-
-  call singleton#enable()
-catch /E117.*/
-catch /E919.*/
-endtry
-
-"-----------------------------------
-" バックアップファイルとスワップファイル設定
-"-----------------------------------
+" backup / swapfile {{{
 
 if isdirectory(expand("~/.vim/backup"))
+  " バックアップ保存先
   set backupdir=~/.vim/backup
+
+  " スワップファイル保存先
   set directory=~/.vim/backup
 
-  " バックアップ作成
+  " バックアップ有効
   set backup
 
   " 上書き前にバックアップ作成
   set writebackup
 
-  " スワップファイル作成
+  " スワップファイル有効
   set swapfile
 endif
 
-"-----------------------------------
-" mkviewの設定
-"-----------------------------------
+" }}}
+
+" mkview {{{
 
 if isdirectory(expand("~/.vim/view"))
-  " 保存先
+  " mkview 保存先
   set viewdir=~/.vim/view
 
-  " :mkviewで保存する設定
+  " :mkview で保存する設定
+  " cursor ファイル／ウィンドウ内のカーソル位置
+  " folds  手動で作られた折り畳み、折り畳みの開閉の区別、折り畳み
   set viewoptions=cursor,folds
 
   augroup vim-view
@@ -104,18 +95,34 @@ if isdirectory(expand("~/.vim/view"))
   augroup END
 endif
 
-"-----------------------------------
-" undo管理設定
-"-----------------------------------
+" }}}
+
+" undo {{{
 
 if isdirectory(expand("~/.vim/undo"))
+  " undo 管理先
   set undodir=~/.vim/undo
+
+  " undo 機能を有効にする
   set undofile
 endif
 
-"-----------------------------------
-" 基本設定
-"-----------------------------------
+" }}}
+
+" 他のvimが起動済ならそれを使う {{{
+
+try
+  packadd vim-singleton
+  let g:singleton#opener = "drop"
+
+  call singleton#enable()
+catch /E117.*/
+catch /E919.*/
+endtry
+
+" }}}
+
+" 基本設定 {{{
 
 " コマンドの保存履歴数
 set history=1000
@@ -149,35 +156,6 @@ set hidden
 " iwhite: vimdiffで空白を無視して比較する
 set diffopt=filler,iwhite
 
-" conceal処理の設定
-" 0: 通常通り表示(デフォルト)
-" 1: conceal対象のテキストは代理文字(初期設定はスペース)に置換される
-" 2: conceal対象のテキストは非表示になる
-" 3: conceal対象のテキストは完全に非表示
-if has("conceal")
-  set conceallevel=0
-  set concealcursor=
-endif
-
-" スペルチェック
-"set spell
-"set spelllang+=cjk
-
-" fold設定
-"set foldmethod=syntax
-"set foldlevel=1
-"set foldnestmax=2
-"set foldcolumn=2
-set nofoldenable
-
-" 外部grepの設定
-if executable("rg")
-  set grepprg=rg\ --vimgrep\ --no-heading
-  set grepformat=%f:%l:%c:%m,%f:%l:%m
-elseif executable("ack")
-  set grepprg=ack
-endif
-
 " beep音を消す
 set belloff=all
 
@@ -187,23 +165,65 @@ set synmaxcol=600
 " テキストの整形方法
 set formatoptions=croql
 
-"-----------------------------------
-" ステータスラインの設定
-"-----------------------------------
+" }}}
+
+" conceal {{{
+
+" 0: 通常通り表示(デフォルト)
+" 1: conceal対象のテキストは代理文字(初期設定はスペース)に置換される
+" 2: conceal対象のテキストは非表示になる
+" 3: conceal対象のテキストは完全に非表示
+if has("conceal")
+  set conceallevel=0
+  set concealcursor=
+endif
+
+" }}}
+
+" スペルチェック
+"set spell
+"set spelllang+=cjk
+
+" folding {{{
+
+set foldmethod=indent
+set foldcolumn=5
+set foldnestmax=5
+set foldlevelstart=99
+
+" }}}
+
+" 外部 grep {{{
+if executable("rg")
+  set grepprg=rg\ --vimgrep\ --no-heading
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
+elseif executable("ack")
+  set grepprg=ack
+endif
+
+" }}}
+
+" statusline {{{
 
 " ステータスラインを常に表示
 set laststatus=2
 
-"-----------------------------------
-" タブラインの設定
-"-----------------------------------
+" 表示設定
+"set statusline=%!ansanloms#statusline#statusline()
+
+" }}}
+
+" tabline {{{
 
 " タブラインを常に表示
 set showtabline=2
 
-"-----------------------------------
-" インデントの設定
-"-----------------------------------
+" タブラインの設定
+"set tabline=%!ansanloms#tabline#tabline()
+
+" }}}
+
+" indent {{{
 
 " オートインデント
 set smartindent
@@ -221,11 +241,11 @@ set noexpandtab
 " ソフトTABのスペースの数
 set softtabstop=4
 
-"-----------------------------------
-" 検索の設定
-"-----------------------------------
+" }}}
 
-" 大文字/小文字の区別なく検索する
+" search {{{
+
+" 大文字 / 小文字の区別なく検索する
 set ignorecase
 
 " 検索文字列に大文字が含まれている場合は区別して検索する
@@ -243,19 +263,19 @@ set hlsearch
 " タグファイルの二分探索
 set tagbsearch
 
-"-----------------------------------
-" 補完の設定
-"-----------------------------------
+" }}}
 
-" ファイルパス保管をbashと同じようにする
+" completion {{{
+
+" ファイルパス保管を bash と同じようにする
 set wildmode=list:longest
 
-" 補完時に表示されるプレビューウィンドウを消す
+" 補完時に表示されるプレビューウィンドウを表示しない
 set completeopt=menuone
 
-"-----------------------------------
-" terminal 設定
-"-----------------------------------
+" }}}
+
+" terminal {{{
 
 if has("terminal")
   " 端末のエンコーディング
@@ -265,9 +285,9 @@ if has("terminal")
   set termwintype="conpty"
 endif
 
-"-----------------------------------
-" プラグイン設定
-"-----------------------------------
+" }}}
+
+" minpac {{{
 
 " minpacの取得
 if !isdirectory(expand("~/.vim/pack/minpac/opt/minpac"))
@@ -279,26 +299,32 @@ call minpac#init()
 
 call minpac#add("https://github.com/k-takata/minpac.git", {"type": "opt"})
 
+" }}}
+
+" general {{{
+
 call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
-
 call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
-
 call minpac#add("https://github.com/junegunn/vim-easy-align.git")
-
 call minpac#add("https://github.com/tyru/open-browser.vim.git")
-
 call minpac#add("https://github.com/thinca/vim-singleton.git", {"type": "opt"})
-
 call minpac#add("https://github.com/vim-denops/denops.vim.git")
 
 call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
-
 let g:loaded_matchparen = 1     " matchparenを無効にする
+
+" }}}
+
+" git {{{
 
 call minpac#add("https://github.com/itchyny/vim-cursorword.git")
 
 call minpac#add("https://github.com/tpope/vim-fugitive.git")
 call minpac#add("https://github.com/airblade/vim-gitgutter.git")
+
+" }}}
+
+" quickrun {{{
 
 call minpac#add("https://github.com/thinca/vim-quickrun.git")
 
@@ -306,6 +332,10 @@ let g:quickrun_config = {}
 let g:quickrun_config["_"] = {
 \ "runner": "job",
 \}
+
+" }}}
+
+" ctrlp {{{
 
 call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
 
@@ -321,20 +351,15 @@ call minpac#add("https://github.com/mattn/ctrlp-launcher.git")
 
 let g:ctrlp_launcher_file = "~/.vim/ctrlp-launcher/conf"        " ランチャ
 
+" }}}
+
+" quickpick {{{
+
 call minpac#add("https://github.com/prabirshrestha/quickpick.vim.git")
 
-call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
+" }}}
 
-let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
-let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
-
-call minpac#add("https://github.com/mattn/vimtweak.git")
-
-"augroup vimtweak-setting
-"  autocmd!
-"
-"  autocmd guienter * silent! VimTweakSetAlpha 230
-"augroup END
+" lightline {{{
 
 call minpac#add("https://github.com/itchyny/lightline.vim.git")
 
@@ -385,36 +410,14 @@ let g:lightline = {
 \ },
 \}
 
-call minpac#add("https://github.com/cocopon/iceberg.vim.git")
-call minpac#add("https://github.com/Rigellute/rigel.git")
-call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
-call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
+call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
 
-call minpac#add("https://github.com/ansanloms/vim-growi.git")
+let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
+let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
-"-----------------------------------
-" ステータスラインの設定
-"-----------------------------------
+" }}}
 
-" ステータスラインを常に表示
-set laststatus=2
-
-" 表示設定
-set statusline=%!ansanloms#statusline#statusline()
-
-"-----------------------------------
-" タブラインの設定
-"-----------------------------------
-
-" タブラインを常に表示
-set showtabline=2
-
-" タブラインの設定
-set tabline=%!ansanloms#tabline#tabline()
-
-"-----------------------------------
-" mapの設定
-"-----------------------------------
+" map {{{
 
 " +-----------------+--------+--------+----------+----------------+--------+------+----------+
 " | コマンド        | NORMAL | INSERT | TERMINAL | コマンドライン | VISUAL | 選択 | 演算待ち |
@@ -431,10 +434,10 @@ set tabline=%!ansanloms#tabline#tabline()
 " | tmap / tnoremap | -      | -      | @        | -              | -      | -    | -        |
 " +-----------------+--------+--------+----------+----------------+--------+------+----------+
 
-" Leaderの設定
+" Leader
 let g:mapleader = ","
 
-" memoを設置するディレクトリ
+" memo を設置するディレクトリ
 if has("win32") || has("win64")
   let g:ansanloms_memo_base_dir = expand("c:/dev/work/memo")
 endif
@@ -521,9 +524,9 @@ tnoremap <S-space> <space>
 tnoremap <C-BS> <BS>
 tnoremap <C-CR> <CR>
 
-"-----------------------------------
-" lsp の設定
-"-----------------------------------
+" }}}
+
+" lsp {{{
 
 call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
 call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
@@ -553,6 +556,9 @@ let g:lsp_diagnostics_signs_warning = {"text": "⚠️"}
 let g:lsp_diagnostics_signs_information = {"text": "❗"}
 let g:lsp_diagnostics_signs_hint = {"text": "❓"}
 
+let g:lsp_document_code_action_signs_enabled = 1
+let g:lsp_document_code_action_signs_hint = {"text": "❓"}
+
 " asyncomplete.vim
 let g:asyncomplete_auto_popup = 1
 let g:asyncomplete_auto_completeopt = 1
@@ -568,9 +574,9 @@ augroup lsp-setting
   autocmd User lsp_buffer_enabled nmap <buffer> K <Plug>(lsp-hover)
 augroup END
 
-"-----------------------------------
-" Quickfixの設定
-"-----------------------------------
+" }}}
+
+" Quickfix {{{
 
 augroup quickfix-setting
   autocmd!
@@ -582,9 +588,9 @@ augroup quickfix-setting
   autocmd FileType qf setlocal statusline=%!ansanloms#statusline#quickfix()
 augroup END
 
-"-----------------------------------
-" Java の設定
-"-----------------------------------
+" }}}
+
+" Java {{{
 
 call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
 
@@ -613,9 +619,9 @@ augroup java-setting
   autocmd FileType java setlocal shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
 augroup END
 
-"-----------------------------------
-" JavaScript / TypeScript の設定
-"-----------------------------------
+" }}}
+
+" JavaScript / TypeScript {{{
 
 call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
 call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
@@ -671,9 +677,9 @@ augroup typescript-setting
   autocmd FileType typescript.tsx packadd typescript-vim
 augroup END
 
-"-----------------------------------
-" vue の設定
-"-----------------------------------
+" }}}
+
+" vue {{{
 
 call minpac#add("https://github.com/posva/vim-vue.git", {"type": "opt"})
 
@@ -690,9 +696,9 @@ augroup vue-setting
   autocmd FileType vue packadd vim-vue
 augroup END
 
-"-----------------------------------
-" PHP の設定
-"-----------------------------------
+" }}}
+
+" PHP {{{
 
 " case 文対応
 let g:PHP_vintage_case_default_indent = 1
@@ -716,9 +722,9 @@ augroup php-setting
   autocmd FileType php packadd vimspector
 augroup END
 
-"-----------------------------------
-" volt (PHP) の設定
-"-----------------------------------
+" }}}
+
+" PHP vold {{{
 
 call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git", {"type": "opt"})
 
@@ -738,9 +744,9 @@ augroup volt-setting
   autocmd FileType volt packadd vim-volt-syntax
 augroup END
 
-"-----------------------------------
-" markdown の設定
-"-----------------------------------
+" }}}
+
+" markdown {{{
 
 augroup markdown-setting
   autocmd!
@@ -792,9 +798,9 @@ if executable("pandoc")
   \}
 endif
 
-"-----------------------------------
-" asciidoc の設定
-"-----------------------------------
+" }}}
+
+" asciidoc {{{
 
 augroup asciidoc-setting
   autocmd!
@@ -806,9 +812,9 @@ augroup asciidoc-setting
   autocmd FileType asciidoc setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
-"-----------------------------------
-" plantuml の設定
-"-----------------------------------
+" }}}
+
+" plantuml {{{
 
 call minpac#add("https://github.com/aklt/plantuml-syntax.git", {"type": "opt"})
 
@@ -839,9 +845,9 @@ if executable("plantuml")
   \}
 endif
 
-"-----------------------------------
-" sh の設定
-"-----------------------------------
+" }}}
+
+" sh {{{
 
 call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
 call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
@@ -859,9 +865,9 @@ augroup sh-setting
   autocmd FileType sh packadd sh.vim
 augroup END
 
-"-----------------------------------
-" Vim script の設定
-"-----------------------------------
+" }}}
+
+" Vim script {{{
 
 " \ を入力した際のインデント量
 let g:vim_indent_cont = 0
@@ -874,11 +880,14 @@ augroup vim-setting
 
   " インデントセット
   autocmd FileType vim setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+
+  " folding
+  autocmd FileType vim setlocal foldmethod=marker
 augroup END
 
-"-----------------------------------
-" sql の設定
-"-----------------------------------
+" }}}
+
+" sql {{{
 
 " quickrun - mysql
 if executable("mysql")
@@ -909,9 +918,9 @@ augroup sql-setting
   endif
 augroup END
 
-"-----------------------------------
-" html の設定
-"-----------------------------------
+" }}}
+
+" html {{{
 
 call minpac#add("https://github.com/mattn/emmet-vim.git")
 
@@ -936,9 +945,9 @@ augroup html-setting
   autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
-"-----------------------------------
-" xml の設定
-"-----------------------------------
+" }}}
+
+" xml {{{
 
 augroup xml-setting
   autocmd!
@@ -954,9 +963,9 @@ augroup xml-setting
   endif
 augroup END
 
-"-----------------------------------
-" json の設定
-"-----------------------------------
+" }}}
+
+" json {{{
 
 " conceal表示を無効にする
 let g:vim_json_syntax_conceal = 0
@@ -976,9 +985,9 @@ augroup json-setting
   endif
 augroup END
 
-"-----------------------------------
-" json5 の設定
-"-----------------------------------
+" }}}
+
+" json5 {{{
 
 call minpac#add("https://github.com/gutenye/json5.vim.git", {"type": "opt"})
 
@@ -992,9 +1001,9 @@ augroup json5-setting
   autocmd FileType json5 packadd json5.vim
 augroup END
 
-"-----------------------------------
-" apache conf の設定
-"-----------------------------------
+" }}}
+
+" apache conf {{{
 
 call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
 
@@ -1005,9 +1014,9 @@ augroup apache-setting
   autocmd FileType apache packadd apachestyle
 augroup END
 
-"-----------------------------------
-" groovy の設定
-"-----------------------------------
+" }}}
+
+" groovy {{{
 
 call minpac#add("https://github.com/vim-scripts/groovyindent.git", {"type": "opt"})
 
@@ -1018,9 +1027,9 @@ augroup groovy-setting
   autocmd FileType groovy packadd groovyindent
 augroup END
 
-"-----------------------------------
-" graphql の設定
-"-----------------------------------
+" }}}
+
+" graphql {{{
 
 " graphql
 call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
@@ -1038,9 +1047,9 @@ augroup graphql-setting
   autocmd FileType graphql packadd vim-graphql
 augroup END
 
-"-----------------------------------
-" toml の設定
-"-----------------------------------
+" }}}
+
+" toml {{{
 
 call minpac#add("https://github.com/cespare/vim-toml.git", {"type": "opt"})
 
@@ -1057,14 +1066,17 @@ augroup toml-setting
   autocmd FileType toml packadd vim-toml
 augroup END
 
-"-----------------------------------
-" yaml の設定
-"-----------------------------------
+" }}}
+
+" yaml {{{
 
 call minpac#add("https://github.com/stephpy/vim-yaml.git", {"type": "opt"})
 
 augroup yaml-setting
   autocmd!
+
+  " 拡張子設定
+  autocmd BufNewFile,BufRead *.{yml,yaml} setlocal filetype=yaml
 
   " インデントセット
   autocmd FileType yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
@@ -1073,9 +1085,9 @@ augroup yaml-setting
   autocmd FileType yaml packadd vim-yaml
 augroup END
 
-"-----------------------------------
-" powershell の設定
-"-----------------------------------
+" }}}
+
+" powershell {{{
 
 call minpac#add("https://github.com/PProvost/vim-ps1.git", {"type": "opt"})
 
@@ -1089,9 +1101,9 @@ augroup powershell-setting
   autocmd FileType ps1 packadd vim-ps1
 augroup END
 
-"-----------------------------------
-" prisma の設定
-"-----------------------------------
+" }}}
+
+" prisma {{{
 
 call minpac#add("https://github.com/pantharshit00/vim-prisma.git", {"type": "opt"})
 
@@ -1105,9 +1117,9 @@ augroup powershell-setting
   autocmd FileType prisma packadd vim-prisma
 augroup END
 
-"-----------------------------------
-" バイナリエディタの設定
-"-----------------------------------
+" }}}
+
+" binary {{{
 
 augroup binary-setting
   autocmd!
@@ -1120,11 +1132,11 @@ augroup binary-setting
   autocmd BufWritePost *.{bin,dll,exe} set nomod | endif
 augroup END
 
-"-----------------------------------
-" netrw の設定
-"-----------------------------------
+" }}}
 
-" netrwは常にtree view
+" netrw {{{
+
+" netrw は常にtree view
 let g:netrw_liststyle = 3
 
 " v でファイルを開くときは右側に開く(デフォルトが左側なので入れ替え)
@@ -1133,11 +1145,10 @@ let g:netrw_altv = 1
 " o でファイルを開くときは下側に開く(デフォルトが上側なので入れ替え)
 let g:netrw_alto = 1
 
-"-----------------------------------
-" その他設定
-"-----------------------------------
+" }}}
 
-" 行末空白削除
+" 行末空白削除 {{{
+
 augroup remove-dust
   autocmd!
 
@@ -1152,7 +1163,9 @@ augroup remove-dust
   endfunction
 augroup END
 
-" ディレクトリ作成
+" }}}
+
+" ディレクトリ作成 {{{
 augroup vimrc-auto-mkdir
   autocmd!
 
@@ -1166,14 +1179,17 @@ augroup vimrc-auto-mkdir
   endfunction
 augroup END
 
-" お仕事用設定
+" }}}
+
+" お仕事用設定 {{{
+
 if filereadable(expand("~/.vim/work.vim"))
   source ~/.vim/work.vim
 endif
 
-"-----------------------------------
-" gVim の設定
-"-----------------------------------
+" }}}
+
+" gVim {{{
 
 if has("gui_running")
   if has("vim_starting")
@@ -1206,9 +1222,9 @@ if has("gui_running")
   set imsearch=-1
 endif
 
-"-----------------------------------
-" 表示の設定
-"-----------------------------------
+" }}}
+
+" appearance {{{
 
 " 空白文字の表示
 " とりあえずTAB/行末スペース/省略文字(右)/省略文字(左)/nbsp
@@ -1272,6 +1288,21 @@ set matchtime=2
 " 補完メニューの高さ
 set pumheight=20
 
+" gVim の背景を透過させる
+call minpac#add("https://github.com/mattn/vimtweak.git")
+
+"augroup vimtweak-setting
+"  autocmd!
+"
+"  autocmd guienter * silent! VimTweakSetAlpha 230
+"augroup END
+
+" colorscheme
+call minpac#add("https://github.com/cocopon/iceberg.vim.git")
+call minpac#add("https://github.com/Rigellute/rigel.git")
+call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
+call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
+
 " シンタックスON
 syntax enable
 
@@ -1280,3 +1311,5 @@ try
   colorscheme gotham
 catch
 endtry
+
+" }}}
