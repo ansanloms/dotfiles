@@ -1,4 +1,3 @@
-
 " 文字コード {{{
 
 if has("vim_starting")
@@ -623,9 +622,7 @@ augroup END
 
 " JavaScript / TypeScript {{{
 
-call minpac#add("https://github.com/pangloss/vim-javascript.git", {"type": "opt"})
 call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
-call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
 
 augroup javascript-setting
   autocmd!
@@ -639,9 +636,7 @@ augroup javascript-setting
   autocmd FileType javascript.jsx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
-  autocmd FileType javascript packadd vim-javascript
   autocmd FileType javascript packadd vim-jsx-pretty
-  autocmd FileType javascript.jsx packadd vim-javascript
   autocmd FileType javascript.jsx packadd vim-jsx-pretty
 augroup END
 
@@ -672,9 +667,7 @@ augroup typescript-setting
 
   " プラグイン読み込み
   autocmd FileType typescript packadd vim-jsx-pretty
-  autocmd FileType typescript packadd typescript-vim
   autocmd FileType typescript.tsx packadd vim-jsx-pretty
-  autocmd FileType typescript.tsx packadd typescript-vim
 augroup END
 
 " }}}
