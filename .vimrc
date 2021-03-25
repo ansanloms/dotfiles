@@ -186,7 +186,7 @@ endif
 " folding {{{
 
 set foldmethod=indent
-set foldcolumn=5
+set foldcolumn=8
 set foldnestmax=5
 set foldlevelstart=99
 
@@ -710,9 +710,6 @@ augroup php-setting
 
   " ハイライト行指定
   autocmd FileType php syntax sync minlines=300 maxlines=500
-
-  " プラグイン読み込み
-  autocmd FileType php packadd vimspector
 augroup END
 
 " }}}
