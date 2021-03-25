@@ -8,10 +8,12 @@
       <row path="https://skk-dev.github.io/dict/SKK-JISYO.geo.gz" enabled="1" />
       <row path="https://skk-dev.github.io/dict/SKK-JISYO.propernoun.gz" enabled="1" />
       <row path="https://skk-dev.github.io/dict/SKK-JISYO.station.gz" enabled="1" />
+      <row path="https://raw.githubusercontent.com/uasi/skk-emoji-jisyo/master/SKK-JISYO.emoji.utf8" enabled="1" />
+      <row path="https://raw.githubusercontent.com/ymrl/SKK-JISYO.emoji-ja/master/SKK-JISYO.emoji-ja.utf8" enabled="1" />
     </list>
   </section>
   <section name="server">
-    <key name="serv" value="1" />
+    <key name="serv" value="0" />
     <key name="host" value="localhost" />
     <key name="port" value="55100" />
     <key name="encoding" value="0" />
