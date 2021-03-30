@@ -344,11 +344,7 @@ let g:ctrlp_clear_cache_on_exit = 0                             " 終了時に�
 let g:ctrlp_lazy_update = 1                                     " 遅延再描画
 let g:ctrlp_max_height = 20                                     " 20行表示
 let g:ctrlp_open_new_file = 1                                   " ファイルの新規作成時は別タブで開く
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|git)$'   " 除外
-
-call minpac#add("https://github.com/mattn/ctrlp-launcher.git")
-
-let g:ctrlp_launcher_file = "~/.vim/ctrlp-launcher/conf"        " ランチャ
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|.dist|git)$'   " 除外
 
 " }}}
 
@@ -478,34 +474,19 @@ nnoremap <C-r> g+
 " バッファ
 nnoremap <Leader>b :<C-u>ls<CR>:<C-u>buf<Space>
 
-" CtrlPLauncher
-"nnoremap <C-e> :<C-u>CtrlPLauncher<CR>
-nnoremap <C-e> :<C-u>CtrlPLauncherSelect<CR>
-
-command! CtrlPLauncherSelect call s:ctrlp_launcher_select()
-function s:ctrlp_launcher_select() abort
-  packadd vital.vim
-
-  let s:list = map(vital#vital#new().import("Prelude").glob(expand(get(g:, "ctrlp_launcher_file", "~/.ctrlp-launcher")) . "-*"), { k, v, -> strpart(v, strlen(expand(get(g:, "ctrlp_launcher_file", "~/.ctrlp-launcher")) . "-")) })
-  call insert(s:list, "", 0)
-
-  let s:profile_key = confirm("profile", join(map(copy(s:list), { k, v -> "&" . k . (v == "" ? "(none)" : v) }), "\n")) - 1
-  if s:profile_key < 0
-    return
-  endif
-
-  call ctrlp#launcher#launch("!", s:list[s:profile_key])
-endfunction
-
 " tab
 nnoremap gr gT
 nnoremap <C-w>gr <C-w>gT
 tnoremap <C-w>gr <C-w>gT
 
-" CtrlPMRUFile
-nnoremap <C-h> :<C-u>CtrlPMRUFiles<CR>
+" launcher
+let g:quickpick_launcher_file = "~/.vim/launcher/conf"
+nnoremap <C-e> :<C-u>call quickpick#pickers#launcher_select#open(1)<CR>
 
-" CtrlPBuffer
+" history
+nnoremap <C-h> :<C-u>call quickpick#pickers#oldfiles#open()<CR>
+
+" buffer
 nnoremap <C-s> :<C-u>CtrlPBuffer<CR>
 
 " タグジャンプの際に新しいタブで開く
