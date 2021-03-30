@@ -1,3 +1,5 @@
+" refs: https://github.com/mattn/ctrlp-launcher/blob/7020ceab9856a4c2deb06687a84c6161c7d15d51/autoload/ctrlp/launcher.vim
+
 let s:list = []
 let s:profile = ""
 let s:bang = ""
