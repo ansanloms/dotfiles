@@ -12,8 +12,8 @@ endfunction
 
 function! s:get_items() abort
   let l:config_file = get(g:, "quickpick_launcher_file", "~/.quickpick-launcher")
-  let s:list = map(glob(l:config_file . "-*", v:true, v:true), { k, v, -> [strpart(v, strlen(expand(l:config_file . "-"))), strpart(v, strlen(expand(l:config_file . "-")))] })
-
+  let l:config_file_list = glob(l:config_file . "-*", v:true, v:true)
+  let s:list = map(copy(l:config_file_list), { k, v, -> [strpart(v, strlen(expand(l:config_file . "-"))), strpart(v, strlen(expand(l:config_file . "-")))] })
   let s:list = [["(none)", ""]] + s:list
   return map(copy(s:list), { v -> v:val[0] })
 endfunction
