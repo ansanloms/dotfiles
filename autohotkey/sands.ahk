@@ -12,16 +12,22 @@
 		Return
 	}
 
-	SendInput {Shift Down}
-	isSpaceRepeat := true
+	if (IME_GET()) {
+		SendInput {Shift Down}
+		isSpaceRepeat := true
+	} else {
+		Send {Space}
+	}
 
 	Return
 
 *Space Up::
-	SendInput {Shift Up}
-	isSpaceRepeat := false
-	if (A_PriorKey == "Space") {
-		SendInput {Space}
+	if (IME_GET()) {
+		SendInput {Shift Up}
+		isSpaceRepeat := false
+		if (A_PriorKey == "Space") {
+			SendInput {Space}
+		}
 	}
 
 	Return
