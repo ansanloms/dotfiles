@@ -17,3 +17,4 @@
     "~/AppData/Local/Microsoft/Windows Terminal/settings.json": windows-terminal.json
     "~/AppData/Roaming/PuTTY/putty.ini": putty.ini
     "~/AppData/Roaming/CorvusSKK/config.xml": corvusskk.xml
+    "~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/sands": "autohotkey/sands.exe"
