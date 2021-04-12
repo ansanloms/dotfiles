@@ -2,8 +2,8 @@
 ; https://blog.phoshigaki.net/2018/10/usautohotkeyscripts.html
 
 *Space::
-	if (isSpaceRepeat == true){
-		if (A_PriorKey != "Space"){
+	if (isSpaceRepeat == true) {
+		if (A_PriorKey != "Space") {
 			KeyWait, Space
 			SendInput {Shift Up}
 			isSpaceRepeat := false
@@ -16,7 +16,7 @@
 		SendInput {Shift Down}
 		isSpaceRepeat := true
 	} else {
-		Send {Space}
+		SendInput {Space}
 	}
 
 	Return
