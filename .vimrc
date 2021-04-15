@@ -110,14 +110,22 @@ endif
 
 " 他のvimが起動済ならそれを使う {{{
 
-try
-  packadd vim-singleton
-  let g:singleton#opener = "drop"
+" http://tyru.hatenablog.com/entry/20130430/vim_resident
 
-  call singleton#enable()
-catch /E117.*/
-catch /E919.*/
-endtry
+if argc() && (has("mac") || has("win32") || has("win64"))
+  let s:running_vim_list = filter(split(serverlist(), "\n"), "v:val !=? v:servername")
+
+  if !empty(s:running_vim_list)
+    silent execute
+    \ (has("gui_running") ? "!gvim" : "!vim")
+    \ "--servername" s:running_vim_list[0]
+    \ "--remote-tab-silent"
+    \ join(map(argv(), "shellescape(v:val, 1)"), " ")
+    qa!
+  endif
+
+  unlet s:running_vim_list
+endif
 
 " }}}
 
@@ -306,7 +314,6 @@ call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
 call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
 call minpac#add("https://github.com/junegunn/vim-easy-align.git")
 call minpac#add("https://github.com/tyru/open-browser.vim.git")
-call minpac#add("https://github.com/thinca/vim-singleton.git", {"type": "opt"})
 call minpac#add("https://github.com/vim-denops/denops.vim.git")
 
 call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
@@ -1083,6 +1090,9 @@ augroup powershell-setting
 
   " 拡張子設定
   autocmd BufNewFile,BufRead *.{prisma} setlocal filetype=prisma
+
+  " インデントセット
+  autocmd FileType prisma setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
   autocmd FileType prisma packadd vim-prisma
