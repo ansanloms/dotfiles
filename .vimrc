@@ -119,7 +119,7 @@ if argc() && (has("mac") || has("win32") || has("win64"))
     silent execute
     \ (has("gui_running") ? "!gvim" : "!vim")
     \ "--servername" s:running_vim_list[0]
-    \ "--remote-tab-silent"
+    \ "--remote-silent"
     \ join(map(argv(), "shellescape(v:val, 1)"), " ")
     qa!
   endif
