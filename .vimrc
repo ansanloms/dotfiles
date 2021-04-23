@@ -1176,7 +1176,7 @@ if has("gui_running")
   if has("vim_starting")
     " フォント設定
     if has("win32") || has("win64")
-      set guifont=Cica:h10:cSHIFTJIS:qDRAFT
+      set guifont=Cica:h12:cSHIFTJIS:qDRAFT
       set renderoptions=type:directx,gamma:1.0,contrast:0,level:0.0,geom:1,renmode:5,taamode:1
     endif
 
