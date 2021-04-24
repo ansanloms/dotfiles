@@ -18,6 +18,11 @@ export PS1_COLOR_RESET="$(tput sgr0)"
 export MYSQL_PS1="(\u@\h) [\d]> "
 
 export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export DENO_INSTALL="/home/maru/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
