@@ -1,0 +1,42 @@
+link:
+  ~/.bashrc:
+    src: ./.bashrc
+  ~/.bash_profile:
+    src: ./.bash_profile
+  ~/.gitconfig:
+    src: ./.gitconfig
+  ~/.vim:
+    src: ./.vim
+  ~/.vimrc:
+    src: ./.vimrc
+  ~/.minttyrc:
+    src: ./.minttyrc
+    option:
+      target:
+        - windows
+  ~/.nyagos:
+    src: ./.nyagos
+  ~/.config/starship.toml:
+    src: ./.config/starship.toml
+  "~/AppData/Local/Microsoft/Windows Terminal/settings.json":
+    src: "./AppData/Local/Microsoft/Windows Terminal/settings.json"
+    option:
+      target:
+        - windows
+  "~/AppData/Roaming/PuTTY/putty.ini":
+    src: "./AppData/Roaming/PuTTY/putty.ini"
+    option:
+      target:
+        - windows
+  "~/AppData/Roaming/CorvusSKK/config.xml":
+    src: "./AppData/Roaming/CorvusSKK/config.xml"
+    option:
+      target:
+        - windows
+  "~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/autohotkey.exe":
+    src: "./AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/autohotkey.exe"
+    option:
+      skip: true
+      target:
+        - windows
+      clean: true

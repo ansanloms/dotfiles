@@ -1,0 +1,35 @@
+format = """
+$directory$git_branch$git_commit
+$time$character"""
+
+add_newline = true
+
+[character]
+disabled = false
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+
+[directory]
+disabled = false
+truncation_length = 0
+truncate_to_repo = false
+
+[time]
+disabled = false
+format = "[\\[$time\\]]($style) "
+time_format = "%F %T"
+
+[git_branch]
+disabled = false
+symbol = ""
+truncation_symbol = ""
+
+[git_commit]
+disabled = false
+only_detached = false
+commit_hash_length = 40
+
+[git_status]
+enabled = true
+
+# vim:set filetype=toml:

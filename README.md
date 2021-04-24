@@ -1,32 +1,9 @@
 # dotfiles
 
-## Install
+## install
 
 ```sh
 git clone https://github.com/ansanloms/dotfiles.git
 cd dotfiles
+deno run --unstable --allow-env --allow-read --allow-write ./install.ts
 ```
-
-### macOS / Linux
-
-```sh
-bash install.sh
-```
-
-### Windows
-
-on Command Prompt:
-
-```bat
-powershell -NoProfile -ExecutionPolicy Unrestricted ./install.ps1
-```
-
-on Powershell:
-
-```powershell
-.\install.ps1
-```
-
-## Powered by
-
-[Dotbot](https://github.com/anishathalye/dotbot)
