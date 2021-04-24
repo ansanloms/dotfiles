@@ -18,7 +18,7 @@
       "fontFace": "Cica",
 
       // フォントサイズ
-      "fontSize": 10,
+      "fontSize": 12,
 
       // スクロールの設定
       "scrollbarState": "visible",
