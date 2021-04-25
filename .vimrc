@@ -358,8 +358,20 @@ let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|.dist|git)$'   " 除外
 " quickpick {{{
 
 call minpac#add("https://github.com/prabirshrestha/quickpick.vim.git")
+
 call minpac#add("https://github.com/ansanloms/quickpick-launcher.vim.git")
 call minpac#add("https://github.com/ansanloms/quickpick-launcher-selector.vim.git")
+
+let g:quickpick_launcher_file = "~/.vim/launcher/conf"
+let g:quickpick_launcher_maxheight = 15
+
+call minpac#add("https://github.com/ansanloms/quickpick-mpc.vim.git")
+
+if has("win32") || has("win64")
+  let g:quickpick_mpc_command = "wsl mpc"
+endif
+let g:quickpick_mpc_format = "%artist%: %album% / [%disc%-]%track% %title%"
+let g:quickpick_mpc_maxheight = 15
 
 " }}}
 
@@ -489,7 +501,6 @@ nnoremap <C-w>gr <C-w>gT
 tnoremap <C-w>gr <C-w>gT
 
 " launcher
-let g:quickpick_launcher_file = "~/.vim/launcher/conf"
 nnoremap <C-e> :<C-u>call quickpick#pickers#launcher#selector#open(1)<CR>
 
 " history
