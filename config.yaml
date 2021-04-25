@@ -40,3 +40,8 @@ link:
       target:
         - windows
       clean: true
+  "~/AppData/Local/mpd/mpd.conf":
+    src: "./AppData/Local/mpd/mpd.conf"
+    option:
+      target:
+        - windows
