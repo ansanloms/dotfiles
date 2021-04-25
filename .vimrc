@@ -358,6 +358,8 @@ let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|.dist|git)$'   " 除外
 " quickpick {{{
 
 call minpac#add("https://github.com/prabirshrestha/quickpick.vim.git")
+call minpac#add("https://github.com/ansanloms/quickpick-launcher.vim.git")
+call minpac#add("https://github.com/ansanloms/quickpick-launcher-selector.vim.git")
 
 " }}}
 
@@ -488,7 +490,7 @@ tnoremap <C-w>gr <C-w>gT
 
 " launcher
 let g:quickpick_launcher_file = "~/.vim/launcher/conf"
-nnoremap <C-e> :<C-u>call quickpick#pickers#launcher_select#open(1)<CR>
+nnoremap <C-e> :<C-u>call quickpick#pickers#launcher#selector#open(1)<CR>
 
 " history
 nnoremap <C-h> :<C-u>call quickpick#pickers#oldfiles#open()<CR>
