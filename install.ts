@@ -70,7 +70,38 @@ const clean = async (dest: string) => {
   }
 };
 
+const skip = (option: option | undefined) => {
+  if (typeof option === "undefined") {
+    return false;
+  }
+
+  if (
+    typeof option?.target !== "undefined" &&
+    !option.target.includes(Deno.build.os)
+  ) {
+    return true;
+  }
+
+  if (
+    typeof option?.skip !== "undefined" &&
+    Array.isArray(option?.skip) &&
+    option.skip.includes(Deno.build.os)
+  ) {
+    return true;
+  }
+
+  if (option?.skip === true) {
+    return true;
+  }
+
+  return false;
+};
+
 const link = async (dest: string, src: string) => {
+  if (!(await exists(src))) {
+    throw new Error("'" + src + "' not exists.");
+  }
+
   await Deno.mkdir(dirname(dest), { recursive: true });
   await Deno.symlink(src, dest, {
     type: (await Deno.open(src).catch(() => null)) !== null ? "file" : "dir",
@@ -91,18 +122,7 @@ for (const dest in config.link) {
       "color: yellow",
     );
 
-    if (
-      (
-        typeof _option?.target !== "undefined" &&
-        !_option.target.includes(Deno.build.os)
-      ) || (
-        typeof _option?.skip !== "undefined" &&
-        Array.isArray(_option?.skip) &&
-        _option.skip.includes(Deno.build.os)
-      ) || (
-        _option?.skip === true
-      )
-    ) {
+    if (skip(_option)) {
       if (_option?.clean === true) {
         console.log(
           " %cRemoving: %c" + _dest + "%c.",
