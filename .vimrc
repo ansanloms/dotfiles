@@ -365,6 +365,8 @@ call minpac#add("https://github.com/ansanloms/quickpick-launcher-selector.vim.gi
 let g:quickpick_launcher_file = "~/.vim/launcher/conf"
 let g:quickpick_launcher_maxheight = 15
 
+call minpac#add("https://github.com/ansanloms/quickpick-buffer.vim.git")
+
 call minpac#add("https://github.com/ansanloms/quickpick-mpc.vim.git")
 
 if has("win32") || has("win64")
@@ -380,7 +382,7 @@ let g:quickpick_mpc_maxheight = 15
 call minpac#add("https://github.com/itchyny/lightline.vim.git")
 
 let g:lightline = {
-\ "colorscheme": "gotham",
+\ "colorscheme": "iceberg",
 \ "active": {
 \   "left": [
 \     ["mode", "readonly", "paste"],
@@ -501,13 +503,13 @@ nnoremap <C-w>gr <C-w>gT
 tnoremap <C-w>gr <C-w>gT
 
 " launcher
-nnoremap <C-e> :<C-u>call quickpick#pickers#launcher#selector#open(1)<CR>
+nnoremap <C-e> :<C-u>call quickpick#pickers#launcher#selector#open("!")<CR>
 
 " history
 nnoremap <C-h> :<C-u>call quickpick#pickers#oldfiles#open()<CR>
 
 " buffer
-nnoremap <C-s> :<C-u>CtrlPBuffer<CR>
+nnoremap <C-s> :<C-u>call quickpick#pickers#buffer#open("")<CR>
 
 " タグジャンプの際に新しいタブで開く
 nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
@@ -1302,7 +1304,7 @@ syntax enable
 
 try
   set background=dark
-  colorscheme gotham
+  colorscheme iceberg
 catch
 endtry
 
