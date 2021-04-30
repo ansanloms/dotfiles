@@ -375,6 +375,8 @@ endif
 let g:quickpick_mpc_format = "%artist%: %album% / [%disc%-]%track% %title%"
 let g:quickpick_mpc_maxheight = 15
 
+call minpac#add("https://github.com/prabirshrestha/quickpick-colorschemes.vim.git")
+
 " }}}
 
 " lightline {{{
@@ -1298,6 +1300,11 @@ call minpac#add("https://github.com/cocopon/iceberg.vim.git")
 call minpac#add("https://github.com/Rigellute/rigel.git")
 call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
 call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
+call minpac#add("https://github.com/djjcast/mirodark.git")
+call minpac#add("https://github.com/kocakosm/hilal.git")
+call minpac#add("https://github.com/cormacrelf/vim-colors-github.git")
+call minpac#add("https://github.com/danishprakash/vim-yami.git")
+call minpac#add("https://github.com/fcpg/vim-orbital.git")
 
 " シンタックスON
 syntax enable
