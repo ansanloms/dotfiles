@@ -384,7 +384,7 @@ call minpac#add("https://github.com/prabirshrestha/quickpick-colorschemes.vim.gi
 call minpac#add("https://github.com/itchyny/lightline.vim.git")
 
 let g:lightline = {
-\ "colorscheme": "iceberg",
+\ "colorscheme": "hilal",
 \ "active": {
 \   "left": [
 \     ["mode", "readonly", "paste"],
@@ -1301,7 +1301,7 @@ call minpac#add("https://github.com/Rigellute/rigel.git")
 call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
 call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
 call minpac#add("https://github.com/djjcast/mirodark.git")
-call minpac#add("https://github.com/kocakosm/hilal.git")
+call minpac#add("https://github.com/ansanloms/hilal.git")
 call minpac#add("https://github.com/cormacrelf/vim-colors-github.git")
 call minpac#add("https://github.com/danishprakash/vim-yami.git")
 call minpac#add("https://github.com/fcpg/vim-orbital.git")
@@ -1310,8 +1310,11 @@ call minpac#add("https://github.com/fcpg/vim-orbital.git")
 syntax enable
 
 try
+  let g:hilal_italic = 0
+  let g:hilal_bold = 0
+
   set background=dark
-  colorscheme iceberg
+  colorscheme hilal
 catch
 endtry
 
