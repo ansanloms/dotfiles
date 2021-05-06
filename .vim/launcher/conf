@@ -8,3 +8,6 @@
 💻 MSYS2			call ansanloms#terminal#msys2()
 💻 MinGW-w64 32bit	call ansanloms#terminal#mingw32()
 💻 MinGW-w64 64bit	call ansanloms#terminal#mingw64()
+
+📄 Hosts			call ansanloms#hosts#open()
+📄 Ctags			call ansanloms#ctags#create()

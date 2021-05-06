@@ -113,7 +113,7 @@ endif
 " http://tyru.hatenablog.com/entry/20130430/vim_resident
 
 if argc() && (has("mac") || has("win32") || has("win64"))
-  let s:running_vim_list = filter(split(serverlist(), "\n"), "v:val !=? v:servername")
+  let s:running_vim_list = filter(split(serverlist(), "\n"), { v -> v:val !=? v:servername })
 
   if !empty(s:running_vim_list)
     silent execute
@@ -466,8 +466,7 @@ command! OpenFilemanager call ansanloms#filemanager#open()
 command! OpenVscode call ansanloms#vscode#open()
 command! OpenPhpstorm call ansanloms#phpstorm#open()
 command! -range OpenBitbucket <line1>,<line2>call ansanloms#bitbucket#open()
-command! OpenHosts call ansanloms#hosts#open()
-command! Ctags call ansanloms#ctags#create()
+
 command! -nargs=? Memo call ansanloms#memo#open(<f-args>)
 command! MemoDaily call ansanloms#memo#open()
 command! MemoList call ansanloms#memo#list()
