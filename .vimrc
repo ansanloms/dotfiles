@@ -49,6 +49,9 @@ set packpath^=~/.vim
 " viminfoの保存先を変更
 set viminfo+=n~/.vim/viminfo
 
+" oldfiles の保存数
+set viminfo+='10000
+
 " }}}
 
 " backup / swapfile {{{
