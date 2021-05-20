@@ -1291,11 +1291,11 @@ set pumheight=20
 " gVim の背景を透過させる
 call minpac#add("https://github.com/mattn/vimtweak.git")
 
-"augroup vimtweak-setting
-"  autocmd!
-"
-"  autocmd guienter * silent! VimTweakSetAlpha 230
-"augroup END
+augroup vimtweak-setting
+  autocmd!
+
+  autocmd guienter * silent! VimTweakSetAlpha 230
+augroup END
 
 " colorscheme
 call minpac#add("https://github.com/cocopon/iceberg.vim.git")
