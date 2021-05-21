@@ -362,6 +362,8 @@ let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|.dist|git)$'   " 除外
 
 call minpac#add("https://github.com/prabirshrestha/quickpick.vim.git")
 
+call minpac#add("https://github.com/ansanloms/quickpick-oldfiles.vim.git")
+
 call minpac#add("https://github.com/ansanloms/quickpick-launcher.vim.git")
 call minpac#add("https://github.com/ansanloms/quickpick-launcher-selector.vim.git")
 
