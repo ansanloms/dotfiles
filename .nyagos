@@ -44,8 +44,4 @@ nyagos.alias.find = [[~\scoop\apps\msys2\current\usr\bin\find.exe]]
 nyagos.alias.tree = [[~\scoop\apps\msys2\current\usr\bin\tree.exe]]
 nyagos.alias.mkdir = [[~\scoop\apps\msys2\current\usr\bin\mkdir.exe]]
 
-nyagos.alias.vim = nyagos.env.PROGRAMFILES .. [[Vim\vim82\vim.exe]]
-nyagos.alias.gvim = nyagos.env.PROGRAMFILES .. [[Vim\vim82\gvim.exe]]
-nyagos.alias.vi = "vim"
-
 -- vim:set ft=lua:
