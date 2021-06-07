@@ -964,6 +964,47 @@ augroup END
 
 " }}}
 
+" css {{{
+
+augroup css-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType css setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+augroup END
+
+" }}}
+
+" scss {{{
+
+augroup scss-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType scss setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+augroup END
+
+" }}}
+
+" stylus {{{
+
+call minpac#add("https://github.com/iloginow/vim-stylus.git", {"type": "opt"})
+
+augroup stylus-setting
+  autocmd!
+
+  " 拡張子設定
+  autocmd BufNewFile,BufRead *.{styl} set filetype=stylus
+
+  " インデントセット
+  autocmd FileType stylus setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+
+  " プラグイン読み込み
+  autocmd FileType stylus packadd vim-stylus
+augroup END
+
+" }}}
+
 " json {{{
 
 " conceal表示を無効にする
