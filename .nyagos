@@ -6,8 +6,8 @@ set {
 }
 
 -- msys2
-nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. nyagos.env.homepath .. "\\scoop\\apps\\msys2\\current\\usr\\bin"
-nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. nyagos.env.homepath .. "\\scoop\\apps\\msys2\\current\\mingw64\\bin"
+nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. nyagos.env.homepath .. "\\msys64\\usr\\bin"
+nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. nyagos.env.homepath .. "\\msys64\\mingw64\\bin"
 
 -- prompt
 nyagos.prompt = function(this)
@@ -39,9 +39,9 @@ nyagos.alias.grep = "grep --color=auto"
 nyagos.alias.egrep = "egrep --color=auto"
 nyagos.alias.fgrep = "fgrep --color=auto"
 
-nyagos.alias.echo = [[~\scoop\apps\msys2\current\usr\bin\echo.exe]]
-nyagos.alias.find = [[~\scoop\apps\msys2\current\usr\bin\find.exe]]
-nyagos.alias.tree = [[~\scoop\apps\msys2\current\usr\bin\tree.exe]]
-nyagos.alias.mkdir = [[~\scoop\apps\msys2\current\usr\bin\mkdir.exe]]
+nyagos.alias.echo = [[\msys64\usr\bin\echo.exe]]
+nyagos.alias.find = [[\msys64\usr\bin\find.exe]]
+nyagos.alias.tree = [[\msys64\usr\bin\tree.exe]]
+nyagos.alias.mkdir = [[\msys64\usr\bin\mkdir.exe]]
 
 -- vim:set ft=lua:
