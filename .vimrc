@@ -84,7 +84,7 @@ if isdirectory(expand("~/.vim/view"))
   " :mkview で保存する設定
   " cursor ファイル／ウィンドウ内のカーソル位置
   " folds  手動で作られた折り畳み、折り畳みの開閉の区別、折り畳み
-  set viewoptions=cursor,folds
+  set viewoptions=cursor
 
   augroup vim-view
     autocmd!
@@ -123,7 +123,7 @@ if argc() && (has("mac") || has("win32") || has("win64"))
     \ (has("gui_running") ? "!gvim" : "!vim")
     \ "--servername" s:running_vim_list[0]
     \ "--remote-silent"
-    \ join(map(argv(), "shellescape(v:val, 1)"), " ")
+    \ join(map(argv(), { v -> shellescape(v:val, 1) }), " ")
     qa!
   endif
 
@@ -147,7 +147,8 @@ set backspace=start,eol,indent
 set virtualedit=block
 
 " クリップボード使用可能に設定
-set clipboard=unnamed
+set clipboard&
+set clipboard=unnamed,autoselect,unnamedplus
 
 " ヘルプ検索で日本語を優先
 set helplang=ja,en
