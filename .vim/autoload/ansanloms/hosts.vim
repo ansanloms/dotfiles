@@ -10,5 +10,5 @@ function! ansanloms#hosts#open()
     let l:hosts_path = expand("C:/Windows/System32/drivers/etc/hosts")
   endif
 
-  silent execute "!sudo vim -u NONE" l:hosts_path
+  execute "edit" l:hosts_path
 endfunction
