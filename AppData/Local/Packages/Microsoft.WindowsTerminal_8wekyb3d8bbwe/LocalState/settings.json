@@ -1,42 +1,25 @@
 {
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    // add custom actions and keybindings to this array.
-    // to unbind a key combination from your defaults.json, set the command to "unbound".
-    // to learn more about actions and keybindings, visit https://aka.ms/terminal-keybindings
     "actions":
     [
-        // copy and paste are bound to ctrl+shift+c and ctrl+shift+v in your defaults.json.
-        // these two lines additionally bind them to ctrl+c and ctrl+v.
-        // to learn more about selection, visit https://aka.ms/terminal-selection
         {
             "command":
             {
-                "action": "copy",
-                "singleline": false
+                "action": "copy"
             },
             "keys": "ctrl+c"
         },
         {
-            "command": "paste",
-            "keys": "ctrl+v"
-        },
-        // press ctrl+shift+f to open the search box
-        {
             "command": "find",
             "keys": "ctrl+shift+f"
         },
-        // press alt+shift+d to open a new pane.
-        // - "split": "auto" makes this pane open in the direction that provides the most surface area.
-        // - "splitmode": "duplicate" makes the new pane use the focused pane's profile.
-        // to learn more about panes, visit https://aka.ms/terminal-panes
         {
-            "command":
-            {
-                "action": "splitpane",
-                "split": "auto",
-                "splitmode": "duplicate"
-            },
+            "command": "unbound",
             "keys": "alt+shift+d"
+        },
+        {
+            "command": "paste",
+            "keys": "ctrl+v"
         }
     ],
     "copyOnSelect": true,
@@ -52,12 +35,12 @@
             "historySize": 9001,
             "padding": "0,0,0,0",
             "scrollbarState": "visible",
-            "useAcrylic": false
+            "useAcrylic": true
         },
         "list":
         [
             {
-                "commandline": "vim.exe",
+                "commandline": "%programfiles%\\Vim\\vim82\\vim.exe",
                 "guid": "{9dc9967a-45c0-48df-93f2-ad380d993070}",
                 "hidden": false,
                 "icon": "%userprofile%\\.vim\\bitmaps\\vim.ico",
@@ -326,6 +309,6 @@
             "white": "#C0C0C0",
             "yellow": "#808000"
         }
-    ]
+    ],
+    "tabWidthMode": "compact"
 }
-
