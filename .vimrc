@@ -568,11 +568,33 @@ let g:lsp_diagnostics_signs_hint = {"text": "❓"}
 let g:lsp_document_code_action_signs_enabled = 1
 let g:lsp_document_code_action_signs_hint = {"text": "❓"}
 
+" let g:lsp_log_verbose = 1
+" let g:lsp_log_file = expand("/logs/vim-lsp.log")
+
 " asyncomplete.vim
 let g:asyncomplete_auto_popup = 1
 let g:asyncomplete_auto_completeopt = 1
 let g:asyncomplete_popup_delay = 200
 let g:asyncomplete_matchfuzzy = 1
+
+" let g:asyncomplete_log_file = expand("/logs/asyncomplete.log")
+
+" vim-lsp-settings
+let g:lsp_settings = {
+\ "eslint-language-server": {
+\   "allowlist": [
+\     "javascript",
+\     "javascriptreact",
+\     "typescript",
+\     "typescriptreact",
+\     "vue"
+\   ],
+\ },
+\ "efm-langserver": {
+\   "disabled": v:false,
+\ }
+\}
+let g:lsp_settings_filetype_vue = ["eslint-language-server"]
 
 augroup lsp-setting
   autocmd!
