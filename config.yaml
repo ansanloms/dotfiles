@@ -45,3 +45,8 @@ link:
     option:
       target:
         - windows
+  "~/AppData/Roaming/efm-langserver/config.yaml":
+    src: "./AppData/Roaming/efm-langserver/config.yaml"
+    option:
+      target:
+        - windows
