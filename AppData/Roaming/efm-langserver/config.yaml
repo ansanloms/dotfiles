@@ -1,0 +1,28 @@
+version: 2
+root-markers:
+  - .git/
+tools:
+  prettier: &prettier
+    format-command: 'npx --no-install prettier --stdin-filepath ${INPUT}'
+    format-stdin: true
+languages:
+  javascript:
+    - <<: *prettier
+  javascriptreact:
+    - <<: *prettier
+  typescript:
+    - <<: *prettier
+  typescriptreact:
+    - <<: *prettier
+  vue:
+    - <<: *prettier
+  css:
+    - <<: *prettier
+  scss:
+    - <<: *prettier
+  markdown:
+    - <<: *prettier
+  json:
+    - <<: *prettier
+  json5:
+    - <<: *prettier
