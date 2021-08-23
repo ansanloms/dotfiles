@@ -11,3 +11,6 @@
 
 📄 Hosts			call ansanloms#hosts#open()
 📄 Ctags			call ansanloms#ctags#create()
+
+✨ format:efm-langserver	LspDocumentFormatSync --server=efm-langserver
+✨ format:eslint			LspDocumentFormatSync --server=eslint-language-server
