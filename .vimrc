@@ -594,7 +594,7 @@ let g:lsp_settings = {
 \   "disabled": v:false,
 \ }
 \}
-let g:lsp_settings_filetype_vue = ["eslint-language-server"]
+let g:lsp_settings_filetype_vue = ["vls", "eslint-language-server"]
 
 augroup lsp-setting
   autocmd!
