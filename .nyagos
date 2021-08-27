@@ -2,7 +2,8 @@
 set {
 	LANG = "ja",
 	EDITOR = "vim",
-	LESSCHARSET = "UTF-8"
+	LESSCHARSET = "UTF-8",
+	FZF_DEFAULT_COMMAND = "rg --files --path-separator /",
 }
 
 -- msys2
