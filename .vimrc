@@ -1262,7 +1262,7 @@ if has("gui_running")
     " フォント設定
     if has("win32") || has("win64")
       set guifont=Cica:h10:cSHIFTJIS:qDRAFT
-      set renderoptions=type:directx,gamma:1.0,contrast:0,level:0.0,geom:1,renmode:5,taamode:1
+      "set renderoptions=type:directx,gamma:1.0,contrast:0,level:0.0,geom:1,renmode:5,taamode:1
     endif
 
     " 縦幅 デフォルトは24
@@ -1331,7 +1331,8 @@ set breakindent
 
 " 文字幅の設定
 " マルチバイト文字等でずれないようにする
-set ambiwidth=double
+"set ambiwidth=double
+set ambiwidth=single
 
 " 上下の視界確保
 set scrolloff=4
