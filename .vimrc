@@ -1331,8 +1331,8 @@ set breakindent
 
 " 文字幅の設定
 " マルチバイト文字等でずれないようにする
-"set ambiwidth=double
-set ambiwidth=single
+set ambiwidth=double
+"set ambiwidth=single
 
 " 上下の視界確保
 set scrolloff=4
