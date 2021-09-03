@@ -1,6 +1,6 @@
 format = """
 $directory$git_branch$git_commit
-$time$character"""
+$character"""
 
 add_newline = true
 
@@ -13,21 +13,19 @@ error_symbol = "[❯](bold red)"
 disabled = false
 truncation_length = 0
 truncate_to_repo = false
-
-[time]
-disabled = false
-format = "[\\[$time\\]]($style) "
-time_format = "%F %T"
+style = ""
 
 [git_branch]
 disabled = false
 symbol = ""
 truncation_symbol = ""
+style = "#2a83a2"
 
 [git_commit]
 disabled = false
 only_detached = false
-commit_hash_length = 40
+commit_hash_length = 8
+style = "#6c848d"
 
 [git_status]
 enabled = true
