@@ -46,11 +46,24 @@ set runtimepath^=~/.vim
 " パッケージディレクトリの追記
 set packpath^=~/.vim
 
-" viminfoの保存先を変更
-set viminfo+=n~/.vim/viminfo
+" }}}
+
+" viminfo {{{
+
+set viminfo=
 
 " oldfiles の保存数
 set viminfo+='10000
+
+" コマンドライン履歴数
+set viminfo+=:100
+
+" レジスタの保存最大数
+set viminfo+=<1000
+set viminfo+=s10
+
+" viminfoの保存先を変更
+set viminfo+=n~/.vim/viminfo
 
 " }}}
 
