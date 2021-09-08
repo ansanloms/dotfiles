@@ -9,6 +9,7 @@ set {
 -- msys2
 nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. "\\msys64\\usr\\bin"
 nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. "\\msys64\\mingw64\\bin"
+nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.userprofile .. "\\.deno\\bin"
 
 -- prompt
 nyagos.prompt = function(this)
