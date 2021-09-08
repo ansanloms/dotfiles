@@ -331,16 +331,16 @@ call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
 call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
 call minpac#add("https://github.com/junegunn/vim-easy-align.git")
 call minpac#add("https://github.com/tyru/open-browser.vim.git")
-call minpac#add("https://github.com/vim-denops/denops.vim.git")
+call minpac#add("https://github.com/itchyny/vim-cursorword.git")
 
 call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
 let g:loaded_matchparen = 1     " matchparenを無効にする
 
+call minpac#add("https://github.com/vim-denops/denops.vim.git")
+
 " }}}
 
 " git {{{
-
-call minpac#add("https://github.com/itchyny/vim-cursorword.git")
 
 call minpac#add("https://github.com/tpope/vim-fugitive.git")
 call minpac#add("https://github.com/airblade/vim-gitgutter.git")
@@ -402,6 +402,13 @@ call minpac#add("https://github.com/prabirshrestha/quickpick-colorschemes.vim.gi
 
 call minpac#add("https://github.com/itchyny/lightline.vim.git")
 
+call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
+
+let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
+let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
+
+call minpac#add("https://github.com/micchy326/lightline-lsp-progress.git")
+
 let g:lightline = {
 \ "colorscheme": "hilal",
 \ "active": {
@@ -410,7 +417,7 @@ let g:lightline = {
 \     ["gitbranch", "filename"],
 \   ],
 \   "right": [
-\     ["sky_color_clock"],
+\     ["lsp_status", "sky_color_clock"],
 \     ["fileformat", "fileencoding", "filetype"],
 \   ]
 \ },
@@ -421,6 +428,7 @@ let g:lightline = {
 \   "mode": "ansanloms#statusline#mode_minimum",
 \   "gitbranch": "fugitive#head",
 \   "filename": "ansanloms#lightline#filename",
+\   "lsp_status": "lightline_lsp_progress#progress",
 \ },
 \ "component": {
 \   "modified": "%{(ansanloms#lightline#is_visible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
@@ -448,11 +456,6 @@ let g:lightline = {
 \   "right": ""
 \ },
 \}
-
-call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-
-let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
-let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 " }}}
 
@@ -594,20 +597,13 @@ let g:asyncomplete_matchfuzzy = 1
 
 " vim-lsp-settings
 let g:lsp_settings = {
-\ "eslint-language-server": {
-\   "allowlist": [
-\     "javascript",
-\     "javascriptreact",
-\     "typescript",
-\     "typescriptreact",
-\     "vue"
-\   ],
-\ },
 \ "efm-langserver": {
 \   "disabled": v:false,
-\ }
+\ },
 \}
+
 let g:lsp_settings_filetype_vue = ["vls", "eslint-language-server"]
+let g:lsp_settings_filetype_typescript = ["typescript-language-server", "eslint-language-server", "deno"]
 
 augroup lsp-setting
   autocmd!
@@ -1344,8 +1340,8 @@ set breakindent
 
 " 文字幅の設定
 " マルチバイト文字等でずれないようにする
-set ambiwidth=double
-"set ambiwidth=single
+"set ambiwidth=double
+set ambiwidth=single
 
 " 上下の視界確保
 set scrolloff=4
