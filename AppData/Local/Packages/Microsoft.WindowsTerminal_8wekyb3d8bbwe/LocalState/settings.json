@@ -30,8 +30,11 @@
         {
             "acrylicOpacity": 1.0,
             "cursorShape": "filledBox",
-            "fontFace": "Cica",
-            "fontSize": 10,
+            "font":
+            {
+                "face": "Cica",
+                "size": 10
+            },
             "historySize": 9001,
             "padding": "0,0,0,0",
             "scrollbarState": "visible",
@@ -310,5 +313,5 @@
             "yellow": "#808000"
         }
     ],
-    "tabWidthMode": "compact"
+    "tabWidthMode": "equal"
 }
