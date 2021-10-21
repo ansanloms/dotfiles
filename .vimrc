@@ -407,8 +407,6 @@ call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
 let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
-call minpac#add("https://github.com/micchy326/lightline-lsp-progress.git")
-
 let g:lightline = {
 \ "colorscheme": "hilal",
 \ "active": {
@@ -417,7 +415,7 @@ let g:lightline = {
 \     ["gitbranch", "filename"],
 \   ],
 \   "right": [
-\     ["lsp_status", "sky_color_clock"],
+\     ["sky_color_clock"],
 \     ["fileformat", "fileencoding", "filetype"],
 \   ]
 \ },
@@ -428,7 +426,6 @@ let g:lightline = {
 \   "mode": "ansanloms#statusline#mode_minimum",
 \   "gitbranch": "fugitive#head",
 \   "filename": "ansanloms#lightline#filename",
-\   "lsp_status": "lightline_lsp_progress#progress",
 \ },
 \ "component": {
 \   "modified": "%{(ansanloms#lightline#is_visible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
@@ -1040,9 +1037,6 @@ augroup END
 " json {{{
 
 " conceal表示を無効にする
-let g:vim_json_syntax_conceal = 0
-
-" ダブルクォーテーションは常に表示
 let g:vim_json_syntax_conceal = 0
 
 augroup json-setting
