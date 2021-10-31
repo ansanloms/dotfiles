@@ -344,6 +344,20 @@ call minpac#add("https://github.com/vim-denops/denops.vim.git")
 
 call minpac#add("https://github.com/tpope/vim-fugitive.git")
 call minpac#add("https://github.com/airblade/vim-gitgutter.git")
+call minpac#add("https://github.com/lambdalisue/gina.vim.git")
+
+let g:gina#command#blame#formatter#format = '%su%=%au %ti %ma%in'
+let g:gina#command#blame#formatter#timestamp_months = 0
+let g:gina#command#blame#formatter#timestamp_format1 = '%Y-%m-%d'
+let g:gina#command#blame#formatter#timestamp_format2 = '%Y-%m-%d'
+
+augroup gina-setting
+  autocmd!
+
+  " 行番号を表示すると崩れるので出さない
+  autocmd FileType gina-blame setlocal nonumber
+augroup END
+
 
 " }}}
 
@@ -599,7 +613,7 @@ let g:lsp_settings = {
 \ },
 \}
 
-let g:lsp_settings_filetype_vue = ["vls", "eslint-language-server"]
+let g:lsp_settings_filetype_vue = ["vls", "eslint-language-server", "volar-server"]
 let g:lsp_settings_filetype_typescript = ["typescript-language-server", "eslint-language-server", "deno"]
 
 augroup lsp-setting
@@ -692,6 +706,8 @@ if executable("tsc")
   \}
 endif
 
+call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
+
 augroup typescript-setting
   autocmd!
 
@@ -704,8 +720,8 @@ augroup typescript-setting
   autocmd FileType typescript.tsx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
-  autocmd FileType typescript packadd vim-jsx-pretty
-  autocmd FileType typescript.tsx packadd vim-jsx-pretty
+  autocmd FileType typescript packadd typescript-vim
+  autocmd FileType typescript.tsx packadd typescript-vim
 augroup END
 
 " }}}
@@ -713,6 +729,21 @@ augroup END
 " vue {{{
 
 call minpac#add("https://github.com/posva/vim-vue.git", {"type": "opt"})
+call minpac#add("https://github.com/leafOfTree/vim-vue-plugin.git", {"type": "opt"})
+
+let g:vim_vue_plugin_config = {
+\ "syntax": {
+\   "template": ["html"],
+\   "script": ["javascript", "typescript"],
+\   "style": ["css", "scss"],
+\ },
+\ "full_syntax": [],
+\ "initial_indent": [],
+\ "attribute": 0,
+\ "keyword": 0,
+\ "foldexpr": 1,
+\ "debug": 0,
+\}
 
 augroup vue-setting
   autocmd!
@@ -724,7 +755,9 @@ augroup vue-setting
   autocmd FileType vue setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
-  autocmd FileType vue packadd vim-vue
+  "autocmd FileType vue packadd vim-vue
+  autocmd FileType vue packadd vim-vue-plugin
+  autocmd FileType vue syntax sync fromstart
 augroup END
 
 " }}}
