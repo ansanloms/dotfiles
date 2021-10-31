@@ -10,12 +10,12 @@
             "keys": "ctrl+c"
         },
         {
-            "command": "find",
-            "keys": "ctrl+shift+f"
-        },
-        {
             "command": "unbound",
             "keys": "alt+shift+d"
+        },
+        {
+            "command": "find",
+            "keys": "ctrl+shift+f"
         },
         {
             "command": "paste",
@@ -23,7 +23,8 @@
         }
     ],
     "copyOnSelect": true,
-    "defaultProfile": "{d5171fe5-5931-4d31-85d1-88be404f0a3c}",
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    "launchMode": "default",
     "profiles":
     {
         "defaults":
