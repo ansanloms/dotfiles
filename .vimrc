@@ -608,13 +608,14 @@ let g:asyncomplete_matchfuzzy = 1
 
 " vim-lsp-settings
 let g:lsp_settings = {
+\ "eslint-language-server": {
+\   "allowlist": ["javascript", "javascriptreact", "typescript", "typescriptreact", "vue"],
+\ },
 \ "efm-langserver": {
 \   "disabled": v:false,
 \ },
 \}
 
-let g:lsp_settings_filetype_vue = ["vls", "eslint-language-server", "volar-server"]
-let g:lsp_settings_filetype_typescript = ["typescript-language-server", "eslint-language-server", "deno"]
 
 augroup lsp-setting
   autocmd!
@@ -706,8 +707,6 @@ if executable("tsc")
   \}
 endif
 
-call minpac#add("https://github.com/leafgarland/typescript-vim.git", {"type": "opt"})
-
 augroup typescript-setting
   autocmd!
 
@@ -720,15 +719,14 @@ augroup typescript-setting
   autocmd FileType typescript.tsx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
-  autocmd FileType typescript packadd typescript-vim
-  autocmd FileType typescript.tsx packadd typescript-vim
+  autocmd FileType typescript packadd vim-jsx-pretty
+  autocmd FileType typescript.tsx packadd vim-jsx-pretty
 augroup END
 
 " }}}
 
 " vue {{{
 
-call minpac#add("https://github.com/posva/vim-vue.git", {"type": "opt"})
 call minpac#add("https://github.com/leafOfTree/vim-vue-plugin.git", {"type": "opt"})
 
 let g:vim_vue_plugin_config = {
@@ -755,7 +753,6 @@ augroup vue-setting
   autocmd FileType vue setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
-  "autocmd FileType vue packadd vim-vue
   autocmd FileType vue packadd vim-vue-plugin
   autocmd FileType vue syntax sync fromstart
 augroup END
