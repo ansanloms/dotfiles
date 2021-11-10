@@ -55,3 +55,8 @@ link:
     option:
       target:
         - windows
+  "~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1":
+    src: "./Documents/PowerShell/Microsoft.PowerShell_profile.ps1"
+    option:
+      target:
+        - windows
