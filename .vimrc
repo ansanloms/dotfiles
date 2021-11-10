@@ -571,8 +571,24 @@ call minpac#add("https://github.com/prabirshrestha/quickpick-lsp.vim.git")
 call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
 
 " vim-lsp
+
+
 let g:lsp_diagnostics_enabled = 1
 let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_diagnostics_echo_delay = 50
+let g:lsp_diagnostics_highlights_enabled = 1
+let g:lsp_diagnostics_highlights_delay = 50
+let g:lsp_diagnostics_highlights_insert_mode_enabled = 0
+let g:lsp_diagnostics_signs_enabled = 1
+let g:lsp_diagnostics_signs_delay = 50
+let g:lsp_diagnostics_signs_insert_mode_enabled = 0
+let g:lsp_diagnostics_virtual_text_enabled = 1
+let g:lsp_diagnostics_virtual_text_delay = 50
+
+let g:lsp_completion_documentation_delay = 40
+let g:lsp_document_highlight_delay = 100
+let g:lsp_document_code_action_signs_delay = 100
+let g:lsp_fold_enabled = 0
 let g:lsp_text_edit_enabled = 1
 
 " 検索対象が定義されている箇所
@@ -615,7 +631,6 @@ let g:lsp_settings = {
 \   "disabled": v:false,
 \ },
 \}
-
 
 augroup lsp-setting
   autocmd!
@@ -727,21 +742,7 @@ augroup END
 
 " vue {{{
 
-call minpac#add("https://github.com/leafOfTree/vim-vue-plugin.git", {"type": "opt"})
-
-let g:vim_vue_plugin_config = {
-\ "syntax": {
-\   "template": ["html"],
-\   "script": ["javascript", "typescript"],
-\   "style": ["css", "scss"],
-\ },
-\ "full_syntax": [],
-\ "initial_indent": [],
-\ "attribute": 0,
-\ "keyword": 0,
-\ "foldexpr": 1,
-\ "debug": 0,
-\}
+call minpac#add("https://github.com/posva/vim-vue.git", {"type": "opt"})
 
 augroup vue-setting
   autocmd!
@@ -753,7 +754,7 @@ augroup vue-setting
   autocmd FileType vue setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
-  autocmd FileType vue packadd vim-vue-plugin
+  autocmd FileType vue packadd vim-vue
   autocmd FileType vue syntax sync fromstart
 augroup END
 
