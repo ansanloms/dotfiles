@@ -5,23 +5,34 @@ tools:
   prettier: &prettier
     format-command: 'npx --no-install prettier --stdin-filepath ${INPUT}'
     format-stdin: true
+  stylelint: &stylelint
+    format-command: 'npx --no-install stylelint --formatter unix --stdin --stdin-filename ${INPUT}'
+    format-stdin: true
 languages:
   javascript:
     - <<: *prettier
+    - <<: *stylelint
   javascriptreact:
     - <<: *prettier
+    - <<: *stylelint
   typescript:
     - <<: *prettier
+    - <<: *stylelint
   typescriptreact:
     - <<: *prettier
+    - <<: *stylelint
   vue:
     - <<: *prettier
+    - <<: *stylelint
   css:
     - <<: *prettier
+    - <<: *stylelint
   scss:
     - <<: *prettier
+    - <<: *stylelint
   markdown:
     - <<: *prettier
+    - <<: *stylelint
   json:
     - <<: *prettier
   json5:
