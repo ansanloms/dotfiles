@@ -632,13 +632,25 @@ let g:lsp_settings = {
 \ },
 \}
 
+let g:lsp_settings_filetype_vue = ["vls", "eslint-language-server", "efm-langserver"]
+
 augroup lsp-setting
   autocmd!
 
   autocmd User lsp_buffer_enabled setlocal omnifunc=lsp#complete
   autocmd User lsp_buffer_enabled setlocal signcolumn=yes
   autocmd User lsp_buffer_enabled setlocal tagfunc=lsp#tagfunc
-  autocmd User lsp_buffer_enabled nmap <buffer> K <Plug>(lsp-hover)
+
+  autocmd User lsp_buffer_enabled nnoremap [lsp] <Nop>
+  autocmd User lsp_buffer_enabled vnoremap [lsp] <Nop>
+  autocmd User lsp_buffer_enabled nmap <Space>l [lsp]
+  autocmd User lsp_buffer_enabled vmap <Space>l [lsp]
+  autocmd User lsp_buffer_enabled nmap <buffer> [lsp]h <Plug>(lsp-hover)
+  autocmd User lsp_buffer_enabled nmap <buffer> [lsp]a <Plug>(lsp-code-action)
+  autocmd User lsp_buffer_enabled nmap <buffer> [lsp]f <plug>(lsp-document-format-sync)
+  autocmd User lsp_buffer_enabled vmap <buffer> [lsp]f <plug>(lsp-document-range-format-sync)
+  autocmd User lsp_buffer_enabled nmap <silent> [lsp]n <Plug>(lsp-next-error)
+  autocmd User lsp_buffer_enabled nmap <silent> [lsp]p <Plug>(lsp-previous-error)
 augroup END
 
 " }}}
