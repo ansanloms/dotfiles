@@ -29,7 +29,6 @@
     {
         "defaults":
         {
-            "acrylicOpacity": 1.0,
             "cursorShape": "filledBox",
             "font":
             {
@@ -39,7 +38,8 @@
             "historySize": 9001,
             "padding": "0,0,0,0",
             "scrollbarState": "visible",
-            "useAcrylic": true
+            "useAcrylic": true,
+            "acrylicOpacity": 0.5
         },
         "list":
         [
@@ -320,5 +320,6 @@
             "yellow": "#808000"
         }
     ],
-    "tabWidthMode": "equal"
+    "tabWidthMode": "equal",
+    "useAcrylicInTabRow": true
 }
