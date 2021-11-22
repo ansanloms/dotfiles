@@ -422,7 +422,7 @@ let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォ
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 let g:lightline = {
-\ "colorscheme": "gotham",
+\ "colorscheme": "iceberg",
 \ "active": {
 \   "left": [
 \     ["mode", "readonly", "paste"],
@@ -1425,11 +1425,11 @@ call minpac#add("https://github.com/fcpg/vim-orbital.git")
 syntax enable
 
 try
-  " let g:hilal_italic = 0
-  " let g:hilal_bold = 0
+  let g:hilal_italic = 0
+  let g:hilal_bold = 0
 
   set background=dark
-  colorscheme gotham
+  colorscheme iceberg
 catch
 endtry
 
