@@ -51,7 +51,7 @@
                 "name": "vim"
             },
             {
-                "commandline": "pwsh -Command nyagos",
+                "commandline": "%USERPROFILE%\\scoop\\apps\\nyagos\\current\\nyagos.exe",
                 "guid": "{d5171fe5-5931-4d31-85d1-88be404f0a3c}",
                 "hidden": false,
                 "icon": "https://raw.githubusercontent.com/zetamatta/nyagos/master/Etc/nyagos.ico",
