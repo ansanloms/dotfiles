@@ -39,12 +39,12 @@
             "padding": "0,0,0,0",
             "scrollbarState": "visible",
             "useAcrylic": true,
-            "acrylicOpacity": 0.5
+            "acrylicOpacity": 0.8
         },
         "list":
         [
             {
-                "commandline": "%programfiles%\\Vim\\vim82\\vim.exe",
+                "commandline": "%PROGRAMFILES%\\Vim\\vim82\\vim.exe",
                 "guid": "{9dc9967a-45c0-48df-93f2-ad380d993070}",
                 "hidden": false,
                 "icon": "%userprofile%\\.vim\\bitmaps\\vim.ico",
