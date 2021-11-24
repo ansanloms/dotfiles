@@ -6,10 +6,11 @@ set {
 	FZF_DEFAULT_COMMAND = "rg --files --path-separator /",
 }
 
--- msys2
+-- path
 nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. "\\msys64\\usr\\bin"
 nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. "\\msys64\\mingw64\\bin"
 nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.userprofile .. "\\.deno\\bin"
+nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.programfiles .. "\\Vim\\vim82\\"
 
 -- prompt
 nyagos.prompt = function(this)
