@@ -23,7 +23,7 @@
         }
     ],
     "copyOnSelect": true,
-    "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+    "defaultProfile": "{d5171fe5-5931-4d31-85d1-88be404f0a3c}",
     "launchMode": "default",
     "profiles":
     {
@@ -51,7 +51,7 @@
                 "name": "vim"
             },
             {
-                "commandline": "nyagos.exe",
+                "commandline": "pwsh -Command nyagos",
                 "guid": "{d5171fe5-5931-4d31-85d1-88be404f0a3c}",
                 "hidden": false,
                 "icon": "https://raw.githubusercontent.com/zetamatta/nyagos/master/Etc/nyagos.ico",
@@ -62,12 +62,6 @@
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
                 "name": "cmd"
-            },
-            {
-                "commandline": "powershell.exe",
-                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-                "hidden": false,
-                "name": "windows powershell"
             },
             {
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
@@ -103,9 +97,15 @@
                 "name": "mingw-w64 win64"
             },
             {
+                "commandline": "powershell.exe",
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "name": "windows powershell (v5)"
+            },
+            {
                 "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
                 "hidden": false,
-                "name": "PowerShell",
+                "name": "PowerShell (v7)",
                 "source": "Windows.Terminal.PowershellCore"
             }
         ]
