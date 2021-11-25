@@ -7,10 +7,13 @@ set {
 }
 
 -- path
-nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. "\\msys64\\usr\\bin"
-nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.homedrive .. "\\msys64\\mingw64\\bin"
-nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.userprofile .. "\\.deno\\bin"
-nyagos.env.path = nyagos.env.path .. ";" .. nyagos.env.programfiles .. "\\Vim\\vim82\\"
+nyagos.envadd(
+	"PATH",
+	nyagos.env.homedrive .. "\\msys64\\usr\\bin",
+	nyagos.env.homedrive .. "\\msys64\\mingw64\\bin",
+	nyagos.env.userprofile .. "\\.deno\\bin",
+	nyagos.env.programfiles .. "\\Vim\\vim82\\"
+)
 
 -- prompt
 nyagos.prompt = function(this)
@@ -38,10 +41,10 @@ nyagos.alias.hlsdl = function(args)
 	nyagos.exec("start ffmpeg -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
 end
 
+nyagos.alias.vi = "vim"
 nyagos.alias.grep = "grep --color=auto"
 nyagos.alias.egrep = "egrep --color=auto"
 nyagos.alias.fgrep = "fgrep --color=auto"
-
 nyagos.alias.echo = [[\msys64\usr\bin\echo.exe]]
 nyagos.alias.find = [[\msys64\usr\bin\find.exe]]
 nyagos.alias.tree = [[\msys64\usr\bin\tree.exe]]
