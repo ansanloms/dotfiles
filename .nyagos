@@ -12,7 +12,8 @@ nyagos.envadd(
 	nyagos.env.homedrive .. "\\msys64\\usr\\bin",
 	nyagos.env.homedrive .. "\\msys64\\mingw64\\bin",
 	nyagos.env.userprofile .. "\\.deno\\bin",
-	nyagos.env.programfiles .. "\\Vim\\vim82\\"
+	nyagos.env.programfiles .. "\\Vim\\vim82\\",
+	nyagos.env.programfiles .. "\\Go\\bin\\"
 )
 
 -- prompt

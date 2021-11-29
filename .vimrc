@@ -160,7 +160,6 @@ set backspace=start,eol,indent
 set virtualedit=block
 
 " クリップボード使用可能に設定
-set clipboard&
 set clipboard=unnamed,autoselect,unnamedplus
 
 " ヘルプ検索で日本語を優先
@@ -632,7 +631,7 @@ let g:lsp_settings = {
 \ },
 \}
 
-let g:lsp_settings_filetype_vue = ["volar-server", "eslint-language-server", "efm-langserver"]
+let g:lsp_settings_filetype_vue = ["vls", "volar-server", "eslint-language-server", "efm-langserver"]
 
 augroup lsp-setting
   autocmd!
