@@ -484,13 +484,13 @@ nnoremap ZQ <Nop>
 " 検索のハイライト削除
 " ポップアップを消す
 command! Clear nohlsearch | call popup_clear()
-nnoremap <silent> <Esc><Esc> :<cmd>Clear<CR>
+nnoremap <silent> <Esc><Esc> <Cmd>Clear<CR>
 
 " very magic
 nnoremap / /\v
 
 " バッファ
-nnoremap <Leader>b :<cmd>ls<CR>:<cmd>buf<Space>
+nnoremap <Leader>b <Cmd>ls<CR><Cmd>buf<Space>
 
 " tab
 nnoremap gr gT
@@ -498,16 +498,16 @@ nnoremap <C-w>gr <C-w>gT
 tnoremap <C-w>gr <C-w>gT
 
 " launcher
-nnoremap <C-e> :<cmd>call quickpick#pickers#launcher#selector#open("!")<CR>
+nnoremap <C-e> <Cmd>call quickpick#pickers#launcher#selector#open("!")<CR>
 
 " history
-nnoremap <C-h> :<cmd>call quickpick#pickers#oldfiles#open()<CR>
+nnoremap <C-h> <Cmd>call quickpick#pickers#oldfiles#open()<CR>
 
 " buffer
-nnoremap <C-s> :<cmd>call quickpick#pickers#buffer#open("")<CR>
+nnoremap <C-s> <Cmd>call quickpick#pickers#buffer#open("")<CR>
 
 " タグジャンプの際に新しいタブで開く
-nnoremap <C-]> :<cmd>tab stj <C-R>=expand("<cword>")<CR><CR>
+nnoremap <C-]> <Cmd>tab stj <C-R>=expand("<cword>")<CR><CR>
 
 " minpac
 command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update("", {"do": "call minpac#status()"})
