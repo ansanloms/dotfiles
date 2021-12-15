@@ -151,12 +151,9 @@ endif
 set history=1000
 
 " backspaceの設定
-" start:    ノーマルモードに移った後に挿入モードに入っても[Backspace]で自由に文字を削除できるようにする
-" eol:      行頭で[Backspace]を押したときに行の連結を可能にする
-" indent:   オートインデントモードのインデントも削除可能にする
 set backspace=start,eol,indent
 
-" C-vの矩形選択で行末より後ろもカーソルを置ける
+" C-v の矩形選択で行末より後ろもカーソルを置ける
 set virtualedit=block
 
 " クリップボード使用可能に設定
@@ -175,15 +172,12 @@ set mouse=
 " バッファ有効
 set hidden
 
-" filler: vimdiffで埋め立てを行う
-" iwhite: vimdiffで空白を無視して比較する
+" filler: vimdiff で埋め立てを行う
+" iwhite: vimdiff で空白を無視して比較する
 set diffopt=filler,iwhite
 
 " beep音を消す
 set belloff=all
-
-" 構文アイテムを検索する桁数の最大値
-set synmaxcol=600
 
 " テキストの整形方法
 set formatoptions=croql
@@ -192,10 +186,6 @@ set formatoptions=croql
 
 " conceal {{{
 
-" 0: 通常通り表示(デフォルト)
-" 1: conceal対象のテキストは代理文字(初期設定はスペース)に置換される
-" 2: conceal対象のテキストは非表示になる
-" 3: conceal対象のテキストは完全に非表示
 if has("conceal")
   set conceallevel=0
   set concealcursor=
@@ -217,6 +207,7 @@ set foldlevelstart=99
 " }}}
 
 " 外部 grep {{{
+
 if executable("rg")
   set grepprg=rg\ --vimgrep\ --no-heading
   set grepformat=%f:%l:%c:%m,%f:%l:%m
@@ -257,11 +248,11 @@ set tabstop=4
 " 自動インデントでずれる幅
 set shiftwidth=4
 
-" ソフトTABの設定
+" ソフト TAB の設定
 "set expandtab
 set noexpandtab
 
-" ソフトTABのスペースの数
+" ソフト TAB のスペースの数
 set softtabstop=4
 
 " }}}
@@ -312,7 +303,7 @@ endif
 
 " minpac {{{
 
-" minpacの取得
+" minpac の取得
 if !isdirectory(expand("~/.vim/pack/minpac/opt/minpac"))
   call system("git clone https://github.com/k-takata/minpac.git " . expand("~/.vim/pack/minpac/opt/minpac"))
 endif
@@ -371,20 +362,6 @@ let g:quickrun_config["_"] = {
 
 " }}}
 
-" ctrlp {{{
-
-call minpac#add("https://github.com/ctrlpvim/ctrlp.vim.git")
-
-let g:ctrlp_use_caching = 1                                     " キャッシュを使用する
-let g:ctrlp_cache_dir = expand("~/.cache/ctrlp")                " キャッシュディレクトリ
-let g:ctrlp_clear_cache_on_exit = 0                             " 終了時にキャッシュを削除しない
-let g:ctrlp_lazy_update = 1                                     " 遅延再描画
-let g:ctrlp_max_height = 20                                     " 20行表示
-let g:ctrlp_open_new_file = 1                                   " ファイルの新規作成時は別タブで開く
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|.dist|git)$'   " 除外
-
-" }}}
-
 " quickpick {{{
 
 call minpac#add("https://github.com/prabirshrestha/quickpick.vim.git")
@@ -406,8 +383,6 @@ if has("win32") || has("win64")
 endif
 let g:quickpick_mpc_format = "%artist%: %album% / [%disc%-]%track% %title%"
 let g:quickpick_mpc_maxheight = 15
-
-call minpac#add("https://github.com/prabirshrestha/quickpick-colorschemes.vim.git")
 
 " }}}
 
@@ -437,7 +412,7 @@ let g:lightline = {
 \ },
 \ "component_function": {
 \   "mode": "ansanloms#statusline#mode_minimum",
-\   "gitbranch": "fugitive#head",
+\   "gitbranch": "gina#component#repo#branch",
 \   "filename": "ansanloms#lightline#filename",
 \ },
 \ "component": {
@@ -489,19 +464,10 @@ let g:lightline = {
 " Leader
 let g:mapleader = ","
 
-" memo を設置するディレクトリ
-if has("win32") || has("win64")
-  let g:ansanloms_memo_base_dir = expand("c:/dev/work/memo")
-endif
-
 command! OpenFilemanager call ansanloms#filemanager#open()
 command! OpenVscode call ansanloms#vscode#open()
 command! OpenPhpstorm call ansanloms#phpstorm#open()
 command! -range OpenBitbucket <line1>,<line2>call ansanloms#bitbucket#open()
-
-command! -nargs=? Memo call ansanloms#memo#open(<f-args>)
-command! MemoDaily call ansanloms#memo#open()
-command! MemoList call ansanloms#memo#list()
 
 " 検索などで飛んだらそこを真ん中に
 nnoremap n nzz
@@ -518,17 +484,13 @@ nnoremap ZQ <Nop>
 " 検索のハイライト削除
 " ポップアップを消す
 command! Clear nohlsearch | call popup_clear()
-nnoremap <silent> <Esc><Esc> :<C-u>Clear<CR>
+nnoremap <silent> <Esc><Esc> :<cmd>Clear<CR>
 
 " very magic
 nnoremap / /\v
 
-" undo-branche
-nnoremap u g-
-nnoremap <C-r> g+
-
 " バッファ
-nnoremap <Leader>b :<C-u>ls<CR>:<C-u>buf<Space>
+nnoremap <Leader>b :<cmd>ls<CR>:<cmd>buf<Space>
 
 " tab
 nnoremap gr gT
@@ -536,25 +498,24 @@ nnoremap <C-w>gr <C-w>gT
 tnoremap <C-w>gr <C-w>gT
 
 " launcher
-nnoremap <C-e> :<C-u>call quickpick#pickers#launcher#selector#open("!")<CR>
+nnoremap <C-e> :<cmd>call quickpick#pickers#launcher#selector#open("!")<CR>
 
 " history
-nnoremap <C-h> :<C-u>call quickpick#pickers#oldfiles#open()<CR>
+nnoremap <C-h> :<cmd>call quickpick#pickers#oldfiles#open()<CR>
 
 " buffer
-nnoremap <C-s> :<C-u>call quickpick#pickers#buffer#open("")<CR>
+nnoremap <C-s> :<cmd>call quickpick#pickers#buffer#open("")<CR>
 
 " タグジャンプの際に新しいタブで開く
-nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
+nnoremap <C-]> :<cmd>tab stj <C-R>=expand("<cword>")<CR><CR>
 
 " minpac
 command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update("", {"do": "call minpac#status()"})
 command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
 
-" <S-space>とか押すと ^[[32;2u[ とかはいるやつの対策
-" あんまよくわかってない
-" 取り急ぎ鬱陶しいやつだけ
+" <S-space> とか押すと ^[[32;2u[ とかはいるやつの対策
+" https://github.com/vim/vim/issues/6040
 tnoremap <S-space> <space>
 tnoremap <C-BS> <BS>
 tnoremap <C-CR> <CR>
@@ -570,8 +531,6 @@ call minpac#add("https://github.com/prabirshrestha/quickpick-lsp.vim.git")
 call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
 
 " vim-lsp
-
-
 let g:lsp_diagnostics_enabled = 1
 let g:lsp_diagnostics_echo_cursor = 1
 let g:lsp_diagnostics_echo_delay = 50
@@ -590,15 +549,13 @@ let g:lsp_document_code_action_signs_delay = 100
 let g:lsp_fold_enabled = 0
 let g:lsp_text_edit_enabled = 1
 
-" 検索対象が定義されている箇所
-" 検索対象が宣言されている箇所
-" 検索対象が実装されている箇所
-" 検索対象の型が定義されている箇所
+" 補完時にみる情報:
+" 検索対象が定義されている箇所 / 検索対象が宣言されている箇所 / 検索対象が実装されている箇所 / 検索対象の型が定義されている箇所
 let g:lsp_tagfunc_source_methods = [
-\ "definition"
-\ ,"declaration"
-\ ,"implementation"
-\ ,"typeDefinition"
+\ "definition",
+\ "declaration",
+\ "implementation",
+\ "typeDefinition"
 \]
 
 let g:lsp_diagnostics_signs_enabled = 1
@@ -624,14 +581,14 @@ let g:asyncomplete_matchfuzzy = 1
 " vim-lsp-settings
 let g:lsp_settings = {
 \ "eslint-language-server": {
-\   "allowlist": ["javascript", "javascriptreact", "typescript", "typescriptreact", "vue"],
+\   "allowlist": ["javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue"],
 \ },
 \ "efm-langserver": {
 \   "disabled": v:false,
 \ },
 \}
 
-let g:lsp_settings_filetype_vue = ["vls", "volar-server", "eslint-language-server", "efm-langserver"]
+let g:lsp_settings_filetype_vue = ["volar-server", "eslint-language-server", "efm-langserver"]
 
 augroup lsp-setting
   autocmd!
@@ -639,6 +596,9 @@ augroup lsp-setting
   autocmd User lsp_buffer_enabled setlocal omnifunc=lsp#complete
   autocmd User lsp_buffer_enabled setlocal signcolumn=yes
   autocmd User lsp_buffer_enabled setlocal tagfunc=lsp#tagfunc
+  "autocmd User lsp_buffer_enabled setlocal foldmethod=expr
+  "autocmd User lsp_buffer_enabled setlocal foldexpr=lsp#ui#vim#folding#foldexpr()
+  "autocmd User lsp_buffer_enabled setlocal foldtext=lsp#ui#vim#folding#foldtext()
 
   autocmd User lsp_buffer_enabled nnoremap [lsp] <Nop>
   autocmd User lsp_buffer_enabled vnoremap [lsp] <Nop>
@@ -650,6 +610,7 @@ augroup lsp-setting
   autocmd User lsp_buffer_enabled vmap <buffer> [lsp]f <plug>(lsp-document-range-format-sync)
   autocmd User lsp_buffer_enabled nmap <silent> [lsp]n <Plug>(lsp-next-error)
   autocmd User lsp_buffer_enabled nmap <silent> [lsp]p <Plug>(lsp-previous-error)
+  autocmd User lsp_buffer_enabled nmap <buffer> [lsp]d <Plug>(lsp-definition)
 augroup END
 
 " }}}
@@ -690,9 +651,6 @@ let g:quickrun_config["java"] = {
 augroup java-setting
   autocmd!
 
-  " 拡張子設定
-  autocmd BufNewFile,BufRead *.{java} setlocal filetype=java
-
   " インデントセット
   autocmd FileType java setlocal shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
 augroup END
@@ -706,16 +664,14 @@ call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt
 augroup javascript-setting
   autocmd!
 
-  " 拡張子設定
-  autocmd BufNewFile,BufRead *.js setlocal filetype=javascript
-  autocmd BufNewFile,BufRead *.jsx setlocal filetype=javascript.jsx
-
   " インデントセット
   autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+  autocmd FileType javascriptreact setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
   autocmd FileType javascript.jsx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
   autocmd FileType javascript packadd vim-jsx-pretty
+  autocmd FileType javascriptreact packadd vim-jsx-pretty
   autocmd FileType javascript.jsx packadd vim-jsx-pretty
 augroup END
 
@@ -736,16 +692,14 @@ endif
 augroup typescript-setting
   autocmd!
 
-  " 拡張子設定
-  autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
-  autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
-
   " インデントセット
   autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+  autocmd FileType typescriptreact setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
   autocmd FileType typescript.tsx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " プラグイン読み込み
   autocmd FileType typescript packadd vim-jsx-pretty
+  autocmd FileType typescriptreact packadd vim-jsx-pretty
   autocmd FileType typescript.tsx packadd vim-jsx-pretty
 augroup END
 
@@ -757,9 +711,6 @@ call minpac#add("https://github.com/posva/vim-vue.git", {"type": "opt"})
 
 augroup vue-setting
   autocmd!
-
-  " 拡張子設定
-  autocmd BufNewFile,BufRead *.{vue} setlocal filetype=vue
 
   " インデントセット
   autocmd FileType vue setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
@@ -783,7 +734,7 @@ augroup php-setting
   autocmd!
 
   " 拡張子設定
-  autocmd BufNewFile,BufRead *.{php,ctp} set filetype=php
+  autocmd BufNewFile,BufRead *.ctp set filetype=php
 
   " インデントセット
   autocmd FileType php setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
@@ -800,9 +751,6 @@ call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git", {"type": "opt"}
 
 augroup volt-setting
   autocmd!
-
-  " 拡張子設定
-  autocmd BufNewFile,BufRead *.volt set filetype=volt
 
   " インデントセット
   autocmd filetype volt setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
@@ -830,7 +778,7 @@ augroup END
 
 " quickrun - markdown
 if executable("pandoc")
-  " cssの取得
+  " css の取得
   if !filereadable(expand("~/.vim/markdown.css"))
     call system("curl https://gist.githubusercontent.com/tuzz/3331384/raw/d1771755a3e26b039bff217d510ee558a8a1e47d/github.css -o " . expand("~/.vim/markdown.css"))
   endif
@@ -944,9 +892,6 @@ let g:vim_indent_cont = 0
 
 augroup vim-setting
   autocmd!
-
-  " 拡張子設定
-  autocmd BufNewFile,BufRead *.{vim,vimrc} setlocal filetype=vim
 
   " インデントセット
   autocmd FileType vim setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
@@ -1065,7 +1010,7 @@ augroup stylus-setting
   autocmd!
 
   " 拡張子設定
-  autocmd BufNewFile,BufRead *.{styl} set filetype=stylus
+  autocmd BufNewFile,BufRead *.styl set filetype=stylus
 
   " インデントセット
   autocmd FileType stylus setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
@@ -1164,9 +1109,6 @@ call minpac#add("https://github.com/cespare/vim-toml.git", {"type": "opt"})
 augroup toml-setting
   autocmd!
 
-  " 拡張子設定
-  autocmd BufNewFile,BufRead *.{toml} setlocal filetype=toml
-
   " インデントセット
   autocmd FileType toml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
@@ -1182,9 +1124,6 @@ call minpac#add("https://github.com/stephpy/vim-yaml.git", {"type": "opt"})
 
 augroup yaml-setting
   autocmd!
-
-  " 拡張子設定
-  autocmd BufNewFile,BufRead *.{yml,yaml} setlocal filetype=yaml
 
   " インデントセット
   autocmd FileType yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
@@ -1202,9 +1141,6 @@ call minpac#add("https://github.com/PProvost/vim-ps1.git", {"type": "opt"})
 augroup powershell-setting
   autocmd!
 
-  " 拡張子設定
-  autocmd BufNewFile,BufRead *.{ps1} setlocal filetype=ps1
-
   " プラグイン読み込み
   autocmd FileType ps1 packadd vim-ps1
 augroup END
@@ -1219,7 +1155,7 @@ augroup powershell-setting
   autocmd!
 
   " 拡張子設定
-  autocmd BufNewFile,BufRead *.{prisma} setlocal filetype=prisma
+  autocmd BufNewFile,BufRead *.prisma setlocal filetype=prisma
 
   " インデントセット
   autocmd FileType prisma setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
@@ -1307,7 +1243,6 @@ if has("gui_running")
     " フォント設定
     if has("win32") || has("win64")
       set guifont=Cica:h12:cSHIFTJIS:qDRAFT
-      "set renderoptions=type:directx,gamma:1.0,contrast:0,level:0.0,geom:1,renmode:5,taamode:1
     endif
 
     " 縦幅 デフォルトは24
@@ -1326,10 +1261,10 @@ if has("gui_running")
   " カーソルを点滅させない
   set guicursor=a:blinkon0
 
-  " 挿入モードのIMEデフォルト
+  " 挿入モードの IME デフォルト
   set iminsert=0
 
-  " 検索時のIMEデフォルト
+  " 検索時の IME デフォルト
   set imsearch=-1
 endif
 
@@ -1346,7 +1281,7 @@ set listchars=tab:\|\ ,trail:_,extends:>,precedes:<,nbsp:%
 set lazyredraw    " コマンド実行時の画面描画をしない
 set ttyfast       " 高速ターミナル接続
 
-" True Colorでのシンタックスハイライト
+" True Color でのシンタックスハイライト
 if (has("termguicolors"))
   set termguicolors
 endif
@@ -1394,11 +1329,11 @@ set cmdheight=2
 " 括弧強調
 set showmatch
 
-" 括弧のカーソルが飛ぶ時間(x0.1秒)
+" 括弧のカーソルが飛ぶ時間(x0.1 秒)
 set matchtime=2
 
-" 補完メニューの高さ
-set pumheight=20
+" 補完メニューの高さ(0 なら無制限)
+set pumheight=0
 
 " gVim の背景を透過させる
 call minpac#add("https://github.com/mattn/vimtweak.git")
