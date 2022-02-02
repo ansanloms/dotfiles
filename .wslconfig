@@ -1,0 +1,3 @@
+[wsl2]
+kernelCommandLine = vsyscall=emulate
+swap=0
