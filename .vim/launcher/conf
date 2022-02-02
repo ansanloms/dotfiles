@@ -4,6 +4,7 @@
 💻 nyagos			call ansanloms#terminal#terminal(expand("~/scoop/apps/nyagos/current/nyagos"), "NYAGOS")
 💻 cmd				call ansanloms#terminal#terminal("cmd", "cmd")
 💻 powershell		call ansanloms#terminal#terminal("powershell", "powershell")
+💻 powershell 7		call ansanloms#terminal#terminal("pwsh", "powershell 7")
 💻 WSL				call ansanloms#terminal#terminal("wsl", "WSL")
 💻 MSYS2			call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") . " -msys -defterm -no-start", "MSYS2")
 💻 MinGW-w64 32bit	call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") . " -mingw32 -defterm -no-start", "MinGW-w64 32bit")
