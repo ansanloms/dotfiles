@@ -348,7 +348,6 @@ augroup gina-setting
   autocmd FileType gina-blame setlocal nonumber
 augroup END
 
-
 " }}}
 
 " quickrun {{{
@@ -488,9 +487,6 @@ nnoremap <silent> <Esc><Esc> :<C-u>Clear<CR>
 
 " very magic
 nnoremap / /\v
-
-" バッファ
-nnoremap <Leader>b :<C-u>ls<CR><C-u>buf<Space>
 
 " tab
 nnoremap gr gT
