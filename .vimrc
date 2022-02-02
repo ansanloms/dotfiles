@@ -502,6 +502,9 @@ nnoremap <C-h> :<C-u>call quickpick#pickers#oldfiles#open()<CR>
 " buffer
 nnoremap <C-s> :<C-u>call quickpick#pickers#buffer#open("")<CR>
 
+" list
+nnoremap <C-p> :<C-u>call quickpick#pickers#list#open()<CR>
+
 " タグジャンプの際に新しいタブで開く
 nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
 
