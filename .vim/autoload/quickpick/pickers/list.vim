@@ -1,5 +1,26 @@
 let s:command = ""
 
+let s:project_root_target = [
+\ ".git",
+\ ".bzr",
+\ ".hg",
+\ ".svn",
+\ "build.xml",
+\ "prj.el",
+\ ".project",
+\ "pom.xml",
+\ "package.json",
+\ "composer.json",
+\ "import_map.json",
+\ "Makefile",
+\ "configure",
+\ "Rakefile",
+\ "NAnt.build",
+\ "P4CONFIG",
+\ "tags",
+\ "gtags"
+\]
+
 function! quickpick#pickers#list#open() abort
   call quickpick#open({
   \ "items": s:get_items(),
@@ -31,19 +52,8 @@ function! quickpick#pickers#list#open() abort
   endif
 endfunction
 
-function! s:get_items(...) abort
-  packadd vital.vim
-  let l:path = vital#vital#new().import("Prelude").path2project_directory(expand("%:p"))
-
-  let l:command = ["rg", "--files", l:path, "--path-separator", "/"]
-
-  let l:g = get(a:, 1, "")
-  if l:g != ""
-    let l:command = add(l:command, "-g")
-    let l:command = add(l:command, "*" . l:g . "*")
-  endif
-
-  return split(system(join(l:command)))
+function! s:get_items() abort
+  return split(system(join(["rg", "--files", s:get_project_path(expand("%:p")), "--path-separator", "/"])))
 endfunction
 
 function! s:on_accept(data, name) abort
@@ -61,4 +71,35 @@ endfunction
 function! s:open_with_command(command) abort
   let s:command = a:command
   call feedkeys("\<CR>")
+endfunction
+
+function! s:get_project_path(path) abort
+  packadd vital.vim
+  let l:v_filepath = vital#vital#new().import("System.Filepath")
+
+  let l:path_list = l:v_filepath.split(a:path)
+
+  for l:path_dir in copy(l:path_list)
+    call remove(l:path_list, -1)
+
+    let l:ftype = ""
+    for l:target in s:project_root_target
+      let l:ftype = getftype(v_filepath.join(l:path_list, l:target))
+
+      if (l:ftype != "")
+        break
+      endif
+    endfor
+
+    if (l:ftype != "")
+      break
+    endif
+  endfor
+
+  if (l:ftype == "")
+    let l:path_list = l:v_filepath.split(a:path)
+    call remove(l:path_list, -1)
+  endif
+
+  return v_filepath.join(l:path_list)
 endfunction
