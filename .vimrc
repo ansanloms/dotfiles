@@ -176,7 +176,8 @@ set hidden
 
 " filler: vimdiff で埋め立てを行う
 " iwhite: vimdiff で空白を無視して比較する
-set diffopt=filler,iwhite
+" internal: 内部 diff ライブラリを使用(現代の Vim だと diff 内蔵してる)
+set diffopt=filler,iwhite,internal
 
 " beep音を消す
 set belloff=all
