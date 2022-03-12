@@ -34,6 +34,8 @@ if has("vim_starting")
       call mkdir(iconv(expand(dir), &encoding, &termencoding), "p")
     endif
   endfor
+
+  unlet dir
 endif
 
 " }}}
@@ -174,7 +176,8 @@ set hidden
 
 " filler: vimdiff で埋め立てを行う
 " iwhite: vimdiff で空白を無視して比較する
-set diffopt=filler,iwhite
+" internal: 内部 diff ライブラリを使用(現代の Vim だと diff 内蔵してる)
+set diffopt=filler,iwhite,internal
 
 " beep音を消す
 set belloff=all
@@ -293,10 +296,10 @@ set completeopt=menuone
 
 if has("terminal")
   " 端末のエンコーディング
-  set termencoding="utf-8"
+  set termencoding=utf-8
 
   " pty 指定
-  set termwintype="conpty"
+  set termwintype=conpty
 endif
 
 " }}}
