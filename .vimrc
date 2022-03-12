@@ -293,10 +293,10 @@ set completeopt=menuone
 
 if has("terminal")
   " 端末のエンコーディング
-  set termencoding="utf-8"
+  set termencoding=utf-8
 
   " pty 指定
-  set termwintype="conpty"
+  set termwintype=conpty
 endif
 
 " }}}
