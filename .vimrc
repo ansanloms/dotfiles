@@ -34,6 +34,8 @@ if has("vim_starting")
       call mkdir(iconv(expand(dir), &encoding, &termencoding), "p")
     endif
   endfor
+
+  unlet dir
 endif
 
 " }}}
