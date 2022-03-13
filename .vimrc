@@ -1207,7 +1207,7 @@ augroup remove-dust
 
   function! s:remove_dust()
     let l:cursor = getpos(".")
-    %s/\s\+$//ge
+    keeppatterns %s/\s\+$//ge
     call setpos(".", cursor)
     unlet l:cursor
   endfunction
