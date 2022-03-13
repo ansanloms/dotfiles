@@ -1137,19 +1137,6 @@ augroup END
 
 " }}}
 
-" powershell {{{
-
-call minpac#add("https://github.com/PProvost/vim-ps1.git", {"type": "opt"})
-
-augroup powershell-setting
-  autocmd!
-
-  " プラグイン読み込み
-  autocmd FileType ps1 packadd vim-ps1
-augroup END
-
-" }}}
-
 " prisma {{{
 
 call minpac#add("https://github.com/pantharshit00/vim-prisma.git", {"type": "opt"})
