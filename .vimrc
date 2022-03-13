@@ -1179,16 +1179,17 @@ if has("gui_running")
     " フォント設定
     if has("win32") || has("win64")
       set guifont=Cica:h12:cSHIFTJIS:qDRAFT
+      set guifont=PlemolJP_Console_NF:h12:cSHIFTJIS:qDRAFT
     endif
 
-    " 縦幅 デフォルトは24
+    " 縦幅 デフォルトは 24
     set lines=60
 
-    " 横幅 デフォルトは80
+    " 横幅 デフォルトは 80
     set columns=180
   endif
 
-  " GUIオプション
+  " GUI オプション
   set guioptions=AcfiM!
 
   " 行間設定

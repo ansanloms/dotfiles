@@ -6,8 +6,8 @@ add_newline = true
 
 [character]
 disabled = false
-success_symbol = "[❯](bold green)"
-error_symbol = "[❯](bold red)"
+success_symbol = "[>](bold green)"
+error_symbol = "[>](bold red)"
 
 [directory]
 disabled = false
@@ -29,5 +29,3 @@ style = "#6c848d"
 
 [git_status]
 enabled = true
-
-# vim:set filetype=toml:
