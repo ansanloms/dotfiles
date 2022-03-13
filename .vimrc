@@ -402,7 +402,7 @@ let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォ
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 let g:lightline = {
-\ "colorscheme": "iceberg",
+\ "colorscheme": "elly",
 \ "active": {
 \   "left": [
 \     ["mode", "readonly", "paste"],
@@ -1203,7 +1203,7 @@ endif
 " appearance {{{
 
 " 空白文字の表示
-" とりあえずTAB/行末スペース/省略文字(右)/省略文字(左)/nbsp
+" とりあえず TAB / 行末スペース / 省略文字(右) / 省略文字(左) / nbsp
 set list
 set listchars=tab:\|\ ,trail:_,extends:>,precedes:<,nbsp:%
 
@@ -1284,8 +1284,9 @@ call minpac#add("https://github.com/ansanloms/hilal.git")
 call minpac#add("https://github.com/cormacrelf/vim-colors-github.git")
 call minpac#add("https://github.com/danishprakash/vim-yami.git")
 call minpac#add("https://github.com/fcpg/vim-orbital.git")
+call minpac#add("https://github.com/ulwlu/elly.vim.git")
 
-" シンタックスON
+" シンタックス ON
 syntax enable
 
 try
@@ -1293,7 +1294,7 @@ try
   let g:hilal_bold = 0
 
   set background=dark
-  colorscheme iceberg
+  colorscheme elly
 catch
 endtry
 
