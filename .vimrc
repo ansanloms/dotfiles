@@ -1154,7 +1154,7 @@ augroup END
 
 call minpac#add("https://github.com/pantharshit00/vim-prisma.git", {"type": "opt"})
 
-augroup powershell-setting
+augroup prisma-setting
   autocmd!
 
   " 拡張子設定
