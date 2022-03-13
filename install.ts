@@ -1,32 +1,27 @@
-import __ from "https://deno.land/x/dirname/mod.ts";
-import {
-  dirname,
-  isAbsolute,
-  join,
-  normalize,
-} from "https://deno.land/std/path/mod.ts";
-import { parse } from "https://deno.land/std/encoding/yaml.ts";
-import { exists } from "https://deno.land/std/fs/mod.ts";
+import __ from "dirname/mod.ts";
+import { dirname, isAbsolute, join, normalize } from "std/path/mod.ts";
+import { parse } from "std/encoding/yaml.ts";
+import { exists } from "std/fs/mod.ts";
 
 const __filename = normalize(__(import.meta)["__filename"]).slice(
   Deno.build.os === "windows" ? 1 : 0,
 );
 const __dirname = dirname(__filename);
 
-interface option {
+interface Option {
   target?: string[];
   skip?: string[] | boolean;
   clean?: boolean;
 }
 
-interface link {
+interface Link {
   src: string;
-  option?: option;
+  option?: Option;
 }
 
-interface config {
+interface Config {
   link: {
-    [Key in string]: link;
+    [Key in string]: Link;
   };
 }
 
@@ -34,7 +29,7 @@ const config = parse(
   (new TextDecoder("utf-8")).decode(
     await Deno.readAll(await Deno.open(join(__dirname, "config.yaml"))),
   ),
-) as config;
+) as Config;
 
 const homedir = Deno.env.get(
   Deno.build.os === "windows" ? "USERPROFILE" : "HOME",
@@ -70,7 +65,7 @@ const clean = async (dest: string) => {
   }
 };
 
-const skip = (option: option | undefined) => {
+const skip = (option: Option | undefined) => {
   if (typeof option === "undefined") {
     return false;
   }

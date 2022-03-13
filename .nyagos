@@ -15,7 +15,8 @@ nyagos.envadd(
 	nyagos.env.userprofile .. "\\.deno\\bin",
 	nyagos.env.programfiles .. "\\Vim\\vim82",
 	nyagos.env.programfiles .. "\\Go\\bin",
-	nyagos.env.localappdata .. "\\multipass\\bin"
+	nyagos.env.localappdata .. "\\multipass\\bin",
+	nyagos.env.userprofile .. "\\flutter\\bin"
 )
 
 -- prompt

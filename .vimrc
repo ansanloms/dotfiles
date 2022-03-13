@@ -31,7 +31,7 @@ if has("vim_starting")
   \ ,"~/.vim/logs"
   \]
     if !isdirectory(expand(dir))
-      call mkdir(iconv(expand(dir), &encoding, &termencoding), "p")
+      call mkdir(expand(dir), "p")
     endif
   endfor
 
@@ -64,7 +64,7 @@ set viminfo+=:100
 set viminfo+=<1000
 set viminfo+=s10
 
-" viminfoの保存先を変更
+" viminfo の保存先を変更
 set viminfo+=n~/.vim/viminfo
 
 " }}}
@@ -126,7 +126,7 @@ endif
 
 " }}}
 
-" 他のvimが起動済ならそれを使う {{{
+" 他の vim が起動済ならそれを使う {{{
 
 " http://tyru.hatenablog.com/entry/20130430/vim_resident
 
@@ -152,7 +152,7 @@ endif
 " コマンドの保存履歴数
 set history=1000
 
-" backspaceの設定
+" backspace の設定
 set backspace=start,eol,indent
 
 " C-v の矩形選択で行末より後ろもカーソルを置ける
@@ -179,7 +179,7 @@ set hidden
 " internal: 内部 diff ライブラリを使用(現代の Vim だと diff 内蔵してる)
 set diffopt=filler,iwhite,internal
 
-" beep音を消す
+" beep 音を消す
 set belloff=all
 
 " テキストの整形方法
@@ -331,6 +331,10 @@ let g:loaded_matchparen = 1     " matchparenを無効にする
 
 call minpac#add("https://github.com/vim-denops/denops.vim.git")
 
+if executable("sudo")
+  call minpac#add("https://github.com/lambdalisue/suda.vim.git")
+endif
+
 " }}}
 
 " git {{{
@@ -398,7 +402,7 @@ let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォ
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 let g:lightline = {
-\ "colorscheme": "iceberg",
+\ "colorscheme": "elly",
 \ "active": {
 \   "left": [
 \     ["mode", "readonly", "paste"],
@@ -634,7 +638,7 @@ augroup END
 
 " Java {{{
 
-call minpac#add("https://github.com/vim-jp/vim-java.git", {"type": "opt"})
+call minpac#add("https://github.com/vim-jp/vim-java.git")
 
 if !filereadable(expand("~/.vim/syntax/javaid.vim"))
   call system("curl https://fleiner.com/vim/syntax/javaid.vim -o " . expand("~/.vim/syntax/javaid.vim"))
@@ -662,7 +666,7 @@ augroup END
 
 " JavaScript / TypeScript {{{
 
-call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git", {"type": "opt"})
+call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git")
 
 augroup javascript-setting
   autocmd!
@@ -671,11 +675,6 @@ augroup javascript-setting
   autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
   autocmd FileType javascriptreact setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
   autocmd FileType javascript.jsx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-  " プラグイン読み込み
-  autocmd FileType javascript packadd vim-jsx-pretty
-  autocmd FileType javascriptreact packadd vim-jsx-pretty
-  autocmd FileType javascript.jsx packadd vim-jsx-pretty
 augroup END
 
 " quickrun - typescript
@@ -699,18 +698,13 @@ augroup typescript-setting
   autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
   autocmd FileType typescriptreact setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
   autocmd FileType typescript.tsx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-  " プラグイン読み込み
-  autocmd FileType typescript packadd vim-jsx-pretty
-  autocmd FileType typescriptreact packadd vim-jsx-pretty
-  autocmd FileType typescript.tsx packadd vim-jsx-pretty
 augroup END
 
 " }}}
 
 " vue {{{
 
-call minpac#add("https://github.com/posva/vim-vue.git", {"type": "opt"})
+call minpac#add("https://github.com/posva/vim-vue.git")
 
 augroup vue-setting
   autocmd!
@@ -718,8 +712,7 @@ augroup vue-setting
   " インデントセット
   autocmd FileType vue setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
-  " プラグイン読み込み
-  autocmd FileType vue packadd vim-vue
+  " ハイライト行指定
   autocmd FileType vue syntax sync fromstart
 augroup END
 
@@ -750,7 +743,7 @@ augroup END
 
 " PHP vold {{{
 
-call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git", {"type": "opt"})
+call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git")
 
 augroup volt-setting
   autocmd!
@@ -760,9 +753,6 @@ augroup volt-setting
 
   " ハイライト行指定
   autocmd filetype volt syntax sync minlines=300 maxlines=500
-
-  " プラグイン読み込み
-  autocmd FileType volt packadd vim-volt-syntax
 augroup END
 
 " }}}
@@ -837,7 +827,7 @@ augroup END
 
 " plantuml {{{
 
-call minpac#add("https://github.com/aklt/plantuml-syntax.git", {"type": "opt"})
+call minpac#add("https://github.com/aklt/plantuml-syntax.git")
 
 augroup plantuml-setting
   autocmd!
@@ -847,9 +837,6 @@ augroup plantuml-setting
 
   " インデントセット
   autocmd FileType plantuml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-  " プラグイン読み込み
-  autocmd FileType plantuml packadd plantuml-syntax
 augroup END
 
 " quickrun - plantuml
@@ -870,8 +857,8 @@ endif
 
 " sh {{{
 
-call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git", {"type": "opt"})
-call minpac#add("https://github.com/vim-scripts/sh.vim.git", {"type": "opt"})
+call minpac#add("https://github.com/vim-scripts/Super-Shell-Indent.git")
+call minpac#add("https://github.com/vim-scripts/sh.vim.git")
 
 let g:sh_indent_case_labels = 1
 
@@ -880,10 +867,6 @@ augroup sh-setting
 
   " インデントセット
   autocmd FileType sh setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-  " プラグイン読み込み
-  autocmd FileType sh packadd Super-Shell-Indent
-  autocmd FileType sh packadd sh.vim
 augroup END
 
 " }}}
@@ -1007,26 +990,20 @@ augroup END
 
 " stylus {{{
 
-call minpac#add("https://github.com/iloginow/vim-stylus.git", {"type": "opt"})
+call minpac#add("https://github.com/iloginow/vim-stylus.git")
 
 augroup stylus-setting
   autocmd!
 
-  " 拡張子設定
-  autocmd BufNewFile,BufRead *.styl set filetype=stylus
-
   " インデントセット
   autocmd FileType stylus setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-  " プラグイン読み込み
-  autocmd FileType stylus packadd vim-stylus
 augroup END
 
 " }}}
 
 " json {{{
 
-" conceal表示を無効にする
+" conceal 表示を無効にする
 let g:vim_json_syntax_conceal = 0
 
 augroup json-setting
@@ -1045,126 +1022,76 @@ augroup END
 
 " json5 {{{
 
-call minpac#add("https://github.com/gutenye/json5.vim.git", {"type": "opt"})
+call minpac#add("https://github.com/gutenye/json5.vim.git")
 
 augroup json5-setting
   autocmd!
 
   " インデントセット
   autocmd FileType json5 setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-  " プラグイン読み込み
-  autocmd FileType json5 packadd json5.vim
 augroup END
 
 " }}}
 
 " apache conf {{{
 
-call minpac#add("https://github.com/vim-scripts/apachestyle.git", {"type": "opt"})
-
-augroup apache-setting
-  autocmd!
-
-  " プラグイン読み込み
-  autocmd FileType apache packadd apachestyle
-augroup END
+call minpac#add("https://github.com/vim-scripts/apachestyle.git")
 
 " }}}
 
 " groovy {{{
 
-call minpac#add("https://github.com/vim-scripts/groovyindent.git", {"type": "opt"})
-
-augroup groovy-setting
-  autocmd!
-
-  " プラグイン読み込み
-  autocmd FileType groovy packadd groovyindent
-augroup END
+call minpac#add("https://github.com/vim-scripts/groovyindent.git")
 
 " }}}
 
 " graphql {{{
 
 " graphql
-call minpac#add("https://github.com/jparise/vim-graphql.git", {"type": "opt"})
+call minpac#add("https://github.com/jparise/vim-graphql.git")
 
 augroup graphql-setting
   autocmd!
 
-  " 拡張子設定
-  autocmd BufNewFile,BufRead *.graphql setlocal filetype=graphql
-
   " インデントセット
   autocmd FileType graphql setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-  " プラグイン読み込み
-  autocmd FileType graphql packadd vim-graphql
 augroup END
 
 " }}}
 
 " toml {{{
 
-call minpac#add("https://github.com/cespare/vim-toml.git", {"type": "opt"})
-
 augroup toml-setting
   autocmd!
 
   " インデントセット
   autocmd FileType toml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-  " プラグイン読み込み
-  autocmd FileType toml packadd vim-toml
 augroup END
 
 " }}}
 
 " yaml {{{
 
-call minpac#add("https://github.com/stephpy/vim-yaml.git", {"type": "opt"})
+call minpac#add("https://github.com/stephpy/vim-yaml.git")
 
 augroup yaml-setting
   autocmd!
 
   " インデントセット
   autocmd FileType yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-  " プラグイン読み込み
-  autocmd FileType yaml packadd vim-yaml
-augroup END
-
-" }}}
-
-" powershell {{{
-
-call minpac#add("https://github.com/PProvost/vim-ps1.git", {"type": "opt"})
-
-augroup powershell-setting
-  autocmd!
-
-  " プラグイン読み込み
-  autocmd FileType ps1 packadd vim-ps1
 augroup END
 
 " }}}
 
 " prisma {{{
 
-call minpac#add("https://github.com/pantharshit00/vim-prisma.git", {"type": "opt"})
+call minpac#add("https://github.com/pantharshit00/vim-prisma.git")
 
-augroup powershell-setting
+augroup prisma-setting
   autocmd!
-
-  " 拡張子設定
-  autocmd BufNewFile,BufRead *.prisma setlocal filetype=prisma
 
   " インデントセット
   autocmd FileType prisma setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-  " プラグイン読み込み
-  autocmd FileType prisma packadd vim-prisma
 augroup END
 
 " }}}
@@ -1207,7 +1134,7 @@ augroup remove-dust
 
   function! s:remove_dust()
     let l:cursor = getpos(".")
-    %s/\s\+$//ge
+    keeppatterns %s/\s\+$//ge
     call setpos(".", cursor)
     unlet l:cursor
   endfunction
@@ -1276,7 +1203,7 @@ endif
 " appearance {{{
 
 " 空白文字の表示
-" とりあえずTAB/行末スペース/省略文字(右)/省略文字(左)/nbsp
+" とりあえず TAB / 行末スペース / 省略文字(右) / 省略文字(左) / nbsp
 set list
 set listchars=tab:\|\ ,trail:_,extends:>,precedes:<,nbsp:%
 
@@ -1357,8 +1284,9 @@ call minpac#add("https://github.com/ansanloms/hilal.git")
 call minpac#add("https://github.com/cormacrelf/vim-colors-github.git")
 call minpac#add("https://github.com/danishprakash/vim-yami.git")
 call minpac#add("https://github.com/fcpg/vim-orbital.git")
+call minpac#add("https://github.com/ulwlu/elly.vim.git")
 
-" シンタックスON
+" シンタックス ON
 syntax enable
 
 try
@@ -1366,7 +1294,7 @@ try
   let g:hilal_bold = 0
 
   set background=dark
-  colorscheme iceberg
+  colorscheme elly
 catch
 endtry
 

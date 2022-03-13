@@ -1,0 +1,7 @@
+{
+  "fmt": {
+    "files": {
+      "include": ["install.ts", "import_map.json", "deno.json"]
+    }
+  }
+}
