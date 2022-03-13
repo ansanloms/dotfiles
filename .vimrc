@@ -31,7 +31,7 @@ if has("vim_starting")
   \ ,"~/.vim/logs"
   \]
     if !isdirectory(expand(dir))
-      call mkdir(iconv(expand(dir), &encoding, &termencoding), "p")
+      call mkdir(expand(dir), "p")
     endif
   endfor
 
