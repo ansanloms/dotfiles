@@ -17,8 +17,3 @@ endfunction
 function! ansanloms#memo#open(...)
   execute "edit " . expand(s:dir()) . "/" . get(a:, "1", strftime("%Y%m%d")) . ".md"
 endfunction
-
-" メモ関連: CtrlPで開く
-function! ansanloms#memo#list()
-  execute "CtrlP " . expand(s:dir())
-endfunction
