@@ -331,6 +331,11 @@ let g:loaded_matchparen = 1     " matchparenを無効にする
 
 call minpac#add("https://github.com/vim-denops/denops.vim.git")
 
+if executable("sudo")
+  call minpac#add("https://github.com/lambdalisue/suda.vim.git")
+  let g:suda_smart_edit = 1     " 書き込みできないファイルを自動で suda 用のバッファに変更する。
+endif
+
 " }}}
 
 " git {{{
