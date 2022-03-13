@@ -1,12 +1,7 @@
-import __ from "https://deno.land/x/dirname/mod.ts";
-import {
-  dirname,
-  isAbsolute,
-  join,
-  normalize,
-} from "https://deno.land/std/path/mod.ts";
-import { parse } from "https://deno.land/std/encoding/yaml.ts";
-import { exists } from "https://deno.land/std/fs/mod.ts";
+import __ from "dirname/mod.ts";
+import { dirname, isAbsolute, join, normalize } from "std/path/mod.ts";
+import { parse } from "std/encoding/yaml.ts";
+import { exists } from "std/fs/mod.ts";
 
 const __filename = normalize(__(import.meta)["__filename"]).slice(
   Deno.build.os === "windows" ? 1 : 0,
