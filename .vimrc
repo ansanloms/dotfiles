@@ -1112,16 +1112,11 @@ augroup END
 
 " toml {{{
 
-call minpac#add("https://github.com/cespare/vim-toml.git", {"type": "opt"})
-
 augroup toml-setting
   autocmd!
 
   " インデントセット
   autocmd FileType toml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-  " プラグイン読み込み
-  autocmd FileType toml packadd vim-toml
 augroup END
 
 " }}}
