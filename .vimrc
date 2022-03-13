@@ -1302,6 +1302,8 @@ try
 
   set background=dark
   colorscheme elly
+
+  highlight CursorLine ctermfg=234 guibg=#2D3640
 catch
 endtry
 
