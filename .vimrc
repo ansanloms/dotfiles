@@ -339,16 +339,11 @@ augroup END
 
 " statusline {{{
 
-call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-
-let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
-let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
-
 " ステータスラインを常に表示
 set laststatus=2
 
 " 表示設定
-set statusline=%!ansanloms#statusline#statusline()
+"set statusline=%!ansanloms#statusline#statusline()
 
 " }}}
 
@@ -358,9 +353,65 @@ set statusline=%!ansanloms#statusline#statusline()
 set showtabline=2
 
 " タブラインの設定
-set tabline=%!ansanloms#tabline#tabline()
+"set tabline=%!ansanloms#tabline#tabline()
 
 " }}}
+
+" lightline {{{
+
+call minpac#add("https://github.com/itchyny/lightline.vim.git")
+
+call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
+
+let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
+let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
+
+let g:lightline = {
+\ "colorscheme": "atomic",
+\ "active": {
+\   "left": [
+\     ["mode", "readonly", "paste"],
+\     ["gitbranch", "filename"],
+\   ],
+\   "right": [
+\     ["sky_color_clock"],
+\     ["fileformat", "fileencoding", "filetype"],
+\   ]
+\ },
+\ "component_expand": {
+\   "tabs": "ansanloms#lightline#tab"
+\ },
+\ "component_function": {
+\   "mode": "ansanloms#statusline#mode_minimum",
+\   "gitbranch": "gina#component#repo#branch",
+\   "filename": "ansanloms#lightline#filename",
+\ },
+\ "component": {
+\   "modified": "%{(ansanloms#lightline#is_visible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
+\   "readonly": "%{&readonly ? '' : ''}",
+\   "fileformat": "%{ansanloms#lightline#is_visible() ? &fileformat : ''}",
+\   "filetype": "%{ansanloms#lightline#is_visible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
+\   "fileencoding": "%{ansanloms#lightline#is_visible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
+\   "sky_color_clock": "%#SkyColorClock#%{' ' . sky_color_clock#statusline() . ' '}%#SkyColorClockTemp# ",
+\ },
+\ "component_raw": {
+\   "sky_color_clock": 1,
+\ },
+\ "tab_component_function": {
+\   "filename": "ansanloms#lightline#tabfilename",
+\   "modified": "lightline#tab#modified",
+\   "readonly": "lightline#tab#readonly",
+\   "tabnum": ""
+\ },
+\ "separator": {
+\   "left": "",
+\   "right": ""
+\ },
+\ "subseparator": {
+\   "left": "",
+\   "right": ""
+\ },
+\}
 
 " quickrun {{{
 
