@@ -367,7 +367,7 @@ let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォ
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 let g:lightline = {
-\ "colorscheme": "atomic",
+\ "colorscheme": "gotham",
 \ "active": {
 \   "left": [
 \     ["mode", "readonly", "paste"],
@@ -1297,10 +1297,7 @@ syntax enable
 
 try
   set background=dark
-  colorscheme atomic
-
-  highlight StatusLineTerm term=bold,reverse ctermfg=0 ctermbg=10 guifg=#A6B5C5 guibg=#1A2128
-  highlight StatusLineTermNC term=reverse ctermfg=0 ctermbg=10 guifg=#A6B5C5 guibg=#1A2128
+  colorscheme gotham
 catch
 endtry
 
