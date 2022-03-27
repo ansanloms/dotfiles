@@ -367,7 +367,7 @@ let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォ
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
 let g:lightline = {
-\ "colorscheme": "gotham",
+\ "colorscheme": "elly",
 \ "active": {
 \   "left": [
 \     ["mode", "readonly", "paste"],
@@ -1297,7 +1297,9 @@ syntax enable
 
 try
   set background=dark
-  colorscheme gotham
+  colorscheme elly
+
+  highlight CursorLine ctermfg=234 guibg=#2D3640
 catch
 endtry
 
