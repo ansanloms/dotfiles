@@ -319,7 +319,6 @@ endif
 
 " git {{{
 
-call minpac#add("https://github.com/tpope/vim-fugitive.git")
 call minpac#add("https://github.com/airblade/vim-gitgutter.git")
 call minpac#add("https://github.com/lambdalisue/gina.vim.git")
 
@@ -327,6 +326,8 @@ let g:gina#command#blame#formatter#format = '%su%=%au %ti %ma%in'
 let g:gina#command#blame#formatter#timestamp_months = 0
 let g:gina#command#blame#formatter#timestamp_format1 = '%Y-%m-%d'
 let g:gina#command#blame#formatter#timestamp_format2 = '%Y-%m-%d'
+
+call minpac#add("https://github.com/lambdalisue/gin.vim.git")
 
 augroup gina-setting
   autocmd!
