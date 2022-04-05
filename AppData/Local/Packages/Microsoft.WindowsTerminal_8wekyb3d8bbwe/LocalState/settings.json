@@ -32,6 +32,7 @@
         {
             "colorScheme": "One Half Dark",
             "cursorShape": "filledBox",
+            "experimental.retroTerminalEffect": false,
             "font":
             {
                 "face": "PlemolJP Console NF",
@@ -53,7 +54,7 @@
                 "name": "vim"
             },
             {
-                "commandline": "%USERPROFILE%\\scoop\\apps\\nyagos\\current\\nyagos.exe",
+                "commandline": "%USERPROFILE%\\scoop\\apps\\nyagos\\current\\nyagos.exe -k \"chcp 65001\"",
                 "guid": "{d5171fe5-5931-4d31-85d1-88be404f0a3c}",
                 "hidden": false,
                 "icon": "https://raw.githubusercontent.com/zetamatta/nyagos/master/Etc/nyagos.ico",
