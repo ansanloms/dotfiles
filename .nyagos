@@ -14,9 +14,10 @@ nyagos.envadd(
 	nyagos.env.homedrive .. "\\msys64\\mingw64\\bin",
 	nyagos.env.userprofile .. "\\.deno\\bin",
 	nyagos.env.programfiles .. "\\Vim\\vim82",
-	nyagos.env.programfiles .. "\\Go\\bin",
 	nyagos.env.localappdata .. "\\multipass\\bin",
-	nyagos.env.userprofile .. "\\flutter\\bin"
+	nyagos.env.userprofile .. "\\flutter\\bin",
+	nyagos.env.userprofile .. "\\go\\bin",
+	nyagos.env.programfiles .. "\\MySQL\\MySQL Server 8.0\\bin"
 )
 
 -- prompt
