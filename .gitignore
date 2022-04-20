@@ -3,6 +3,8 @@
 !bitmaps
 !launcher
 
+.vim/autoload/*
+work
+
 .vim/launcher/*
 !conf
-
