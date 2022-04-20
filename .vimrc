@@ -305,6 +305,7 @@ call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
 call minpac#add("https://github.com/junegunn/vim-easy-align.git")
 call minpac#add("https://github.com/tyru/open-browser.vim.git")
 call minpac#add("https://github.com/itchyny/vim-cursorword.git")
+call minpac#add("https://github.com/mattn/vim-notification.git")
 
 call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
 let g:loaded_matchparen = 1     " matchparenを無効にする
