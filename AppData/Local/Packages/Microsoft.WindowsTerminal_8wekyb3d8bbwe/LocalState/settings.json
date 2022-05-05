@@ -30,7 +30,7 @@
     {
         "defaults":
         {
-            "colorScheme": "One Half Dark",
+            "colorScheme": "Nord",
             "cursorShape": "filledBox",
             "experimental.retroTerminalEffect": false,
             "font":
@@ -108,13 +108,6 @@
                 "hidden": false,
                 "name": "PowerShell (v7)",
                 "source": "Windows.Terminal.PowershellCore"
-            },
-            {
-                "background": "#350425",
-                "commandline": "multipass shell",
-                "guid": "{aaaa9e6d-1e09-4be6-b76c-82b4ba1885fb}",
-                "icon": "C:/Program Files/Multipass/bin/multipass_wt.ico",
-                "name": "Multipass"
             }
         ]
     },
@@ -165,6 +158,29 @@
             "selectionBackground": "#FFFFFF",
             "white": "#CCCCCC",
             "yellow": "#C19C00"
+        },
+        {
+            "background": "#2E3440",
+            "black": "#3B4252",
+            "blue": "#81A1C1",
+            "brightBlack": "#4C566A",
+            "brightBlue": "#81A1C1",
+            "brightCyan": "#88C0D0",
+            "brightGreen": "#A3BE8C",
+            "brightPurple": "#B48EAD",
+            "brightRed": "#BF616A",
+            "brightWhite": "#E5E9F0",
+            "brightYellow": "#EBCB8B",
+            "cursorColor": "#FFFFFF",
+            "cyan": "#88C0D0",
+            "foreground": "#D8DEE9",
+            "green": "#A3BE8C",
+            "name": "Nord",
+            "purple": "#B48EAD",
+            "red": "#BF616A",
+            "selectionBackground": "#FFFFFF",
+            "white": "#E5E9F0",
+            "yellow": "#EBCB8B"
         },
         {
             "background": "#282C34",
