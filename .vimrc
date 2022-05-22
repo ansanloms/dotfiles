@@ -1250,6 +1250,8 @@ set breakindent
 " マルチバイト文字等でずれないようにする
 "set ambiwidth=double
 set ambiwidth=single
+call minpac#add("https://github.com/rbtnn/vim-ambiwidth.git")
+let g:ambiwidth_cica_enabled = v:false
 
 " 上下の視界確保
 set scrolloff=4
