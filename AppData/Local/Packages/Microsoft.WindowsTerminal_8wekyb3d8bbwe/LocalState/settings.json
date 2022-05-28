@@ -23,6 +23,8 @@
             "keys": "ctrl+v"
         }
     ],
+    "alwaysShowTabs": false,
+    "showTabsInTitlebar": false,
     "copyOnSelect": true,
     "defaultProfile": "{d5171fe5-5931-4d31-85d1-88be404f0a3c}",
     "launchMode": "default",
