@@ -18,7 +18,8 @@ let s:project_root_target = [
 \ "NAnt.build",
 \ "P4CONFIG",
 \ "tags",
-\ "gtags"
+\ "gtags",
+\ "vendor"
 \]
 
 function! quickpick#pickers#list#open() abort
