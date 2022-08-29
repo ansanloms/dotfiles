@@ -15,3 +15,5 @@
 
 ✨ format:efm-langserver	LspDocumentFormatSync --server=efm-langserver
 ✨ format:eslint			LspDocumentFormatSync --server=eslint-language-server
+
+🔧 remotedebug_ios_webkit_adapter		tabnew | call ansanloms#terminal#terminal("wt remotedebug_ios_webkit_adapter --port 9221", "remotedebug_ios_webkit_adapter")
