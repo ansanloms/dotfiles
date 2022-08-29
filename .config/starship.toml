@@ -1,5 +1,5 @@
 format = """
-$directory$git_branch$git_commit
+$directory$git_branch
 $character"""
 
 add_newline = true
@@ -20,12 +20,3 @@ disabled = false
 symbol = ""
 truncation_symbol = ""
 style = "#2a83a2"
-
-[git_commit]
-disabled = false
-only_detached = false
-commit_hash_length = 8
-style = "#6c848d"
-
-[git_status]
-enabled = true
