@@ -554,6 +554,7 @@ let g:lsp_document_highlight_delay = 100
 let g:lsp_document_code_action_signs_delay = 100
 let g:lsp_fold_enabled = 0
 let g:lsp_text_edit_enabled = 1
+let g:lsp_inlay_hints_enabled = 1
 
 " 補完時にみる情報:
 " 検索対象が定義されている箇所 / 検索対象が宣言されている箇所 / 検索対象が実装されている箇所 / 検索対象の型が定義されている箇所
@@ -698,6 +699,19 @@ augroup typescript-setting
   autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
   autocmd FileType typescriptreact setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
   autocmd FileType typescript.tsx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+augroup END
+
+" }}}
+
+" markdown.mdx {{{
+
+call minpac#add("https://github.com/jxnblk/vim-mdx-js.git")
+
+augroup markdown-mdx-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType markdown.mdx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
 " }}}
@@ -1098,6 +1112,17 @@ augroup prisma-setting
 
   " インデントセット
   autocmd FileType prisma setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+augroup END
+
+" }}}
+
+" python {{{
+
+augroup python-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType python setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 augroup END
 
 " }}}
