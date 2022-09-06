@@ -1,49 +1,49 @@
 -- set envs
 set {
-	LANG = "ja",
-	EDITOR = "vim",
-	LESSCHARSET = "UTF-8",
-	FZF_DEFAULT_COMMAND = "rg --files --path-separator /",
+  LANG = "ja",
+  EDITOR = "vim",
+  LESSCHARSET = "UTF-8",
+  FZF_DEFAULT_COMMAND = "rg --files --path-separator /",
 }
 
 -- path
 nyagos.envadd(
-	"PATH",
-	nyagos.env.userprofile .. "\\bin",
-	nyagos.env.homedrive .. "\\msys64\\usr\\bin",
-	nyagos.env.homedrive .. "\\msys64\\mingw64\\bin",
-	nyagos.env.userprofile .. "\\.deno\\bin",
-	nyagos.env.programfiles .. "\\Vim\\vim82",
-	nyagos.env.localappdata .. "\\multipass\\bin",
-	nyagos.env.userprofile .. "\\flutter\\bin",
-	nyagos.env.userprofile .. "\\go\\bin",
-	nyagos.env.programfiles .. "\\MySQL\\MySQL Server 8.0\\bin"
+  "PATH",
+  nyagos.env.userprofile .. "\\bin",
+  nyagos.env.homedrive .. "\\msys64\\usr\\bin",
+  nyagos.env.homedrive .. "\\msys64\\mingw64\\bin",
+  nyagos.env.userprofile .. "\\.deno\\bin",
+  nyagos.env.programfiles .. "\\Vim\\vim90",
+  nyagos.env.localappdata .. "\\multipass\\bin",
+  nyagos.env.userprofile .. "\\flutter\\bin",
+  nyagos.env.userprofile .. "\\go\\bin",
+  nyagos.env.programfiles .. "\\MySQL\\MySQL Server 8.0\\bin"
 )
 
 -- prompt
 nyagos.prompt = function(this)
-	-- path
-	local path = nyagos.getwd():gsub("\\", "/")
+  -- path
+  local path = nyagos.getwd():gsub("\\", "/")
 
-	-- title
-	local title = "NYAGOS - " .. path
+  -- title
+  local title = "NYAGOS - " .. path
 
-	-- prompt
-	local prompt = "\n"
-	if nyagos.which("starship") then
-		prompt = prompt .. nyagos.eval("starship prompt 2> nul") .. " "
-	else
-		-- git
-		local git = " " .. nyagos.eval("git show --format='[%D]' --no-patch 2> nul")
-		prompt = prompt .. path .. git .. "\n" .. "❯❯❯ "
-	end
+  -- prompt
+  local prompt = "\n"
+  if nyagos.which("starship") then
+    prompt = prompt .. nyagos.eval("starship prompt 2> nul") .. " "
+  else
+    -- git
+    local git = " " .. nyagos.eval("git show --format='[%D]' --no-patch 2> nul")
+    prompt = prompt .. path .. git .. "\n" .. "> "
+  end
 
-	return nyagos.default_prompt(prompt, title)
+  return nyagos.default_prompt(prompt, title)
 end
 
 -- ffmpeg
 nyagos.alias.hlsdl = function(args)
-	nyagos.exec("start ffmpeg -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
+  nyagos.exec("start ffmpeg -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
 end
 
 nyagos.alias.vi = "vim"
