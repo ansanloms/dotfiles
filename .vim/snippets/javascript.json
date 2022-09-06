@@ -1,0 +1,37 @@
+{
+   "jest.vue": {
+     "prefix": ["jest.vue"],
+     "body": [
+        "import { mount } from \"@vue/test-utils\";",
+        "import Component from \"~/components/path/to/Component.vue\";",
+        "",
+        "describe(\"components/path/to/Component\", () => {",
+        "  test(\"テスト。\", () => {",
+        "    const props = {};",
+        "",
+        "    const wrapper = mount(Component, { propsData: props });",
+        "",
+        "    expect(wrapper.vm).toBeTruthy();",
+        "  });",
+        "});"
+     ],
+     "description": "Test code by jest in Vue.js."
+   },
+   "jest.nuxt.page": {
+     "prefix": ["jest.nuxt.page"],
+     "body": [
+        "import { get, setupTest } from \"@nuxt/test-utils\";",
+        "",
+        "describe(\"pages/path/to\", () => {",
+        "  setupTest({ server: false });",
+        "",
+        "  test(\"ページが描画されること。\", async () => {",
+        "    const { body } = await get(\"/path/to\");",
+        "",
+        "    expect(body).anything();",
+        "  });",
+        "});"
+     ],
+     "description": "Test code by jest in Nuxt.js pages."
+   }
+ }
