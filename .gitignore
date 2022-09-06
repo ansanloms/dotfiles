@@ -2,6 +2,7 @@
 !autoload
 !bitmaps
 !launcher
+!snippets
 
 .vim/autoload/*
 work
