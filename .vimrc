@@ -528,6 +528,15 @@ tnoremap <C-CR> <CR>
 
 " }}}
 
+" snippet {{{
+
+call minpac#add("https://github.com/hrsh7th/vim-vsnip.git")
+call minpac#add("https://github.com/hrsh7th/vim-vsnip-integ.git")
+
+let g:vsnip_snippet_dir = expand("~/.vim/snippets")
+
+" }}}
+
 " lsp {{{
 
 call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
@@ -554,7 +563,7 @@ let g:lsp_document_highlight_delay = 100
 let g:lsp_document_code_action_signs_delay = 100
 let g:lsp_fold_enabled = 0
 let g:lsp_text_edit_enabled = 1
-let g:lsp_inlay_hints_enabled = 1
+let g:lsp_inlay_hints_enabled = 0
 
 " 補完時にみる情報:
 " 検索対象が定義されている箇所 / 検索対象が宣言されている箇所 / 検索対象が実装されている箇所 / 検索対象の型が定義されている箇所
@@ -1127,6 +1136,17 @@ augroup END
 
 " }}}
 
+" lua {{{
+
+augroup lua-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType lua setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+augroup END
+
+" }}}
+
 " binary {{{
 
 augroup binary-setting
@@ -1174,6 +1194,7 @@ augroup END
 " }}}
 
 " ディレクトリ作成 {{{
+
 augroup vimrc-auto-mkdir
   autocmd!
 
