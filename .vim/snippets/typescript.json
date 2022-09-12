@@ -1,0 +1,22 @@
+{
+  "jest.nuxt.plugin": {
+    "prefix": ["jest.nuxt.plugin"],
+    "body": [
+      "import { Context } from \"@nuxt/types\";",
+      "import samplePlugin from \"~/plugins/sample\";",
+      "",
+      "const mockContext: Context = {} as Context;",
+      "",
+      "describe(\"components/path/to/Component\", () => {",
+      "  samplePlugin(",
+      "    mockContext,",
+      "    (key, value) => ((mockContext as any)[\"\\$\" + key] = value)",
+      "  );",
+      "",
+      "  test(\"test\", () => {",
+      "  });",
+      "});"
+    ],
+    "description": "Test code by jest in Nuxt.js plugins."
+  }
+}
