@@ -335,6 +335,9 @@ augroup gina-setting
 
   " 行番号を表示すると崩れるので出さない
   autocmd FileType gina-blame setlocal nonumber
+
+  " 折り返さない
+  autocmd FileType gina-blame setlocal nowrap
 augroup END
 
 " }}}
@@ -1052,6 +1055,19 @@ augroup json5-setting
 
   " インデントセット
   autocmd FileType json5 setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+augroup END
+
+" }}}
+
+" jsonc {{{
+
+call minpac#add("https://github.com/neoclide/jsonc.vim.git")
+
+augroup jsonc-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType jsonc setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
 " }}}
