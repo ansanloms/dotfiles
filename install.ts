@@ -1,12 +1,9 @@
-import __ from "dirname/mod.ts";
-import { dirname, isAbsolute, join, normalize } from "std/path/mod.ts";
+import * as fs from "std/fs/mod.ts";
+import * as path from "std/path/mod.ts";
 import { parse } from "std/encoding/yaml.ts";
-import { exists } from "std/fs/mod.ts";
 
-const __filename = normalize(__(import.meta)["__filename"]).slice(
-  Deno.build.os === "windows" ? 1 : 0,
-);
-const __dirname = dirname(__filename);
+const __filename = path.fromFileUrl(import.meta.url);
+const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
 
 interface Option {
   target?: string[];
@@ -27,7 +24,7 @@ interface Config {
 
 const config = parse(
   (new TextDecoder("utf-8")).decode(
-    await Deno.readAll(await Deno.open(join(__dirname, "config.yaml"))),
+    await Deno.readAll(await Deno.open(path.join(__dirname, "config.yaml"))),
   ),
 ) as Config;
 
@@ -40,23 +37,21 @@ if (typeof homedir === "undefined") {
   Deno.exit(1);
 }
 
-const expand = (path: string) => {
-  let filepath = path;
-
+const expand = (filepath: string) => {
   if (filepath[0] === "~") {
-    filepath = join(homedir, filepath.slice(1));
+    filepath = path.join(homedir, filepath.slice(1));
   }
-  filepath = normalize(filepath);
+  filepath = path.normalize(filepath);
 
-  if (!isAbsolute(filepath)) {
-    filepath = join(__dirname, filepath);
+  if (!path.isAbsolute(filepath)) {
+    filepath = path.join(__dirname, filepath);
   }
 
   return filepath;
 };
 
 const clean = async (dest: string) => {
-  if (await exists(dest)) {
+  if (await fs.exists(dest)) {
     if ((await Deno.readLink(dest).catch(() => null)) !== null) {
       await Deno.remove(dest);
     } else {
@@ -93,11 +88,11 @@ const skip = (option: Option | undefined) => {
 };
 
 const link = async (dest: string, src: string) => {
-  if (!(await exists(src))) {
+  if (!(await fs.exists(src))) {
     throw new Error("'" + src + "' not exists.");
   }
 
-  await Deno.mkdir(dirname(dest), { recursive: true });
+  await Deno.mkdir(path.dirname(dest), { recursive: true });
   await Deno.symlink(src, dest, {
     type: (await Deno.open(src).catch(() => null)) !== null ? "file" : "dir",
   });

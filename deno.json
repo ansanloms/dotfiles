@@ -1,7 +1,16 @@
 {
+  "lint": {
+    "files": {
+      "include": ["install.ts", "import_map.json", "deno.json"]
+    }
+  },
   "fmt": {
     "files": {
       "include": ["install.ts", "import_map.json", "deno.json"]
     }
+  },
+  "importMap": "import_map.json",
+  "tasks": {
+    "install": "deno run --allow-env --allow-read --allow-write install.ts"
   }
 }
