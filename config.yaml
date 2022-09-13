@@ -65,3 +65,8 @@ link:
     option:
       target:
         - windows
+  "~/bin/lua54.dll":
+    src: "~/scoop/apps/lua/current/lua54.dll"
+    option:
+      target:
+        - windows
