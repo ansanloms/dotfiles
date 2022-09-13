@@ -1,6 +1,6 @@
 function! ansanloms#tabline#tabline() abort
   let l:sep = ""  " タブ間の区切り
-  return join(map(range(1, tabpagenr("$")), "ansanloms#tabline#tabpage_label(v:val)"), l:sep) . l:sep . "%#TabLineFill#%T"
+  return join(map(range(1, tabpagenr("$")), {_, val -> ansanloms#tabline#tabpage_label(val)}), l:sep) . l:sep . "%#TabLineFill#%T"
 endfunction
 
 function! ansanloms#tabline#tabpage_label(tabpagenr) abort
@@ -22,5 +22,5 @@ function! ansanloms#tabline#tabpage_label(tabpagenr) abort
   " ファイルネームがないとき
   let l:noname = "[No Name]"
 
-  return "%" . a:tabpagenr . "T" . l:hi . " " . a:tabpagenr . ":" . (l:fname !=# "" ? l:fname : l:noname) . l:mod . " " . "%T%#TabLineFill#"
+  return "%" . a:tabpagenr . "T" . l:hi . " " . (l:fname !=# "" ? l:fname : l:noname) . l:mod . " " . "%T%#TabLineFill#"
 endfunction

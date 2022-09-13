@@ -1,10 +1,24 @@
 function! ansanloms#statusline#statusline() abort
-  let l:s = " " . ansanloms#statusline#mode_minimum() . ansanloms#statusline#paste() . " " . ansanloms#statusline#filename() . "%m%r%h%w%=" . " " . &filetype . " " . &fileformat . " " . &fileencoding
+  let l:s = " " . ansanloms#statusline#mode() . ansanloms#statusline#paste()
 
   try
-    let l:s = l:s . " " . "%#SkyColorClock#" . " " . sky_color_clock#statusline() . " "
+    let l:branch = gina#component#repo#branch()
+    if strlen(l:branch) > 0
+      let l:s = l:s . " " . l:branch
+    endif
   catch /E117.*/
   endtry
+
+  let l:s = l:s . " " . ansanloms#statusline#filename()
+  let l:s = l:s . "%m%r%h%w%="
+  let l:s = l:s . " " . &filetype . " " . &fileformat . " " . &fileencoding
+
+  try
+    let l:s = l:s . " " . "%#SkyColorClock#" . " " . sky_color_clock#statusline()
+  catch /E117.*/
+  endtry
+
+  let l:s = l:s . " "
 
   return l:s
 endfunction
