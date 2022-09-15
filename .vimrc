@@ -1115,6 +1115,12 @@ augroup END
 
 " }}}
 
+" mustache {{{
+
+call minpac#add("https://github.com/juvenn/mustache.vim.git")
+
+" }}}
+
 " binary {{{
 
 augroup binary-setting
@@ -1317,7 +1323,7 @@ set background=dark
 
 try
   packadd nightfox.nvim
-  colorscheme terafox
+  colorscheme carbonfox
 
   highlight! link StatusLineTerm StatusLine
   highlight! link StatusLineTermNC StatusLineNC
