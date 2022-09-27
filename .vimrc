@@ -306,6 +306,7 @@ call minpac#add("https://github.com/junegunn/vim-easy-align.git")
 call minpac#add("https://github.com/tyru/open-browser.vim.git")
 call minpac#add("https://github.com/itchyny/vim-cursorword.git")
 call minpac#add("https://github.com/mattn/vim-notification.git")
+call minpac#add("https://github.com/liuchengxu/vista.vim.git")
 
 call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
 let g:loaded_matchparen = 1     " matchparenを無効にする
@@ -518,7 +519,7 @@ let g:lsp_document_highlight_delay = 100
 let g:lsp_document_code_action_signs_delay = 100
 let g:lsp_fold_enabled = 0
 let g:lsp_text_edit_enabled = 1
-let g:lsp_inlay_hints_enabled = 0
+let g:lsp_inlay_hints_enabled = 1
 
 " 補完時にみる情報:
 " 検索対象が定義されている箇所 / 検索対象が宣言されている箇所 / 検索対象が実装されている箇所 / 検索対象の型が定義されている箇所
