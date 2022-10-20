@@ -1312,14 +1312,14 @@ call minpac#add("https://github.com/fcpg/vim-orbital.git")
 call minpac#add("https://github.com/ulwlu/elly.vim.git")
 call minpac#add("https://github.com/gerardbm/vim-atomic.git")
 call minpac#add("https://github.com/EdenEast/nightfox.nvim.git")
+call minpac#add("https://github.com/tyrannicaltoucan/vim-deep-space.git")
 
 " シンタックス ON
 syntax enable
 set background=dark
 
 try
-  packadd nightfox.nvim
-  colorscheme carbonfox
+  colorscheme deep-space
 
   highlight! link StatusLineTerm StatusLine
   highlight! link StatusLineTermNC StatusLineNC
