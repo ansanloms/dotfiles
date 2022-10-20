@@ -1279,7 +1279,7 @@ set sidescrolloff=8
 set sidescroll=1
 
 " コマンドラインの行数
-set cmdheight=2
+set cmdheight=1
 
 " 括弧強調
 set showmatch
