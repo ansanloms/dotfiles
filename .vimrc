@@ -1304,22 +1304,16 @@ call minpac#add("https://github.com/cocopon/iceberg.vim.git")
 call minpac#add("https://github.com/Rigellute/rigel.git")
 call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
 call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
-call minpac#add("https://github.com/djjcast/mirodark.git")
-call minpac#add("https://github.com/ansanloms/hilal.git")
-call minpac#add("https://github.com/cormacrelf/vim-colors-github.git")
-call minpac#add("https://github.com/danishprakash/vim-yami.git")
-call minpac#add("https://github.com/fcpg/vim-orbital.git")
-call minpac#add("https://github.com/ulwlu/elly.vim.git")
-call minpac#add("https://github.com/gerardbm/vim-atomic.git")
-call minpac#add("https://github.com/EdenEast/nightfox.nvim.git")
-call minpac#add("https://github.com/tyrannicaltoucan/vim-deep-space.git")
+call minpac#add("https://github.com/kaicataldo/material.vim.git")
+call minpac#add("https://github.com/wuelnerdotexe/vim-enfocado")
+call minpac#add("https://github.com/tjammer/blayu.vim")
 
 " シンタックス ON
 syntax enable
 set background=dark
 
 try
-  colorscheme deep-space
+  colorscheme enfocado
 
   highlight! link StatusLineTerm StatusLine
   highlight! link StatusLineTermNC StatusLineNC
