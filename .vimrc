@@ -1314,13 +1314,15 @@ call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
 call minpac#add("https://github.com/kaicataldo/material.vim.git")
 call minpac#add("https://github.com/wuelnerdotexe/vim-enfocado")
 call minpac#add("https://github.com/tjammer/blayu.vim")
+call minpac#add("https://github.com/EdenEast/nightfox.nvim")
 
 " シンタックス ON
 syntax enable
 set background=dark
 
 try
-  colorscheme enfocado
+  packadd nightfox.nvim
+  colorscheme carbonfox
 
   highlight! link StatusLineTerm StatusLine
   highlight! link StatusLineTermNC StatusLineNC
