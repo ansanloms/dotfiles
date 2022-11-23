@@ -1172,13 +1172,21 @@ augroup END
 
 " ディレクトリ作成 {{{
 
-augroup vimrc-auto-mkdir
+augroup auto-mkdir
   autocmd!
 
   " ファイルを保存する直前に実施
   autocmd BufWritePre * call s:auto_mkdir(expand("<afile>:p:h"), v:cmdbang)
 
   function! s:auto_mkdir(dir, force)
+    if a:dir[0:5] == "scp://"
+      return
+    endif
+
+    if a:dir[0:6] == "sftp://"
+      return
+    endif
+
     if !isdirectory(a:dir)
       call mkdir(iconv(a:dir, &encoding, &termencoding), "p")
     endif
