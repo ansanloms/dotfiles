@@ -312,6 +312,24 @@ call minpac#add("https://github.com/vim-denops/denops.vim.git")
 call minpac#add("https://github.com/liuchengxu/vista.vim.git")
 let g:vista_default_executive = "vim_lsp"
 
+call minpac#add("https://github.com/uga-rosa/scorpeon.vim.git")
+
+let g:scorpeon_extensions_path = [
+\ expand("~/.vim/scorpeon/vscode/extensions"),
+\]
+
+let g:scorpeon_highlight = {
+\ "enable": v:true,
+\ "disable": { -> getfsize(expand("%")) > 1 * 1024 * 1024 }
+\}
+
+if has("vim_starting")
+  if !isdirectory(expand("~/.vim/scorpeon"))
+    call mkdir(expand("~/.vim/scorpeon"), "p")
+    call system("git clone https://github.com/microsoft/vscode.git " . expand("~/.vim/scorpeon/vscode") . " --depth 1")
+  endif
+endif
+
 " }}}
 
 " git {{{
