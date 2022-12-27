@@ -320,7 +320,7 @@ let g:scorpeon_extensions_path = [
 
 let g:scorpeon_highlight = {
 \ "enable": v:true,
-\ "disable": { -> getfsize(expand("%")) > 1 * 1024 * 1024 }
+\ "disable": ["markdown", "quickpick", "quickpick.buffer"],
 \}
 
 if has("vim_starting")
