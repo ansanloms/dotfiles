@@ -534,6 +534,8 @@ let g:lsp_fold_enabled = 0
 let g:lsp_text_edit_enabled = 1
 let g:lsp_inlay_hints_enabled = 1
 
+let g:lsp_diagnostics_virtual_text_enabled = 0
+
 " 補完時にみる情報:
 " 検索対象が定義されている箇所 / 検索対象が宣言されている箇所 / 検索対象が実装されている箇所 / 検索対象の型が定義されている箇所
 let g:lsp_tagfunc_source_methods = [
