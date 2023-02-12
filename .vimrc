@@ -1215,14 +1215,6 @@ augroup END
 
 " }}}
 
-" お仕事用設定 {{{
-
-if filereadable(expand("~/.vim/work.vim"))
-  source ~/.vim/work.vim
-endif
-
-" }}}
-
 " gVim {{{
 
 if has("gui_running")
@@ -1356,5 +1348,21 @@ try
   highlight! link StatusLineTermNC StatusLineNC
 catch
 endtry
+
+" }}}
+
+" お仕事用設定 {{{
+
+if filereadable(expand("~/.vim/work.vim"))
+  source ~/.vim/work.vim
+endif
+
+" }}}
+
+" 一時的設定 {{{
+
+if filereadable(expand("~/.vim/temp.vim"))
+  source ~/.vim/temp.vim
+endif
 
 " }}}
