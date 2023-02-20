@@ -330,8 +330,6 @@ if has("vim_starting")
   endif
 endif
 
-" }}}
-
 " git {{{
 
 call minpac#add("https://github.com/airblade/vim-gitgutter.git")
@@ -439,7 +437,7 @@ let g:quickpick_mpc_maxheight = 15
 " Leader
 let g:mapleader = ","
 
-command! OpenFilemanager call ansanloms#filemanager#open()
+command! OpenFilemanager call ansanloms#filemanager#open(expand("%:p"))
 command! OpenVscode call ansanloms#vscode#open()
 command! OpenPhpstorm call ansanloms#phpstorm#open()
 command! -range OpenBitbucket <line1>,<line2>call ansanloms#bitbucket#open()
