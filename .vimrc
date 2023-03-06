@@ -342,6 +342,8 @@ let g:gina#command#blame#formatter#timestamp_format2 = '%Y-%m-%d'
 
 call minpac#add("https://github.com/lambdalisue/gin.vim.git")
 
+call minpac#add("https://github.com/ansanloms/trauermarsch.vim.git")
+
 augroup gina-setting
   autocmd!
 
