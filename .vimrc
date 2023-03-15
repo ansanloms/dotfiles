@@ -342,8 +342,6 @@ let g:gina#command#blame#formatter#timestamp_format2 = '%Y-%m-%d'
 
 call minpac#add("https://github.com/lambdalisue/gin.vim.git")
 
-call minpac#add("https://github.com/ansanloms/trauermarsch.vim.git")
-
 augroup gina-setting
   autocmd!
 
@@ -494,6 +492,30 @@ command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
 tnoremap <S-space> <space>
 tnoremap <C-BS> <BS>
 tnoremap <C-CR> <CR>
+
+" }}}
+
+" chat {{[
+
+call minpac#add("https://github.com/ansanloms/ramble.vim.git")
+
+function! s:ChatStart(question) abort
+  vertical botright new
+  setlocal ft=markdown
+  call ramble#chat#open(bufnr(), "chatgpt", a:question)
+endfunction
+
+function! s:ChatCode(question) range abort
+  let l:code = getline(a:firstline, a:lastline)->join("\n")
+  let l:content = [a:question, "", "```", l:code, "```"]->join("\n")
+  call s:ChatStart(l:content)
+endfunction
+
+command! ChatConfig tabnew | call ramble#config#open()
+command! ChatOpen call s:ChatStart("")
+command! -nargs=? ChatStart call s:ChatStart(<f-args>)
+command! -range=% -nargs=1 ChatCode :<line1>,<line2>call s:ChatCode(<f-args>)
+command! Chat call ramble#chat#chat(bufnr())
 
 " }}}
 
