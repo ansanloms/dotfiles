@@ -1363,8 +1363,7 @@ syntax enable
 set background=dark
 
 try
-  packadd nightfox.nvim
-  colorscheme carbonfox
+  colorscheme gotham
 
   highlight! link StatusLineTerm StatusLine
   highlight! link StatusLineTermNC StatusLineNC
