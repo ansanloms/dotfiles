@@ -412,8 +412,19 @@ call minpac#add("https://github.com/ansanloms/quickpick-mpc.vim.git")
 if has("win32") || has("win64")
   let g:quickpick_mpc_command = "wsl mpc"
 endif
+
 let g:quickpick_mpc_format = "%artist%: %album% / [%disc%-]%track% %title%"
 let g:quickpick_mpc_maxheight = 15
+
+augroup quickpick-setting
+  autocmd!
+
+  " quickpick 上では ime を有効にしない。
+  autocmd FileType quickpick-filter setlocal iminsert=0
+  autocmd BufEnter * if &filetype == "quickpick-filter" | setlocal iminsert=0 | endif
+  autocmd BufEnter * if &filetype != "quickpick-filter" | setlocal iminsert=2 | endif
+augroup END
+
 
 " }}}
 
@@ -1264,10 +1275,12 @@ if has("gui_running")
   set guicursor=a:blinkon0
 
   " 挿入モードの IME デフォルト
-  set iminsert=0
+  set iminsert=2
 
   " 検索時の IME デフォルト
   set imsearch=-1
+
+  set imcmdline
 endif
 
 " }}}

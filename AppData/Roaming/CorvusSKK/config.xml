@@ -19,9 +19,18 @@
     <key name="encoding" value="0" />
     <key name="timeout" value="5" />
   </section>
+  <section name="userdict">
+    <key name="backupdir" value="%APPDATA%\CorvusSKK" />
+    <key name="backupgen" value="7" />
+    <key name="privateonvkey" value="0x79" />
+    <key name="privateonmkey" value="6" />
+    <key name="privateoffvkey" value="0x79" />
+    <key name="privateoffmkey" value="6" />
+    <key name="privatemodeauto" value="1" />
+  </section>
   <section name="behavior">
-    <key name="defaultmode" value="0" />
-    <key name="defmodeascii" value="0" />
+    <key name="defaultmode" value="1" />
+    <key name="defmodeascii" value="1" />
     <key name="begincvokuri" value="1" />
     <key name="precedeokuri" value="0" />
     <key name="shiftnnokuri" value="1" />
@@ -58,6 +67,7 @@
     <key name="drawapi" value="1" />
     <key name="colorfont" value="1" />
     <key name="untilcandlist" value="5" />
+    <key name="pagecandnum" value="7" />
     <key name="dispcandno" value="0" />
     <key name="verticalcand" value="1" />
     <key name="annotation" value="1" />
@@ -102,6 +112,7 @@
       <row vkey="0x19" mkey="0" />
       <row vkey="0xF3" mkey="0" />
       <row vkey="0xF4" mkey="0" />
+      <row vkey="0x16" mkey="0" />
     </list>
   </section>
   <section name="preservedkeyoff">
@@ -110,6 +121,7 @@
       <row vkey="0x19" mkey="0" />
       <row vkey="0xF3" mkey="0" />
       <row vkey="0xF4" mkey="0" />
+      <row vkey="0x16" mkey="0" />
     </list>
   </section>
   <section name="keymap">
@@ -139,6 +151,7 @@
     <key name="right" value="\cf" />
     <key name="down" value="\ce" />
     <key name="paste" value="\cy|\cv" />
+    <key name="reconvert" value="" />
   </section>
   <section name="vkeymap">
     <key name="kana" value="" />
@@ -167,6 +180,7 @@
     <key name="right" value="\x27" />
     <key name="down" value="\x28" />
     <key name="paste" value="" />
+    <key name="reconvert" value="" />
   </section>
   <section name="convpoint">
     <list>
