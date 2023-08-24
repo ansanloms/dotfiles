@@ -1,6 +1,6 @@
 import * as fs from "std/fs/mod.ts";
 import * as path from "std/path/mod.ts";
-import { parse } from "std/encoding/yaml.ts";
+import { parse } from "std/yaml/mod.ts";
 
 const __filename = path.fromFileUrl(import.meta.url);
 const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
