@@ -1258,8 +1258,6 @@ if has("gui_running")
 
   " 検索時の IME デフォルト
   set imsearch=-1
-
-  set imcmdline
 endif
 
 " }}}
