@@ -629,6 +629,20 @@ augroup END
 
 " }}}
 
+" clang {{{
+
+augroup clang-setting
+  autocmd!
+
+  " 拡張子設定
+  autocmd BufNewFile,BufRead *.c set filetype=c
+
+  " インデントセット
+  autocmd FileType c setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
+augroup END
+
+" }}}
+
 " Java {{{
 
 call minpac#add("https://github.com/vim-jp/vim-java.git")
