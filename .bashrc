@@ -1,3 +1,19 @@
+function isWsl() {
+  if [ "$(uname)" == "Linux" ] && [[ "$(uname -r)" == *microsoft* ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function isMsys() {
+  if [[ "$(uname)" == *MSYS* ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 if type "starship" > /dev/null 2>&1; then
   eval "$(starship init bash)"
 #else
@@ -6,11 +22,17 @@ if type "starship" > /dev/null 2>&1; then
 #  PS1+='\u@\h ❯❯❯ '
 fi
 
-alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
-alias ll='ls -l'
-alias vi='vim'
+alias rm="rm -i"
+alias cp="cp -i"
+alias mv="mv -i"
+alias ll="ls -l"
+alias vi="vim"
+
+if [ isWsl ]; then
+  alias git="git.exe"
+  alias vim="vim.exe"
+  alias vi="vim.exe"
+fi
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
