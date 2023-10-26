@@ -1,4 +1,18 @@
-export PATH=$HOME/bin:$PATH
+function isWsl() {
+  if [ "$(uname)" == "Linux" ] && [[ "$(uname -r)" == *microsoft* ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function isMsys() {
+  if [[ "$(uname)" == *MSYS* ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
 
 export LANG=ja_JP.UTF-8
 export LC_ALL=
@@ -17,16 +31,31 @@ export PS1_COLOR_RESET="$(tput sgr0)"
 
 export MYSQL_PS1="(\u@\h) [\d]> "
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+if [ isWsl ] && [ -z "$http_proxy" ]; then
+  export http_proxy=http://$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):30080
+  export https_proxy=${http_proxy}
+fi
+
+if [ -d "$HOME/bin" ]; then
+  export PATH="$HOME/bin:$PATH"
+fi
 
 export DENO_INSTALL="$HOME/.deno"
-export PATH="$DENO_INSTALL/bin:$PATH"
+if [ -d "$DENO_INSTALL" ]; then
+  export PATH="$DENO_INSTALL/bin:$PATH"
+fi
+
+export VOLTA_HOME="$HOME/.volta"
+if [ -d "$VOLTA_HOME" ]; then
+  export PATH="$VOLTA_HOME/bin:$PATH"
+fi
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	/etc/bashrc
+  /etc/bashrc
 fi
 
-test -r ~/.bashrc && . ~/.bashrc
+# include .bashrc if it exists
+if [ -f "$HOME/.bashrc" ]; then
+  . "$HOME/.bashrc"
+fi
