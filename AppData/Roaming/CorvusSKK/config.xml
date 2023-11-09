@@ -16,7 +16,7 @@
     <key name="serv" value="0" />
     <key name="host" value="localhost" />
     <key name="port" value="55100" />
-    <key name="encoding" value="0" />
+    <key name="encoding" value="1" />
     <key name="timeout" value="5" />
   </section>
   <section name="userdict">
@@ -126,8 +126,8 @@
   </section>
   <section name="keymap">
     <key name="kana" value="q" />
-    <key name="convchar" value="\cq" />
-    <key name="jlatin" value="L" />
+    <key name="convchar" value="" />
+    <key name="jlatin" value="" />
     <key name="ascii" value="l" />
     <key name="jmode" value="" />
     <key name="abbrev" value="/" />
