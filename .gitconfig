@@ -6,7 +6,7 @@
 	autoCRLF = false
 	preloadindex = true
 	fscache = false
-	editor = vim
+	editor = 'c:/Program Files/Vim/vim90/vim.exe'
 	quotepath = false
 [diff]
 	algorithm = histogram

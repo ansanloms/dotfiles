@@ -126,27 +126,6 @@ endif
 
 " }}}
 
-" 他の vim が起動済ならそれを使う {{{
-
-" http://tyru.hatenablog.com/entry/20130430/vim_resident
-
-if argc() && (has("mac") || has("win32") || has("win64"))
-  let s:running_vim_list = filter(split(serverlist(), "\n"), { v -> v:val !=? v:servername })
-
-  if !empty(s:running_vim_list)
-    silent execute
-    \ (has("gui_running") ? "!gvim" : "!vim")
-    \ "--servername" s:running_vim_list[0]
-    \ "--remote-silent"
-    \ join(map(argv(), { v -> shellescape(v:val, 1) }), " ")
-    qa!
-  endif
-
-  unlet s:running_vim_list
-endif
-
-" }}}
-
 " 基本設定 {{{
 
 " コマンドの保存履歴数
@@ -308,6 +287,12 @@ call minpac#add("https://github.com/itchyny/vim-parenmatch.git")
 let g:loaded_matchparen = 1     " matchparenを無効にする
 
 call minpac#add("https://github.com/vim-denops/denops.vim.git")
+
+call minpac#add("https://github.com/thinca/vim-singleton.git")
+try
+  call singleton#enable()
+catch
+endtry
 
 " git {{{
 
