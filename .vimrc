@@ -1155,6 +1155,19 @@ call minpac#add("https://github.com/juvenn/mustache.vim.git")
 
 " }}}
 
+" terraform {{{
+
+call minpac#add("https://github.com/hashivim/vim-terraform.git")
+
+augroup terraform-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType terraform setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+augroup END
+
+" }}}
+
 " binary {{{
 
 augroup binary-setting
