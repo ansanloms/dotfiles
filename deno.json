@@ -1,12 +1,12 @@
 {
   "lint": {
-      "include": ["install.ts",  "deno.json"]
+    "include": ["install.ts", "deno.json"]
   },
   "fmt": {
-      "include": ["install.ts",  "deno.json"]
+    "include": ["install.ts", "deno.json"]
   },
   "imports": {
-    "std/": "https://deno.land/std@0.200.0/"
+    "std/": "https://deno.land/std@0.206.0/"
   },
   "tasks": {
     "install": "deno run --allow-env --allow-read --allow-write install.ts"

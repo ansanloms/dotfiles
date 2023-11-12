@@ -290,7 +290,9 @@ call minpac#add("https://github.com/vim-denops/denops.vim.git")
 
 call minpac#add("https://github.com/thinca/vim-singleton.git")
 try
-  call singleton#enable()
+  if has("win32")
+    call singleton#enable()
+  endif
 catch
 endtry
 

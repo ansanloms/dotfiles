@@ -2,30 +2,21 @@ import * as fs from "std/fs/mod.ts";
 import * as path from "std/path/mod.ts";
 import { parse } from "std/yaml/mod.ts";
 
-const __filename = path.fromFileUrl(import.meta.url);
 const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
-
-interface Option {
-  target?: string[];
-  skip?: string[] | boolean;
-  clean?: boolean;
-}
 
 interface Link {
   src: string;
-  option?: Option;
+  targets?: ("darwin" | "linux" | "windows")[];
 }
 
 interface Config {
   link: {
-    [Key in string]: Link;
+    [Key in string]: Link[];
   };
 }
 
 const config = parse(
-  (new TextDecoder("utf-8")).decode(
-    await Deno.readAll(await Deno.open(path.join(__dirname, "config.yaml"))),
-  ),
+  await Deno.readTextFile(path.join(__dirname, "config.yaml")),
 ) as Config;
 
 const homedir = Deno.env.get(
@@ -34,7 +25,6 @@ const homedir = Deno.env.get(
 
 if (typeof homedir === "undefined") {
   throw new Error("Cannot find home directory.");
-  Deno.exit(1);
 }
 
 const expand = (filepath: string) => {
@@ -60,33 +50,6 @@ const clean = async (dest: string) => {
   }
 };
 
-const skip = (option: Option | undefined) => {
-  if (typeof option === "undefined") {
-    return false;
-  }
-
-  if (
-    typeof option?.target !== "undefined" &&
-    !option.target.includes(Deno.build.os)
-  ) {
-    return true;
-  }
-
-  if (
-    typeof option?.skip !== "undefined" &&
-    Array.isArray(option?.skip) &&
-    option.skip.includes(Deno.build.os)
-  ) {
-    return true;
-  }
-
-  if (option?.skip === true) {
-    return true;
-  }
-
-  return false;
-};
-
 const link = async (dest: string, src: string) => {
   if (!(await fs.exists(src))) {
     throw new Error("'" + src + "' not exists.");
@@ -98,54 +61,47 @@ const link = async (dest: string, src: string) => {
   });
 };
 
-for (const dest in config.link) {
-  try {
-    const _src = expand(config.link[dest].src);
-    const _dest = expand(dest);
-    const _option = config.link[dest].option;
+for (const v of Object.entries(config.link)) {
+  const dest = expand(v[0]);
 
-    console.log();
-    console.log(
-      "%c" + _dest + "%c -> %c" + _src,
-      "color: blue",
-      "color: gray",
-      "color: yellow",
-    );
+  for (const l of v[1]) {
+    const src = expand(l.src);
+    const targets = l.targets || [];
 
-    if (skip(_option)) {
-      if (_option?.clean === true) {
-        console.log(
-          " %cRemoving: %c" + _dest + "%c.",
-          "color: gray",
-          "color: cyan",
-          "color: gray",
-        );
-        await clean(_dest);
-      }
-
-      console.log(" %cThis is a skip target.", "color: gray");
-    } else {
-      console.log(
-        " %cRemoving: %c" + _dest + "%c.",
-        "color: gray",
-        "color: cyan",
-        "color: gray",
-      );
-      await clean(_dest);
-
-      console.log(
-        " %cCreating link: %c" + _dest + "%c -> %c" + _src + "%c.",
-        "color: gray",
-        "color: cyan",
-        "color: gray",
-        "color: cyan",
-        "color: gray",
-      );
-      await link(_dest, _src);
+    if (!targets.map(String).includes(String(Deno.build.os))) {
+      continue;
     }
 
-    console.log("  %cSuccessed.", "color: green");
-  } catch (e) {
-    console.error("  %c" + e.toString(), "color: red");
+    try {
+      console.log();
+      console.log(
+        "%c" + dest + "%c -> %c" + src,
+        "color: blue",
+        "color: gray",
+        "color: yellow",
+      );
+
+      console.log(
+        " %cRemoving: %c" + dest + "%c.",
+        "color: gray",
+        "color: cyan",
+        "color: gray",
+      );
+      await clean(dest);
+
+      console.log(
+        " %cCreating link: %c" + dest + "%c -> %c" + src + "%c.",
+        "color: gray",
+        "color: cyan",
+        "color: gray",
+        "color: cyan",
+        "color: gray",
+      );
+      await link(dest, src);
+
+      console.log("  %cSuccessed.", "color: green");
+    } catch (e) {
+      console.error("  %c" + e.toString(), "color: red");
+    }
   }
 }

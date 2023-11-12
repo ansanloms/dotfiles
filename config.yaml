@@ -1,72 +1,62 @@
 link:
   ~/.bashrc:
-    src: ./.bashrc
+    - src: ./.bashrc
   ~/.bash_profile:
-    src: ./.bash_profile
+    - src: ./.bash_profile
   ~/.gitconfig:
-    src: ./.gitconfig
+    - src: ./.gitconfig
+  ~/.gitconfig.os:
+    - src: ./.gitconfig.windows
+      targets:
+        - windows
+    - src: ./.gitconfig.linux
+      targets:
+        - linux
   ~/.vim:
-    src: ./.vim
+    - src: ./.vim
   ~/.vimrc:
-    src: ./.vimrc
+    - src: ./.vimrc
   ~/.minttyrc:
-    src: ./.minttyrc
-    option:
-      target:
+    - src: ./.minttyrc
+      targets:
         - windows
   ~/.nyagos:
-    src: ./.nyagos
+    - src: ./.nyagos
   ~/.wslconfig:
-    src: ./.wslconfig
-    option:
-      target:
+    - src: ./.wslconfig
+      targets:
         - windows
   ~/.config/starship.toml:
-    src: ./.config/starship.toml
+    - src: ./.config/starship.toml
   "~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json":
-    src: "./AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
-    option:
-      target:
+    - src: "./AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
+      targets:
         - windows
   "~/AppData/Roaming/PuTTY/putty.ini":
-    src: "./AppData/Roaming/PuTTY/putty.ini"
-    option:
-      target:
+    - src: "./AppData/Roaming/PuTTY/putty.ini"
+      targets:
         - windows
   "~/AppData/Roaming/CorvusSKK/config.xml":
-    src: "./AppData/Roaming/CorvusSKK/config.xml"
-    option:
-      target:
+    - src: "./AppData/Roaming/CorvusSKK/config.xml"
+      targets:
         - windows
-  "~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/autohotkey.exe":
-    src: "./AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/autohotkey.exe"
-    option:
-      skip: true
-      target:
-        - windows
-      clean: true
   "~/AppData/Local/mpd/mpd.conf":
-    src: "./AppData/Local/mpd/mpd.conf"
-    option:
-      target:
+    - src: "./AppData/Local/mpd/mpd.conf"
+      targets:
         - windows
   "~/AppData/Roaming/efm-langserver/config.yaml":
-    src: "./AppData/Roaming/efm-langserver/config.yaml"
-    option:
-      target:
+    - src: "./AppData/Roaming/efm-langserver/config.yaml"
+      targets:
         - windows
   "~/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1":
-    src: "./Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
-    option:
-      target:
+    - src: "./Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
+      targets:
         - windows
   "~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1":
-    src: "./Documents/PowerShell/Microsoft.PowerShell_profile.ps1"
-    option:
-      target:
+    - src: "./Documents/PowerShell/Microsoft.PowerShell_profile.ps1"
+      targets:
         - windows
   "~/bin/lua54.dll":
-    src: "~/scoop/apps/lua/current/lua54.dll"
-    option:
-      target:
+    - src: "~/scoop/apps/lua/current/lua54.dll"
+      targets:
         - windows
