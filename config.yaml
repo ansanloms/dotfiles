@@ -22,6 +22,8 @@ link:
         - windows
   ~/.nyagos:
     - src: ./.nyagos
+      targets:
+        - windows
   ~/.wslconfig:
     - src: ./.wslconfig
       targets:
