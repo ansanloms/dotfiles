@@ -66,9 +66,12 @@ for (const v of Object.entries(config.link)) {
 
   for (const l of v[1]) {
     const src = expand(l.src);
-    const targets = l.targets || [];
+    const targets = l.targets;
 
-    if (!targets.map(String).includes(String(Deno.build.os))) {
+    if (
+      typeof targets !== "undefined" &&
+      !targets.map(String).includes(String(Deno.build.os))
+    ) {
       continue;
     }
 
