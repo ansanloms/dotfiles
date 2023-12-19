@@ -12,8 +12,8 @@ alias mv="mv -i"
 alias ll="ls -l"
 alias vi="vim"
 
-if [ isWsl ]; then
-  alias git="git.exe"
-  alias vim="vim.exe"
-  alias vi="vim.exe"
-fi
+#if [ isWsl ]; then
+#  alias git="git.exe"
+#  alias vim="vim.exe"
+#  alias vi="vim.exe"
+#fi
