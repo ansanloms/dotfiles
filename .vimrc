@@ -1356,10 +1356,7 @@ augroup END
 call minpac#add("https://github.com/cocopon/iceberg.vim.git")
 call minpac#add("https://github.com/Rigellute/rigel.git")
 call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
-call minpac#add("https://github.com/arcticicestudio/nord-vim.git")
 call minpac#add("https://github.com/kaicataldo/material.vim.git")
-call minpac#add("https://github.com/wuelnerdotexe/vim-enfocado")
-call minpac#add("https://github.com/tjammer/blayu.vim")
 call minpac#add("https://github.com/EdenEast/nightfox.nvim")
 
 " シンタックス ON
@@ -1367,7 +1364,8 @@ syntax enable
 set background=dark
 
 try
-  colorscheme gotham
+  packadd! nightfox.nvim
+  colorscheme terafox
 
   highlight! link StatusLineTerm StatusLine
   highlight! link StatusLineTermNC StatusLineNC
