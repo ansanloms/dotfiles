@@ -1,3 +1,4 @@
 [wsl2]
 kernelCommandLine = vsyscall=emulate
 swap=0
+memory=24GB
