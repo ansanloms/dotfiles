@@ -1,6 +1,7 @@
 import * as fs from "std/fs/mod.ts";
 import * as path from "std/path/mod.ts";
 import { parse } from "std/yaml/mod.ts";
+import { colors } from "cliffy/ansi/colors.ts";
 
 const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
 
@@ -76,35 +77,26 @@ for (const v of Object.entries(config.link)) {
     }
 
     try {
-      console.log();
-      console.log(
-        "%c" + dest + "%c -> %c" + src,
-        "color: blue",
-        "color: gray",
-        "color: yellow",
+      console.info();
+      console.info(
+        `${colors.blue(dest)} ${colors.gray("->")} ${colors.yellow(src)}`,
       );
 
-      console.log(
-        " %cRemoving: %c" + dest + "%c.",
-        "color: gray",
-        "color: cyan",
-        "color: gray",
+      console.info(
+        ` ${colors.gray("Removing:")} ${colors.cyan(dest)}${colors.gray(".")}`,
       );
       await clean(dest);
 
-      console.log(
-        " %cCreating link: %c" + dest + "%c -> %c" + src + "%c.",
-        "color: gray",
-        "color: cyan",
-        "color: gray",
-        "color: cyan",
-        "color: gray",
+      console.info(
+        ` ${colors.gray("Creating link:")} ${colors.cyan(dest)} ${
+          colors.gray("->")
+        } ${colors.cyan(src)}${colors.gray(".")}`,
       );
       await link(dest, src);
 
-      console.log("  %cSuccessed.", "color: green");
+      console.info(` ${colors.green("Successed.")}`);
     } catch (e) {
-      console.error("  %c" + e.toString(), "color: red");
+      console.error(` ${colors.red(e.toString())}`);
     }
   }
 }
