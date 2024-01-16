@@ -6,7 +6,7 @@ $Env:FZF_DEFAULT_COMMAND = "rg --files --path-separator /"
 $Env:Path += ";" + (Join-Path $Env:homedrive  "\msys64\usr\bin")
 $Env:Path += ";" + (Join-Path $Env:homedrive  "\msys64\mingw64\bin")
 $Env:Path += ";" + (Join-Path $Env:userprofile  "\.deno\bin")
-$Env:Path += ";" + (Join-Path $Env:programfiles  "\Vim\vim82")
+$Env:Path += ";" + (Join-Path $Env:programfiles  "\Vim\vim91")
 
 # bash ライクな補完
 
