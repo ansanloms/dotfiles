@@ -3,7 +3,6 @@ set {
   LANG = "ja",
   EDITOR = "vim",
   LESSCHARSET = "UTF-8",
-  FZF_DEFAULT_COMMAND = "rg --files --path-separator /",
 }
 
 -- path
@@ -13,11 +12,8 @@ nyagos.envadd(
   nyagos.env.homedrive .. "\\msys64\\usr\\bin",
   nyagos.env.homedrive .. "\\msys64\\mingw64\\bin",
   nyagos.env.userprofile .. "\\.deno\\bin",
-  nyagos.env.programfiles .. "\\Vim\\vim90",
-  nyagos.env.localappdata .. "\\multipass\\bin",
-  nyagos.env.userprofile .. "\\flutter\\bin",
-  nyagos.env.userprofile .. "\\go\\bin",
-  nyagos.env.programfiles .. "\\MySQL\\MySQL Server 8.0\\bin"
+  nyagos.env.programfiles .. "\\Vim\\vim91",
+  nyagos.env.localappdata .. "\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin"
 )
 
 -- prompt
@@ -39,11 +35,6 @@ nyagos.prompt = function(this)
   end
 
   return nyagos.default_prompt(prompt, title)
-end
-
--- ffmpeg
-nyagos.alias.hlsdl = function(args)
-  nyagos.exec("start ffmpeg -i " .. args[1] .. " -movflags faststart -c copy -bsf:a aac_adtstoasc " .. args[2] .. ".mp4")
 end
 
 nyagos.alias.vi = "vim"
