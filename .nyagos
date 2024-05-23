@@ -1,3 +1,6 @@
+-- env
+nyagos.env.LESSCHARSET = "utf-8"
+
 -- path
 nyagos.envadd(
   "PATH",
