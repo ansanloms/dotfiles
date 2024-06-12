@@ -1,22 +1,22 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions": 
+    "actions":
     [
         {
-            "command": 
+            "command":
             {
                 "action": "copy"
             },
             "keys": "ctrl+c"
         },
         {
-            "command": "paste",
-            "keys": "ctrl+v"
-        },
-        {
             "command": "unbound",
             "keys": "alt+shift+d"
+        },
+        {
+            "command": "paste",
+            "keys": "ctrl+v"
         },
         {
             "command": "find",
@@ -27,22 +27,22 @@
     "copyOnSelect": true,
     "defaultProfile": "{d5171fe5-5931-4d31-85d1-88be404f0a3c}",
     "launchMode": "default",
-    "newTabMenu": 
+    "newTabMenu":
     [
         {
             "type": "remainingProfiles"
         }
     ],
-    "profiles": 
+    "profiles":
     {
-        "defaults": 
+        "defaults":
         {
             "colorScheme": "Nord",
             "cursorShape": "filledBox",
             "experimental.retroTerminalEffect": false,
-            "font": 
+            "font":
             {
-                "face": "PlemolJP Console NF",
+                "face": "Bizin Gothic",
                 "size": 12.0
             },
             "historySize": 9001,
@@ -51,7 +51,7 @@
             "scrollbarState": "visible",
             "useAcrylic": true
         },
-        "list": 
+        "list":
         [
             {
                 "commandline": "%PROGRAMFILES%\\Vim\\vim91\\vim.exe",
@@ -112,7 +112,7 @@
             }
         ]
     },
-    "schemes": 
+    "schemes":
     [
         {
             "background": "#0C0C0C",
@@ -370,6 +370,7 @@
     ],
     "showTabsInTitlebar": false,
     "tabWidthMode": "equal",
+    "theme": "system",
     "themes": [],
     "useAcrylicInTabRow": true
 }

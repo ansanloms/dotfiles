@@ -475,25 +475,25 @@ tnoremap <C-CR> <CR>
 
 " chat {{[
 
-call minpac#add("https://github.com/ansanloms/ramble.vim.git")
-
-function! s:ChatStart(question) abort
-  vertical botright new
-  setlocal ft=markdown
-  call ramble#chat#open(bufnr(), "chatgpt", a:question)
-endfunction
-
-function! s:ChatCode(question) range abort
-  let l:code = getline(a:firstline, a:lastline)->join("\n")
-  let l:content = [a:question, "", "```", l:code, "```"]->join("\n")
-  call s:ChatStart(l:content)
-endfunction
-
-command! ChatConfig tabnew | call ramble#config#open()
-command! ChatOpen call s:ChatStart("")
-command! -nargs=? ChatStart call s:ChatStart(<f-args>)
-command! -range=% -nargs=1 ChatCode :<line1>,<line2>call s:ChatCode(<f-args>)
-command! Chat call ramble#chat#chat(bufnr())
+"call minpac#add("https://github.com/ansanloms/ramble.vim.git")
+"
+"function! s:ChatStart(question) abort
+"  vertical botright new
+"  setlocal ft=markdown
+"  call ramble#chat#open(bufnr(), "chatgpt", a:question)
+"endfunction
+"
+"function! s:ChatCode(question) range abort
+"  let l:code = getline(a:firstline, a:lastline)->join("\n")
+"  let l:content = [a:question, "", "```", l:code, "```"]->join("\n")
+"  call s:ChatStart(l:content)
+"endfunction
+"
+"command! ChatConfig tabnew | call ramble#config#open()
+"command! ChatOpen call s:ChatStart("")
+"command! -nargs=? ChatStart call s:ChatStart(<f-args>)
+"command! -range=% -nargs=1 ChatCode :<line1>,<line2>call s:ChatCode(<f-args>)
+"command! Chat call ramble#chat#chat(bufnr())
 
 " }}}
 
@@ -1248,8 +1248,7 @@ if has("gui_running")
   if has("vim_starting")
     " フォント設定
     if has("win32") || has("win64")
-      "set guifont=Cica:h12:cSHIFTJIS:qDRAFT
-      set guifont=PlemolJP_Console_NF:h12:cSHIFTJIS:qDRAFT
+      set guifont=Bizin_Gothic:h12:cSHIFTJIS:qDRAFT
     endif
 
     " 縦幅 デフォルトは 24
@@ -1321,7 +1320,6 @@ set breakindent
 "set ambiwidth=double
 set ambiwidth=single
 call minpac#add("https://github.com/rbtnn/vim-ambiwidth.git")
-let g:ambiwidth_cica_enabled = v:false
 
 " 上下の視界確保
 set scrolloff=4
