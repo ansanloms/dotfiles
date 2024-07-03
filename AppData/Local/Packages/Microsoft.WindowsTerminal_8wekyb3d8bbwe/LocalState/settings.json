@@ -23,7 +23,7 @@
             "keys": "ctrl+shift+f"
         }
     ],
-    "alwaysShowTabs": false,
+    "alwaysShowTabs": true,
     "copyOnSelect": true,
     "defaultProfile": "{d5171fe5-5931-4d31-85d1-88be404f0a3c}",
     "launchMode": "default",
@@ -38,6 +38,7 @@
         "defaults":
         {
             "colorScheme": "Nord",
+            "compatibility.reloadEnvironmentVariables": true,
             "cursorShape": "filledBox",
             "experimental.retroTerminalEffect": false,
             "font":
@@ -45,10 +46,11 @@
                 "face": "Bizin Gothic",
                 "size": 12.0
             },
-            "historySize": 9001,
+            "historySize": 99999,
             "opacity": 80,
             "padding": "0,0,0,0",
             "scrollbarState": "visible",
+            "suppressApplicationTitle": true,
             "useAcrylic": true
         },
         "list":
@@ -368,7 +370,7 @@
             "yellow": "#808000"
         }
     ],
-    "showTabsInTitlebar": false,
+    "showTabsInTitlebar": true,
     "tabWidthMode": "equal",
     "theme": "system",
     "themes": [],
