@@ -62,3 +62,12 @@ link:
     - src: ~/scoop/apps/lua/current/lua54.dll
       targets:
         - windows
+  /Windows/my.cnf:
+    - src: ./.my.cnf
+      targets:
+        - windows
+  ~/.my.cnf:
+    - src: ./.my.cnf
+      targets:
+        - darwin
+        - linux
