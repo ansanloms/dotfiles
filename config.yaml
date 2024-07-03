@@ -30,35 +30,35 @@ link:
         - windows
   ~/.config/starship.toml:
     - src: ./.config/starship.toml
-  "~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json":
-    - src: "./AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
+  ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json:
+    - src: ./AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json
       targets:
         - windows
-  "~/AppData/Roaming/PuTTY/putty.ini":
-    - src: "./AppData/Roaming/PuTTY/putty.ini"
+  ~/AppData/Roaming/PuTTY/putty.ini:
+    - src: ./AppData/Roaming/PuTTY/putty.ini
       targets:
         - windows
-  "~/AppData/Roaming/CorvusSKK/config.xml":
-    - src: "./AppData/Roaming/CorvusSKK/config.xml"
+  ~/AppData/Roaming/CorvusSKK/config.xml:
+    - src: ./AppData/Roaming/CorvusSKK/config.xml
       targets:
         - windows
-  "~/AppData/Local/mpd/mpd.conf":
-    - src: "./AppData/Local/mpd/mpd.conf"
+  ~/AppData/Local/mpd/mpd.conf:
+    - src: ./AppData/Local/mpd/mpd.conf
       targets:
         - windows
-  "~/AppData/Roaming/efm-langserver/config.yaml":
-    - src: "./AppData/Roaming/efm-langserver/config.yaml"
+  ~/AppData/Roaming/efm-langserver/config.yaml:
+    - src: ./AppData/Roaming/efm-langserver/config.yaml
       targets:
         - windows
-  "~/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1":
-    - src: "./Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
+  ~/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1:
+    - src: ./Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1
       targets:
         - windows
-  "~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1":
-    - src: "./Documents/PowerShell/Microsoft.PowerShell_profile.ps1"
+  ~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1:
+    - src: ./Documents/PowerShell/Microsoft.PowerShell_profile.ps1
       targets:
         - windows
-  "~/bin/lua54.dll":
-    - src: "~/scoop/apps/lua/current/lua54.dll"
+  ~/bin/lua54.dll:
+    - src: ~/scoop/apps/lua/current/lua54.dll
       targets:
         - windows
