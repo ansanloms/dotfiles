@@ -1,11 +1,19 @@
-format = """
-$directory$git_branch
-$character"""
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = '''
+$os $directory $git_branch
+$character '''
 
 add_newline = true
 
+[os]
+disabled = false
+format = "[$type]($style)"
+style = "fg:202"
+
 [character]
 disabled = false
+format="$symbol"
 success_symbol = "[>](bold green)"
 error_symbol = "[>](bold red)"
 
@@ -13,10 +21,10 @@ error_symbol = "[>](bold red)"
 disabled = false
 truncation_length = 0
 truncate_to_repo = false
-style = ""
+format="[$path]($style)[$read_only]($read_only_style)"
+style = "fg:244"
 
 [git_branch]
 disabled = false
-symbol = ""
-truncation_symbol = ""
-style = "#2a83a2"
+format="on [$branch(:$remote_branch)]($style)"
+style = "fg:31"
