@@ -40,6 +40,10 @@ if [ -d "$HOME/bin" ]; then
   export PATH="$HOME/bin:$PATH"
 fi
 
+if [ -d "$HOME/.local/bin" ]; then
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
 export DENO_INSTALL="$HOME/.deno"
 if [ -d "$DENO_INSTALL" ]; then
   export PATH="$DENO_INSTALL/bin:$PATH"
