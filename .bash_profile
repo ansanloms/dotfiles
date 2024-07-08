@@ -32,7 +32,7 @@ export PS1_COLOR_RESET="$(tput sgr0)"
 export MYSQL_PS1="(\u@\h) [\d]> "
 
 #if [ isWsl ] && [ -z "$http_proxy" ]; then
-#  export http_proxy=http://$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):30080
+#  export http_proxy=http://$(ip route list default | awk '{print $3}'):30080
 #  export https_proxy=${http_proxy}
 #fi
 
