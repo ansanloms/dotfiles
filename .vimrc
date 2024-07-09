@@ -1156,6 +1156,17 @@ augroup END
 
 " }}}
 
+" powershell {{{
+
+augroup powershell-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType ps1 setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+augroup END
+
+" }}}
+
 " mustache {{{
 
 call minpac#add("https://github.com/juvenn/mustache.vim.git")
