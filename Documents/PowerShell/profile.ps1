@@ -17,18 +17,13 @@ Invoke-Expression (&starship init powershell)
 Set-PSReadLineOption -Colors @{ InlinePrediction = $PSStyle.Foreground.BrightBlack }
 Set-PSReadlineOption -BellStyle None
 
-function eza-no-color() {
-  eza $(@("--color", "never"); $args)
-}
-
 function eza-ll() {
-  eza $(@("--color", "never", "--long"); $args)
+  eza $(@("--long"); $args)
 }
 
 # alias
 if (Get-Command eza -errorAction SilentlyContinue) {
-  # 少なくとも gvim の terminal 上では ansi color エスケープシーケンスが上手く反映されないので。
-  Set-Alias -Name ls -Value eza-no-color
+  Set-Alias -Name ls -Value eza
   Set-Alias -Name ll -Value eza-ll
 } else {
   Set-Alias -Name ll -Value Get-ChildItem
