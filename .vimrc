@@ -1383,6 +1383,7 @@ try
 
   highlight! link StatusLineTerm StatusLine
   highlight! link StatusLineTermNC StatusLineNC
+  highlight! Terminal guibg=#152528
 catch
 endtry
 
