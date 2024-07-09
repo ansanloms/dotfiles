@@ -258,6 +258,28 @@ if has("terminal")
   set termencoding=utf-8
 endif
 
+if exists("*term_setansicolors")
+  let g:terminal_ansi_colors = repeat([0], 16)
+
+  " Terafox
+  let g:terminal_ansi_colors[0] =  "#2f3239"  " black
+  let g:terminal_ansi_colors[1] =  "#e85c51"  " red
+  let g:terminal_ansi_colors[2] =  "#7aa4a1"  " green
+  let g:terminal_ansi_colors[3] =  "#fda47f"  " yellow
+  let g:terminal_ansi_colors[4] =  "#5a93aa"  " blue
+  let g:terminal_ansi_colors[5] =  "#ad5c7c"  " magenta
+  let g:terminal_ansi_colors[6] =  "#a1cdd8"  " cyan
+  let g:terminal_ansi_colors[7] =  "#ebebeb"  " white
+  let g:terminal_ansi_colors[8] =  "#4e5157"  " black (bright)
+  let g:terminal_ansi_colors[9] =  "#eb746b"  " red (bright)
+  let g:terminal_ansi_colors[10] = "#8eb2af"  " green (bright)
+  let g:terminal_ansi_colors[11] = "#fdb292"  " yellow (bright)
+  let g:terminal_ansi_colors[12] = "#73a3b7"  " blue (bright)
+  let g:terminal_ansi_colors[13] = "#b97490"  " magenta (bright)
+  let g:terminal_ansi_colors[14] = "#afd4de"  " cyan (bright)
+  let g:terminal_ansi_colors[15] = "#eeeeee"  " white (bright)
+endif
+
 " }}}
 
 " minpac {{{
