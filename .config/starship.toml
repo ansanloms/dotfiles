@@ -1,7 +1,6 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-format = '''
-$os ($git_branch )$directory
+format = '''$os ($git_branch )$directory
 $character '''
 
 add_newline = true
@@ -9,7 +8,7 @@ add_newline = true
 [os]
 disabled = false
 format = "[$type]($style)"
-style = "fg:46"
+style = "green"
 
 [character]
 disabled = false
@@ -22,9 +21,9 @@ disabled = false
 truncation_length = 0
 truncate_to_repo = false
 format="[$path]($style)[$read_only]($read_only_style)"
-style = "fg:244"
+style = "fg:244" # brightBlack
 
 [git_branch]
 disabled = false
 format="[$branch(:$remote_branch)]($style)"
-style = "fg:31"
+style = "cyan"
