@@ -4,15 +4,15 @@
     "actions":
     [
         {
+            "command": "unbound",
+            "keys": "alt+shift+d"
+        },
+        {
             "command":
             {
                 "action": "copy"
             },
             "keys": "ctrl+c"
-        },
-        {
-            "command": "unbound",
-            "keys": "alt+shift+d"
         },
         {
             "command": "paste",
@@ -37,7 +37,7 @@
     {
         "defaults":
         {
-            "colorScheme": "Nord",
+            "colorScheme": "Terafox",
             "compatibility.reloadEnvironmentVariables": true,
             "cursorShape": "filledBox",
             "experimental.retroTerminalEffect": false,
@@ -111,6 +111,18 @@
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "hidden": false,
                 "name": "windows powershell (v5)"
+            },
+            {
+                "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+                "hidden": false,
+                "name": "PowerShell",
+                "source": "Windows.Terminal.PowershellCore"
+            },
+            {
+                "guid": "{a3a2e83a-884a-5379-baa8-16f193a13b21}",
+                "hidden": false,
+                "name": "PowerShell 7 Preview",
+                "source": "Windows.Terminal.PowershellCore"
             }
         ]
     },
@@ -163,6 +175,52 @@
             "yellow": "#C19C00"
         },
         {
+            "background": "#161616",
+            "black": "#282828",
+            "blue": "#78A9FF",
+            "brightBlack": "#484848",
+            "brightBlue": "#8CB6FF",
+            "brightCyan": "#52BDFF",
+            "brightGreen": "#46C880",
+            "brightPurple": "#C8A5FF",
+            "brightRed": "#F16DA6",
+            "brightWhite": "#E4E4E5",
+            "brightYellow": "#2DC7C4",
+            "cursorColor": "#F2F4F8",
+            "cyan": "#33B1FF",
+            "foreground": "#F2F4F8",
+            "green": "#25BE6A",
+            "name": "Carbonfox",
+            "purple": "#BE95FF",
+            "red": "#EE5396",
+            "selectionBackground": "#2A2A2A",
+            "white": "#DFDFE0",
+            "yellow": "#08BDBA"
+        },
+        {
+            "background": "#192330",
+            "black": "#393B44",
+            "blue": "#719CD6",
+            "brightBlack": "#575860",
+            "brightBlue": "#86ABDC",
+            "brightCyan": "#7AD5D6",
+            "brightGreen": "#8EBAA4",
+            "brightPurple": "#BAA1E2",
+            "brightRed": "#D16983",
+            "brightWhite": "#E4E4E5",
+            "brightYellow": "#E0C989",
+            "cursorColor": "#CDCECF",
+            "cyan": "#63CDCF",
+            "foreground": "#CDCECF",
+            "green": "#81B29A",
+            "name": "Nightfox",
+            "purple": "#9D79D6",
+            "red": "#C94F6D",
+            "selectionBackground": "#2B3B51",
+            "white": "#DFDFE0",
+            "yellow": "#DBC074"
+        },
+        {
             "background": "#2E3440",
             "black": "#3B4252",
             "blue": "#81A1C1",
@@ -182,6 +240,29 @@
             "purple": "#B48EAD",
             "red": "#BF616A",
             "selectionBackground": "#FFFFFF",
+            "white": "#E5E9F0",
+            "yellow": "#EBCB8B"
+        },
+        {
+            "background": "#2E3440",
+            "black": "#3B4252",
+            "blue": "#81A1C1",
+            "brightBlack": "#465780",
+            "brightBlue": "#8CAFD2",
+            "brightCyan": "#93CCDC",
+            "brightGreen": "#B1D196",
+            "brightPurple": "#C895BF",
+            "brightRed": "#D06F79",
+            "brightWhite": "#E7ECF4",
+            "brightYellow": "#F0D399",
+            "cursorColor": "#CDCECF",
+            "cyan": "#88C0D0",
+            "foreground": "#CDCECF",
+            "green": "#A3BE8C",
+            "name": "Nordfox",
+            "purple": "#B48EAD",
+            "red": "#BF616A",
+            "selectionBackground": "#3E4A5B",
             "white": "#E5E9F0",
             "yellow": "#EBCB8B"
         },
@@ -322,6 +403,29 @@
             "selectionBackground": "#FFFFFF",
             "white": "#D3D7CF",
             "yellow": "#C4A000"
+        },
+        {
+            "background": "#152528",
+            "black": "#2F3239",
+            "blue": "#5A93AA",
+            "brightBlack": "#4E5157",
+            "brightBlue": "#73A3B7",
+            "brightCyan": "#AFD4DE",
+            "brightGreen": "#8EB2AF",
+            "brightPurple": "#B97490",
+            "brightRed": "#EB746B",
+            "brightWhite": "#EEEEEE",
+            "brightYellow": "#FDB292",
+            "cursorColor": "#E6EAEA",
+            "cyan": "#A1CDD8",
+            "foreground": "#E6EAEA",
+            "green": "#7AA4A1",
+            "name": "Terafox",
+            "purple": "#AD5C7C",
+            "red": "#E85C51",
+            "selectionBackground": "#293E40",
+            "white": "#EBEBEB",
+            "yellow": "#FDA47F"
         },
         {
             "background": "#300A24",
