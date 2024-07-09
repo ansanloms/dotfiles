@@ -50,12 +50,12 @@ link:
     - src: ./AppData/Roaming/efm-langserver/config.yaml
       targets:
         - windows
-  ~/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1:
-    - src: ./Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1
+  ~/Documents/WindowsPowerShell/profile.ps1:
+    - src: ./Documents/PowerShell/profile.ps1
       targets:
         - windows
-  ~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1:
-    - src: ./Documents/PowerShell/Microsoft.PowerShell_profile.ps1
+  ~/Documents/PowerShell/profile.ps1:
+    - src: ./Documents/PowerShell/profile.ps1
       targets:
         - windows
   ~/bin/lua54.dll:
