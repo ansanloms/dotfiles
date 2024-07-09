@@ -1,19 +1,14 @@
 # vim:set ft=conf:
 # vim:set noexpandtab:
 
-💻 nyagos			call ansanloms#terminal#terminal(expand("~/scoop/apps/nyagos/current/nyagos.exe") . " -k \"chcp 65001\"", "NYAGOS")
+#💻 NYAGOS			call ansanloms#terminal#terminal(expand("~/scoop/apps/nyagos/current/nyagos.exe") . " -k \"chcp 65001\"", "NYAGOS")
+💻 PowerShell		call ansanloms#terminal#terminal("pwsh", "PowerShell")
+#💻 PowerShell (v5)	call ansanloms#terminal#terminal("powershell", "PowerShell (v5)")
 💻 cmd				call ansanloms#terminal#terminal("cmd", "cmd")
-💻 powershell		call ansanloms#terminal#terminal("powershell", "powershell")
-💻 powershell 7		call ansanloms#terminal#terminal("pwsh", "powershell 7")
 💻 WSL (Ubuntu)		call ansanloms#terminal#terminal("wsl -d Ubuntu", "WSL (Ubuntu)")
 💻 MSYS2			call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") . " -msys -defterm -no-start", "MSYS2")
 💻 MinGW-w64 32bit	call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") . " -mingw32 -defterm -no-start", "MinGW-w64 32bit")
 💻 MinGW-w64 64bit	call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") . " -mingw64 -defterm -no-start", "MinGW-w64 64bit")
 
 📄 Hosts			call ansanloms#hosts#open()
-📄 Ctags			call ansanloms#ctags#create()
-
-✨ format:efm-langserver	LspDocumentFormatSync --server=efm-langserver
-✨ format:eslint			LspDocumentFormatSync --server=eslint-language-server
-
-🔧 remotedebug_ios_webkit_adapter		tabnew | call ansanloms#terminal#terminal("wt remotedebug_ios_webkit_adapter --port 9221", "remotedebug_ios_webkit_adapter")
+#📄 Ctags			call ansanloms#ctags#create()
