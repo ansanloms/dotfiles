@@ -1,0 +1,6 @@
+# vim:set ft=conf:
+# vim:set noexpandtab:
+
+update		packadd minpac | source $MYVIMRC | call minpac#update("", {"do": "call minpac#status()"})
+clean		packadd minpac | source $MYVIMRC | call minpac#clean()
+status		packadd minpac | source $MYVIMRC | call minpac#status()

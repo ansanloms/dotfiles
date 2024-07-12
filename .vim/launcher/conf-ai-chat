@@ -1,0 +1,6 @@
+# vim:set ft=conf:
+# vim:set noexpandtab:
+
+config				tabnew | call denops#request("ramble", "config", [])
+start				call denops#request("ramble", "new", ["openai", {"model": "gpt-4o"}, [{"role": "system", "message": "ここに前提条件を入力。"}, {"role": "user", "message": "ここに質問を入力。"}]])
+chat				call denops#request("ramble", "chat", [bufnr()])

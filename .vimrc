@@ -464,11 +464,6 @@ nnoremap <C-p> :<C-u>call quickpick#pickers#list#open()<CR>
 " タグジャンプの際に新しいタブで開く
 nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
 
-" minpac
-command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update("", {"do": "call minpac#status()"})
-command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
-command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
-
 " <S-space> とか押すと ^[[32;2u[ とかはいるやつの対策
 " https://github.com/vim/vim/issues/6040
 tnoremap <S-space> <space>
@@ -480,10 +475,6 @@ tnoremap <C-CR> <CR>
 " chat {{[
 
 call minpac#add("https://github.com/ansanloms/ramble.vim.git")
-
-command! ChatConfig tabnew | call denops#request("ramble", "config", [])
-command! ChatOpen call denops#request("ramble", "new", ["openai", {"model": "gpt-4o"}])
-command! Chat call denops#request("ramble", "chat", [bufnr()])
 
 " }}}
 
