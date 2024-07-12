@@ -1,14 +1,24 @@
 # vim:set ft=conf:
 # vim:set noexpandtab:
 
-#💻 NYAGOS			call ansanloms#terminal#terminal(expand("~/scoop/apps/nyagos/current/nyagos.exe") . " -k \"chcp 65001\"", "NYAGOS")
-💻 PowerShell		call ansanloms#terminal#terminal("ansicon pwsh", "PowerShell")
-#💻 PowerShell (v5)	call ansanloms#terminal#terminal("powershell", "PowerShell (v5)")
-💻 cmd				call ansanloms#terminal#terminal("cmd", "cmd")
-💻 WSL (Ubuntu)		call ansanloms#terminal#terminal("wsl -d Ubuntu", "WSL (Ubuntu)")
-💻 MSYS2			call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") . " -msys -defterm -no-start", "MSYS2")
-💻 MinGW-w64 32bit	call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") . " -mingw32 -defterm -no-start", "MinGW-w64 32bit")
-💻 MinGW-w64 64bit	call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") . " -mingw64 -defterm -no-start", "MinGW-w64 64bit")
+#💻 NYAGOS					call ansanloms#terminal#terminal(expand("~/scoop/apps/nyagos/current/nyagos.exe") . " -k \"chcp 65001\"", "NYAGOS")
+💻 PowerShell				call ansanloms#terminal#terminal("ansicon pwsh", "PowerShell")
+#💻 PowerShell (v5)			call ansanloms#terminal#terminal("powershell", "PowerShell (v5)")
+💻 cmd						call ansanloms#terminal#terminal("cmd", "cmd")
+💻 WSL (Ubuntu)				call ansanloms#terminal#terminal("wsl -d Ubuntu", "WSL (Ubuntu)")
+💻 MSYS2					call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") . " -msys -defterm -no-start", "MSYS2")
+💻 MinGW-w64 32bit			call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") . " -mingw32 -defterm -no-start", "MinGW-w64 32bit")
+💻 MinGW-w64 64bit			call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") . " -mingw64 -defterm -no-start", "MinGW-w64 64bit")
 
-📄 Hosts			call ansanloms#hosts#open()
-#📄 Ctags			call ansanloms#ctags#create()
+📄 Hosts					call ansanloms#hosts#open()
+#📄 Ctags					call ansanloms#ctags#create()
+
+# AI chat
+🤖 AI chat: config			tabnew | call denops#request("ramble", "config", [])
+🤖 AI chat: chat			call denops#request("ramble", "chat", [bufnr()])
+🤖 AI chat: new				call denops#request("ramble", "new", ["openai", {"model": "gpt-4o"}, [{"role": "system", "message": ""}, {"role": "user", "message": "質問を入力。"}]])
+
+# minpac
+📦 minpac: update			packadd minpac | source $MYVIMRC | call minpac#update("", {"do": "call minpac#status()"})
+📦 minpac: clean			packadd minpac | source $MYVIMRC | call minpac#clean()
+📦 minpac: status			packadd minpac | source $MYVIMRC | call minpac#status()

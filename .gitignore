@@ -9,5 +9,3 @@ work
 
 .vim/launcher/*
 !conf
-!conf-ai-chat
-!conf-package-manager
