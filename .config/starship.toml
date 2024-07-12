@@ -1,14 +1,13 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-format = '''$os ($git_branch )$directory
-$character '''
+palette = "custom"
+
+format = '''
+[┌──────────────>](gray) $git_branch $git_metrics
+[│](gray) $os  $directory
+[└─](gray)$character '''
 
 add_newline = true
-
-[os]
-disabled = false
-format = "[$type]($style)"
-style = "green"
 
 [character]
 disabled = false
@@ -16,14 +15,32 @@ format="$symbol"
 success_symbol = "[>](bold green)"
 error_symbol = "[>](bold red)"
 
+[os]
+disabled = false
+format = "[$symbol]($style)"
+style = "green"
+
+[os.symbols]
+Windows = ""
+Ubuntu = ""
+Macos = ""
+
 [directory]
 disabled = false
 truncation_length = 0
 truncate_to_repo = false
 format="[$path]($style)[$read_only]($read_only_style)"
-style = "fg:244" # brightBlack
+style = "white"
 
 [git_branch]
 disabled = false
-format="[$branch(:$remote_branch)]($style)"
+format = '[$symbol $branch(:$remote_branch)]($style)'
+symbol = ""
 style = "cyan"
+
+[git_metrics]
+disabled = false
+format = '[+$added]($added_style)/[-$deleted]($deleted_style)'
+
+[palettes.custom]
+gray = "244"

@@ -23,7 +23,7 @@ nyagos.prompt = function(this)
   -- prompt
   local prompt = "\n"
   if nyagos.which("starship") then
-    prompt = prompt .. nyagos.eval("starship prompt 2> nul") .. " "
+    prompt = prompt .. nyagos.eval("starship prompt 2> nul")
   else
     -- git
     local git = " " .. nyagos.eval("git show --format='[%D]' --no-patch 2> nul")
