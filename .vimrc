@@ -476,6 +476,8 @@ tnoremap <C-CR> <CR>
 
 call minpac#add("https://github.com/ansanloms/ramble.vim.git")
 
+command! Chat call denops#request("ramble", "chat", [bufnr()])
+
 " }}}
 
 " snippet {{{
