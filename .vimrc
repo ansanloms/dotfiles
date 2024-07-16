@@ -366,26 +366,12 @@ let g:quickrun_config["_"] = {
 
 " quickpick {{{
 
-call minpac#add("https://github.com/prabirshrestha/quickpick.vim.git")
-
-call minpac#add("https://github.com/ansanloms/quickpick-oldfiles.vim.git")
 
 call minpac#add("https://github.com/ansanloms/quickpick-launcher.vim.git")
 call minpac#add("https://github.com/ansanloms/quickpick-launcher-selector.vim.git")
 
 let g:quickpick_launcher_file = "~/.vim/launcher/conf"
 let g:quickpick_launcher_maxheight = 15
-
-call minpac#add("https://github.com/ansanloms/quickpick-buffer.vim.git")
-
-call minpac#add("https://github.com/ansanloms/quickpick-mpc.vim.git")
-
-if has("win32") || has("win64")
-  let g:quickpick_mpc_command = "wsl mpc"
-endif
-
-let g:quickpick_mpc_format = "%artist%: %album% / [%disc%-]%track% %title%"
-let g:quickpick_mpc_maxheight = 15
 
 augroup quickpick-setting
   autocmd!
@@ -396,6 +382,14 @@ augroup quickpick-setting
   autocmd BufEnter * if &filetype != "quickpick-filter" | setlocal iminsert=2 | endif
 augroup END
 
+
+" }}}
+
+" fuzzy finder {{{
+
+call minpac#add("https://github.com/ansanloms/vim-bekken.git")
+call minpac#add("https://github.com/ansanloms/vim-bekken-oldfiles.git")
+call minpac#add("https://github.com/ansanloms/vim-bekken-buffer.git")
 
 " }}}
 
@@ -453,13 +447,10 @@ tnoremap <C-w>gr <C-w>gT
 nnoremap <C-e> :<C-u>call quickpick#pickers#launcher#selector#open("!")<CR>
 
 " history
-nnoremap <C-h> :<C-u>call quickpick#pickers#oldfiles#open()<CR>
+nnoremap <C-h> :<C-u>call bekken#Open("oldfiles")<CR>
 
 " buffer
-nnoremap <C-s> :<C-u>call quickpick#pickers#buffer#open("")<CR>
-
-" list
-nnoremap <C-p> :<C-u>call quickpick#pickers#list#open()<CR>
+nnoremap <C-s> :<C-u>call bekken#Open("buffer")<CR>
 
 " タグジャンプの際に新しいタブで開く
 nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
@@ -472,9 +463,9 @@ tnoremap <C-CR> <CR>
 
 " }}}
 
-" chat {{[
+" AI chat {{[
 
-call minpac#add("https://github.com/ansanloms/ramble.vim.git")
+call minpac#add("https://github.com/ansanloms/vim-ramble.git")
 
 command! Chat call denops#request("ramble", "chat", [bufnr()])
 
@@ -494,6 +485,7 @@ let g:vsnip_snippet_dir = expand("~/.vim/snippets")
 call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
 call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
 call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
+call minpac#add("https://github.com/prabirshrestha/quickpick.vim.git")
 call minpac#add("https://github.com/prabirshrestha/quickpick-lsp.vim.git")
 call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
 
