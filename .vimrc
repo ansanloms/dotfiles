@@ -388,10 +388,11 @@ augroup END
 " fuzzy finder {{{
 
 call minpac#add("https://github.com/ansanloms/vim-bekken.git")
-call minpac#add("https://github.com/ansanloms/vim-bekken-oldfiles.git")
+call minpac#add("https://github.com/ansanloms/vim-bekken-files.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-buffer.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-launcher.git")
 
+let g:bekken#files#get_file_list_cmd = ["rg", "--files"]
 let g:bekken#lancher#base_dir = $HOME . "/.vim/launcher"
 
 " }}}
@@ -451,6 +452,10 @@ nnoremap <C-e> :<C-u>call bekken#Open("launcher_selector")<CR>
 
 " history
 nnoremap <C-h> :<C-u>call bekken#Open("oldfiles")<CR>
+
+" current files
+packadd vital.vim
+nnoremap <C-l> :<C-u>call bekken#Open("files", vital#vital#new().import("Prelude").path2project_directory(expand("%:p")))<CR>
 
 " buffer
 nnoremap <C-s> :<C-u>call bekken#Open("buffer")<CR>
