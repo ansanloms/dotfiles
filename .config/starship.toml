@@ -3,7 +3,7 @@
 palette = "custom"
 
 format = '''
-[┌──────────────>](gray) $git_branch $git_metrics
+[┌──────────────>](gray) $git_branch
 [│](gray) $os  $directory
 [└─](gray)$character '''
 
