@@ -22,25 +22,30 @@ style = "green"
 
 [os.symbols]
 Windows = ""
-Ubuntu = ""
+Ubuntu = ""
 Macos = ""
+Arch = ""
+Gentoo = ""
+CentOS = ""
+Debian = ""
+Linux = ""
 
 [directory]
 disabled = false
 truncation_length = 0
 truncate_to_repo = false
-format="[$path]($style)[$read_only]($read_only_style)"
+format = "[$path]($style)[$read_only]($read_only_style)"
 style = "white"
 
 [git_branch]
 disabled = false
-format = '[$symbol $branch(:$remote_branch)]($style)'
+format = "[$symbol $branch(:$remote_branch)]($style)"
 symbol = ""
 style = "cyan"
 
 [git_metrics]
 disabled = false
-format = '[+$added]($added_style)/[-$deleted]($deleted_style)'
+format = "[+$added]($added_style)/[-$deleted]($deleted_style)"
 
 [palettes.custom]
 gray = "244"
