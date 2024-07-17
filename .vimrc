@@ -392,7 +392,7 @@ call minpac#add("https://github.com/ansanloms/vim-bekken-files.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-buffer.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-launcher.git")
 
-let g:bekken#files#get_file_list_cmd = ["rg", "--files"]
+let g:bekken#files#get_file_list_cmd = ["rg", "--files", "--path-separator", "/"]
 let g:bekken#lancher#base_dir = $HOME . "/.vim/launcher"
 
 " }}}
