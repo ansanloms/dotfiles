@@ -454,8 +454,7 @@ nnoremap <C-e> :<C-u>call bekken#Open("launcher_selector")<CR>
 nnoremap <C-h> :<C-u>call bekken#Open("oldfiles")<CR>
 
 " current files
-packadd vital.vim
-nnoremap <C-l> :<C-u>call bekken#Open("files", vital#vital#new().import("Prelude").path2project_directory(expand("%:p")))<CR>
+nnoremap <C-l> :<C-u>call bekken#Open("files", denops#request("bekken-files", "projectDirectory", [expand("%:h")]))<CR>
 
 " buffer
 nnoremap <C-s> :<C-u>call bekken#Open("buffer")<CR>
