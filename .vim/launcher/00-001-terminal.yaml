@@ -1,6 +1,5 @@
-title: ⚙️ General
+title: 💻 Terminal
 items:
-  ## shell;
   #- name: 💻 NYAGOS
   #  command: |
   #    call ansanloms#terminal#terminal(expand("~/scoop/apps/nyagos/current/nyagos.exe") . " -k \"chcp 65001\"", "NYAGOS")
@@ -25,33 +24,3 @@ items:
   - name: 💻 MinGW-w64 64bit
     command: |
       call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") .. " -mingw64 -defterm -no-start", "MinGW-w64 64bit")
-
-  ## AI chat:
-  - name: 🤖 AI chat - config
-    command: |
-      tabnew | call denops#request("ramble", "config", [])
-  - name: 🤖 AI chat - chat
-    command: |
-      call denops#request("ramble", "chat", [bufnr()])
-  - name: 🤖 AI chat - new
-    command: |
-      call denops#request("ramble", "new", ["openai", {"model": "gpt-4o"}, [{"role": "system", "message": ""}, {"role": "user", "message": "質問を入力。"}]])
-
-  ## minpac:
-  - name: 📦 minpac - update
-    command: |
-      packadd minpac | source $MYVIMRC | call minpac#update("", {"do": "call minpac#status()"})
-  - name: 📦 minpac - clean
-    command: |
-      packadd minpac | source $MYVIMRC | call minpac#clean()
-  - name: 📦 minpac - status
-    command: |
-      packadd minpac | source $MYVIMRC | call minpac#status()
-
-  ## other:
-  - name: 📄 Hosts
-    command: |
-      call ansanloms#hosts#open()
-  #- name: 📄 Ctags
-  #  command: |
-  #    call ansanloms#ctags#create()

@@ -1,0 +1,11 @@
+title: 🤖 AI Chat
+items:
+  - name: 🤖 New Chat (OpenAI GPT-4o)
+    command: |
+      call denops#request("ramble", "new", ["openai", {"model": "gpt-4o"}, [{"role": "system", "message": ""}, {"role": "user", "message": "質問を入力。"}]])
+  - name: 🤖 Update Chat
+    command: |
+      call denops#request("ramble", "chat", [bufnr()])
+  - name: 🤖 Config
+    command: |
+      tabnew | call denops#request("ramble", "config", [])

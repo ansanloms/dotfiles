@@ -1,0 +1,5 @@
+title: 📄 Config
+items:
+  - name: 📄 Hosts
+    command: |
+      call ansanloms#hosts#open()
