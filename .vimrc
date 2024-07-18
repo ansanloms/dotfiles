@@ -387,8 +387,8 @@ augroup END
 
 " fuzzy finder {{{
 
-"call minpac#add("https://github.com/ansanloms/vim-bekken.git")
-"call minpac#add("https://github.com/ansanloms/vim-bekken-files.git")
+call minpac#add("https://github.com/ansanloms/vim-bekken.git")
+call minpac#add("https://github.com/ansanloms/vim-bekken-files.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-buffer.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-launcher.git")
 
