@@ -392,7 +392,9 @@ call minpac#add("https://github.com/ansanloms/vim-bekken-files.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-buffer.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-launcher.git")
 
-let g:bekken#files#get_file_list_cmd = ["rg", "--files", "--path-separator", "/"]
+if executable("rg")
+  let g:bekken#files#get_file_list_cmd = ["rg", "--files"]
+endif
 let g:bekken#lancher#base_dir = $HOME . "/.vim/launcher"
 
 " }}}
@@ -454,7 +456,7 @@ nnoremap <C-e> :<C-u>call bekken#Open("launcher_selector")<CR>
 nnoremap <C-h> :<C-u>call bekken#Open("oldfiles")<CR>
 
 " current files
-nnoremap <C-l> :<C-u>call bekken#Open("files", denops#request("bekken-files", "projectDirectory", [expand("%:h")]))<CR>
+nnoremap <C-l> :<C-u>call bekken#Open("files", denops#request("bekken-files", "projectDirectory", [expand("%:h"), expand("%:h")]))<CR>
 
 " buffer
 nnoremap <C-s> :<C-u>call bekken#Open("buffer")<CR>
@@ -474,7 +476,11 @@ tnoremap <C-CR> <CR>
 
 call minpac#add("https://github.com/ansanloms/vim-ramble.git")
 
-command! Chat call denops#request("ramble", "chat", [bufnr()])
+augroup chat-setting
+  autocmd!
+
+  autocmd FileType ramble-chat nnoremap <buffer> <C-CR> :<C-u>call denops#request("ramble", "chat", [bufnr()])<CR>
+augroup END
 
 " }}}
 
