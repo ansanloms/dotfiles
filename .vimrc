@@ -387,8 +387,8 @@ augroup END
 
 " fuzzy finder {{{
 
-call minpac#add("https://github.com/ansanloms/vim-bekken.git")
-call minpac#add("https://github.com/ansanloms/vim-bekken-files.git")
+"call minpac#add("https://github.com/ansanloms/vim-bekken.git")
+"call minpac#add("https://github.com/ansanloms/vim-bekken-files.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-buffer.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-launcher.git")
 
@@ -1247,7 +1247,7 @@ if has("gui_running")
   if has("vim_starting")
     " フォント設定
     if has("win32") || has("win64")
-      set guifont=Cica:h12:cSHIFTJIS:qDRAFT
+      set guifont=Cica:h14:cSHIFTJIS:qDRAFT
     endif
 
     " 縦幅 デフォルトは 24
