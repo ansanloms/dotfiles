@@ -2,7 +2,10 @@ title: 🤖 AI Chat
 items:
   - name: 🤖 New Chat (OpenAI GPT-4o)
     command: |
-      call denops#request("ramble", "new", ["openai", {"model": "gpt-4o"}, [{"role": "system", "message": ""}, {"role": "user", "message": "質問を入力。"}]])
+      call denops#request("ramble", "new", ["OpenAI", {"model": "gpt-4o"}, [{"role": "system", "message": ""}, {"role": "user", "message": "質問を入力。"}]])
+  - name: 🤖 New Chat (Gemini Pro)
+    command: |
+      call denops#request("ramble", "new", ["GoogleGenerativeAI", {"model": "gemini-pro"}, [{"role": "system", "message": ""}, {"role": "user", "message": "質問を入力。"}]])
   - name: 🤖 Update Chat
     command: |
       call denops#request("ramble", "chat", [bufnr()])
