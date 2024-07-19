@@ -1247,7 +1247,7 @@ if has("gui_running")
   if has("vim_starting")
     " フォント設定
     if has("win32") || has("win64")
-      set guifont=Cica:h14:cSHIFTJIS:qDRAFT
+      set guifont=Cica:h12:cSHIFTJIS:qDRAFT
     endif
 
     " 縦幅 デフォルトは 24
