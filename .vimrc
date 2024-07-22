@@ -391,11 +391,11 @@ call minpac#add("https://github.com/ansanloms/vim-bekken.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-files.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-buffer.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-launcher.git")
+call minpac#add("https://github.com/ansanloms/vim-bekken-quickfix.git")
 
 if executable("rg")
   let g:bekken#files#get_file_list_cmd = ["rg", "--files"]
 endif
-let g:bekken#lancher#base_dir = $HOME . "/.vim/launcher"
 
 " }}}
 
@@ -450,16 +450,16 @@ nnoremap <C-w>gr <C-w>gT
 tnoremap <C-w>gr <C-w>gT
 
 " launcher
-nnoremap <C-e> :<C-u>call bekken#Open("launcher_selector")<CR>
+nnoremap <silent> <C-e> :<C-u>call bekken#Open("launcher#select", globpath(expand("~/.vim/launcher"), "**/*.yaml", v:false, v:true), {})<CR>
 
 " history
-nnoremap <C-h> :<C-u>call bekken#Open("oldfiles")<CR>
+nnoremap <silent> <C-h> :<C-u>call bekken#Open("files#oldfiles", [], { "resultFileType": "bekken-result-files" })<CR>
 
 " current files
-nnoremap <C-l> :<C-u>call bekken#Open("files", denops#request("bekken-files", "projectDirectory", [expand("%:h"), expand("%:h")]))<CR>
+nnoremap <silent> <C-l> :<C-u>call bekken#Open("files#list", [denops#request("bekken-files", "projectDirectory", [expand("%:h"), expand("%:h")])], { "resultFileType": "bekken-result-files" })<CR>
 
 " buffer
-nnoremap <C-s> :<C-u>call bekken#Open("buffer")<CR>
+nnoremap <silent> <C-s> :<C-u>call bekken#Open("buffer", [], { "resultFileType": "bekken-result-buffer" })<CR>
 
 " タグジャンプの際に新しいタブで開く
 nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
@@ -479,7 +479,7 @@ call minpac#add("https://github.com/ansanloms/vim-ramble.git")
 augroup chat-setting
   autocmd!
 
-  autocmd FileType ramble-chat nnoremap <buffer> <C-CR> :<C-u>call denops#request("ramble", "chat", [bufnr()])<CR>
+  autocmd FileType ramble-chat nnoremap <silent> <buffer> <C-CR> :<C-u>call denops#request("ramble", "chat", [bufnr()])<CR>
 augroup END
 
 " }}}
@@ -597,7 +597,7 @@ augroup quickfix-setting
   autocmd!
 
   " :grep で quickfix を開く
-  "autocmd QuickFixCmdPost *grep* cwindow
+  autocmd QuickFixCmdPost *grep* call bekken#Open("quickfix#grep", [], { "resultFileType": "bekken-result-quickfix-grep" })
 
   " ステータスラインを更新
   autocmd FileType qf setlocal statusline=%!ansanloms#statusline#quickfix()
