@@ -1,0 +1,78 @@
+title: ⚙️ General
+items:
+  # Terminal:
+  - name: 💻 Terminal - PowerShell
+    type: command
+    command: |
+      call ansanloms#terminal#terminal("ansicon pwsh", "PowerShell")
+  #- name: 💻 Terminal - PowerShell (v5)
+  #  type: command
+  #  command: |
+  #    call ansanloms#terminal#terminal("powershell", "PowerShell (v5)")
+  - name: 💻 Terminal - cmd
+    type: command
+    command: |
+      call ansanloms#terminal#terminal("cmd", "cmd")
+  - name: 💻 Terminal - WSL (Ubuntu)
+    type: command
+    command: |
+      call ansanloms#terminal#terminal("wsl -d Ubuntu", "WSL (Ubuntu)")
+  - name: 💻 Terminal - MSYS2
+    type: command
+    command: |
+      call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") .. " -msys -defterm -no-start", "MSYS2")
+  - name: 💻 Terminal - MinGW-w64 32bit
+    type: command
+    command: |
+      call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") .. " -mingw32 -defterm -no-start", "MinGW-w64 32bit")
+  - name: 💻 Terminal - MinGW-w64 64bit
+    type: command
+    command: |
+      call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") .. " -mingw64 -defterm -no-start", "MinGW-w64 64bit")
+  #- name: 💻 Terminal - NYAGOS
+  #  type: command
+  #  command: |
+  #    call ansanloms#terminal#terminal(expand("~/scoop/apps/nyagos/current/nyagos.exe") . " -k \"chcp 65001\"", "NYAGOS")
+
+  # AI Chat:
+  - name: 🤖 AI Chat - Start (OpenAI GPT-4o mini)
+    type: command
+    command: |
+      call denops#request("ramble", "new", ["OpenAI", {"model": "gpt-4o-mini"}, [{"role": "system", "type": "text", "message": ""}, {"role": "user", "type": "text", "message": "質問を入力。"}]])
+  - name: 🤖 AI Chat - Start (Google AI Gemini Pro)
+    type: command
+    command: |
+      call denops#request("ramble", "new", ["GoogleGenerativeAI", {"model": "gemini-pro"}, [{"role": "system", "type": "text", "message": ""}, {"role": "user", "type": "text", "message": "質問を入力。"}]])
+  - name: 🤖 AI Chat - Update
+    type: command
+    command: |
+      call denops#request("ramble", "chat", [bufnr()])
+  - name: 🤖 AI Chat - Config
+    type: command
+    command: |
+      tabnew | call denops#request("ramble", "config", [])
+
+  # Package Manager:
+  - name: 📦 Package Manager -  minpac Update
+    type: command
+    command: |
+      packadd minpac | source $MYVIMRC | call minpac#update("", {"do": "call minpac#status()"})
+  - name: 📦 Package Manager -  minpac Clean
+    type: command
+    command: |
+      packadd minpac | source $MYVIMRC | call minpac#clean()
+  - name: 📦 Package Manager -  minpac Status
+    type: command
+    command: |
+      packadd minpac | source $MYVIMRC | call minpac#status()
+
+  # quickfix
+  - name: 🔍 Quickfix - grep
+    type: command
+    command: |
+      call bekken#Open("quickfix#grep", [], { "resultFileType": "bekken-result-quickfix-grep" })
+
+  - name: 📄 Hosts
+    type: command
+    command: |
+      call ansanloms#hosts#open()

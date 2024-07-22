@@ -8,4 +8,4 @@
 work
 
 .vim/launcher/*
-!00-*.yaml
+!.vim/launcher/general.yaml
