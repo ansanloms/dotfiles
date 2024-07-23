@@ -1,6 +1,5 @@
-/.vim/
+/.vim/*
 !/.vim/autoload/
 !/.vim/bitmaps/
-!/.vim/launcher/
 !/.vim/snippets/
 !/.vim/launcher/general.yaml
