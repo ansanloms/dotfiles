@@ -5,7 +5,7 @@ palette = "custom"
 format = '''
 [┌──────────────](gray) $git_branch
 [│](gray) $os  $directory
-[└─](gray)$character '''
+[└─](gray)$character'''
 
 add_newline = true
 
