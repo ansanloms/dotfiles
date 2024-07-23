@@ -1,7 +1,7 @@
-import * as fs from "std/fs/mod.ts";
-import * as path from "std/path/mod.ts";
-import { parse } from "std/yaml/mod.ts";
-import { colors } from "cliffy/ansi/colors.ts";
+import * as fs from "@std/fs";
+import * as path from "@std/path";
+import { parse } from "@std/yaml";
+import { colors } from "@cliffy/ansi/colors";
 
 const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
 
