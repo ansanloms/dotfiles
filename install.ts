@@ -58,7 +58,7 @@ const link = async (dest: string, src: string) => {
 
   await Deno.mkdir(path.dirname(dest), { recursive: true });
   await Deno.symlink(src, dest, {
-    type: (await Deno.open(src).catch(() => null)) !== null ? "file" : "dir",
+    type: (await Deno.stat(src)).isDirectory ? "dir" : "file",
   });
 };
 
