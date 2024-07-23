@@ -299,7 +299,6 @@ call minpac#add("https://github.com/k-takata/minpac.git", {"type": "opt"})
 " general {{{
 
 call minpac#add("https://github.com/vim-jp/vimdoc-ja.git")
-call minpac#add("https://github.com/vim-jp/vital.vim.git", {"type": "opt"})
 call minpac#add("https://github.com/junegunn/vim-easy-align.git")
 call minpac#add("https://github.com/tyru/open-browser.vim.git")
 call minpac#add("https://github.com/itchyny/vim-cursorword.git")
@@ -456,7 +455,7 @@ nnoremap <silent> <C-e> :<C-u>call bekken#Open("launcher#select", globpath(expan
 nnoremap <silent> <C-h> :<C-u>call bekken#Open("files#oldfiles", [], { "resultFileType": "bekken-result-files" })<CR>
 
 " current files
-nnoremap <silent> <C-l> :<C-u>call bekken#Open("files#list", [denops#request("bekken-files", "projectDirectory", [expand("%:h"), expand("%:h")])], { "resultFileType": "bekken-result-files" })<CR>
+nnoremap <silent> <C-l> :<C-u>call bekken#Open("files#list", [ansanloms#project#dir(expand("%:h"), expand("%:h"))], { "resultFileType": "bekken-result-files" })<CR>
 
 " buffer
 nnoremap <silent> <C-s> :<C-u>call bekken#Open("buffer", [], { "resultFileType": "bekken-result-buffer" })<CR>
