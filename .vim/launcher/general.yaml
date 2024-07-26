@@ -72,7 +72,50 @@ items:
     command: |
       call bekken#Open("quickfix#grep", [], { "resultFileType": "bekken-result-quickfix-grep" })
 
-  - name: 📄 Hosts
+  - name: 📄 Open Hosts
     type: command
+    silent: true
     command: |
-      call ansanloms#hosts#open()
+      if has("mac")
+        execute "edit" expand("/private/etc/hosts")
+      elseif has("win32") || has("win64")
+        execute "edit" expand("C:/Windows/System32/drivers/etc/hosts")
+      else
+        execute "edit" expand("/etc/hosts")
+      endif
+  - name:  Open current file by FileManager
+    type: command
+    silent: true
+    command: |
+      if has("win32") || has("win64")
+        execute "!start explorer.exe /select," expand("%:p")
+      elseif has("mac")
+        execute "!open" expand("%:p")
+      endif
+  - name:  Open current file by BitBucket
+    type: command
+    silent: true
+    command: |
+      if executable("bb")
+        execute "!bb browse code" expand("%:p") "-l" line(".")
+      else
+        echoerr "bb command not found."
+      endif
+  - name:  Open current file by VSCode
+    type: command
+    silent: true
+    command: |
+      if executable("code")
+        execute "!code --goto" (expand("%:p") .. ":" .. line(".") .. ":" .. col(".")) ansanloms#project#dir(expand("%:p"), expand("%:p"))
+      else
+        echoerr "VSCode not found."
+      endif
+  - name: 󿠞 Open current file by PHPStorm
+    type: command
+    silent: true
+    command: |
+      if executable("phpstorm")
+        execute "!start phpstorm" ansanloms#project#dir(expand("%:p"), expand("%:p")) "--line" line(".") "--column" col(".") expand("%:p")
+      else
+        echoerr "PHPStorm not found."
+      endif

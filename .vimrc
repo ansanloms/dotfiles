@@ -418,11 +418,6 @@ endif
 " Leader
 let g:mapleader = ","
 
-command! OpenFilemanager call ansanloms#filemanager#open(expand("%:p"))
-command! OpenVscode call ansanloms#vscode#open()
-command! OpenPhpstorm call ansanloms#phpstorm#open()
-command! -range OpenBitbucket <line1>,<line2>call ansanloms#bitbucket#open()
-
 " 検索などで飛んだらそこを真ん中に
 nnoremap n nzz
 nnoremap N Nzz

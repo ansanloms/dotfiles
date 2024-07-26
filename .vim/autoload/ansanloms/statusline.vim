@@ -1,14 +1,6 @@
 function! ansanloms#statusline#statusline() abort
   let l:s = " " . ansanloms#statusline#mode() . ansanloms#statusline#paste()
 
-  try
-    let l:branch = gina#component#repo#branch()
-    if strlen(l:branch) > 0
-      let l:s = l:s . " " . l:branch
-    endif
-  catch /E117.*/
-  endtry
-
   let l:s = l:s . " " . ansanloms#statusline#filename()
   let l:s = l:s . "%m%r%h%w%="
   let l:s = l:s . " " . &filetype . " " . &fileformat . " " . &fileencoding
