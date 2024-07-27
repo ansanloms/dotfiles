@@ -445,6 +445,7 @@ tnoremap <C-w>gr <C-w>gT
 
 " launcher
 nnoremap <silent> <C-e> :<C-u>call bekken#Open("launcher#select", globpath(expand("~/.vim/launcher"), "**/*.yaml", v:false, v:true), {})<CR>
+vnoremap <silent> <C-e> :<C-u>call bekken#Open("launcher#select", globpath(expand("~/.vim/launcher"), "**/*.yaml", v:false, v:true), {})<CR>
 
 " history
 nnoremap <silent> <C-h> :<C-u>call bekken#Open("files#oldfiles", [], { "resultFileType": "bekken-result-files" })<CR>

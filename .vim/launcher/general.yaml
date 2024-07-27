@@ -97,7 +97,11 @@ items:
     silent: true
     command: |
       if executable("bb")
-        execute "!bb browse code" expand("%:p") "-l" line(".")
+        if mode() !=# 'v' && mode() !=# 'V' && mode() !=# "\<C-v>"
+          execute "!bb browse code" expand("%:p") "-l" (line("'<") .. "-" .. line("'>"))
+        else
+          execute "!bb browse code" expand("%:p") "-l" line(".")
+        endif
       else
         echoerr "bb command not found."
       endif
