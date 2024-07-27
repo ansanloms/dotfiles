@@ -5,18 +5,18 @@ palette = "custom"
 format = '''
 [┌──────────────](gray) $git_branch
 [│](gray) $os  $directory
-[└─](gray)$character '''
+$character '''
 
 add_newline = true
 
 [character]
 disabled = false
-success_symbol = "[→](fg:gray)"
-error_symbol = "[→](fg:red)"
-vimcmd_symbol = "[←](fg:green)"
-vimcmd_replace_one_symbol = "[←](fg:purple)"
-vimcmd_replace_symbol = "[←](fg:purple)"
-vimcmd_visual_symbol = "[←](fg:yellow)"
+success_symbol = "[>](fg:gray)"
+error_symbol = "[>](fg:red)"
+vimcmd_symbol = "[<](fg:green)"
+vimcmd_replace_one_symbol = "[<](fg:purple)"
+vimcmd_replace_symbol = "[<](fg:purple)"
+vimcmd_visual_symbol = "[<](fg:yellow)"
 
 [os]
 disabled = false
