@@ -97,7 +97,7 @@ items:
     silent: true
     command: |
       if executable("bb")
-        if mode() !=# 'v' && mode() !=# 'V' && mode() !=# "\<C-v>"
+        if line(".") == line("'<")
           execute "!bb browse code" expand("%:p") "-l" (line("'<") .. "-" .. line("'>"))
         else
           execute "!bb browse code" expand("%:p") "-l" line(".")
