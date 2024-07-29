@@ -341,7 +341,7 @@ set tabline=%!ansanloms#tabline#tabline()
 
 " }}}
 
-" lightline {{{
+" statusline {{{
 
 call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
 
@@ -360,27 +360,6 @@ let g:quickrun_config = {}
 let g:quickrun_config["_"] = {
 \ "runner": "job",
 \}
-
-" }}}
-
-" quickpick {{{
-
-
-call minpac#add("https://github.com/ansanloms/quickpick-launcher.vim.git")
-call minpac#add("https://github.com/ansanloms/quickpick-launcher-selector.vim.git")
-
-let g:quickpick_launcher_file = "~/.vim/launcher/conf"
-let g:quickpick_launcher_maxheight = 15
-
-augroup quickpick-setting
-  autocmd!
-
-  " quickpick 上では ime を有効にしない。
-  autocmd FileType quickpick-filter setlocal iminsert=0
-  autocmd BufEnter * if &filetype == "quickpick-filter" | setlocal iminsert=0 | endif
-  autocmd BufEnter * if &filetype != "quickpick-filter" | setlocal iminsert=2 | endif
-augroup END
-
 
 " }}}
 
@@ -493,8 +472,6 @@ let g:vsnip_snippet_dir = expand("~/.vim/snippets")
 call minpac#add("https://github.com/prabirshrestha/asyncomplete.vim.git")
 call minpac#add("https://github.com/prabirshrestha/asyncomplete-lsp.vim.git")
 call minpac#add("https://github.com/prabirshrestha/vim-lsp.git")
-call minpac#add("https://github.com/prabirshrestha/quickpick.vim.git")
-call minpac#add("https://github.com/prabirshrestha/quickpick-lsp.vim.git")
 call minpac#add("https://github.com/mattn/vim-lsp-settings.git")
 
 " vim-lsp
