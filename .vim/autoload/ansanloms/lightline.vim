@@ -13,10 +13,10 @@ endfunction
 function! ansanloms#lightline#tab() abort
   let [x, y, z] = [[], [], []]
   let nr = tabpagenr()
-  let cnt = tabpagenr('$')
+  let cnt = tabpagenr("$")
 
   for i in range(1, cnt)
-    call add(i < nr ? x : i == nr ? y : z, (i > nr + 3 ? '%<' : '') . '%'. i . 'T%{lightline#onetab(' . i . ',' . (i == nr) . ')}' . (i == cnt ? '%T' : ''))
+    call add(i < nr ? x : i == nr ? y : z, (i > nr + 3 ? "%<" : "") . "%". i . "T%{lightline#onetab(" . i . "," . (i == nr) . ")}" . (i == cnt ? "%T" : ""))
   endfor
 
   return [x, y, z]

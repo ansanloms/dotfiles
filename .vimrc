@@ -326,29 +326,68 @@ call minpac#add("https://github.com/airblade/vim-gitgutter.git")
 
 " statusline {{{
 
-" ステータスラインを常に表示
 set laststatus=2
-
-" 表示設定
 "set statusline=%!ansanloms#statusline#statusline()
-
-" }}}
-
-" tabline {{{
-
-set showtabline=2
-set tabline=%!ansanloms#tabline#tabline()
-
-" }}}
-
-" statusline {{{
 
 call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
 
 let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
 let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
 
-set statusline=%!ansanloms#statusline#statusline()
+call minpac#add("https://github.com/itchyny/lightline.vim.git")
+
+let g:lightline = {
+\ "colorscheme": "terafox",
+\ "active": {
+\   "left": [
+\     ["mode", "readonly", "paste"],
+\     ["filename"],
+\   ],
+\   "right": [
+\     ["sky_color_clock"],
+\     ["fileformat", "fileencoding", "filetype"],
+\   ]
+\ },
+\ "component_expand": {
+\   "tabs": "ansanloms#lightline#tab"
+\ },
+\ "component_function": {
+\   "mode": "ansanloms#statusline#mode_minimum",
+\   "filename": "ansanloms#lightline#filename",
+\ },
+\ "component": {
+\   "modified": "%{(ansanloms#lightline#is_visible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
+\   "readonly": "%{&readonly ? '' : ''}",
+\   "fileformat": "%{ansanloms#lightline#is_visible() ? &fileformat : ''}",
+\   "filetype": "%{ansanloms#lightline#is_visible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
+\   "fileencoding": "%{ansanloms#lightline#is_visible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
+\   "sky_color_clock": "%#SkyColorClock#%{' ' . sky_color_clock#statusline() . ' '}%#SkyColorClockTemp# ",
+\ },
+\ "component_raw": {
+\   "sky_color_clock": 1,
+\ },
+\ "tab_component_function": {
+\   "filename": "ansanloms#lightline#tabfilename",
+\   "modified": "lightline#tab#modified",
+\   "readonly": "lightline#tab#readonly",
+\   "tabnum": ""
+\ },
+\ "separator": {
+\   "left": "",
+\   "right": ""
+\ },
+\ "subseparator": {
+\   "left": "",
+\   "right": ""
+\ },
+\}
+
+" }}}
+
+" tabline {{{
+
+set showtabline=2
+"set tabline=%!ansanloms#tabline#tabline()
 
 " }}}
 
