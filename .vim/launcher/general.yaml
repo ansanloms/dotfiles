@@ -43,10 +43,10 @@ items:
     type: command
     command: |
       call denops#request("ramble", "new", ["GoogleGenerativeAI", {"model": "gemini-pro"}, [{"role": "system", "type": "text", "message": ""}, {"role": "user", "type": "text", "message": "質問を入力。"}]])
-  - name: 🤖 AI Chat - Update
-    type: command
-    command: |
-      call denops#request("ramble", "chat", [bufnr()])
+  #- name: 🤖 AI Chat - Update
+  #  type: command
+  #  command: |
+  #    call denops#request("ramble", "chat", [bufnr()])
   - name: 🤖 AI Chat - Config
     type: command
     command: |
