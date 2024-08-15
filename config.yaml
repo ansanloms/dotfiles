@@ -71,3 +71,5 @@ link:
       targets:
         - darwin
         - linux
+  ~/.ripgreprc:
+    - src: ./.ripgreprc
