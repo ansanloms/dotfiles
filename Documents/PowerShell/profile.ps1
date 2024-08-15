@@ -1,7 +1,7 @@
 $Env:LANG = "ja"
 $Env:EDITOR = "vim"
 $Env:LESSCHARSET = "UTF-8"
-$Env:RIPGREP_CONFIG_PATH = (Join-Path $Env:homedrive "\.ripgreprc")
+$Env:RIPGREP_CONFIG_PATH = (Join-Path $Env:userprofile "\.ripgreprc")
 
 $Env:Path += ";" + (Join-Path $Env:homedrive "\msys64\usr\bin")
 $Env:Path += ";" + (Join-Path $Env:homedrive "\msys64\mingw64\bin")
