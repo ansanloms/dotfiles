@@ -1,57 +1,57 @@
 {
-   "conventional-commits.feat": {
-     "prefix": ["cc.feat"],
-     "body": ["feat: "],
-     "description": "[Conventional Commits] feat: ✨ 新しい機能を追加。"
-   },
-   "conventional-commits.fix": {
-     "prefix": ["cc.fix"],
-     "body": ["fix: "],
-     "description": "[Conventional Commits] fix: 🐛 バグ修正。"
-   },
-   "conventional-commits.docs": {
-     "prefix": ["cc.docs"],
-     "body": ["docs: "],
-     "description": "[Conventional Commits] docs: 📚 ドキュメントの修正。"
-   },
-   "conventional-commits.style": {
-     "prefix": ["cc.style"],
-     "body": ["style: "],
-     "description": "[Conventional Commits] style: 🎨 コードの動作に影響しないフォーマットの変更。"
-   },
-   "conventional-commits.refactor": {
-     "prefix": ["cc.refactor"],
-     "body": ["refactor: "],
-     "description": "[Conventional Commits] refactor: 🔨 リファクタリング。機能追加やバグ修正を含まない。"
-   },
-   "conventional-commits.perf": {
-     "prefix": ["cc.perf"],
-     "body": ["perf: "],
-     "description": "[Conventional Commits] perf: 🚀 パフォーマンス改善。"
-   },
-   "conventional-commits.test": {
-     "prefix": ["cc.test"],
-     "body": ["test: "],
-     "description": "[Conventional Commits] test: 🚨 テストの修正や追加。"
-   },
-   "conventional-commits.build": {
-     "prefix": ["cc.build"],
-     "body": ["build: "],
-     "description": "[Conventional Commits] build: 📦 ビルドシステムや外部依存に関する変更。"
-   },
-   "conventional-commits.ci": {
-     "prefix": ["cc.ci"],
-     "body": ["ci: "],
-     "description": "[Conventional Commits] ci: 👷 CI 用の設定やスクリプトに関する変更。"
-   },
-   "conventional-commits.chore": {
-     "prefix": ["cc.chore"],
-     "body": ["chore: "],
-     "description": "[Conventional Commits] chore: 🔧 それ以外の変更。"
-   },
-   "conventional-commits.revert": {
-     "prefix": ["cc.revert"],
-     "body": ["revert: "],
-     "description": "[Conventional Commits] revert: 🔀 差し戻し。"
-   }
- }
+  "conventional-commits.feat": {
+    "prefix": ["cc.feat"],
+    "body": ["feat: "],
+    "description": "[Conventional Commits] feat: ✨ 新しい機能を追加。"
+  },
+  "conventional-commits.fix": {
+    "prefix": ["cc.fix"],
+    "body": ["fix: "],
+    "description": "[Conventional Commits] fix: 🐛 バグ修正。"
+  },
+  "conventional-commits.docs": {
+    "prefix": ["cc.docs"],
+    "body": ["docs: "],
+    "description": "[Conventional Commits] docs: 📚 ドキュメントの修正。"
+  },
+  "conventional-commits.style": {
+    "prefix": ["cc.style"],
+    "body": ["style: "],
+    "description": "[Conventional Commits] style: 🎨 コードの動作に影響しないフォーマットの変更。"
+  },
+  "conventional-commits.refactor": {
+    "prefix": ["cc.refactor"],
+    "body": ["refactor: "],
+    "description": "[Conventional Commits] refactor: 🔨 リファクタリング。機能追加やバグ修正を含まない。"
+  },
+  "conventional-commits.perf": {
+    "prefix": ["cc.perf"],
+    "body": ["perf: "],
+    "description": "[Conventional Commits] perf: 🚀 パフォーマンス改善。"
+  },
+  "conventional-commits.test": {
+    "prefix": ["cc.test"],
+    "body": ["test: "],
+    "description": "[Conventional Commits] test: 🚨 テストの修正や追加。"
+  },
+  "conventional-commits.build": {
+    "prefix": ["cc.build"],
+    "body": ["build: "],
+    "description": "[Conventional Commits] build: 📦 ビルドシステムや外部依存に関する変更。"
+  },
+  "conventional-commits.ci": {
+    "prefix": ["cc.ci"],
+    "body": ["ci: "],
+    "description": "[Conventional Commits] ci: 👷 CI 用の設定やスクリプトに関する変更。"
+  },
+  "conventional-commits.chore": {
+    "prefix": ["cc.chore"],
+    "body": ["chore: "],
+    "description": "[Conventional Commits] chore: 🔧 それ以外の変更。"
+  },
+  "conventional-commits.revert": {
+    "prefix": ["cc.revert"],
+    "body": ["revert: "],
+    "description": "[Conventional Commits] revert: 🔀 差し戻し。"
+  }
+}
