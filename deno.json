@@ -1,9 +1,11 @@
 {
+  "unstable": ["fmt-yaml"],
   "lint": {
-    "include": ["deno.json"]
+    "include": ["deno.json", "config.yaml"]
   },
   "fmt": {
-    "include": ["deno.json"]
+    "include": ["deno.json", "config.yaml"],
+    "proseWrap": "preserve"
   },
   "tasks": {
     "dot-mori": "deno run -A https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.0/cli.ts",
