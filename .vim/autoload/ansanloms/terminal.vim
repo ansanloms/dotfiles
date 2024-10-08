@@ -3,7 +3,7 @@ function! ansanloms#terminal#terminal(cmd, name, ...)
   \ "term_name": a:name,
   \ "term_finish": "close",
   \ "curwin": 1
-  \},  get(a:, 1, {})))
+  \}, get(a:, 1, {})))
 endfunction
 
 function! ansanloms#terminal#ssh(destination)
