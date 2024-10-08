@@ -584,6 +584,15 @@
       <row ro="zL" hi="⇒" ka="⇒" an="⇒" so="0" />
       <row ro="z;" hi="゛" ka="゛" an="ﾞ" so="0" />
       <row ro="z:" hi="゜" ka="゜" an="ﾟ" so="0" />
+      <row ro="z1" hi="①" ka="①" an="①" so="0" />
+      <row ro="z2" hi="②" ka="②" an="②" so="0" />
+      <row ro="z3" hi="③" ka="③" an="③" so="0" />
+      <row ro="z4" hi="④" ka="④" an="④" so="0" />
+      <row ro="z5" hi="⑤" ka="⑤" an="⑤" so="0" />
+      <row ro="z6" hi="⑥" ka="⑥" an="⑥" so="0" />
+      <row ro="z7" hi="⑦" ka="⑦" an="⑦" so="0" />
+      <row ro="z8" hi="⑧" ka="⑧" an="⑧" so="0" />
+      <row ro="z9" hi="⑨" ka="⑨" an="⑨" so="0" />
     </list>
   </section>
   <section name="jlatin">
