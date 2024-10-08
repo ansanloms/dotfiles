@@ -570,7 +570,7 @@ let g:lsp_settings = {
 \   "allowlist": ["javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue"],
 \ },
 \ "efm-langserver": {
-\   "disabled": v:false,
+\   "disabled": v:true,
 \ },
 \}
 
