@@ -7,8 +7,11 @@
     "include": ["deno.json", "config.yaml"],
     "proseWrap": "preserve"
   },
+  "imports": {
+    "dot-mori/": "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.1/"
+  },
   "tasks": {
-    "dot-mori": "deno run -A https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.0/cli.ts",
+    "dot-mori": "echo \"import 'dot-mori/cli.ts'\" | deno run -A -",
     "install": "deno task dot-mori --config ./config.yaml",
     "uninstall": "deno task dot-mori --config ./config.yaml --clean"
   }
