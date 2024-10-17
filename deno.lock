@@ -1,73 +1,111 @@
 {
-  "version": "3",
-  "packages": {
-    "specifiers": {
-      "jsr:@cliffy/ansi@1.0.0-rc.7": "jsr:@cliffy/ansi@1.0.0-rc.7",
-      "jsr:@cliffy/command@1.0.0-rc.7": "jsr:@cliffy/command@1.0.0-rc.7",
-      "jsr:@cliffy/flags@1.0.0-rc.7": "jsr:@cliffy/flags@1.0.0-rc.7",
-      "jsr:@cliffy/internal@1.0.0-rc.7": "jsr:@cliffy/internal@1.0.0-rc.7",
-      "jsr:@cliffy/table@1.0.0-rc.7": "jsr:@cliffy/table@1.0.0-rc.7",
-      "jsr:@core/unknownutil@4.3.0": "jsr:@core/unknownutil@4.3.0",
-      "jsr:@std/fmt@~1.0.2": "jsr:@std/fmt@1.0.2",
-      "jsr:@std/fs@1.0.4": "jsr:@std/fs@1.0.4",
-      "jsr:@std/path@1.0.6": "jsr:@std/path@1.0.6",
-      "jsr:@std/path@^1.0.6": "jsr:@std/path@1.0.6",
-      "jsr:@std/text@~1.0.7": "jsr:@std/text@1.0.7",
-      "jsr:@std/yaml@1.0.5": "jsr:@std/yaml@1.0.5"
+  "version": "4",
+  "specifiers": {
+    "jsr:@cliffy/ansi@1.0.0-rc.7": "1.0.0-rc.7",
+    "jsr:@cliffy/command@1.0.0-rc.7": "1.0.0-rc.7",
+    "jsr:@cliffy/flags@1.0.0-rc.7": "1.0.0-rc.7",
+    "jsr:@cliffy/internal@1.0.0-rc.7": "1.0.0-rc.7",
+    "jsr:@cliffy/table@1.0.0-rc.7": "1.0.0-rc.7",
+    "jsr:@std/fmt@~1.0.2": "1.0.2",
+    "jsr:@std/fs@1.0.4": "1.0.4",
+    "jsr:@std/path@1.0.6": "1.0.6",
+    "jsr:@std/path@^1.0.6": "1.0.6",
+    "jsr:@std/text@~1.0.7": "1.0.7",
+    "jsr:@std/yaml@1.0.5": "1.0.5",
+    "npm:ajv@8.17.1": "8.17.1",
+    "npm:json-schema-to-ts@3.1.1": "3.1.1"
+  },
+  "jsr": {
+    "@cliffy/ansi@1.0.0-rc.7": {
+      "integrity": "f71c921cce224c13d322e5cedba4f38e8f7354c7d855c9cb22729362a53f25aa",
+      "dependencies": [
+        "jsr:@std/fmt"
+      ]
     },
-    "jsr": {
-      "@cliffy/ansi@1.0.0-rc.7": {
-        "integrity": "f71c921cce224c13d322e5cedba4f38e8f7354c7d855c9cb22729362a53f25aa",
-        "dependencies": [
-          "jsr:@std/fmt@~1.0.2"
-        ]
-      },
-      "@cliffy/command@1.0.0-rc.7": {
-        "integrity": "1288808d7a3cd18b86c24c2f920e47a6d954b7e23cadc35c8cbd78f8be41f0cd",
-        "dependencies": [
-          "jsr:@cliffy/flags@1.0.0-rc.7",
-          "jsr:@cliffy/internal@1.0.0-rc.7",
-          "jsr:@cliffy/table@1.0.0-rc.7",
-          "jsr:@std/fmt@~1.0.2",
-          "jsr:@std/text@~1.0.7"
-        ]
-      },
-      "@cliffy/flags@1.0.0-rc.7": {
-        "integrity": "318d9be98f6a6417b108e03dec427dea96cdd41a15beb21d2554ae6da450a781",
-        "dependencies": [
-          "jsr:@std/text@~1.0.7"
-        ]
-      },
-      "@cliffy/internal@1.0.0-rc.7": {
-        "integrity": "10412636ab3e67517d448be9eaab1b70c88eba9be22617b5d146257a11cc9b17"
-      },
-      "@cliffy/table@1.0.0-rc.7": {
-        "integrity": "9fdd9776eda28a0b397981c400eeb1aa36da2371b43eefe12e6ff555290e3180",
-        "dependencies": [
-          "jsr:@std/fmt@~1.0.2"
-        ]
-      },
-      "@core/unknownutil@4.3.0": {
-        "integrity": "538a3687ffa81028e91d148818047df219663d0da671d906cecd165581ae55cc"
-      },
-      "@std/fmt@1.0.2": {
-        "integrity": "87e9dfcdd3ca7c066e0c3c657c1f987c82888eb8103a3a3baa62684ffeb0f7a7"
-      },
-      "@std/fs@1.0.4": {
-        "integrity": "2907d32d8d1d9e540588fd5fe0ec21ee638134bd51df327ad4e443aaef07123c",
-        "dependencies": [
-          "jsr:@std/path@^1.0.6"
-        ]
-      },
-      "@std/path@1.0.6": {
-        "integrity": "ab2c55f902b380cf28e0eec501b4906e4c1960d13f00e11cfbcd21de15f18fed"
-      },
-      "@std/text@1.0.7": {
-        "integrity": "344a820af99fde81ae1d4f9ce586da3f47a58cda25ac4c4dd688166cf5ed97f1"
-      },
-      "@std/yaml@1.0.5": {
-        "integrity": "71ba3d334305ee2149391931508b2c293a8490f94a337eef3a09cade1a2a2742"
-      }
+    "@cliffy/command@1.0.0-rc.7": {
+      "integrity": "1288808d7a3cd18b86c24c2f920e47a6d954b7e23cadc35c8cbd78f8be41f0cd",
+      "dependencies": [
+        "jsr:@cliffy/flags",
+        "jsr:@cliffy/internal",
+        "jsr:@cliffy/table",
+        "jsr:@std/fmt",
+        "jsr:@std/text"
+      ]
+    },
+    "@cliffy/flags@1.0.0-rc.7": {
+      "integrity": "318d9be98f6a6417b108e03dec427dea96cdd41a15beb21d2554ae6da450a781",
+      "dependencies": [
+        "jsr:@std/text"
+      ]
+    },
+    "@cliffy/internal@1.0.0-rc.7": {
+      "integrity": "10412636ab3e67517d448be9eaab1b70c88eba9be22617b5d146257a11cc9b17"
+    },
+    "@cliffy/table@1.0.0-rc.7": {
+      "integrity": "9fdd9776eda28a0b397981c400eeb1aa36da2371b43eefe12e6ff555290e3180",
+      "dependencies": [
+        "jsr:@std/fmt"
+      ]
+    },
+    "@std/fmt@1.0.2": {
+      "integrity": "87e9dfcdd3ca7c066e0c3c657c1f987c82888eb8103a3a3baa62684ffeb0f7a7"
+    },
+    "@std/fs@1.0.4": {
+      "integrity": "2907d32d8d1d9e540588fd5fe0ec21ee638134bd51df327ad4e443aaef07123c",
+      "dependencies": [
+        "jsr:@std/path@^1.0.6"
+      ]
+    },
+    "@std/path@1.0.6": {
+      "integrity": "ab2c55f902b380cf28e0eec501b4906e4c1960d13f00e11cfbcd21de15f18fed"
+    },
+    "@std/text@1.0.7": {
+      "integrity": "344a820af99fde81ae1d4f9ce586da3f47a58cda25ac4c4dd688166cf5ed97f1"
+    },
+    "@std/yaml@1.0.5": {
+      "integrity": "71ba3d334305ee2149391931508b2c293a8490f94a337eef3a09cade1a2a2742"
+    }
+  },
+  "npm": {
+    "@babel/runtime@7.25.7": {
+      "integrity": "sha512-FjoyLe754PMiYsFaN5C94ttGiOmBNYTf6pLr4xXHAT5uctHb092PBszndLDR5XA/jghQvn4n7JMHl7dmTgbm9w==",
+      "dependencies": [
+        "regenerator-runtime"
+      ]
+    },
+    "ajv@8.17.1": {
+      "integrity": "sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==",
+      "dependencies": [
+        "fast-deep-equal",
+        "fast-uri",
+        "json-schema-traverse",
+        "require-from-string"
+      ]
+    },
+    "fast-deep-equal@3.1.3": {
+      "integrity": "sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q=="
+    },
+    "fast-uri@3.0.3": {
+      "integrity": "sha512-aLrHthzCjH5He4Z2H9YZ+v6Ujb9ocRuW6ZzkJQOrTxleEijANq4v1TsaPaVG1PZcuurEzrLcWRyYBYXD5cEiaw=="
+    },
+    "json-schema-to-ts@3.1.1": {
+      "integrity": "sha512-+DWg8jCJG2TEnpy7kOm/7/AxaYoaRbjVB4LFZLySZlWn8exGs3A4OLJR966cVvU26N7X9TWxl+Jsw7dzAqKT6g==",
+      "dependencies": [
+        "@babel/runtime",
+        "ts-algebra"
+      ]
+    },
+    "json-schema-traverse@1.0.0": {
+      "integrity": "sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug=="
+    },
+    "regenerator-runtime@0.14.1": {
+      "integrity": "sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw=="
+    },
+    "require-from-string@2.0.2": {
+      "integrity": "sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw=="
+    },
+    "ts-algebra@2.0.0": {
+      "integrity": "sha512-FPAhNPFMrkwz76P7cdjdmiShwMynZYN6SgOujD1urY4oNm80Ou9oMdmbR45LotcKOXoy7wSmHkRFE6Mxbrhefw=="
     }
   },
   "remote": {
@@ -93,14 +131,16 @@
     "https://deno.land/x/dir@1.5.2/home_dir/mod.ts": "6128b52da60124f78a4fc176cd4687a073e9b0331803dd602dfb685fa4fe4ae1",
     "https://deno.land/x/dir@1.5.2/mod.ts": "95e1519b7b629c995025652342b36fbf64a6a9a0bd7822b0c4573a22f42f0529",
     "https://deno.land/x/dir@1.5.2/tmp_dir/mod.ts": "c89c792d454fa1e3b2882f34faa87e9b92fc2866118b348d9984d68d33773c58",
-    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.1/cli.ts": "5379bb9597725b541c55c4e017f363d9c785c09a59fad600c41b1fb2b69c488d",
-    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.1/deps/@cliffy/ansi/colors.ts": "40f3a2a6e9e59ec4d317242699b5d7149c12f08808e98a3ed43373cfe9a4e529",
-    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.1/deps/@cliffy/command/mod.ts": "b9245c2bb7889c3e59685898134448901eea5bd21760b2bd4eb8a9e4e70a640d",
-    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.1/deps/@core/unknownutil/mod.ts": "be110eb9e9f1ead34bdca2b71b580ddc42239ad548f8727350b7b13ab3c7345f",
-    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.1/deps/@std/fs/mod.ts": "3211c17afc1d1d19f133ead72f30808994dfc012d4c1791c6e72a24a89341efd",
-    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.1/deps/@std/path/mod.ts": "ff22088878e2b255d66b08e890fa0848e93a38216b53ee7988f8b02a5fbf1253",
-    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.1/deps/@std/yaml/mod.ts": "cbcf4d295ed88066e12a718750f09cebbf30fefa32e186844b597bce74b35557",
-    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.1/deps/dir/mod.ts": "c547974dec477c2b384684ab8a80a130f3d9808df70a23b276c1b32491f87a4c",
-    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.1/mod.ts": "2577d72b9861a8630189b67d72953eba524735238daf0d55853fa926c6099a50"
+    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.2/cli.ts": "21037262004915110d5e9b6e6c74677ca9e12d8de875e8dab55b4b2342bf5bea",
+    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.2/deps/@cliffy/ansi/colors.ts": "40f3a2a6e9e59ec4d317242699b5d7149c12f08808e98a3ed43373cfe9a4e529",
+    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.2/deps/@cliffy/command/mod.ts": "b9245c2bb7889c3e59685898134448901eea5bd21760b2bd4eb8a9e4e70a640d",
+    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.2/deps/@std/fs/mod.ts": "3211c17afc1d1d19f133ead72f30808994dfc012d4c1791c6e72a24a89341efd",
+    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.2/deps/@std/path/mod.ts": "ff22088878e2b255d66b08e890fa0848e93a38216b53ee7988f8b02a5fbf1253",
+    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.2/deps/@std/yaml/mod.ts": "cbcf4d295ed88066e12a718750f09cebbf30fefa32e186844b597bce74b35557",
+    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.2/deps/ajv/mod.ts": "3ffef9ad16449cb163cc4231616c9ea0995496c871835659beff51323c0293ce",
+    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.2/deps/dir/mod.ts": "c547974dec477c2b384684ab8a80a130f3d9808df70a23b276c1b32491f87a4c",
+    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.2/deps/json-schema-to-ts/mod.ts": "c4f17632da80f9f3992debba4280590f51307e086b2b2125f46e63b6fdd6560c",
+    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.2/mod.ts": "34c65380b334bedd72785dd49a031a38c0418c0bfce98e27c3946edbd5be0da9",
+    "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.2/schemas/Schema.json": "c0c5ba5a079144ad195546f5b71e1bf7baee315601068d9abfe73d329fd9a482"
   }
 }
