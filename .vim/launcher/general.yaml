@@ -4,11 +4,7 @@ items:
   - name: 💻 Terminal - PowerShell
     type: command
     command: |
-      call ansanloms#terminal#terminal("ansicon pwsh", "PowerShell")
-  #- name: 💻 Terminal - PowerShell (v5)
-  #  type: command
-  #  command: |
-  #    call ansanloms#terminal#terminal("powershell", "PowerShell (v5)")
+      call ansanloms#terminal#terminal("pwsh", "PowerShell")
   - name: 💻 Terminal - cmd
     type: command
     command: |
@@ -29,10 +25,6 @@ items:
     type: command
     command: |
       call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") .. " -mingw64 -defterm -no-start", "MinGW-w64 64bit")
-  #- name: 💻 Terminal - NYAGOS
-  #  type: command
-  #  command: |
-  #    call ansanloms#terminal#terminal(expand("~/scoop/apps/nyagos/current/nyagos.exe") . " -k \"chcp 65001\"", "NYAGOS")
 
   # AI Chat:
   - name: 🤖 AI Chat - Start (OpenAI GPT-4o mini)
@@ -43,10 +35,6 @@ items:
     type: command
     command: |
       call denops#request("ramble", "new", ["GoogleGenerativeAI", {"model": "gemini-pro"}, [{"role": "system", "type": "text", "message": ""}, {"role": "user", "type": "text", "message": ""}]])
-  #- name: 🤖 AI Chat - Update
-  #  type: command
-  #  command: |
-  #    call denops#request("ramble", "chat", [bufnr()])
   - name: 🤖 AI Chat - Config
     type: command
     command: |
