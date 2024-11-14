@@ -3,10 +3,10 @@ root-markers:
   - .git/
 tools:
   prettier: &prettier
-    format-command: 'npx --no-install prettier --stdin-filepath ${INPUT}'
+    format-command: "npx --no-install prettier --stdin-filepath ${INPUT}"
     format-stdin: true
   stylelint: &stylelint
-    format-command: 'npx --no-install stylelint --formatter unix --stdin --stdin-filename ${INPUT}'
+    format-command: "npx --no-install stylelint --formatter unix --stdin --stdin-filename ${INPUT}"
     format-stdin: true
 languages:
   javascript:

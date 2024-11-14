@@ -1,13 +1,12 @@
 {
+  "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "lint": {
-    "include": ["README.md", "deno.json", "config.yaml"]
   },
   "fmt": {
-    "include": ["README.md", "deno.json", "config.yaml"],
     "proseWrap": "preserve"
   },
   "imports": {
-    "dot-mori/": "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.2/"
+    "dot-mori/": "https://raw.githubusercontent.com/ansanloms/dot-mori/v0.1.3/"
   },
   "tasks": {
     "dot-mori": "echo \"import 'dot-mori/cli.ts'\" | deno run -A -",
