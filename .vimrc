@@ -465,6 +465,24 @@ tnoremap <C-w>gr <C-w>gT
 nnoremap <silent> <C-e> :<C-u>call bekken#Open("launcher#select", globpath(expand("~/.vim/launcher"), "**/*.yaml", v:false, v:true), {})<CR>
 vnoremap <silent> <C-e> :<C-u>call bekken#Open("launcher#select", globpath(expand("~/.vim/launcher"), "**/*.yaml", v:false, v:true), {})<CR>
 
+function s:bekken_buffer_open(bufnr, cmd)
+  " タブに指定バッファがある場合にそのタブに移動する
+  for i in range(1, tabpagenr("$"))
+    if index(tabpagebuflist(i), a:bufnr) != -1
+      execute("tabnext " .. i)
+      return
+    endif
+  endfor
+
+  " タブに無かったら指定したコマンドで開く
+  execute(a:cmd .. " " .. a:bufnr)
+endfunction
+
+let g:bekken_buffer#key_mappings = {
+\ "\<Cr>": { bufnr -> <SID>bekken_buffer_open(bufnr, "buffer") },
+\ "\<C-t>": { bufnr -> <SID>bekken_buffer_open(bufnr, "tab split | buffer") },
+\}
+
 " history
 nnoremap <silent> <C-h> :<C-u>call bekken#Open("files#oldfiles", [], { "resultFileType": "bekken-result-files" })<CR>
 
@@ -472,7 +490,7 @@ nnoremap <silent> <C-h> :<C-u>call bekken#Open("files#oldfiles", [], { "resultFi
 nnoremap <silent> <C-l> :<C-u>call bekken#Open("files#list", [ansanloms#project#dir(expand("%:h"), expand("%:h"))], { "resultFileType": "bekken-result-files" })<CR>
 
 " buffer
-nnoremap <silent> <C-s> :<C-u>call bekken#Open("buffer", [], { "resultFileType": "bekken-result-buffer" })<CR>
+nnoremap <silent> <C-s> :<C-u>call bekken#Open("buffer", [ v:false, g:bekken_buffer#key_mappings ], { "resultFileType": "bekken-result-buffer" })<CR>
 
 " タグジャンプの際に新しいタブで開く
 nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
