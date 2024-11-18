@@ -54,12 +54,6 @@ items:
     command: |
       packadd minpac | source $MYVIMRC | call minpac#status()
 
-  # quickfix
-  - name: 🔍 Quickfix - grep
-    type: command
-    command: |
-      call bekken#Open("quickfix#grep", [], { "resultFileType": "bekken-result-quickfix-grep" })
-
   - name: 📄 Open Hosts
     type: command
     silent: true

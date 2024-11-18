@@ -462,8 +462,8 @@ nnoremap <C-w>gr <C-w>gT
 tnoremap <C-w>gr <C-w>gT
 
 " launcher
-nnoremap <silent> <C-e> :<C-u>call bekken#Open("launcher#select", globpath(expand("~/.vim/launcher"), "**/*.yaml", v:false, v:true), {})<CR>
-vnoremap <silent> <C-e> :<C-u>call bekken#Open("launcher#select", globpath(expand("~/.vim/launcher"), "**/*.yaml", v:false, v:true), {})<CR>
+nnoremap <silent> <C-e> :<C-u>call bekken#Run("launcher#select", globpath(expand("~/.vim/launcher"), "**/*.yaml", v:false, v:true), {})<CR>
+vnoremap <silent> <C-e> :<C-u>call bekken#Run("launcher#select", globpath(expand("~/.vim/launcher"), "**/*.yaml", v:false, v:true), {})<CR>
 
 function s:bekken_buffer_open(bufnr, cmd)
   " タブに指定バッファがある場合にそのタブに移動する
@@ -484,13 +484,13 @@ let g:bekken_buffer#key_mappings = {
 \}
 
 " history
-nnoremap <silent> <C-h> :<C-u>call bekken#Open("files#oldfiles", [], { "resultFileType": "bekken-result-files" })<CR>
+nnoremap <silent> <C-h> :<C-u>call bekken#Run("files#oldfiles", [], { "filetype": { "selection": "bekken-selection-files" } })<CR>
 
 " current files
-nnoremap <silent> <C-l> :<C-u>call bekken#Open("files#list", [ansanloms#project#dir(expand("%:h"), expand("%:h"))], { "resultFileType": "bekken-result-files" })<CR>
+nnoremap <silent> <C-l> :<C-u>call bekken#Run("files#list", [ansanloms#project#dir(expand("%:h"), expand("%:h"))], { "filetype": { "selection": "bekken-selection-files" } })<CR>
 
 " buffer
-nnoremap <silent> <C-s> :<C-u>call bekken#Open("buffer", [ v:false, g:bekken_buffer#key_mappings ], { "resultFileType": "bekken-result-buffer" })<CR>
+nnoremap <silent> <C-s> :<C-u>call bekken#Run("buffer", [ v:false, g:bekken_buffer#key_mappings ], { "filetype": { "selection": "bekken-selection-buffer" } })<CR>
 
 " タグジャンプの際に新しいタブで開く
 nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
@@ -626,7 +626,7 @@ augroup quickfix-setting
   autocmd!
 
   " :grep で quickfix を開く
-  autocmd QuickFixCmdPost *grep* call bekken#Open("quickfix#grep", [], { "resultFileType": "bekken-result-quickfix-grep" })
+  autocmd QuickFixCmdPost *grep* call bekken#Run("quickfix#grep", [], { "filetype": { "selection": "bekken-selection-quickfix-grep" } })
 
   " ステータスラインを更新
   autocmd FileType qf setlocal statusline=%!ansanloms#statusline#quickfix()
