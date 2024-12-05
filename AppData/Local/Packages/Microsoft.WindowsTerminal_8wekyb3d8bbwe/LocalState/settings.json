@@ -1,14 +1,14 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions": 
+    "actions":
     [
         {
             "command": "unbound",
             "keys": "alt+shift+d"
         },
         {
-            "command": 
+            "command":
             {
                 "action": "copy"
             },
@@ -32,23 +32,23 @@
     "initialCols": 160,
     "initialRows": 40,
     "launchMode": "default",
-    "newTabMenu": 
+    "newTabMenu":
     [
         {
             "type": "remainingProfiles"
         }
     ],
-    "profiles": 
+    "profiles":
     {
-        "defaults": 
+        "defaults":
         {
             "colorScheme": "Terafox",
             "compatibility.reloadEnvironmentVariables": true,
             "cursorShape": "filledBox",
             "experimental.retroTerminalEffect": false,
-            "font": 
+            "font":
             {
-                "face": "Moralerspace Krypton HWJPDOC",
+                "face": "Moralerspace Krypton HWNF",
                 "size": 12
             },
             "historySize": 99999,
@@ -58,7 +58,7 @@
             "suppressApplicationTitle": true,
             "useAcrylic": true
         },
-        "list": 
+        "list":
         [
             {
                 "commandline": "%PROGRAMFILES%\\Vim\\vim91\\vim.exe",
@@ -137,7 +137,7 @@
             }
         ]
     },
-    "schemes": 
+    "schemes":
     [
         {
             "background": "#161616",

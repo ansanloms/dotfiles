@@ -1275,7 +1275,7 @@ augroup END
 if has("gui_running")
   if has("vim_starting")
     " フォント設定
-    set guifont=Moralerspace_Krypton_HWJPDOC:h12:cSHIFTJIS:qDRAFT
+    set guifont=Moralerspace_Krypton_HWNF:h12:cSHIFTJIS:qDRAFT
 
     " 縦幅 デフォルトは 24
     set lines=40
