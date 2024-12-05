@@ -29,6 +29,8 @@
     "alwaysShowTabs": true,
     "copyOnSelect": true,
     "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+    "initialCols": 160,
+    "initialRows": 40,
     "launchMode": "default",
     "newTabMenu": 
     [
@@ -46,7 +48,7 @@
             "experimental.retroTerminalEffect": false,
             "font": 
             {
-                "face": "Cica",
+                "face": "Moralerspace Krypton HWJPDOC",
                 "size": 12
             },
             "historySize": 99999,

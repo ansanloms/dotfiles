@@ -1275,9 +1275,7 @@ augroup END
 if has("gui_running")
   if has("vim_starting")
     " フォント設定
-    if has("win32") || has("win64")
-      set guifont=Cica:h12:cSHIFTJIS:qDRAFT
-    endif
+    set guifont=Moralerspace_Krypton_HWJPDOC:h12:cSHIFTJIS:qDRAFT
 
     " 縦幅 デフォルトは 24
     set lines=40
@@ -1348,7 +1346,6 @@ set breakindent
 "set ambiwidth=double
 set ambiwidth=single
 call minpac#add("https://github.com/rbtnn/vim-ambiwidth.git")
-let g:ambiwidth_cica_enabled = v:true
 
 " 上下の視界確保
 set scrolloff=4

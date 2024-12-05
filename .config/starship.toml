@@ -4,7 +4,7 @@ palette = "custom"
 
 format = '''
 [┌──────────────](gray) $git_branch
-[│](gray) $os  $directory
+[│](gray) $directory
 $character'''
 
 add_newline = true
@@ -23,21 +23,6 @@ disabled = false
 format = "[$symbol]($style)"
 style = "green"
 
-[os.symbols]
-Windows = ""
-Ubuntu = ""
-Raspbian = ""
-Macos = ""
-Manjaro = ""
-Linux = ""
-Gentoo = ""
-Alpine = ""
-Amazon = ""
-Android = ""
-Arch = ""
-CentOS = ""
-Debian = ""
-
 [directory]
 disabled = false
 truncation_length = 0
@@ -47,8 +32,7 @@ style = "white"
 
 [git_branch]
 disabled = false
-format = "[$symbol $branch(:$remote_branch)]($style)"
-symbol = ""
+format = "[$branch(:$remote_branch)]($style)"
 style = "cyan"
 
 [git_status]
@@ -58,38 +42,6 @@ format = "[($all_status$ahead_behind)]($style)"
 [git_metrics]
 disabled = false
 format = "[+$added]($added_style)/[-$deleted]($deleted_style)"
-
-[nodejs]
-symbol = ""
-format = "[$symbol( $version)]($style)"
-
-[c]
-symbol = ""
-format = "[$symbol( $version)]($style)"
-
-[rust]
-symbol = ""
-format = "[$symbol( $version)]($style)"
-
-[golang]
-symbol = ""
-format = "[$symbol( $version)]($style)"
-
-[php]
-symbol = ""
-format = "[$symbol( $version)]($style)"
-
-[java]
-symbol = ""
-format = "[$symbol( $version)]($style)"
-
-[haskell]
-symbol = ""
-format = "[$symbol( $version)]($style)"
-
-[python]
-symbol = ""
-format = "[$symbol( $version)]($style)"
 
 [palettes.custom]
 gray = "244"
