@@ -31,6 +31,10 @@ items:
     type: command
     command: |
       call denops#request("ramble", "new", ["OpenAI", {"model": "gpt-4o-mini"}, [{"role": "system", "type": "text", "message": ""}, {"role": "user", "type": "text", "message": ""}]])
+  - name: 🤖 AI Chat - Start (OpenAI o1-mini)
+    type: command
+    command: |
+      call denops#request("ramble", "new", ["OpenAI", {"model": "o1-mini-2024-09-12"}, [{"role": "user", "type": "text", "message": ""}]])
   - name: 🤖 AI Chat - Start (Google AI Gemini Pro)
     type: command
     command: |
