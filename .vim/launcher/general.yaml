@@ -100,7 +100,7 @@ items:
       else
         echoerr "VSCode not found."
       endif
-  - name: 󿠞 Open current file by PHPStorm
+  - name:  Open current file by PHPStorm
     type: command
     silent: true
     command: |
