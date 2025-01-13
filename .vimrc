@@ -20,15 +20,15 @@ scriptencoding utf-8
 
 if has("vim_starting")
   for dir in [
-  \ "~/.vim"
-  \ ,"~/.vim/autoload"
-  \ ,"~/.vim/plugin"
-  \ ,"~/.vim/backup"
-  \ ,"~/.vim/view"
-  \ ,"~/.vim/undo"
-  \ ,"~/.vim/syntax"
-  \ ,"~/.vim/pack"
-  \ ,"~/.vim/logs"
+  \ "~/.vim",
+  \ "~/.vim/autoload",
+  \ "~/.vim/plugin",
+  \ "~/.vim/backup",
+  \ "~/.vim/view",
+  \ "~/.vim/undo",
+  \ "~/.vim/syntax",
+  \ "~/.vim/pack",
+  \ "~/.vim/logs"
   \]
     if !isdirectory(expand(dir))
       call mkdir(expand(dir), "p")
@@ -1195,6 +1195,19 @@ augroup terraform-setting
 
   " インデントセット
   autocmd FileType terraform setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+augroup END
+
+" }}}
+
+" rust {{{
+
+call minpac#add("https://github.com/rust-lang/rust.vim.git")
+
+augroup rust-setting
+  autocmd!
+
+  " インデントセット
+  autocmd FileType rust setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 augroup END
 
 " }}}
