@@ -14,15 +14,20 @@ Set-PSReadLineKeyHandler -Key Tab -Function Complete
 # Prompt に staship を使う
 Invoke-Expression (&starship init powershell)
 
-# PSReadLine
+# インライン予測のテキストの色を設定
 Set-PSReadLineOption -Colors @{ InlinePrediction = $PSStyle.Foreground.BrightBlack }
+
+# 警告音を消す
 Set-PSReadlineOption -BellStyle None
+
+# 履歴の重複を許可しない
+Set-PSReadlineOption -HistoryNoDuplicates
 
 function eza-ll() {
   eza $(@("--long"); $args)
 }
 
-function togif {
+function togif() {
   param (
     [string]$inputPath,
     [string]$outputPath = $null
