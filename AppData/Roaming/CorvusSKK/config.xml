@@ -126,8 +126,8 @@
   </section>
   <section name="keymap">
     <key name="kana" value="q" />
-    <key name="convchar" value="" />
-    <key name="jlatin" value="" />
+    <key name="convchar" value="\cq" />
+    <key name="jlatin" value="L" />
     <key name="ascii" value="l" />
     <key name="jmode" value="" />
     <key name="abbrev" value="/" />
