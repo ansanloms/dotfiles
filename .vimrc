@@ -554,11 +554,11 @@ let g:lsp_inlay_hints_enabled = 1
 let g:lsp_diagnostics_virtual_text_enabled = 0
 
 " 補完時にみる情報:
-" 検索対象が定義されている箇所 / 検索対象が宣言されている箇所 / 検索対象が実装されている箇所 / 検索対象の型が定義されている箇所
+" 検索対象が実装されている箇所 / 検索対象が定義されている箇所 / 検索対象が宣言されている箇所 / 検索対象の型が定義されている箇所
 let g:lsp_tagfunc_source_methods = [
+\ "implementation",
 \ "definition",
 \ "declaration",
-\ "implementation",
 \ "typeDefinition"
 \]
 
@@ -571,16 +571,11 @@ let g:lsp_diagnostics_signs_hint = {"text": "❓"}
 let g:lsp_document_code_action_signs_enabled = 1
 let g:lsp_document_code_action_signs_hint = {"text": "❓"}
 
-" let g:lsp_log_verbose = 1
-" let g:lsp_log_file = expand("/logs/vim-lsp.log")
-
 " asyncomplete.vim
 let g:asyncomplete_auto_popup = 1
 let g:asyncomplete_auto_completeopt = 1
 let g:asyncomplete_popup_delay = 200
 let g:asyncomplete_matchfuzzy = 1
-
-" let g:asyncomplete_log_file = expand("/logs/asyncomplete.log")
 
 " vim-lsp-settings
 let g:lsp_settings = {
@@ -601,9 +596,9 @@ augroup lsp-setting
   autocmd User lsp_buffer_enabled setlocal omnifunc=lsp#complete
   autocmd User lsp_buffer_enabled setlocal signcolumn=yes
   autocmd User lsp_buffer_enabled setlocal tagfunc=lsp#tagfunc
-  "autocmd User lsp_buffer_enabled setlocal foldmethod=expr
-  "autocmd User lsp_buffer_enabled setlocal foldexpr=lsp#ui#vim#folding#foldexpr()
-  "autocmd User lsp_buffer_enabled setlocal foldtext=lsp#ui#vim#folding#foldtext()
+  autocmd User lsp_buffer_enabled setlocal foldmethod=expr
+  autocmd User lsp_buffer_enabled setlocal foldexpr=lsp#ui#vim#folding#foldexpr()
+  autocmd User lsp_buffer_enabled setlocal foldtext=lsp#ui#vim#folding#foldtext()
 
   autocmd User lsp_buffer_enabled nnoremap [lsp] <Nop>
   autocmd User lsp_buffer_enabled vnoremap [lsp] <Nop>
@@ -611,11 +606,13 @@ augroup lsp-setting
   autocmd User lsp_buffer_enabled vmap <Space>l [lsp]
   autocmd User lsp_buffer_enabled nmap <buffer> [lsp]h <Plug>(lsp-hover)
   autocmd User lsp_buffer_enabled nmap <buffer> [lsp]a <Plug>(lsp-code-action)
+  autocmd User lsp_buffer_enabled nmap <buffer> [lsp]d <Plug>(lsp-definition)
+  autocmd User lsp_buffer_enabled nmap <buffer> [lsp]i <Plug>(lsp-implementation)
+  autocmd User lsp_buffer_enabled nmap <buffer> [lsp]r <Plug>(lsp-references)
   autocmd User lsp_buffer_enabled nmap <buffer> [lsp]f <plug>(lsp-document-format-sync)
   autocmd User lsp_buffer_enabled vmap <buffer> [lsp]f <plug>(lsp-document-range-format-sync)
   autocmd User lsp_buffer_enabled nmap <silent> [lsp]n <Plug>(lsp-next-error)
   autocmd User lsp_buffer_enabled nmap <silent> [lsp]p <Plug>(lsp-previous-error)
-  autocmd User lsp_buffer_enabled nmap <buffer> [lsp]d <Plug>(lsp-definition)
 augroup END
 
 " }}}
@@ -639,10 +636,7 @@ augroup END
 augroup clang-setting
   autocmd!
 
-  " 拡張子設定
   autocmd BufNewFile,BufRead *.c set filetype=c
-
-  " インデントセット
   autocmd FileType c setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 augroup END
 
@@ -670,7 +664,6 @@ let g:quickrun_config["java"] = {
 augroup java-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType java setlocal shiftwidth=4 tabstop=4 softtabstop=4 noexpandtab
 augroup END
 
@@ -683,7 +676,6 @@ call minpac#add("https://github.com/MaxMEllon/vim-jsx-pretty.git")
 augroup javascript-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
   autocmd FileType javascriptreact setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
   autocmd FileType javascript.jsx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
@@ -706,7 +698,6 @@ endif
 augroup typescript-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
   autocmd FileType typescriptreact setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
   autocmd FileType typescript.tsx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
@@ -721,7 +712,6 @@ call minpac#add("https://github.com/jxnblk/vim-mdx-js.git")
 augroup markdown-mdx-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType markdown.mdx setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -734,7 +724,6 @@ call minpac#add("https://github.com/posva/vim-vue.git")
 augroup vue-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType vue setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " ハイライト行指定
@@ -757,7 +746,6 @@ augroup php-setting
   " 拡張子設定
   autocmd BufNewFile,BufRead *.ctp set filetype=php
 
-  " インデントセット
   autocmd FileType php setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 
   " ハイライト行指定
@@ -773,7 +761,6 @@ call minpac#add("https://github.com/yukpiz/vim-volt-syntax.git")
 augroup volt-setting
   autocmd!
 
-  " インデントセット
   autocmd filetype volt setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 
   " ハイライト行指定
@@ -787,10 +774,7 @@ augroup END
 augroup markdown-setting
   autocmd!
 
-  " 拡張子設定
   autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-
-  " インデントセット
   autocmd FileType markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -841,10 +825,7 @@ endif
 augroup asciidoc-setting
   autocmd!
 
-  " 拡張子設定
   autocmd BufNewFile,BufRead *.adoc set filetype=asciidoc
-
-  " インデントセット
   autocmd FileType asciidoc setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -857,10 +838,7 @@ call minpac#add("https://github.com/aklt/plantuml-syntax.git")
 augroup plantuml-setting
   autocmd!
 
-  " 拡張子設定
   autocmd BufNewFile,BufRead *.{pu,uml,puml,iuml,plantuml} set filetype=plantuml
-
-  " インデントセット
   autocmd FileType plantuml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -890,7 +868,6 @@ let g:sh_indent_case_labels = 1
 augroup sh-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType sh setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -904,7 +881,6 @@ let g:vim_indent_cont = 0
 augroup vim-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType vim setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " folding
@@ -932,7 +908,6 @@ endif
 augroup sql-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType sql setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " 折り返さない
@@ -967,7 +942,6 @@ endif
 augroup html-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -978,7 +952,6 @@ augroup END
 augroup xml-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType xml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " フォーマット指定
@@ -996,7 +969,6 @@ augroup END
 augroup css-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType css setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -1007,7 +979,6 @@ augroup END
 augroup scss-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType scss setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -1020,7 +991,6 @@ call minpac#add("https://github.com/iloginow/vim-stylus.git")
 augroup stylus-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType stylus setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -1034,7 +1004,6 @@ let g:vim_json_syntax_conceal = 0
 augroup json-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType json setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
   " フォーマット指定
@@ -1052,7 +1021,6 @@ call minpac#add("https://github.com/gutenye/json5.vim.git")
 augroup json5-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType json5 setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -1065,7 +1033,6 @@ call minpac#add("https://github.com/neoclide/jsonc.vim.git")
 augroup jsonc-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType jsonc setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -1084,7 +1051,6 @@ call minpac#add("https://github.com/vim-scripts/groovyindent.git")
 augroup groovy-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType groovy setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -1098,7 +1064,6 @@ call minpac#add("https://github.com/jparise/vim-graphql.git")
 augroup graphql-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType graphql setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -1115,7 +1080,6 @@ call minpac#add("https://github.com/dart-lang/dart-vim-plugin.git")
 augroup toml-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType toml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -1128,7 +1092,6 @@ call minpac#add("https://github.com/stephpy/vim-yaml.git")
 augroup yaml-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -1141,7 +1104,6 @@ call minpac#add("https://github.com/pantharshit00/vim-prisma.git")
 augroup prisma-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType prisma setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -1152,7 +1114,6 @@ augroup END
 augroup python-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType python setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 augroup END
 
@@ -1163,7 +1124,6 @@ augroup END
 augroup lua-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType lua setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -1174,7 +1134,6 @@ augroup END
 augroup powershell-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType ps1 setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -1193,7 +1152,6 @@ call minpac#add("https://github.com/hashivim/vim-terraform.git")
 augroup terraform-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType terraform setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup END
 
@@ -1206,7 +1164,6 @@ call minpac#add("https://github.com/rust-lang/rust.vim.git")
 augroup rust-setting
   autocmd!
 
-  " インデントセット
   autocmd FileType rust setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 augroup END
 
@@ -1392,7 +1349,6 @@ augroup END
 
 " colorscheme
 call minpac#add("https://github.com/cocopon/iceberg.vim.git")
-call minpac#add("https://github.com/Rigellute/rigel.git")
 call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
 call minpac#add("https://github.com/kaicataldo/material.vim.git")
 call minpac#add("https://github.com/EdenEast/nightfox.nvim")
