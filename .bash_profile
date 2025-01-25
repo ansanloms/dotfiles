@@ -42,6 +42,11 @@ if [ -d "$VOLTA_HOME" ]; then
   export PATH="$VOLTA_HOME/bin:$PATH"
 fi
 
+export CARGO_HOME="$HOME/.cargo"
+if [ -d "$CARGO_HOME" ]; then
+  export PATH="$CARGO_HOME/bin:$PATH"
+fi
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
   /etc/bashrc
@@ -51,3 +56,4 @@ fi
 if [ -f "$HOME/.bashrc" ]; then
   . "$HOME/.bashrc"
 fi
+. "$HOME/.cargo/env"
