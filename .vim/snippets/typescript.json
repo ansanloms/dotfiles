@@ -65,5 +65,16 @@
       "});"
     ],
     "description": "Test code by jest in Nuxt.js plugins."
+  },
+  "deno.serve": {
+    "prefix": ["deno.serve"],
+    "body": [
+      "export default {",
+      "  fetch: async (req: Request) => {",
+      "    return new Response(null, { status: 404 });",
+      "  },",
+      "};"
+    ],
+    "description": "deno serve template."
   }
 }
