@@ -408,7 +408,6 @@ call minpac#add("https://github.com/ansanloms/vim-bekken.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-files.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-buffer.git")
 call minpac#add("https://github.com/ansanloms/vim-bekken-launcher.git")
-call minpac#add("https://github.com/ansanloms/vim-bekken-quickfix.git")
 
 if executable("rg")
   let g:bekken#files#get_file_list_cmd = ["rg", "--files"]
@@ -481,6 +480,7 @@ endfunction
 let g:bekken_buffer#key_mappings = {
 \ "\<Cr>": { bufnr -> <SID>bekken_buffer_open(bufnr, "buffer") },
 \ "\<C-t>": { bufnr -> <SID>bekken_buffer_open(bufnr, "tab split | buffer") },
+\ "\<C-b>": { bufnr -> execute("buffer " .. bufnr) },
 \}
 
 " history
