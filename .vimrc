@@ -164,6 +164,13 @@ set belloff=all
 " テキストの整形方法
 set formatoptions=croql
 
+" 挿入モードの IME デフォルト
+set iminsert=2
+"set imactivatefunc=ImActivateFunc
+
+" 検索時の IME デフォルト
+set imsearch=-1
+
 " }}}
 
 " conceal {{{
@@ -455,7 +462,22 @@ nnoremap <silent> <Esc><Esc> :<C-u>Clear<CR>
 " very magic
 nnoremap / /\v
 
-" tab
+" バッファ前
+nnoremap ft :<C-u>bprev<CR>
+nnoremap <C-w>ft <C-w>:<C-u>bprev<CR>
+tnoremap <C-w>ft <C-w>:<C-u>bprev<CR>
+
+" バッファ次
+nnoremap fT :<C-u>bnext<CR>
+nnoremap <C-w>fT <C-w>:<C-u>bnext<CR>
+tnoremap <C-w>fT <C-w>:<C-u>bnext<CR>
+
+" バッファ次
+nnoremap fr :<C-u>bnext<CR>
+nnoremap <C-w>fr <C-w>:<C-u>bnext<CR>
+tnoremap <C-w>fr <C-w>:<C-u>bnext<CR>
+
+" タブ次
 nnoremap gr gT
 nnoremap <C-w>gr <C-w>gT
 tnoremap <C-w>gr <C-w>gT
@@ -464,36 +486,25 @@ tnoremap <C-w>gr <C-w>gT
 nnoremap <silent> <C-e> :<C-u>call bekken#Run("launcher#select", globpath(expand("~/.vim/launcher"), "**/*.yaml", v:false, v:true), {})<CR>
 vnoremap <silent> <C-e> :<C-u>call bekken#Run("launcher#select", globpath(expand("~/.vim/launcher"), "**/*.yaml", v:false, v:true), {})<CR>
 
-function s:bekken_buffer_open(bufnr, cmd)
-  " タブに指定バッファがある場合にそのタブに移動する
-  for i in range(1, tabpagenr("$"))
-    if index(tabpagebuflist(i), a:bufnr) != -1
-      execute("tabnext " .. i)
-      return
-    endif
-  endfor
-
-  " タブに無かったら指定したコマンドで開く
-  execute(a:cmd .. " " .. a:bufnr)
-endfunction
-
 let g:bekken_buffer#key_mappings = {
-\ "\<Cr>": { bufnr -> <SID>bekken_buffer_open(bufnr, "buffer") },
-\ "\<C-t>": { bufnr -> <SID>bekken_buffer_open(bufnr, "tab split | buffer") },
-\ "\<C-b>": { bufnr -> execute("buffer " .. bufnr) },
+\ "\<CR>": { bufnr -> execute("buffer " .. bufnr) },
+\}
+
+let g:bekken_files#key_mappings = {
+\ "\<CR>": { path -> execute("edit " .. path) },
 \}
 
 " history
-nnoremap <silent> <C-h> :<C-u>call bekken#Run("files#oldfiles", [], { "filetype": { "selection": "bekken-selection-files" } })<CR>
+nnoremap <silent> <C-h> :<C-u>call bekken#Run("files#oldfiles", [g:bekken_files#key_mappings], { "filetype": { "selection": "bekken-selection-files" } })<CR>
 
 " current files
-nnoremap <silent> <C-l> :<C-u>call bekken#Run("files#list", [ansanloms#project#dir(expand("%:h"), expand("%:h"))], { "filetype": { "selection": "bekken-selection-files" } })<CR>
+nnoremap <silent> <C-l> :<C-u>call bekken#Run("files#list", [ansanloms#project#dir(expand("%:h"), expand("%:h")), g:bekken_files#key_mappings], { "filetype": { "selection": "bekken-selection-files" } })<CR>
 
 " buffer
-nnoremap <silent> <C-s> :<C-u>call bekken#Run("buffer", [ v:false, g:bekken_buffer#key_mappings ], { "filetype": { "selection": "bekken-selection-buffer" } })<CR>
+nnoremap <silent> <C-s> :<C-u>call bekken#Run("buffer", [v:false, g:bekken_buffer#key_mappings], { "filetype": { "selection": "bekken-selection-buffer" } })<CR>
 
 " タグジャンプの際に新しいタブで開く
-nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
+"nnoremap <C-]> :<C-u>tab stj <C-R>=expand("<cword>")<CR><CR>
 
 " <S-space> とか押すと ^[[32;2u[ とかはいるやつの対策
 " https://github.com/vim/vim/issues/6040
@@ -596,9 +607,9 @@ augroup lsp-setting
   autocmd User lsp_buffer_enabled setlocal omnifunc=lsp#complete
   autocmd User lsp_buffer_enabled setlocal signcolumn=yes
   autocmd User lsp_buffer_enabled setlocal tagfunc=lsp#tagfunc
-  autocmd User lsp_buffer_enabled setlocal foldmethod=expr
-  autocmd User lsp_buffer_enabled setlocal foldexpr=lsp#ui#vim#folding#foldexpr()
-  autocmd User lsp_buffer_enabled setlocal foldtext=lsp#ui#vim#folding#foldtext()
+  "autocmd User lsp_buffer_enabled setlocal foldmethod=expr
+  "autocmd User lsp_buffer_enabled setlocal foldexpr=lsp#ui#vim#folding#foldexpr()
+  "autocmd User lsp_buffer_enabled setlocal foldtext=lsp#ui#vim#folding#foldtext()
 
   autocmd User lsp_buffer_enabled nnoremap [lsp] <Nop>
   autocmd User lsp_buffer_enabled vnoremap [lsp] <Nop>
@@ -1262,12 +1273,6 @@ if has("gui_running")
 
   " カーソルを点滅させない
   set guicursor=a:blinkon0
-
-  " 挿入モードの IME デフォルト
-  set iminsert=2
-
-  " 検索時の IME デフォルト
-  set imsearch=-1
 endif
 
 " }}}
@@ -1284,9 +1289,9 @@ set lazyredraw    " コマンド実行時の画面描画をしない
 set ttyfast       " 高速ターミナル接続
 
 " True Color でのシンタックスハイライト
-if (has("termguicolors"))
-  set termguicolors
-endif
+"if (has("termguicolors"))
+"  set termguicolors
+"endif
 
 " 行番号を表示する
 set number
@@ -1359,11 +1364,30 @@ set background=dark
 
 try
   packadd! nightfox.nvim
+  if has("gui_running")
+    lua require("nightfox").setup({
+    \ options = {
+    \   terminal_colors = false,
+    \ }
+    \})
+  else
+    lua require("nightfox").setup({
+    \ options = {
+    \   transparent = true,
+    \ }
+    \})
+  endif
   colorscheme terafox
 
   highlight! link StatusLineTerm StatusLine
   highlight! link StatusLineTermNC StatusLineNC
   highlight! link Terminal Normal
+
+  if !has("gui_running")
+    set t_Co=256
+    let &t_AB="\e[48;5;%dm"
+    let &t_AF="\e[38;5;%dm"
+  endif
 catch
 endtry
 
