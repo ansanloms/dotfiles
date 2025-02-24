@@ -73,3 +73,5 @@ link:
         - linux
   ~/.ripgreprc:
     - src: ./.ripgreprc
+  ~/.config/wezterm:
+    - src: ./.config/wezterm
