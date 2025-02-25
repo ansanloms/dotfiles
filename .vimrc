@@ -483,12 +483,16 @@ let g:bekken_buffer#key_mappings = {
 \ "\<CR>": { bufnr -> execute("buffer " .. bufnr) },
 \ "\<C-s>": { bufnr -> execute("split | buffer " .. bufnr) },
 \ "\<C-v>": { bufnr -> execute("vsplit | buffer " .. bufnr) },
+\ "\<C-w>": { bufnr -> execute("split | wincmd w | buffer " .. bufnr) },
+\ "\<C-l>": { bufnr -> execute("vsplit | wincmd l | buffer " .. bufnr) },
 \}
 
 let g:bekken_files#key_mappings = {
 \ "\<CR>": { path -> execute("edit " .. path) },
 \ "\<C-s>": { path -> execute("split | edit " .. path) },
 \ "\<C-v>": { path -> execute("vsplit | edit " .. path) },
+\ "\<C-w>": { path -> execute("split | wincmd w | edit " .. path) },
+\ "\<C-l>": { path -> execute("vsplit | wincmd l | edit " .. path) },
 \}
 
 " history
