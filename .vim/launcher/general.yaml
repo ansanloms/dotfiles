@@ -46,7 +46,7 @@ items:
   - name: 🤖 AI Chat - Config
     type: command
     command: |
-      tabnew | call denops#request("ramble", "config", [])
+      call denops#request("ramble", "config", [])
 
   # Package Manager:
   - name: 📦 Package Manager -  minpac Update
