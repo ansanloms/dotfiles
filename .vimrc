@@ -324,7 +324,7 @@ try
 catch
 endtry
 
-call minpac#add("https://github.com/ansanlom/vim-ime-set.git")
+call minpac#add("https://github.com/ansanloms/vim-ime-set.git")
 
 " git {{{
 
