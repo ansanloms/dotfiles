@@ -39,6 +39,10 @@ items:
     type: command
     command: |
       call denops#request("ramble", "new", ["GoogleGenerativeAI", {"model": "gemini-pro"}, [{"role": "system", "type": "text", "message": ""}, {"role": "user", "type": "text", "message": ""}]])
+  - name: 🤖 AI Chat - Start (Anthropic Claude 3.7 Sonnet)
+    type: command
+    command: |
+      call denops#request("ramble", "new", ["Anthropic", {"model": "claude-3-7-sonnet-20250219"}, [{"role": "system", "type": "text", "message": "あなたはプロフェッショナルのフルスタックエンジニアです。それを念頭にアドバイスしてください。一度の説明は最大 800 文字程度にしてください。"}, {"role": "user", "type": "text", "message": ""}]])
   - name: 🤖 AI Chat - Config
     type: command
     command: |
