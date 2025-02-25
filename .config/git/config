@@ -9,6 +9,7 @@
 	preloadindex = true
 	fscache = false
 	quotepath = false
+	excludesfile = ~/.config/git/ignore
 [diff]
 	algorithm = histogram
 [color]

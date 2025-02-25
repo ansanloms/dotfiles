@@ -3,15 +3,19 @@ link:
     - src: ./.bashrc
   ~/.bash_profile:
     - src: ./.bash_profile
-  ~/.gitconfig:
-    - src: ./.gitconfig
-  ~/.gitconfig.os:
-    - src: ./.gitconfig.windows
+  ~/.config/git:
+    - src: ./.config/git
+  ~/.config/git/config.os:
+    - src: ./.config/git/config.windows
       targets:
         - windows
-    - src: ./.gitconfig.linux
+    - src: ./.config/git/config.linux
       targets:
         - linux
+  ~/.config/starship.toml:
+    - src: ./.config/starship.toml
+  ~/.config/wezterm:
+    - src: ./.config/wezterm
   ~/.vim:
     - src: ./.vim
   ~/.vimrc:
@@ -28,8 +32,6 @@ link:
     - src: ./.wslconfig
       targets:
         - windows
-  ~/.config/starship.toml:
-    - src: ./.config/starship.toml
   ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json:
     - src: ./AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json
       targets:
@@ -73,5 +75,3 @@ link:
         - linux
   ~/.ripgreprc:
     - src: ./.ripgreprc
-  ~/.config/wezterm:
-    - src: ./.config/wezterm
