@@ -1,29 +1,31 @@
-local wezterm = require "wezterm";
-
+local wezterm = require("wezterm");
 local config = wezterm.config_builder()
 
+function merge_config(new_config)
+  for k, v in pairs(new_config) do
+    config[k] = v
+  end
+end
+
 -- 設定の自動再読み込み。
--- https://wezterm.org/config/lua/config/automatically_reload_config.html
 config.automatically_reload_config = true
 
+-- IME を有効にする。
 config.use_ime = true
 
-config.initial_cols = 160
-config.initial_rows = 40
-config.window_padding = {
-  left = "0px",
-  right = "0px",
-  top = "0px",
-  bottom = "0px",
-}
+-- 起動するシェルの設定。
+if wezterm.target_triple == "x86_64-pc-windows-msvc" then
+  config.default_prog = { "pwsh.exe" }
+end
+if wezterm.target_triple == "x86_64-apple-darwin" then
+  config.default_prog = { "zsh" }
+end
 
-config.font = wezterm.font("Moralerspace Krypton HWNF")
-config.font_size = 12
-config.adjust_window_size_when_changing_font_size = false
-config.color_scheme = "terafox"
+-- 外観。
+merge_config(require("appearance"))
 
-config.default_prog = { "pwsh" }
+-- キーバインドまわり。
+merge_config(require("keybinding"))
 
-config.window_decorations = "RESIZE"
 
 return config
