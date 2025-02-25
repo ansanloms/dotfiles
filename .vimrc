@@ -166,7 +166,9 @@ set formatoptions=croql
 
 " 挿入モードの IME デフォルト
 set iminsert=2
-"set imactivatefunc=ImActivateFunc
+if has("win32") && !has("gui_running")
+  let &imactivatefunc = { active -> denops#request("ime-set", "set", [active]) }
+endif
 
 " 検索時の IME デフォルト
 set imsearch=-1
@@ -324,6 +326,8 @@ try
   endif
 catch
 endtry
+
+call minpac#add("https://github.com/ansanlom/vim-ime-set.git")
 
 " git {{{
 
