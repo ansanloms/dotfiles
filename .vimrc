@@ -1349,7 +1349,7 @@ call minpac#add("https://github.com/mattn/vimtweak.git")
 augroup vimtweak-setting
   autocmd!
 
-  autocmd guienter * silent! VimTweakSetAlpha 230
+  autocmd guienter * silent! VimTweakSetAlpha 204
 augroup END
 
 " colorscheme
