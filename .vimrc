@@ -393,7 +393,7 @@ let g:lightline = {
 
 " tabline {{{
 
-set showtabline=2
+set showtabline=0
 "set tabline=%!ansanloms#tabline#tabline()
 
 " }}}
