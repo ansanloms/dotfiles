@@ -481,10 +481,14 @@ vnoremap <silent> <C-e> :<C-u>call bekken#Run("launcher#select", globpath(expand
 
 let g:bekken_buffer#key_mappings = {
 \ "\<CR>": { bufnr -> execute("buffer " .. bufnr) },
+\ "\<C-s>": { bufnr -> execute("split | buffer " .. bufnr) },
+\ "\<C-v>": { bufnr -> execute("vsplit | buffer " .. bufnr) },
 \}
 
 let g:bekken_files#key_mappings = {
 \ "\<CR>": { path -> execute("edit " .. path) },
+\ "\<C-s>": { path -> execute("split | edit " .. path) },
+\ "\<C-v>": { path -> execute("vsplit | edit " .. path) },
 \}
 
 " history
