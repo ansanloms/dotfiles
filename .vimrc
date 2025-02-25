@@ -166,9 +166,6 @@ set formatoptions=croql
 
 " 挿入モードの IME デフォルト
 set iminsert=2
-if has("win32") && !has("gui_running")
-  let &imactivatefunc = { active -> denops#request("ime-set", "set", [active]) }
-endif
 
 " 検索時の IME デフォルト
 set imsearch=-1
@@ -523,12 +520,6 @@ tnoremap <C-CR> <CR>
 
 call minpac#add("https://github.com/ansanloms/vim-ramble.git")
 
-augroup chat-setting
-  autocmd!
-
-  autocmd FileType ramble-chat nnoremap <silent> <buffer> <C-CR> :<C-u>call denops#request("ramble", "chat", [bufnr()])<CR>
-augroup END
-
 " }}}
 
 " snippet {{{
@@ -579,13 +570,13 @@ let g:lsp_tagfunc_source_methods = [
 \]
 
 let g:lsp_diagnostics_signs_enabled = 1
-let g:lsp_diagnostics_signs_error = {"text": "❌"}
-let g:lsp_diagnostics_signs_warning = {"text": "⚠️"}
-let g:lsp_diagnostics_signs_information = {"text": "❗"}
-let g:lsp_diagnostics_signs_hint = {"text": "❓"}
+let g:lsp_diagnostics_signs_error = { "text": ">"  }
+let g:lsp_diagnostics_signs_warning = { "text": "v" }
+let g:lsp_diagnostics_signs_information = { "text": "!" }
+let g:lsp_diagnostics_signs_hint = { "text": "?" }
 
 let g:lsp_document_code_action_signs_enabled = 1
-let g:lsp_document_code_action_signs_hint = {"text": "❓"}
+let g:lsp_document_code_action_signs_hint = { "text": "?" }
 
 " asyncomplete.vim
 let g:asyncomplete_auto_popup = 1
@@ -1261,7 +1252,7 @@ augroup END
 if has("gui_running")
   if has("vim_starting")
     " フォント設定
-    set guifont=Moralerspace_Krypton_HWNF:h12:cSHIFTJIS:qDRAFT
+    set guifont=Moralerspace_Krypton_HWNF:h10:cSHIFTJIS:qDRAFT
 
     " 縦幅 デフォルトは 24
     set lines=40
@@ -1376,11 +1367,11 @@ try
     \ }
     \})
   else
-    lua require("nightfox").setup({
-    \ options = {
-    \   transparent = true,
-    \ }
-    \})
+    "lua require("nightfox").setup({
+    "\ options = {
+    "\   transparent = true,
+    "\ }
+    "\})
   endif
   colorscheme terafox
 
@@ -1390,8 +1381,6 @@ try
 
   if !has("gui_running")
     set t_Co=256
-    let &t_AB="\e[48;5;%dm"
-    let &t_AF="\e[38;5;%dm"
   endif
 catch
 endtry
