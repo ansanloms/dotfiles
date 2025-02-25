@@ -336,11 +336,6 @@ call minpac#add("https://github.com/airblade/vim-gitgutter.git")
 set laststatus=2
 "set statusline=%!ansanloms#statusline#statusline()
 
-call minpac#add("https://github.com/mopp/sky-color-clock.vim.git")
-
-let g:sky_color_clock#datetime_format = "%Y.%m.%d (%a) %H:%M"     " 日付フォーマット
-let g:sky_color_clock#enable_emoji_icon = 1                       " 絵文字表示
-
 call minpac#add("https://github.com/itchyny/lightline.vim.git")
 
 let g:lightline = {
@@ -351,7 +346,6 @@ let g:lightline = {
 \     ["filename"],
 \   ],
 \   "right": [
-\     ["sky_color_clock"],
 \     ["fileformat", "fileencoding", "filetype"],
 \   ]
 \ },
@@ -368,7 +362,6 @@ let g:lightline = {
 \   "fileformat": "%{ansanloms#lightline#is_visible() ? &fileformat : ''}",
 \   "filetype": "%{ansanloms#lightline#is_visible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
 \   "fileencoding": "%{ansanloms#lightline#is_visible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
-\   "sky_color_clock": "%#SkyColorClock#%{' ' . sky_color_clock#statusline() . ' '}%#SkyColorClockTemp# ",
 \ },
 \ "component_raw": {
 \   "sky_color_clock": 1,
@@ -393,7 +386,7 @@ let g:lightline = {
 
 " tabline {{{
 
-set showtabline=0
+set showtabline=1
 "set tabline=%!ansanloms#tabline#tabline()
 
 " }}}
