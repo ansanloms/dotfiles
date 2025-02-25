@@ -1,0 +1,41 @@
+snippet storybook.nuxt Nuxt の stories テンプレート。
+	import type { Meta, StoryObj } from "@nuxtjs/storybook";
+	import $1 from "./$1.vue";
+
+	const meta: Meta<typeof $1> = {
+		title: "$1.vue",
+		component: $1,
+		render: (args) => ({
+			components: { $1 },
+			setup() {
+				return { args };
+			},
+			template: '<$1 v-bind="args" v-on="args" />',
+		}),
+	};
+
+	export const Default: StoryObj<typeof $1> = {
+		args: {
+		},
+	};
+
+	export default meta;
+
+snippet vitest.nuxt.plugin Nuxt の plugin 向けの vitest テンプレート。
+	// @vitest-environment nuxt
+	import { describe, test, expect } from "vitest";
+
+	describe("plugins/$1.ts", async () => {
+		const { \$$1 } = useNuxtApp();
+
+		test("$1.func(): テスト概要。", async () => {
+			expect(\$$1.func()).eq(true);
+		});
+	});
+
+snippet deno.serve deno serve のテンプレート。
+	export default {
+		fetch: async (req: Request) => {
+			return new Response(null, { status: 404 });
+		},
+	};
