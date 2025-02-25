@@ -1,0 +1,33 @@
+snippet nuxt.component Nuxt の Component テンプレート。
+	<script setup lang="ts">
+	type Props = {
+		/**
+		 * 値。
+		 */
+		val: string;
+	};
+
+	type Emits = {
+		/**
+		 * 押下時。
+		 */
+		(e: "click", event: MouseEvent): void;
+	};
+
+	const props = withDefaults(defineProps<Props>(), {val: "hoge"});
+
+	const emits = defineEmits<Emits>();
+
+	const handleClick = (event: MouseEvent) => {
+		emits("click", event);
+	};
+	</script>
+
+	<template>
+		<div :class="$style.container" />
+	</template>
+
+	<style lang="scss" module>
+	.container {
+	}
+	</style>
