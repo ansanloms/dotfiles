@@ -1,5 +1,5 @@
 [include]
-	path = .gitconfig.os
+	path = config.os
 [user]
 	useConfigOnly = true
 	name = ansanloms
