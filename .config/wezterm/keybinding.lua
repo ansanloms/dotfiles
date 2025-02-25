@@ -103,6 +103,13 @@ config.keys = {
     mods = "LEADER|CTRL",
     action = act.ActivateCopyMode
   },
+
+  -- デバッグオーバレイ。
+  {
+    key = "L",
+    mods = "LEADER|SHIFT",
+    action = act.ShowDebugOverlay
+  },
 }
 
 config.key_tables = {

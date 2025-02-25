@@ -1,7 +1,7 @@
 local wezterm = require("wezterm");
 local config = wezterm.config_builder()
 
-function merge_config(new_config)
+function merge(config, new_config)
   for k, v in pairs(new_config) do
     config[k] = v
   end
@@ -21,11 +21,13 @@ if wezterm.target_triple == "x86_64-apple-darwin" then
   config.default_prog = { "zsh" }
 end
 
+-- NVIDIA の GPU とかで OpenGL だと背景透過が動かない。
+config.front_end = "WebGpu"
+
 -- 外観。
-merge_config(require("appearance"))
+merge(config, require("appearance"))
 
 -- キーバインドまわり。
-merge_config(require("keybinding"))
-
+merge(config, require("keybinding"))
 
 return config

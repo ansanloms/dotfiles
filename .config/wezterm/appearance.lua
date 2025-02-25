@@ -24,7 +24,7 @@ config.window_decorations = "RESIZE"
 
 -- 外観。
 config.color_scheme = "terafox"
-config.window_background_opacity = 0.75
+config.window_background_opacity = 0.9
 config.colors = {
   tab_bar = {
     inactive_tab_edge = "none",
@@ -32,17 +32,17 @@ config.colors = {
 }
 
 -- 背景。
---config.background = {
---  {
---    source = {
---      File = wezterm.config_dir .. "/background.png",
---    },
---    opacity = 0.25,
---    attachment = {
---      Parallax = 0.125
---    },
---  },
---}
+config.background = {
+  {
+    source = {
+      File = wezterm.config_dir .. "/background.png",
+    },
+    opacity = 0.9,
+    -- attachment = {
+    --   Parallax = 0.125
+    -- },
+  },
+}
 
 -- タブまわりの設定。
 config.tab_bar_at_bottom = true

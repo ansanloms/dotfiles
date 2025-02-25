@@ -1375,13 +1375,13 @@ try
   endif
   colorscheme terafox
 
-  highlight! link StatusLineTerm StatusLine
-  highlight! link StatusLineTermNC StatusLineNC
-  highlight! link Terminal Normal
-
   if !has("gui_running")
     set t_Co=256
   endif
+
+  highlight link StatusLineTerm StatusLine
+  highlight link StatusLineTermNC StatusLineNC
+  highlight link Terminal Normal
 catch
 endtry
 
