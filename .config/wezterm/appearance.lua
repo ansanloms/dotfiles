@@ -4,12 +4,6 @@ local config = {}
 -- 画面サイズ。
 config.initial_cols = 160
 config.initial_rows = 40
--- config.window_padding = {
---   left = "0px",
---   right = "0px",
---   top = "0px",
---   bottom = "0px",
--- }
 
 -- フォント。
 config.font = wezterm.font_with_fallback({
@@ -30,6 +24,26 @@ config.enable_scroll_bar = false
 config.colors = {
   tab_bar = {
     inactive_tab_edge = "none",
+  },
+  ansi = {
+    "#0a0f14",
+    "#c33027",
+    "#26a98b",
+    "#edb54b",
+    "#195465",
+    "#4e5165",
+    "#33859d",
+    "#98d1ce",
+  },
+  brights = {
+    "#314051",
+    "#d26939",
+    "#081f2d",
+    "#245361",
+    "#093748",
+    "#888ba5",
+    "#599caa",
+    "#d3ebe9",
   },
 }
 config.window_frame = {
