@@ -20,15 +20,20 @@ config.font_size = 10
 config.adjust_window_size_when_changing_font_size = false
 
 -- タイトルバーの設定。
-config.window_decorations = "RESIZE"
+config.window_decorations = "INTEGRATED_BUTTONS"
 
 -- 外観。
 config.color_scheme = "terafox"
 config.window_background_opacity = 0.9
+config.enable_scroll_bar = false
 config.colors = {
   tab_bar = {
     inactive_tab_edge = "none",
   },
+}
+config.window_frame = {
+  inactive_titlebar_bg = "none",
+  active_titlebar_bg = "none",
 }
 
 -- 背景。

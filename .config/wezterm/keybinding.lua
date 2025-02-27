@@ -3,6 +3,8 @@ local act = wezterm.action
 
 local config = {}
 
+config.disable_default_key_bindings = true
+
 config.leader = {
   key = ";",
   mods = "CTRL",
@@ -10,6 +12,12 @@ config.leader = {
 }
 
 config.keys = {
+  {
+    key = "q",
+    mods = "LEADER",
+    action = wezterm.action.ActivateCommandPalette,
+  },
+
   -- タブの追加。
   {
     key = "c",
@@ -102,13 +110,6 @@ config.keys = {
     key = "w",
     mods = "LEADER|CTRL",
     action = act.ActivateCopyMode
-  },
-
-  -- デバッグオーバレイ。
-  {
-    key = "L",
-    mods = "LEADER|SHIFT",
-    action = act.ShowDebugOverlay
   },
 }
 
