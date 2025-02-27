@@ -2,6 +2,7 @@
 !.vim/autoload/
 !.vim/bitmaps/
 !.vim/snippets/
-!.vim/launcher/general.yaml
+!.vim/launcher/000-general.yaml
+!.vim/launcher/001-ai-chat.yaml
 
 .config/git/config.os
