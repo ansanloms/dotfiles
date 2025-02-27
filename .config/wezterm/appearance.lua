@@ -13,7 +13,7 @@ config.initial_rows = 40
 
 -- フォント。
 config.font = wezterm.font_with_fallback({
-  { family = "Moralerspace Krypton HWNF" },
+  { family = "Moralerspace Krypton HWNF", assume_emoji_presentation = false },
   { family = "Moralerspace Krypton HWNF", assume_emoji_presentation = true },
 })
 config.font_size = 10
@@ -23,8 +23,9 @@ config.adjust_window_size_when_changing_font_size = false
 config.window_decorations = "INTEGRATED_BUTTONS"
 
 -- 外観。
-config.color_scheme = "terafox"
+config.color_scheme = "Gotham (terminal.sexy)"
 config.window_background_opacity = 0.9
+config.text_background_opacity = 1.0
 config.enable_scroll_bar = false
 config.colors = {
   tab_bar = {

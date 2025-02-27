@@ -25,6 +25,7 @@ end
 config.front_end = "WebGpu"
 
 -- 外観。
+config.term = "wezterm"
 merge(config, require("appearance"))
 
 -- キーバインドまわり。

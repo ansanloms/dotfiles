@@ -264,28 +264,6 @@ if has("terminal")
   set termencoding=utf-8
 endif
 
-if exists("*term_setansicolors")
-  let g:terminal_ansi_colors = repeat([0], 16)
-
-  " Terafox
-  let g:terminal_ansi_colors[0] =  "#2f3239"  " black
-  let g:terminal_ansi_colors[1] =  "#e85c51"  " red
-  let g:terminal_ansi_colors[2] =  "#7aa4a1"  " green
-  let g:terminal_ansi_colors[3] =  "#fda47f"  " yellow
-  let g:terminal_ansi_colors[4] =  "#5a93aa"  " blue
-  let g:terminal_ansi_colors[5] =  "#ad5c7c"  " magenta
-  let g:terminal_ansi_colors[6] =  "#a1cdd8"  " cyan
-  let g:terminal_ansi_colors[7] =  "#ebebeb"  " white
-  let g:terminal_ansi_colors[8] =  "#4e5157"  " black (bright)
-  let g:terminal_ansi_colors[9] =  "#eb746b"  " red (bright)
-  let g:terminal_ansi_colors[10] = "#8eb2af"  " green (bright)
-  let g:terminal_ansi_colors[11] = "#fdb292"  " yellow (bright)
-  let g:terminal_ansi_colors[12] = "#73a3b7"  " blue (bright)
-  let g:terminal_ansi_colors[13] = "#b97490"  " magenta (bright)
-  let g:terminal_ansi_colors[14] = "#afd4de"  " cyan (bright)
-  let g:terminal_ansi_colors[15] = "#eeeeee"  " white (bright)
-endif
-
 " }}}
 
 " minpac {{{
@@ -332,63 +310,56 @@ call minpac#add("https://github.com/airblade/vim-gitgutter.git")
 
 " }}}
 
-" statusline {{{
+" statusline & tabline  {{{
 
 set laststatus=2
-"set statusline=%!ansanloms#statusline#statusline()
-
-call minpac#add("https://github.com/itchyny/lightline.vim.git")
-
-let g:lightline = {
-\ "colorscheme": "terafox",
-\ "active": {
-\   "left": [
-\     ["mode", "readonly", "paste"],
-\     ["filename"],
-\   ],
-\   "right": [
-\     ["fileformat", "fileencoding", "filetype"],
-\   ]
-\ },
-\ "component_expand": {
-\   "tabs": "ansanloms#lightline#tab"
-\ },
-\ "component_function": {
-\   "mode": "ansanloms#statusline#mode_minimum",
-\   "filename": "ansanloms#lightline#filename",
-\ },
-\ "component": {
-\   "modified": "%{(ansanloms#lightline#is_visible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
-\   "readonly": "%{&readonly ? '' : ''}",
-\   "fileformat": "%{ansanloms#lightline#is_visible() ? &fileformat : ''}",
-\   "filetype": "%{ansanloms#lightline#is_visible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
-\   "fileencoding": "%{ansanloms#lightline#is_visible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
-\ },
-\ "component_raw": {
-\   "sky_color_clock": 1,
-\ },
-\ "tab_component_function": {
-\   "filename": "ansanloms#lightline#tabfilename",
-\   "modified": "lightline#tab#modified",
-\   "readonly": "lightline#tab#readonly",
-\   "tabnum": ""
-\ },
-\ "separator": {
-\   "left": "",
-\   "right": ""
-\ },
-\ "subseparator": {
-\   "left": "",
-\   "right": ""
-\ },
-\}
-
-" }}}
-
-" tabline {{{
+set statusline=%!ansanloms#statusline#statusline()
 
 set showtabline=1
-"set tabline=%!ansanloms#tabline#tabline()
+set tabline=%!ansanloms#tabline#tabline()
+
+"call minpac#add("https://github.com/itchyny/lightline.vim.git")
+"
+"let g:lightline = {
+"\ "colorscheme": "gotham",
+"\ "active": {
+"\   "left": [
+"\     ["mode", "readonly", "paste"],
+"\     ["filename"],
+"\   ],
+"\   "right": [
+"\     ["fileformat", "fileencoding", "filetype"],
+"\   ]
+"\ },
+"\ "component_expand": {
+"\   "tabs": "ansanloms#lightline#tab"
+"\ },
+"\ "component_function": {
+"\   "mode": "ansanloms#statusline#mode_minimum",
+"\   "filename": "ansanloms#lightline#filename",
+"\ },
+"\ "component": {
+"\   "modified": "%{(ansanloms#lightline#is_visible() && &modifiable) ? (&modified ? '[+]' : '[-]') : ''}",
+"\   "readonly": "%{&readonly ? '' : ''}",
+"\   "fileformat": "%{ansanloms#lightline#is_visible() ? &fileformat : ''}",
+"\   "filetype": "%{ansanloms#lightline#is_visible() ? (strlen(&filetype) ? &filetype : 'no ft') : ''}",
+"\   "fileencoding": "%{ansanloms#lightline#is_visible() ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''}",
+"\ },
+"\ "tab_component_function": {
+"\   "filename": "ansanloms#lightline#tabfilename",
+"\   "modified": "lightline#tab#modified",
+"\   "readonly": "lightline#tab#readonly",
+"\   "tabnum": ""
+"\ },
+"\ "separator": {
+"\   "left": "",
+"\   "right": ""
+"\ },
+"\ "subseparator": {
+"\   "left": "",
+"\   "right": ""
+"\ },
+"\}
 
 " }}}
 
@@ -1284,11 +1255,6 @@ set listchars=tab:\|\ ,trail:_,extends:>,precedes:<,nbsp:%
 set lazyredraw    " コマンド実行時の画面描画をしない
 set ttyfast       " 高速ターミナル接続
 
-" True Color でのシンタックスハイライト
-"if (has("termguicolors"))
-"  set termguicolors
-"endif
-
 " 行番号を表示する
 set number
 
@@ -1345,45 +1311,87 @@ call minpac#add("https://github.com/mattn/vimtweak.git")
 augroup vimtweak-setting
   autocmd!
 
-  autocmd guienter * silent! VimTweakSetAlpha 230
+  if has("win32") && has("gui_running")
+    autocmd guienter * silent! VimTweakSetAlpha 230
+  endif
 augroup END
 
 " colorscheme
-call minpac#add("https://github.com/cocopon/iceberg.vim.git")
 call minpac#add("https://github.com/whatyouhide/vim-gotham.git")
-call minpac#add("https://github.com/kaicataldo/material.vim.git")
 call minpac#add("https://github.com/EdenEast/nightfox.nvim")
 
 " シンタックス ON
 syntax enable
 set background=dark
 
-try
-  packadd! nightfox.nvim
-  if has("gui_running")
-    lua require("nightfox").setup({
-    \ options = {
-    \   terminal_colors = false,
-    \ }
-    \})
-  else
-    "lua require("nightfox").setup({
-    "\ options = {
-    "\   transparent = true,
-    "\ }
-    "\})
-  endif
-  colorscheme terafox
+" True Color でのシンタックスハイライト
+if (has("termguicolors"))
+  set termguicolors
+endif
 
-  if !has("gui_running")
-    set t_Co=256
-  endif
+"try
+"  packadd! nightfox.nvim
+"  if has("gui_running")
+"    lua require("nightfox").setup({
+"    \ options = {
+"    \   terminal_colors = false,
+"    \ }
+"    \})
+"  else
+"    "lua require("nightfox").setup({
+"    "\ options = {
+"    "\   transparent = true,
+"    "\ }
+"    "\})
+"  endif
+"catch
+"endtry
 
-  highlight link StatusLineTerm StatusLine
-  highlight link StatusLineTermNC StatusLineNC
-  highlight link Terminal Normal
-catch
-endtry
+"colorscheme terafox
+colorscheme gotham
+
+highlight link StatusLineTerm StatusLine
+highlight link StatusLineTermNC StatusLineNC
+
+if has("terminal") && exists("*term_setansicolors")
+  let g:terminal_ansi_colors = repeat([0], 16)
+
+  " gotham
+  let g:terminal_ansi_colors[0] =  "#0a0f14"    " black
+  let g:terminal_ansi_colors[1] =  "#dc362c"    " dark red
+  let g:terminal_ansi_colors[2] =  "#26a98b"    " dark green
+  let g:terminal_ansi_colors[3] =  "#edb54b"    " brown
+  let g:terminal_ansi_colors[4] =  "#13789c"    " dark blue
+  let g:terminal_ansi_colors[5] =  "#888ba5"    " dark magenta
+  let g:terminal_ansi_colors[6] =  "#599caa"    " dark cyan
+  let g:terminal_ansi_colors[7] =  "#98d1ce"    " light grey
+  let g:terminal_ansi_colors[8] =  "#10151b"    " dark grey
+  let g:terminal_ansi_colors[9] =  "#d26939"    " red
+  let g:terminal_ansi_colors[10] = "#abe4bb"    " green
+  let g:terminal_ansi_colors[11] = "#f6d8a1"    " yellow
+  let g:terminal_ansi_colors[12] = "#72b3ca"    " blue
+  let g:terminal_ansi_colors[13] = "#b8bcdf"    " magenta
+  let g:terminal_ansi_colors[14] = "#33859d"    " cyan
+  let g:terminal_ansi_colors[15] = "#d3ebe9"    " white
+
+  " Terafox
+  "let g:terminal_ansi_colors[0] =  "#2f3239"    " black
+  "let g:terminal_ansi_colors[1] =  "#e85c51"    " dark red
+  "let g:terminal_ansi_colors[2] =  "#7aa4a1"    " dark green
+  "let g:terminal_ansi_colors[3] =  "#fda47f"    " brown
+  "let g:terminal_ansi_colors[4] =  "#5a93aa"    " dark blue
+  "let g:terminal_ansi_colors[5] =  "#ad5c7c"    " dark magenta
+  "let g:terminal_ansi_colors[6] =  "#a1cdd8"    " dark cyan
+  "let g:terminal_ansi_colors[7] =  "#ebebeb"    " light grey
+  "let g:terminal_ansi_colors[8] =  "#4e5157"    " dark grey
+  "let g:terminal_ansi_colors[9] =  "#eb746b"    " red
+  "let g:terminal_ansi_colors[10] = "#8eb2af"    " green
+  "let g:terminal_ansi_colors[11] = "#fdb292"    " yellow
+  "let g:terminal_ansi_colors[12] = "#73a3b7"    " blue
+  "let g:terminal_ansi_colors[13] = "#b97490"    " magenta
+  "let g:terminal_ansi_colors[14] = "#afd4de"    " cyan
+  "let g:terminal_ansi_colors[15] = "#eeeeee"    " white
+endif
 
 " }}}
 
