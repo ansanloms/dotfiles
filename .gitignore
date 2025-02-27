@@ -3,6 +3,7 @@
 !.vim/bitmaps/
 !.vim/snippets/
 !.vim/launcher/000-general.yaml
-!.vim/launcher/001-ai-chat.yaml
+!.vim/launcher/001-terminal.yaml
+!.vim/launcher/002-ai-chat.yaml
 
 .config/git/config.os
