@@ -5,11 +5,6 @@ function! ansanloms#statusline#statusline() abort
   let l:s = l:s . "%m%r%h%w%="
   let l:s = l:s . " " . &filetype . " " . &fileformat . " " . &fileencoding
 
-  try
-    let l:s = l:s . " " . "%#SkyColorClock#" . " " . sky_color_clock#statusline()
-  catch /E117.*/
-  endtry
-
   let l:s = l:s . " "
 
   return l:s

@@ -1,26 +1,32 @@
-function! ansanloms#tabline#tabline() abort
-  let l:sep = ""  " タブ間の区切り
-  return join(map(range(1, tabpagenr("$")), {_, val -> ansanloms#tabline#tabpage_label(val)}), l:sep) . l:sep . "%#TabLineFill#%T"
+function! s:GetTabLabel(bufnr) abort
+  " ファイル名。
+  let l:label = fnamemodify(bufname(a:bufnr), ":t")
+
+  " ファイル名がないとき。
+  if len(l:label) <= 0
+    let l:label .= "[No Name]"
+  endif
+
+  " 変更ありのバッファに付ける。
+  if getbufvar(a:bufnr, "&modified")
+    let l:label .= "[+]"
+  endif
+
+  return l:label
 endfunction
 
-function! ansanloms#tabline#tabpage_label(tabpagenr) abort
-  " タブページ内のバッファのリスト
-  let l:bufnrs = tabpagebuflist(a:tabpagenr)
+function! s:GetTabLine(tabpagenr) abort
+  " カレントバッファ。
+  let l:curbufnr = tabpagebuflist(a:tabpagenr)[tabpagewinnr(a:tabpagenr) - 1]
 
-  " カレントタブページかどうかでハイライトを切り替える
+  " カレントタブページかどうかでハイライトを切り替える。
   let l:hi = a:tabpagenr is tabpagenr() ? "%#TabLineSel#" : "%#TabLine#"
 
-  " タブページ内に変更ありのバッファがあったら "+" を付ける
-  let l:mod = len(filter(copy(l:bufnrs), "getbufvar(v:val, \"&modified\")")) ? "[+]" : ""
+  return "%" . a:tabpagenr . "T" . l:hi . " " . s:GetTabLabel(l:curbufnr) . " " . "%T%#TabLineFill#"
+endfunction
 
-  " カレントバッファ
-  let l:curbufnr = l:bufnrs[tabpagewinnr(a:tabpagenr) - 1]  " tabpagewinnr() は 1 origin
+function! ansanloms#tabline#tabline() abort
+  let l:sep = ""  " タブ間の区切り
 
-  " ファイルネーム
-  let l:fname = fnamemodify(bufname(l:curbufnr), ":t")
-
-  " ファイルネームがないとき
-  let l:noname = "[No Name]"
-
-  return "%" . a:tabpagenr . "T" . l:hi . " " . (l:fname !=# "" ? l:fname : l:noname) . l:mod . " " . "%T%#TabLineFill#"
+  return join(map(range(1, tabpagenr("$")), {_, val -> s:GetTabLine(val)}), l:sep) . l:sep . "%#TabLineFill#%T"
 endfunction
