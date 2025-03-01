@@ -1341,49 +1341,46 @@ if (has("termguicolors"))
   set termguicolors
 endif
 
-"try
-"  packadd! nightfox.nvim
-"  if has("gui_running")
-"    lua require("nightfox").setup({
-"    \ options = {
-"    \   terminal_colors = false,
-"    \ }
-"    \})
-"  else
-"    "lua require("nightfox").setup({
-"    "\ options = {
-"    "\   transparent = true,
-"    "\ }
-"    "\})
-"  endif
-"catch
-"endtry
+"packadd! nightfox.nvim
+"if has("gui_running")
+"  lua require("nightfox").setup({
+"  \ options = {
+"  \   terminal_colors = false,
+"  \ }
+"  \})
+"else
+"  "lua require("nightfox").setup({
+"  "\ options = {
+"  "\   transparent = true,
+"  "\ }
+"  "\})
+"endif
 
 "colorscheme terafox
 colorscheme gotham
 
-highlight link StatusLineTerm StatusLine
-highlight link StatusLineTermNC StatusLineNC
+highlight! link StatusLineTerm StatusLine
+highlight! link StatusLineTermNC StatusLineNC
 
 if has("terminal") && exists("*term_setansicolors")
   let g:terminal_ansi_colors = repeat([0], 16)
 
   " gotham
   let g:terminal_ansi_colors[0] =  "#0a0f14"    " black
-  let g:terminal_ansi_colors[1] =  "#dc362c"    " dark red
+  let g:terminal_ansi_colors[1] =  "#c33027"    " dark red
   let g:terminal_ansi_colors[2] =  "#26a98b"    " dark green
   let g:terminal_ansi_colors[3] =  "#edb54b"    " brown
-  let g:terminal_ansi_colors[4] =  "#13789c"    " dark blue
-  let g:terminal_ansi_colors[5] =  "#888ba5"    " dark magenta
-  let g:terminal_ansi_colors[6] =  "#599caa"    " dark cyan
+  let g:terminal_ansi_colors[4] =  "#195465"    " dark blue
+  let g:terminal_ansi_colors[5] =  "#4e5165"    " dark magenta
+  let g:terminal_ansi_colors[6] =  "#33859d"    " dark cyan
   let g:terminal_ansi_colors[7] =  "#98d1ce"    " light grey
-  let g:terminal_ansi_colors[8] =  "#10151b"    " dark grey
+  let g:terminal_ansi_colors[8] =  "#314051"    " dark grey
   let g:terminal_ansi_colors[9] =  "#d26939"    " red
-  let g:terminal_ansi_colors[10] = "#abe4bb"    " green
-  let g:terminal_ansi_colors[11] = "#f6d8a1"    " yellow
-  let g:terminal_ansi_colors[12] = "#72b3ca"    " blue
-  let g:terminal_ansi_colors[13] = "#b8bcdf"    " magenta
-  let g:terminal_ansi_colors[14] = "#33859d"    " cyan
+  let g:terminal_ansi_colors[10] = "#081f2d"    " green
+  let g:terminal_ansi_colors[11] = "#245361"    " yellow
+  let g:terminal_ansi_colors[12] = "#093748"    " blue
+  let g:terminal_ansi_colors[13] = "#888ba5"    " magenta
+  let g:terminal_ansi_colors[14] = "#599caa"    " cyan
   let g:terminal_ansi_colors[15] = "#d3ebe9"    " white
 
   " Terafox
