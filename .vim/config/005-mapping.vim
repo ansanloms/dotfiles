@@ -76,11 +76,25 @@ let g:bekken_files#key_mappings = {
 \ "\<C-l>": { path -> execute("vsplit | wincmd l | edit " .. path) },
 \}
 
+function! s:GetProjectDir() abort
+  let l:dir_base = expand("%:h")
+  if empty(l:dir_base)
+    return getcwd()
+  endif
+
+  let l:project_dir = ansanloms#project#dir(l:dir_base)
+  if empty(l:project_dir)
+    return getcwd()
+  endif
+
+  return  l:project_dir
+endfunction
+
 " history
 nnoremap <silent> <C-h> :<C-u>call bekken#Run("files#oldfiles", [g:bekken_files#key_mappings], { "filetype": { "selection": "bekken-selection-files" } })<CR>
 
 " current files
-nnoremap <silent> <C-l> :<C-u>call bekken#Run("files#list", [ansanloms#project#dir(expand("%:h"), expand("%:h")), g:bekken_files#key_mappings], { "filetype": { "selection": "bekken-selection-files" } })<CR>
+nnoremap <silent> <C-l> :<C-u>call bekken#Run("files#list", [<SID>GetProjectDir(), g:bekken_files#key_mappings], { "filetype": { "selection": "bekken-selection-files" } })<CR>
 
 " buffer
 nnoremap <silent> <C-s> :<C-u>call bekken#Run("buffer", [v:false, g:bekken_buffer#key_mappings], { "filetype": { "selection": "bekken-selection-buffer" } })<CR>
