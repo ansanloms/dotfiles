@@ -67,11 +67,34 @@ config.background = {
 -- タブまわりの設定。
 config.tab_bar_at_bottom = true
 
+function truncate_string_by_width(str, max_width)
+  local current_width = 0
+  local result = ""
+
+  for _, codepoint in utf8.codes(str) do
+    local char = utf8.char(codepoint)
+    local char_width = codepoint <= 127 and 1 or 2
+
+    if current_width + char_width > max_width then
+      break
+    end
+
+    result = result .. char
+    current_width = current_width + char_width
+  end
+
+  return result
+end
+
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
-  local background = tab.is_active and "#5a93aa" or "#4e5157"
-  local foreground = "#ebebeb"
+  local background = tab.is_active and "#245361" or "#081f2d"
+  local foreground = "#d3ebe9"
   local edge_background = "none"
   local edge_foreground = background
+
+  local index = tab.tab_index + 1
+  local pane = tab.active_pane
+  local full_title = truncate_string_by_width(index .. ": " .. pane.title, 36)
 
   return {
     { Background = { Color = edge_background } },
@@ -79,7 +102,7 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
     { Text = wezterm.nerdfonts.ple_left_half_circle_thick },
     { Background = { Color = background } },
     { Foreground = { Color = foreground } },
-    { Text = tab.active_pane.title },
+    { Text = " " .. full_title .. " " },
     { Background = { Color = edge_background } },
     { Foreground = { Color = edge_foreground } },
     { Text = wezterm.nerdfonts.ple_right_half_circle_thick },
