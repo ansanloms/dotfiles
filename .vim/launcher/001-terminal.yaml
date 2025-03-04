@@ -3,7 +3,7 @@ items:
   - name:  PowerShell
     type: command
     command: |
-      call ansanloms#terminal#terminal("pwsh", "PowerShell")
+      call ansanloms#terminal#terminal("pwsh.exe -NoLogo", "PowerShell")
   - name:  cmd
     type: command
     command: |
