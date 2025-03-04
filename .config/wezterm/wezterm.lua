@@ -15,17 +15,17 @@ config.use_ime = true
 
 -- 起動するシェルの設定。
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-  config.default_prog = { "pwsh.exe" }
+  config.default_prog = { "pwsh.exe", "-NoLogo" }
 end
 if wezterm.target_triple == "x86_64-apple-darwin" then
   config.default_prog = { "zsh" }
 end
 
--- NVIDIA の GPU とかで OpenGL だと背景透過が動かない。
+-- @see https://github.com/wezterm/wezterm/issues/4881
 config.front_end = "WebGpu"
+config.webgpu_power_preference = "LowPower"
 
 -- 外観。
-config.term = "wezterm"
 merge(config, require("appearance"))
 
 -- キーバインドまわり。

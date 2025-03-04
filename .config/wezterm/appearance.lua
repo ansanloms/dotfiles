@@ -18,7 +18,8 @@ config.window_decorations = "INTEGRATED_BUTTONS"
 
 -- 外観。
 config.color_scheme = "Gotham (terminal.sexy)"
-config.window_background_opacity = 0.9
+--config.window_background_opacity = 0.9
+
 config.text_background_opacity = 1.0
 config.enable_scroll_bar = false
 config.colors = {
@@ -55,13 +56,22 @@ config.window_frame = {
 config.background = {
   {
     source = {
-      File = wezterm.config_dir .. "/background.png",
+      Color = "#0a0f14",
     },
-    opacity = 0.9,
-    -- attachment = {
-    --   Parallax = 0.125
-    -- },
+    opacity = 0.95,
+    width = "100%",
+    height = "100%",
   },
+  --{
+  --  source = {
+  --    File = wezterm.config_dir .. "/background.png",
+  --  },
+  --  opacity = 1,
+  --  hsb = { brightness = 0.05 },
+  --  --attachment = {
+  --  --  Parallax = 0.125
+  --  --},
+  --},
 }
 
 -- タブまわりの設定。
