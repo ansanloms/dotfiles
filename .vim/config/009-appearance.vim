@@ -114,6 +114,14 @@ colorscheme gotham
 highlight! link StatusLineTerm StatusLine
 highlight! link StatusLineTermNC StatusLineNC
 
+if !has("gui_running")
+  highlight! Normal guibg=NONE ctermbg=NONE
+  highlight! NonText guibg=NONE ctermbg=NONE
+  highlight! LineNr guibg=NONE ctermbg=NONE
+  highlight! Folded guibg=NONE ctermbg=NONE
+  highlight! EndOfBuffer guibg=NONE ctermbg=NONE
+endif
+
 if has("terminal") && exists("*term_setansicolors")
   let g:terminal_ansi_colors = repeat([0], 16)
 
