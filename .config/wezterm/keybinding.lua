@@ -113,6 +113,15 @@ config.keys = {
   },
 }
 
+config.mouse_bindings = {
+  -- コピーとペースト。
+  {
+    event = { Down = { streak = 1, button = "Right" } },
+    mods = "NONE",
+    action = act({ PasteFrom = "Clipboard" }),
+  },
+}
+
 config.key_tables = {
   copy_mode = {
     { key = "Tab", mods = "NONE", action = act.CopyMode "MoveForwardWord" },
