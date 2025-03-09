@@ -32,7 +32,7 @@
         },
         {
             "id": null,
-            "keys": "ctrl+minus"
+            "keys": "alt+shift+d"
         },
         {
             "id": null,
@@ -40,15 +40,15 @@
         },
         {
             "id": null,
-            "keys": "alt+shift+d"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+tab"
+            "keys": "ctrl+minus"
         },
         {
             "id": null,
             "keys": "ctrl+shift+d"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+tab"
         },
         {
             "id": null,
@@ -60,18 +60,6 @@
         },
         {
             "id": null,
-            "keys": "ctrl+numpad0"
-        },
-        {
-            "id": null,
-            "keys": "f11"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+period"
-        },
-        {
-            "id": null,
             "keys": "ctrl+shift+pgup"
         },
         {
@@ -80,15 +68,27 @@
         },
         {
             "id": null,
+            "keys": "f11"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+numpad0"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+period"
+        },
+        {
+            "id": null,
             "keys": "win+sc(41)"
         },
         {
             "id": null,
-            "keys": "menu"
+            "keys": "ctrl+shift+a"
         },
         {
             "id": null,
-            "keys": "ctrl+shift+a"
+            "keys": "menu"
         },
         {
             "id": null,
@@ -108,19 +108,19 @@
         },
         {
             "id": null,
-            "keys": "ctrl+alt+5"
-        },
-        {
-            "id": null,
             "keys": "alt+shift+right"
         },
         {
             "id": null,
-            "keys": "ctrl+alt+1"
+            "keys": "ctrl+alt+5"
         },
         {
             "id": null,
             "keys": "alt+shift+left"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+alt+1"
         },
         {
             "id": null,
@@ -148,11 +148,11 @@
         },
         {
             "id": null,
-            "keys": "ctrl+alt+9"
+            "keys": "ctrl+alt+2"
         },
         {
             "id": null,
-            "keys": "ctrl+alt+2"
+            "keys": "ctrl+alt+9"
         },
         {
             "id": null,
@@ -172,11 +172,11 @@
         },
         {
             "id": null,
-            "keys": "ctrl+shift+v"
+            "keys": "ctrl+alt+8"
         },
         {
             "id": null,
-            "keys": "ctrl+alt+8"
+            "keys": "ctrl+shift+v"
         },
         {
             "id": null,
@@ -184,19 +184,11 @@
         },
         {
             "id": null,
-            "keys": "ctrl+shift+6"
-        },
-        {
-            "id": null,
             "keys": "ctrl+insert"
         },
         {
             "id": null,
-            "keys": "ctrl+shift+5"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+2"
+            "keys": "ctrl+shift+6"
         },
         {
             "id": null,
@@ -208,11 +200,15 @@
         },
         {
             "id": null,
-            "keys": "ctrl+numpad_plus"
+            "keys": "ctrl+shift+2"
         },
         {
             "id": null,
-            "keys": "alt+right"
+            "keys": "ctrl+shift+5"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+numpad_plus"
         },
         {
             "id": null,
@@ -220,15 +216,23 @@
         },
         {
             "id": null,
+            "keys": "alt+right"
+        },
+        {
+            "id": null,
             "keys": "alt+up"
         },
         {
             "id": null,
-            "keys": "ctrl+shift+4"
+            "keys": "alt+down"
         },
         {
             "id": null,
-            "keys": "alt+down"
+            "keys": "ctrl+shift+t"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+4"
         },
         {
             "id": null,
@@ -256,11 +260,11 @@
         },
         {
             "id": null,
-            "keys": "ctrl+shift+7"
+            "keys": "ctrl+shift+home"
         },
         {
             "id": null,
-            "keys": "ctrl+shift+home"
+            "keys": "ctrl+shift+7"
         },
         {
             "id": null,
@@ -288,10 +292,6 @@
         },
         {
             "id": null,
-            "keys": "ctrl+shift+t"
-        },
-        {
-            "id": null,
             "keys": "ctrl+shift+n"
         },
         {
@@ -313,7 +313,7 @@
             "backgroundImage": null,
             "backgroundImageOpacity": 0.1,
             "backgroundImageStretchMode": "uniform",
-            "colorScheme": "Gotham",
+            "colorScheme": "Terafox",
             "compatibility.reloadEnvironmentVariables": true,
             "cursorShape": "filledBox",
             "experimental.retroTerminalEffect": false,
