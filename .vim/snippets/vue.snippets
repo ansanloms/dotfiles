@@ -1,20 +1,20 @@
 snippet nuxt.component Nuxt の Component テンプレート。
 	<script setup lang="ts">
-	type Props = {
+	interface Props {
 		/**
 		 * 値。
 		 */
-		val: string;
+		value?: string;
 	};
 
-	type Emits = {
+	interface Emits {
 		/**
 		 * 押下時。
 		 */
-		(e: "click", event: MouseEvent): void;
+		click: [event: MouseEvent];
 	};
 
-	const props = withDefaults(defineProps<Props>(), {val: "hoge"});
+	const { value = undefined } = defineProps<Props>();
 
 	const emits = defineEmits<Emits>();
 
@@ -24,10 +24,30 @@ snippet nuxt.component Nuxt の Component テンプレート。
 	</script>
 
 	<template>
-		<div :class="$style.container" />
+		<div :class="\$style.container">
+			{{ value }}
+		</div>
 	</template>
 
 	<style lang="scss" module>
 	.container {
+		color: red;
 	}
 	</style>
+
+snippet nuxt.page Nuxt の page テンプレート。
+	<script setup lang="ts">
+	import { useHead, definePageMeta } from "#imports";
+	import { useI18n } from "vue-i18n";
+
+	const i18n = useI18n();
+
+	definePageMeta({});
+
+	useHead({
+		title: i18n.t("title"),
+	});
+	</script>
+
+	<template>
+	</template>
