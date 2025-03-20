@@ -108,18 +108,18 @@ else
   \})
 endif
 
-colorscheme terafox
-"colorscheme gotham
+"colorscheme terafox
+colorscheme gotham
 
 highlight! link StatusLineTerm StatusLine
 highlight! link StatusLineTermNC StatusLineNC
 
 if !has("gui_running")
-  "highlight! Normal guibg=NONE ctermbg=NONE
-  "highlight! NonText guibg=NONE ctermbg=NONE
-  "highlight! LineNr guibg=NONE ctermbg=NONE
-  "highlight! Folded guibg=NONE ctermbg=NONE
-  "highlight! EndOfBuffer guibg=NONE ctermbg=NONE
+  highlight! Normal guibg=NONE ctermbg=NONE
+  highlight! NonText guibg=NONE ctermbg=NONE
+  highlight! LineNr guibg=NONE ctermbg=NONE
+  highlight! Folded guibg=NONE ctermbg=NONE
+  highlight! EndOfBuffer guibg=NONE ctermbg=NONE
 
   " Inform vim how to enable undercurl in wezterm
   let &t_Cs = "\e[60m"
@@ -131,38 +131,38 @@ if has("terminal") && exists("*term_setansicolors")
   let g:terminal_ansi_colors = repeat([0], 16)
 
   " gotham
-  "let g:terminal_ansi_colors[0] =  "#0a0f14"    " black
-  "let g:terminal_ansi_colors[1] =  "#c33027"    " dark red
-  "let g:terminal_ansi_colors[2] =  "#26a98b"    " dark green
-  "let g:terminal_ansi_colors[3] =  "#edb54b"    " brown
-  "let g:terminal_ansi_colors[4] =  "#195465"    " dark blue
-  "let g:terminal_ansi_colors[5] =  "#4e5165"    " dark magenta
-  "let g:terminal_ansi_colors[6] =  "#33859d"    " dark cyan
-  "let g:terminal_ansi_colors[7] =  "#98d1ce"    " light grey
-  "let g:terminal_ansi_colors[8] =  "#314051"    " dark grey
-  "let g:terminal_ansi_colors[9] =  "#d26939"    " red
-  "let g:terminal_ansi_colors[10] = "#081f2d"    " green
-  "let g:terminal_ansi_colors[11] = "#245361"    " yellow
-  "let g:terminal_ansi_colors[12] = "#093748"    " blue
-  "let g:terminal_ansi_colors[13] = "#888ba5"    " magenta
-  "let g:terminal_ansi_colors[14] = "#599caa"    " cyan
-  "let g:terminal_ansi_colors[15] = "#d3ebe9"    " white
+  let g:terminal_ansi_colors[0] =  "#0a0f14"    " black
+  let g:terminal_ansi_colors[1] =  "#c33027"    " dark red
+  let g:terminal_ansi_colors[2] =  "#26a98b"    " dark green
+  let g:terminal_ansi_colors[3] =  "#edb54b"    " brown
+  let g:terminal_ansi_colors[4] =  "#195465"    " dark blue
+  let g:terminal_ansi_colors[5] =  "#4e5165"    " dark magenta
+  let g:terminal_ansi_colors[6] =  "#33859d"    " dark cyan
+  let g:terminal_ansi_colors[7] =  "#98d1ce"    " light grey
+  let g:terminal_ansi_colors[8] =  "#314051"    " dark grey
+  let g:terminal_ansi_colors[9] =  "#d26939"    " red
+  let g:terminal_ansi_colors[10] = "#081f2d"    " green
+  let g:terminal_ansi_colors[11] = "#245361"    " yellow
+  let g:terminal_ansi_colors[12] = "#093748"    " blue
+  let g:terminal_ansi_colors[13] = "#888ba5"    " magenta
+  let g:terminal_ansi_colors[14] = "#599caa"    " cyan
+  let g:terminal_ansi_colors[15] = "#d3ebe9"    " white
 
   " Terafox
-  let g:terminal_ansi_colors[0] =  "#2f3239"    " black
-  let g:terminal_ansi_colors[1] =  "#e85c51"    " dark red
-  let g:terminal_ansi_colors[2] =  "#7aa4a1"    " dark green
-  let g:terminal_ansi_colors[3] =  "#fda47f"    " brown
-  let g:terminal_ansi_colors[4] =  "#5a93aa"    " dark blue
-  let g:terminal_ansi_colors[5] =  "#ad5c7c"    " dark magenta
-  let g:terminal_ansi_colors[6] =  "#a1cdd8"    " dark cyan
-  let g:terminal_ansi_colors[7] =  "#ebebeb"    " light grey
-  let g:terminal_ansi_colors[8] =  "#4e5157"    " dark grey
-  let g:terminal_ansi_colors[9] =  "#eb746b"    " red
-  let g:terminal_ansi_colors[10] = "#8eb2af"    " green
-  let g:terminal_ansi_colors[11] = "#fdb292"    " yellow
-  let g:terminal_ansi_colors[12] = "#73a3b7"    " blue
-  let g:terminal_ansi_colors[13] = "#b97490"    " magenta
-  let g:terminal_ansi_colors[14] = "#afd4de"    " cyan
-  let g:terminal_ansi_colors[15] = "#eeeeee"    " white
+  "let g:terminal_ansi_colors[0] =  "#2f3239"    " black
+  "let g:terminal_ansi_colors[1] =  "#e85c51"    " dark red
+  "let g:terminal_ansi_colors[2] =  "#7aa4a1"    " dark green
+  "let g:terminal_ansi_colors[3] =  "#fda47f"    " brown
+  "let g:terminal_ansi_colors[4] =  "#5a93aa"    " dark blue
+  "let g:terminal_ansi_colors[5] =  "#ad5c7c"    " dark magenta
+  "let g:terminal_ansi_colors[6] =  "#a1cdd8"    " dark cyan
+  "let g:terminal_ansi_colors[7] =  "#ebebeb"    " light grey
+  "let g:terminal_ansi_colors[8] =  "#4e5157"    " dark grey
+  "let g:terminal_ansi_colors[9] =  "#eb746b"    " red
+  "let g:terminal_ansi_colors[10] = "#8eb2af"    " green
+  "let g:terminal_ansi_colors[11] = "#fdb292"    " yellow
+  "let g:terminal_ansi_colors[12] = "#73a3b7"    " blue
+  "let g:terminal_ansi_colors[13] = "#b97490"    " magenta
+  "let g:terminal_ansi_colors[14] = "#afd4de"    " cyan
+  "let g:terminal_ansi_colors[15] = "#eeeeee"    " white
 endif

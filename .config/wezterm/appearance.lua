@@ -17,36 +17,37 @@ config.adjust_window_size_when_changing_font_size = false
 config.window_decorations = "INTEGRATED_BUTTONS"
 
 -- 外観。
---config.color_scheme = "Gotham (terminal.sexy)"
-config.color_scheme = "terafox"
+config.color_scheme = "Gotham (terminal.sexy)"
+--config.color_scheme = "terafox"
 
-config.text_background_opacity = 0.25
+config.window_background_opacity = 0.9
+config.text_background_opacity = 0.1
 config.enable_scroll_bar = true
 config.colors = {
   tab_bar = {
     inactive_tab_edge = "none",
   },
   -- Gotham
-  --ansi = {
-  --  "#0a0f14",
-  --  "#c33027",
-  --  "#26a98b",
-  --  "#edb54b",
-  --  "#195465",
-  --  "#4e5165",
-  --  "#33859d",
-  --  "#98d1ce",
-  --},
-  --brights = {
-  --  "#314051",
-  --  "#d26939",
-  --  "#081f2d",
-  --  "#245361",
-  --  "#093748",
-  --  "#888ba5",
-  --  "#599caa",
-  --  "#d3ebe9",
-  --},
+  ansi = {
+    "#0a0f14",
+    "#c33027",
+    "#26a98b",
+    "#edb54b",
+    "#195465",
+    "#4e5165",
+    "#33859d",
+    "#98d1ce",
+  },
+  brights = {
+    "#314051",
+    "#d26939",
+    "#081f2d",
+    "#245361",
+    "#093748",
+    "#888ba5",
+    "#599caa",
+    "#d3ebe9",
+  },
 }
 
 config.window_frame = {
@@ -55,26 +56,26 @@ config.window_frame = {
 }
 
 -- 背景。
-config.background = {
-  {
-    source = {
-      Color = "#152528",
-    },
-    opacity = 0.9,
-    width = "100%",
-    height = "100%",
-  },
-  --{
-  --  source = {
-  --    File = wezterm.config_dir .. "/background.png",
-  --  },
-  --  opacity = 1,
-  --  hsb = { brightness = 0.03 },
-  --  attachment = {
-  --    Parallax = 0.125
-  --  },
-  --},
-}
+--config.background = {
+--  --{
+--  --  source = {
+--  --    Color = "#0a0f14",
+--  --  },
+--  --  opacity = 0.92,
+--  --  width = "100%",
+--  --  height = "100%",
+--  --},
+--  --{
+--  --  source = {
+--  --    File = wezterm.config_dir .. "/background.png",
+--  --  },
+--  --  --opacity = 0.2,
+--  --  hsb = { brightness = 0.03 },
+--  --  --attachment = {
+--  --  --  Parallax = 0.125
+--  --  --},
+--  --},
+--}
 
 -- タブまわりの設定。
 config.tab_bar_at_bottom = true
