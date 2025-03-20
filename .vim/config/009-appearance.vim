@@ -93,20 +93,20 @@ if (has("termguicolors"))
   set termguicolors
 endif
 
-packadd! nightfox.nvim
-if has("gui_running")
-  lua require("nightfox").setup({
-  \ options = {
-  \   terminal_colors = false,
-  \ }
-  \})
-else
-  lua require("nightfox").setup({
-  \ options = {
-  \   transparent = true,
-  \ }
-  \})
-endif
+"packadd! nightfox.nvim
+"if has("gui_running")
+"  lua require("nightfox").setup({
+"  \ options = {
+"  \   terminal_colors = false,
+"  \ }
+"  \})
+"else
+"  lua require("nightfox").setup({
+"  \ options = {
+"  \   transparent = true,
+"  \ }
+"  \})
+"endif
 
 "colorscheme terafox
 colorscheme gotham
