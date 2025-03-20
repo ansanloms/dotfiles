@@ -110,6 +110,7 @@ endif
 
 "colorscheme terafox
 colorscheme gotham
+highlight! PreProc ctermfg=13 guifg=#888ca6
 
 highlight! link StatusLineTerm StatusLine
 highlight! link StatusLineTermNC StatusLineNC
