@@ -20,3 +20,7 @@ items:
     type: command
     command: |
       call denops#request("ramble", "config", [])
+  - name: Chat
+    type: command
+    command: |
+      call denops#request("ramble", "chat", [bufnr()])
