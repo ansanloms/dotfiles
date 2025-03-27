@@ -28,12 +28,11 @@ call minpac#add("https://github.com/vim-denops/denops.vim.git")
 call minpac#add("https://github.com/thinca/vim-singleton.git")
 let g:singleton#opener = "edit"
 try
-  if has("win32")
-    call singleton#enable()
-  endif
+  call singleton#enable()
 catch
 endtry
 
+" }}}
 
 " git {{{
 
