@@ -1,8 +1,16 @@
 link:
   ~/.bashrc:
     - src: ./.bashrc
+      targets:
+        - linux
   ~/.bash_profile:
     - src: ./.bash_profile
+      targets:
+        - linux
+  ~/.inputrc:
+    - src: ./.inputrc
+      targets:
+        - linux
   ~/.config/git:
     - src: ./.config/git
   ~/.config/git/config.os:

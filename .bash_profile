@@ -37,14 +37,10 @@ if [ -d "$DENO_INSTALL" ]; then
   export PATH="$DENO_INSTALL/bin:$PATH"
 fi
 
-export VOLTA_HOME="$HOME/.volta"
-if [ -d "$VOLTA_HOME" ]; then
-  export PATH="$VOLTA_HOME/bin:$PATH"
-fi
-
 export CARGO_HOME="$HOME/.cargo"
 if [ -d "$CARGO_HOME" ]; then
   export PATH="$CARGO_HOME/bin:$PATH"
+  . "$HOME/.cargo/env"
 fi
 
 # Source global definitions
@@ -56,4 +52,8 @@ fi
 if [ -f "$HOME/.bashrc" ]; then
   . "$HOME/.bashrc"
 fi
-. "$HOME/.cargo/env"
+
+export VOLTA_HOME="$HOME/.volta"
+if [ -d "$VOLTA_HOME" ]; then
+  export PATH="$VOLTA_HOME/bin:$PATH"
+fi
