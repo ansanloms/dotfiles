@@ -24,8 +24,10 @@ link:
     - src: ./.config/starship.toml
   ~/.config/wezterm:
     - src: ./.config/wezterm
-  ~/.vim:
-    - src: ./.vim
+  ~/.config/vim:
+    - src: ./.config/vim
+  ~/.config/nvim:
+    - src: ./.config/nvim
   ~/.vimrc:
     - src: ./.vimrc
   ~/.minttyrc:
@@ -58,10 +60,6 @@ link:
         - windows
   ~/AppData/Roaming/efm-langserver/config.yaml:
     - src: ./AppData/Roaming/efm-langserver/config.yaml
-      targets:
-        - windows
-  ~/Documents/WindowsPowerShell/profile.ps1:
-    - src: ./Documents/PowerShell/profile.ps1
       targets:
         - windows
   ~/Documents/PowerShell/profile.ps1:

@@ -1,10 +1,10 @@
-.vim/*
-!.vim/config/
-!.vim/autoload/
-!.vim/bitmaps/
-!.vim/snippets/
-!.vim/launcher/000-general.yaml
-!.vim/launcher/001-terminal.yaml
-!.vim/launcher/002-ai-chat.yaml
+.config/vim/*
+!.config/vim/config/
+!.config/vim/autoload/
+!.config/vim/bitmaps/
+!.config/vim/snippets/
+!.config/vim/launcher/000-general.yaml
+!.config/vim/launcher/001-terminal.yaml
+!.config/vim/launcher/002-ai-chat.yaml
 
 .config/git/config.os

@@ -28,18 +28,24 @@ if [ -d "$HOME/.local/bin" ]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
-export DENO_INSTALL="$HOME/.deno"
-if [ -d "$DENO_INSTALL" ]; then
-  export PATH="$DENO_INSTALL/bin:$PATH"
+if [ -d "$HOME/.deno" ]; then
+  export PATH="$HOME/.deno/bin:$PATH"
 fi
 
-export CARGO_HOME="$HOME/.cargo"
-if [ -d "$CARGO_HOME" ]; then
-  export PATH="$CARGO_HOME/bin:$PATH"
+if [ -d "$HOME/.cargo" ]; then
+  export PATH="$HOME/.cargo/bin:$PATH"
   . "$HOME/.cargo/env"
 fi
 
-export VOLTA_HOME="$HOME/.volta"
-if [ -d "$VOLTA_HOME" ]; then
-  export PATH="$VOLTA_HOME/bin:$PATH"
+if [ -d "$HOME/.volta" ]; then
+  export PATH="$HOME/.volta/bin:$PATH"
+fi
+
+export GOPATH="$HOME/go"
+if [ -d "$GOPATH" ]; then
+  export PATH="$GOPATH/bin:$PATH"
+fi
+
+if [ -d "/opt/nvim-linux-x86_64/bin" ]; then
+  export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 fi

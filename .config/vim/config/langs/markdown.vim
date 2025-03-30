@@ -16,8 +16,8 @@ augroup END
 " quickrun - markdown
 if executable("pandoc")
   " css の取得
-  if !filereadable(expand("~/.vim/markdown.css"))
-    call system("curl https://gist.githubusercontent.com/tuzz/3331384/raw/d1771755a3e26b039bff217d510ee558a8a1e47d/github.css -o " . expand("~/.vim/markdown.css"))
+  if !filereadable(expand("~/.config/vim/markdown.css"))
+    call system("curl https://gist.githubusercontent.com/tuzz/3331384/raw/d1771755a3e26b039bff217d510ee558a8a1e47d/github.css -o " . expand("~/.config/vim/markdown.css"))
   endif
 
   let g:quickrun_config["markdown"] = {
@@ -28,7 +28,7 @@ if executable("pandoc")
   let g:quickrun_config["markdown/pandoc"] = {
   \ "hook/cd/directory": "%S:p:h",
   \ "outputter": "browser",
-  \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --css=" . expand("~/.vim/markdown.css") . " --metadata title=%s"
+  \ "exec": "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --css=" . expand("~/.config/vim/markdown.css") . " --metadata title=%s"
   \}
 
   " slidy 出力
