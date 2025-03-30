@@ -1,0 +1,26 @@
+title: 💻 Terminal
+items:
+  - name:  PowerShell
+    type: command
+    command: |
+      call ansanloms#terminal#terminal("pwsh.exe -NoLogo", "PowerShell")
+  - name:  cmd
+    type: command
+    command: |
+      call ansanloms#terminal#terminal("cmd", "cmd")
+  - name: 󰕈 WSL (Ubuntu)
+    type: command
+    command: |
+      call ansanloms#terminal#terminal("wsl -d Ubuntu", "WSL (Ubuntu)")
+  - name: 💻 MSYS2
+    type: command
+    command: |
+      call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") .. " -msys -defterm -no-start", "MSYS2")
+  - name: 💻 MinGW-w64 32bit
+    type: command
+    command: |
+      call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") .. " -mingw32 -defterm -no-start", "MinGW-w64 32bit")
+  - name: 💻 MinGW-w64 64bit
+    type: command
+    command: |
+      call ansanloms#terminal#terminal(expand("/msys64/msys2_shell.cmd") .. " -mingw64 -defterm -no-start", "MinGW-w64 64bit")
