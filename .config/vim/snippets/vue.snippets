@@ -37,7 +37,8 @@ snippet nuxt.component Nuxt の Component テンプレート。
 
 snippet nuxt.page Nuxt の page テンプレート。
 	<script setup lang="ts">
-	import { useHead, definePageMeta } from "#imports";
+	import { definePageMeta } from "#imports";
+	import { useHead } from "nuxt/app";
 	import { useI18n } from "vue-i18n";
 
 	const i18n = useI18n();
