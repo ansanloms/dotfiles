@@ -113,7 +113,7 @@
                 "source": "Windows.Terminal.PowershellCore"
             },
             {
-                "commandline": "ubuntu.exe",
+                "commandline": "wsl.exe -d Ubuntu",
                 "guid": "{b93fb378-2fea-46ae-bc2c-18eb9ae3a562}",
                 "hidden": false,
                 "icon": "https://assets.ubuntu.com/v1/49a1a858-favicon-32x32.png",
