@@ -17,6 +17,9 @@ require("config.mapping")
 -- plugins:
 require("config.plugins")
 
+-- langs:
+require("config.langs")
+
 -- appearance:
 require("config.appearance.general")
 require("config.appearance.colorscheme")
@@ -25,4 +28,6 @@ require("config.appearance.statusline")
 --source ~/.config/vim/config/statusline.vim
 --source ~/.config/vim/config/appearance.vim
 
+
 dynamic_require("temp")
+dynamic_require("work")

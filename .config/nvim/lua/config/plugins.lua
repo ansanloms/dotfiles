@@ -51,7 +51,7 @@ jetpackPacker.add({
       vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
       vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
       vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "Telescope oldfiles" })
-      vim.keymap.set("n", "<leader>fl", launcher(require("config.launcher.init")), { desc = "Telescope launcher" })
+      vim.keymap.set("n", "<leader>fl", launcher(require("config.launcher")), { desc = "Telescope launcher" })
     end
   },
 
