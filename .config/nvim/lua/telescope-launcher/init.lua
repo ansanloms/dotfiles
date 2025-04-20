@@ -5,7 +5,6 @@ local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 
 local launcher = function(config, opts)
-print(config.title)
   return function(opts)
     opts = opts or {}
 
