@@ -1,13 +1,15 @@
 -- Javaの設定
-
--- Javaidを読み込み
-if vim.fn.filereadable(vim.fn.expand("~/.config/vim/syntax/javaid.vim")) == 0 then
-  vim.fn.system("curl https://fleiner.com/vim/syntax/javaid.vim -o " .. vim.fn.expand("~/.config/vim/syntax/javaid.vim"))
-end
-
 vim.g.java_highlight_all = 1
 
--- quickrun設定は後で対応
+-- quickrun - java
+vim.g.quickrun_config = vim.g.quickrun_config or {}
+vim.g.quickrun_config["java"] = {
+  ["hook/cd/directory"] = "%S:p:h",
+  exec = {
+    "javac -J-Dfile.encoding=UTF8 %o %s",
+    "%c -Dfile.encoding=UTF8 %s:t:r %a"
+  }
+}
 
 local augroup_java = vim.api.nvim_create_augroup("java-setting", { clear = true })
 

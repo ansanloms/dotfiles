@@ -17,7 +17,14 @@ jetpackPacker.add({
   { "https://github.com/vim-jp/vimdoc-ja.git", as = "vimdoc-ja" },
   { "https://github.com/vim-denops/denops.vim.git", as = "denops.vim" },
   { "https://github.com/ansanloms/vim-ime-set.git", as = "vim-ime-set", requires = "denops.vim" },
-  { "https://github.com/yukimemi/hitori.vim.git", as = "hitori.vim", requires = "denops.vim" },
+  {
+    "https://github.com/yukimemi/hitori.vim.git",
+    as = "hitori.vim",
+    requires = "denops.vim",
+    config = function()
+      vim.g.hitori_opener = "edit"
+    end
+  },
 
   -- telescope:
   { "https://github.com/nvim-lua/plenary.nvim.git", as = "plenary.nvim" },
@@ -55,26 +62,99 @@ jetpackPacker.add({
     end
   },
 
-  -- appearance:
-  { "https://github.com/whatyouhide/vim-gotham.git", as = "vim-gotham" },
-  { "https://github.com/EdenEast/nightfox.nvim.git", as = "nightfox.nvim" },
-  { "https://github.com/rebelot/heirline.nvim.git", as = "heirline.nvim", requires = "nightfox.nvim" },
-  { "https://github.com/nvim-treesitter/nvim-treesitter.git", as = "nvim-treesitter", run = ":TSUpdatl" },
+  -- quickrun:
   {
-    "https://github.com/rbtnn/vim-ambiwidth.git",
-    as = "vim-ambiwidth",
-    setup = function()
-      -- Nerd Fonts 関連の設定。
-      -- Nerd Fonts Seti-UI + Custom (0xe5fa-0xe62b,0xe62e は元々対応されてる)
-      -- Nerd Fonts Devicons (0xe700-0xe7c5 は元々対応されてる)
-      -- Nerd Fonts Material Design Icons
-      -- Nerd Fonts Codicons
-      vim.g.ambiwidth_add_list = {
-        { 0xe62c, 0xe62d, 2 }, { 0xe62f, 0xe6b7, 2 },
-        { 0xe7c6, 0xe8ef, 2 },
-        { 0xf0001, 0xf1af0, 2 },
-        { 0xea60, 0xec1e, 2 },
-      }
+    "https://github.com/thinca/vim-quickrun.git",
+    as = "vim-quickrun"
+  },
+
+  -- snippet:
+  {
+    "https://github.com/hrsh7th/vim-vsnip.git",
+    as = "vim-vsnip",
+    config = function()
+      vim.g.vsnip_snippet_dir = vim.fn.expand("~/.config/nvim/snippets")
+
+      vim.g.vsnip_filetypes = {}
+      vim.g.vsnip_filetypes.typescript = { "javascript" }
+      vim.g.vsnip_filetypes.vue = { "javascript", "typescript" }
+      vim.g.vsnip_filetypes.javascriptreact = { "javascript" }
+      vim.g.vsnip_filetypes.typescriptreact = { "javascript", "typescript" }
+    end
+  },
+  {
+    "https://github.com/hrsh7th/vim-vsnip-integ.git",
+    as = "vim-vsnip-integ",
+    requires = { "vim-vsnip" },
+  },
+
+  -- cmp:
+  {
+    "https://github.com/hrsh7th/cmp-vsnip.git",
+    as = "cmp-vsnip",
+    requires = { "vim-vsnip" },
+  },
+  {
+    "https://github.com/hrsh7th/cmp-nvim-lsp.git",
+    as = "cmp-nvim-lsp",
+  },
+  {
+    "https://github.com/hrsh7th/nvim-cmp.git",
+    as = "nvim-cmp",
+    requires = { "cmp-vsnip", "cmp-nvim-lsp" },
+    config = function()
+      local cmp = require("cmp")
+      cmp.setup({
+        snippet = {
+          expand = function(args)
+            vim.fn["vsnip#anonymous"](args.body)
+          end,
+        },
+        sources = {
+          { name = "nvim_lsp" },
+          { name = "vsnip" },
+        },
+        mapping = cmp.mapping.preset.insert({
+          ["<C-p>"] = cmp.mapping.select_prev_item(),
+          ["<C-n>"] = cmp.mapping.select_next_item(),
+          ["<C-l>"] = cmp.mapping.complete(),
+          ["<C-e>"] = cmp.mapping.abort(),
+          ["<CR>"] = cmp.mapping.confirm { select = true },
+        }),
+        experimental = {
+          ghost_text = true,
+        },
+      })
+    end
+  },
+
+  -- lsp:
+  {
+    "https://github.com/neovim/nvim-lspconfig.git",
+    as = "nvim-lspconfig"
+  },
+  {
+    "https://github.com/williamboman/mason.nvim.git",
+    as = "mason.nvim",
+    config = function()
+      require("mason").setup()
+    end
+  },
+  {
+    "https://github.com/williamboman/mason-lspconfig.nvim.git",
+    as = "mason-lspconfig.nvim",
+    requires = { "nvim-lspconfig", "mason.nvim", "cmp-nvim-lsp" },
+    config = function()
+      require("mason-lspconfig").setup_handlers({
+        function(server)
+          local opt = {
+            capabilities = require("cmp_nvim_lsp").default_capabilities(
+              vim.lsp.protocol.make_client_capabilities()
+            )
+          }
+          require("lspconfig")[server].setup(opt)
+        end
+      })
     end
   },
 
@@ -82,7 +162,7 @@ jetpackPacker.add({
   {
     "https://github.com/ansanloms/vim-ramble.git",
     as = "vim-ramble",
-    requires = "denops.vim",
+    requires = {"denops.vim"},
     config = function()
       local augroupRambleChat = vim.api.nvim_create_augroup("ramble-chat", { clear = true })
 
@@ -102,21 +182,58 @@ jetpackPacker.add({
     end
   },
 
-  -- snippet:
+  -- appearance:
   {
-    "https://github.com/hrsh7th/vim-vsnip.git",
-    as = "vim-vsnip",
+    "https://github.com/whatyouhide/vim-gotham.git",
+    as = "vim-gotham"
+  },
+  {
+    "https://github.com/EdenEast/nightfox.nvim.git",
+    as = "nightfox.nvim"
+  },
+  {
+    "https://github.com/rebelot/heirline.nvim.git",
+    as = "heirline.nvim",
+    requires = { "nightfox.nvim" },
     config = function()
-      vim.g.vsnip_snippet_dir = vim.fn.expand("~/.config/vim/snippets")
-
-      vim.g.vsnip_filetypes = {}
-      vim.g.vsnip_filetypes.typescript = { "javascript" }
-      vim.g.vsnip_filetypes.vue = { "javascript", "typescript" }
-      vim.g.vsnip_filetypes.javascriptreact = { "javascript" }
-      vim.g.vsnip_filetypes.typescriptreact = { "javascript", "typescript" }
     end
   },
-  { "https://github.com/hrsh7th/vim-vsnip-integ.git", as = "vim-vsnip-integ" }
+  {
+    "https://github.com/nvim-treesitter/nvim-treesitter.git",
+    as = "nvim-treesitter",
+    run = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup {
+        highlight = { enable = true }
+      }
+    end
+  },
+  {
+    "https://github.com/nvim-treesitter/nvim-treesitter-context.git",
+    as = "nvim-treesitter-context",
+    requires = { "nvim-treesitter" },
+  },
+  {
+    "https://github.com/rbtnn/vim-ambiwidth.git",
+    as = "vim-ambiwidth",
+    setup = function()
+      -- Nerd Fonts 関連の設定。
+      -- Nerd Fonts Seti-UI + Custom (0xe5fa-0xe62b,0xe62e は元々対応されてる)
+      -- Nerd Fonts Devicons (0xe700-0xe7c5 は元々対応されてる)
+      -- Nerd Fonts Material Design Icons
+      -- Nerd Fonts Codicons
+      vim.g.ambiwidth_add_list = {
+        { 0xe62c, 0xe62d, 2 }, { 0xe62f, 0xe6b7, 2 },
+        { 0xe7c6, 0xe8ef, 2 },
+        { 0xf0001, 0xf1af0, 2 },
+        { 0xea60, 0xec1e, 2 },
+      }
+    end
+  },
+  {
+    "https://github.com/OXY2DEV/markview.nvim.git",
+    as = "markview.nvim"
+  },
 })
 
 for _, name in ipairs(jetpack.names()) do
