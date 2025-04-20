@@ -16,7 +16,7 @@ jetpackPacker.add({
   -- general:
   { "https://github.com/vim-jp/vimdoc-ja.git", as = "vimdoc-ja" },
   { "https://github.com/vim-denops/denops.vim.git", as = "denops.vim" },
-  { "https://github.com/ansanloms/vim-ime-set.git", as = "vim-ime-set", requires = "denops.vim" },
+  --{ "https://github.com/ansanloms/vim-ime-set.git", as = "vim-ime-set", requires = "denops.vim" },
   {
     "https://github.com/yukimemi/hitori.vim.git",
     as = "hitori.vim",
@@ -153,8 +153,48 @@ jetpackPacker.add({
             )
           }
           require("lspconfig")[server].setup(opt)
-        end
-      })
+        end,
+
+		-- https://github.com/williamboman/mason-lspconfig.nvim/issues/371#issuecomment-2249935162
+      	["volar"] = function()
+      	  require("lspconfig").volar.setup({
+      	    filetypes = { "vue", "javascript", "typescript", "javascriptreact", "typescriptreact", "json" },
+      	    root_dir = require("lspconfig").util.root_pattern(
+      	      "vue.config.js",
+      	      "vue.config.ts",
+      	      "nuxt.config.js",
+      	      "nuxt.config.ts"
+      	    ),
+      	    init_options = {
+      	      vue = {
+      	        hybridMode = false,
+      	      },
+      	    },
+      	    settings = {
+      	      typescript = {
+      	        inlayHints = {
+      	          enumMemberValues = {
+      	            enabled = true,
+      	          },
+      	          functionLikeReturnTypes = {
+      	            enabled = true,
+      	          },
+      	          propertyDeclarationTypes = {
+      	            enabled = true,
+      	          },
+      	          parameterTypes = {
+      	            enabled = true,
+      	            suppressWhenArgumentMatchesName = true,
+      	          },
+      	          variableTypes = {
+      	            enabled = true,
+      	          },
+      	        },
+      	      },
+      	    },
+      	  })
+      	end,
+	  })
     end
   },
 

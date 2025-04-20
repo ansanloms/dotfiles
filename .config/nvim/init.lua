@@ -10,6 +10,7 @@ end
 
 -- general:
 require("config.general")
+require("config.im")
 
 -- mapping:
 require("config.mapping")
