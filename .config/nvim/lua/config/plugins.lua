@@ -17,6 +17,7 @@ jetpackPacker.add({
   { "https://github.com/vim-jp/vimdoc-ja.git", as = "vimdoc-ja" },
   { "https://github.com/vim-denops/denops.vim.git", as = "denops.vim" },
   { "https://github.com/ansanloms/vim-ime-set.git", as = "vim-ime-set", requires = "denops.vim" },
+  { "https://github.com/yukimemi/hitori.vim.git", as = "hitori.vim", requires = "denops.vim" },
 
   -- telescope:
   { "https://github.com/nvim-lua/plenary.nvim.git", as = "plenary.nvim" },
@@ -98,7 +99,24 @@ jetpackPacker.add({
           end, { buffer = true })
         end
       })
-    end },
+    end
+  },
+
+  -- snippet:
+  {
+    "https://github.com/hrsh7th/vim-vsnip.git",
+    as = "vim-vsnip",
+    config = function()
+      vim.g.vsnip_snippet_dir = vim.fn.expand("~/.config/vim/snippets")
+
+      vim.g.vsnip_filetypes = {}
+      vim.g.vsnip_filetypes.typescript = { "javascript" }
+      vim.g.vsnip_filetypes.vue = { "javascript", "typescript" }
+      vim.g.vsnip_filetypes.javascriptreact = { "javascript" }
+      vim.g.vsnip_filetypes.typescriptreact = { "javascript", "typescript" }
+    end
+  },
+  { "https://github.com/hrsh7th/vim-vsnip-integ.git", as = "vim-vsnip-integ" }
 })
 
 for _, name in ipairs(jetpack.names()) do
