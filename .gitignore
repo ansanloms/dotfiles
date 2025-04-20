@@ -7,4 +7,11 @@
 !.config/vim/launcher/001-terminal.yaml
 !.config/vim/launcher/002-ai-chat.yaml
 
+.config/nvim/shada
+.config/nvim/backup
+.config/nvim/view
+.config/nvim/undo
+.config/nvim/log
+.config/nvim/lua/temp.lua
+
 .config/git/config.os

@@ -4,10 +4,14 @@ vim.opt.fileformats = "unix,mac,dos"
 
 -- ディレクトリ作成。
 local dirs = {
-  "~/.config/nvim/autoload", "~/.config/nvim/plugin",
-  "~/.config/nvim/backup", "~/.config/nvim/view",
-  "~/.config/nvim/undo", "~/.config/nvim/syntax",
-  "~/.config/nvim/pack", "~/.config/nvim/logs"
+  --"~/.config/nvim/autoload",
+  --"~/.config/nvim/plugin",
+  "~/.config/nvim/backup",
+  "~/.config/nvim/view",
+  "~/.config/nvim/undo",
+  --"~/.config/nvim/syntax",
+  --"~/.config/nvim/pack",
+  "~/.config/nvim/logs"
 }
 
 for _, dir in ipairs(dirs) do
@@ -25,16 +29,16 @@ vim.opt.packpath:prepend("~/.config/nvim")
 vim.opt.shada = "'10000,:100,<1000,s10,n~/.config/nvim/shada"
 
 -- バックアップ設定。
-vim.opt.backupdir = "~/.config/nvim/backup"
+vim.opt.backupdir = vim.fn.expand("~/.config/nvim/backup")
 vim.opt.backup = true
 vim.opt.writebackup = true
 
 -- スワップファイル設定。
-vim.opt.directory = "~/.config/nvim/backup"
+vim.opt.directory = vim.fn.expand("~/.config/nvim/backup")
 vim.opt.swapfile = true
 
 -- mkview 設定。
-vim.opt.viewdir = "~/.config/nvim/view"
+vim.opt.viewdir = vim.fn.expand("~/.config/nvim/view")
 vim.opt.viewoptions = "cursor"
 
 -- mkview 自動保存読み込み。
@@ -59,7 +63,7 @@ vim.api.nvim_create_autocmd("BufRead", {
 })
 
 -- undo 設定。
-vim.opt.undodir = "~/.config/nvim/undo"
+vim.opt.undodir = vim.fn.expand("~/.config/nvim/undo")
 vim.opt.undofile = true
 
 -- 基本設定。
@@ -111,8 +115,6 @@ vim.opt.tagbsearch = true
 -- 補完設定。
 vim.opt.wildmode = "list:longest"
 vim.opt.completeopt = "menuone"
---vim.opt.iminsert = 2 -- @todo https://github.com/neovim/neovim/issues/10050
-vim.opt.imsearch = -1
 vim.opt.timeoutlen = 1000
 vim.opt.ttimeoutlen = 0
 

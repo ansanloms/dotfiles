@@ -31,18 +31,6 @@ vim.opt.breakindent = true
 -- 文字幅の設定。
 vim.opt.ambiwidth = "single"
 
--- Nerd Fonts 関連の設定。
--- Nerd Fonts Seti-UI + Custom (0xe5fa-0xe62b,0xe62e は元々対応されてる)
--- Nerd Fonts Devicons (0xe700-0xe7c5 は元々対応されてる)
--- Nerd Fonts Material Design Icons
--- Nerd Fonts Codicons
-vim.g.ambiwidth_add_list = {
-  { 0xe62c, 0xe62d, 2 }, { 0xe62f, 0xe6b7, 2 },
-  { 0xe7c6, 0xe8ef, 2 },
-  { 0xf0001, 0xf1af0, 2 },
-  { 0xea60, 0xec1e, 2 },
-}
-
 -- 上下の視界確保。
 vim.opt.scrolloff = 4
 
