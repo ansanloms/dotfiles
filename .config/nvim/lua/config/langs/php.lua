@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.tabstop = 4
     vim.opt_local.softtabstop = 4
     vim.opt_local.expandtab = true
-    
+
     -- ハイライト行指定
     vim.cmd("syntax sync minlines=300 maxlines=500")
   end,
@@ -41,7 +41,7 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.tabstop = 4
     vim.opt_local.softtabstop = 4
     vim.opt_local.expandtab = true
-    
+
     -- ハイライト行指定
     vim.cmd("syntax sync minlines=300 maxlines=500")
   end,

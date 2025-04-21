@@ -16,13 +16,13 @@ vim.api.nvim_create_autocmd("FileType", {
 if vim.fn.executable("w3m") == 1 then
   vim.g.quickrun_config = vim.g.quickrun_config or {}
   vim.g.quickrun_config["html"] = {
-    type = "html/w3m"
+    type = "html/w3m",
   }
 
   -- text 出力
   vim.g.quickrun_config["html/w3m"] = {
     command = "w3m",
     cmdopt = "-dump",
-    exec = "%c %o %s"
+    exec = "%c %o %s",
   }
 end

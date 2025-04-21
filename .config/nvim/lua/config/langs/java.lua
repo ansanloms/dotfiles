@@ -7,8 +7,8 @@ vim.g.quickrun_config["java"] = {
   ["hook/cd/directory"] = "%S:p:h",
   exec = {
     "javac -J-Dfile.encoding=UTF8 %o %s",
-    "%c -Dfile.encoding=UTF8 %s:t:r %a"
-  }
+    "%c -Dfile.encoding=UTF8 %s:t:r %a",
+  },
 }
 
 local augroup_java = vim.api.nvim_create_augroup("java-setting", { clear = true })

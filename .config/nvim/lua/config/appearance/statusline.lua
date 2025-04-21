@@ -88,7 +88,7 @@ local ViMode = {
       r = { fg = colors.red_bright, bg = colors.red_dim },
       ["!"] = { fg = colors.orange_bright, bg = colors.orange_dim },
       t = { fg = colors.white_bright, bg = colors.white_dim },
-    }
+    },
   },
 
   -- We can now access the value of mode() that, by now, would have been
@@ -99,7 +99,7 @@ local ViMode = {
   -- control the padding and make sure our string is always at least 2
   -- characters long. Plus a nice Icon.
   provider = function(self)
-    return " %2("..self.names[self.mode].."%) "
+    return " %2(" .. self.names[self.mode] .. "%) "
   end,
 
   -- Same goes for the highlight. Now the foreground will change according to the current mode.
@@ -129,11 +129,11 @@ local Git = {
 
   hl = { fg = "orange" },
 
-  {   -- git branch name
+  { -- git branch name
     provider = function(self)
       return "" .. self.status_dict.head
     end,
-    hl = { bold = true }
+    hl = { bold = true },
   },
 
   -- You could handle delimiters, icons and counts similar to Diagnostics
@@ -141,7 +141,7 @@ local Git = {
     condition = function(self)
       return self.has_changes
     end,
-    provider = "("
+    provider = "(",
   },
   {
     provider = function(self)
@@ -186,7 +186,7 @@ local FileIcon = {
 
   hl = function(self)
     return { fg = self.icon_color }
-  end
+  end,
 }
 
 local FileName = {
@@ -234,7 +234,7 @@ local FileFlags = {
 
 local LSPActive = {
   condition = conditions.lsp_attached,
-  update = {"LspAttach", "LspDetach"},
+  update = { "LspAttach", "LspDetach" },
 
   provider = function()
     local names = {}
@@ -255,9 +255,9 @@ local Ruler = {
   provider = "%7(%l/%3L%):%2c %P",
 }
 
-local ScrollBar ={
+local ScrollBar = {
   static = {
-    sbar = { "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" }
+    sbar = { "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" },
   },
 
   provider = function(self)
@@ -279,7 +279,7 @@ local Navic = {
     return require("nvim-navic").get_location({ highlight = true })
   end,
 
-  update = "CursorMoved"
+  update = "CursorMoved",
 }
 
 local TablineFlags = {
@@ -339,7 +339,7 @@ local TablineFileIcon = {
 
   hl = function(self)
     return { fg = self.icon_color }
-  end
+  end,
 }
 
 local Tabpage = {
@@ -356,7 +356,7 @@ local Tabpage = {
 
   hl = function(self)
     if self.is_active then
-      return { fg = utils.get_highlight("TabLineSel").fg  }
+      return { fg = utils.get_highlight("TabLineSel").fg }
     else
       return { fg = utils.get_highlight("TabLine").fg }
     end
@@ -371,7 +371,6 @@ local TablineBlock = utils.surround({ " ", " " }, function(self)
   end
 end, { TablineFileIcon, Tabpage, TablineFlags })
 
-
 local TabPages = {
   -- only show this component if there's 2 or more tabpages
   condition = function()
@@ -382,11 +381,11 @@ local TabPages = {
 
 require("heirline").setup({
   statusline = {
-    {ViMode, { provider = " " }, Git,{ provider = " " }, FileIcon, { provider = " " },FileName, FileFlags, },
- { provider = "%=" },
-    {LSPActive,{ provider = " " }, Ruler,{ provider = " " }, ScrollBar },
+    { ViMode, { provider = " " }, Git, { provider = " " }, FileIcon, { provider = " " }, FileName, FileFlags },
+    { provider = "%=" },
+    { LSPActive, { provider = " " }, Ruler, { provider = " " }, ScrollBar },
   },
   winbar = { Navic },
-  tabline = {TabPages},
-  opts = { colors = colors }
+  tabline = { TabPages },
+  opts = { colors = colors },
 })

@@ -13,7 +13,7 @@ M.tasks = {
       else
         vim.cmd("edit " .. vim.fn.expand("/etc/hosts"))
       end
-    end
+    end,
   },
   {
     name = " Open current file by FileManager",
@@ -23,7 +23,7 @@ M.tasks = {
       elseif vim.fn.has("mac") == 1 then
         vim.cmd("!open " .. vim.fn.expand("%:p"))
       end
-    end
+    end,
   },
   {
     name = " Open current file by BitBucket",
@@ -37,28 +37,46 @@ M.tasks = {
       else
         vim.api.nvim_err_writeln("bb execute not found.")
       end
-    end
+    end,
   },
   {
     name = " Open current file by VSCode",
     execute = function()
       if vim.fn.executable("code") == 1 then
-        vim.cmd("!code --goto " .. vim.fn.expand("%:p") .. ":" .. vim.fn.line(".") .. ":" .. vim.fn.col(".") .. " " .. vim.call("ansanloms#project#dir", vim.fn.expand("%:p"), vim.fn.expand("%:p")))
+        vim.cmd(
+          "!code --goto "
+            .. vim.fn.expand("%:p")
+            .. ":"
+            .. vim.fn.line(".")
+            .. ":"
+            .. vim.fn.col(".")
+            .. " "
+            .. vim.call("ansanloms#project#dir", vim.fn.expand("%:p"), vim.fn.expand("%:p"))
+        )
       else
         vim.api.nvim_err_writeln("VSCode not found.")
       end
-    end
+    end,
   },
   {
     name = " Open current file by PHPStorm",
     execute = function()
       if vim.fn.executable("phpstorm") == 1 then
-        vim.cmd("!start phpstorm " .. vim.call("ansanloms#project#dir", vim.fn.expand("%:p"), vim.fn.expand("%:p")) .. " --line " .. vim.fn.line(".") .. " --column " .. vim.fn.col(".") .. " " .. vim.fn.expand("%:p"))
+        vim.cmd(
+          "!start phpstorm "
+            .. vim.call("ansanloms#project#dir", vim.fn.expand("%:p"), vim.fn.expand("%:p"))
+            .. " --line "
+            .. vim.fn.line(".")
+            .. " --column "
+            .. vim.fn.col(".")
+            .. " "
+            .. vim.fn.expand("%:p")
+        )
       else
         vim.api.nvim_err_writeln("PHPStorm not found.")
       end
-    end
-  }
+    end,
+  },
 }
 
 return M

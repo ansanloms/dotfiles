@@ -11,7 +11,7 @@ local dirs = {
   "~/.config/nvim/undo",
   --"~/.config/nvim/syntax",
   --"~/.config/nvim/pack",
-  "~/.config/nvim/logs"
+  "~/.config/nvim/logs",
 }
 
 for _, dir in ipairs(dirs) do
@@ -50,7 +50,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     if vim.fn.expand("%") ~= "" and vim.bo.buftype:match("nofile") == nil then
       vim.cmd("mkview")
     end
-  end
+  end,
 })
 vim.api.nvim_create_autocmd("BufRead", {
   group = augroupMkview,
@@ -59,7 +59,7 @@ vim.api.nvim_create_autocmd("BufRead", {
     if vim.fn.expand("%") ~= "" and vim.bo.buftype:match("nofile") == nil then
       pcall(vim.cmd, "silent loadview")
     end
-  end
+  end,
 })
 
 -- undo 設定。
@@ -127,7 +127,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     local cursor_pos = vim.fn.getpos(".")
     vim.cmd([[keeppatterns %s/\s\+$//ge]])
     vim.fn.setpos(".", cursor_pos)
-  end
+  end,
 })
 
 -- ディレクトリ自動作成。
@@ -144,7 +144,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     if vim.fn.isdirectory(dir) == 0 then
       vim.fn.mkdir(vim.fn.iconv(dir, vim.o.encoding, vim.o.termencoding), "p")
     end
-  end
+  end,
 })
 
 -- 不要なプラグイン等を読み込ませない。

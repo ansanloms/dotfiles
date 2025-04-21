@@ -36,37 +36,40 @@ vim.api.nvim_create_autocmd("FileType", {
 -- quickrun - markdown
 if vim.fn.executable("pandoc") == 1 then
   -- CSSの取得は初回のみのためここでは実装しない
-  
+
   vim.g.quickrun_config = vim.g.quickrun_config or {}
   vim.g.quickrun_config["markdown"] = {
-    type = "markdown/pandoc"
+    type = "markdown/pandoc",
   }
 
   -- html 出力
   vim.g.quickrun_config["markdown/pandoc"] = {
     ["hook/cd/directory"] = "%S:p:h",
     outputter = "browser",
-    exec = "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --css=" .. vim.fn.expand("~/.config/vim/markdown.css") .. " --metadata title=%s"
+    exec = "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --css=" .. vim.fn.expand(
+      "~/.config/vim/markdown.css"
+    ) .. " --metadata title=%s",
   }
 
   -- slidy 出力
   vim.g.quickrun_config["markdown/pandoc-slidy"] = {
     ["hook/cd/directory"] = "%S:p:h",
     outputter = "browser",
-    exec = "pandoc %s --standalone --self-contained --from markdown --to=slidy --toc-depth=6 --metadata title=%s"
+    exec = "pandoc %s --standalone --self-contained --from markdown --to=slidy --toc-depth=6 --metadata title=%s",
   }
 
   -- Word docx 出力
   vim.g.quickrun_config["markdown/pandoc-docx"] = {
     ["hook/cd/directory"] = "%S:p:h",
     outputter = "null",
-    exec = "pandoc %s --standalone --self-contained --from markdown --to=docx --toc-depth=6 --highlight-style=zenburn --output=%s.docx"
+    exec = "pandoc %s --standalone --self-contained --from markdown --to=docx --toc-depth=6 --highlight-style=zenburn --output=%s.docx",
   }
 
   -- 単一 markdown 出力
   vim.g.quickrun_config["markdown/pandoc-self-contained"] = {
     ["hook/cd/directory"] = "%S:p:h",
     ["outputter/buffer/filetype"] = "markdown",
-    exec = "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --no-highlight --metadata title=%s | pandoc --from html --to markdown --wrap none --markdown-headings=atx" .. ' | sed -r -e "s/```\\s*\\{\\.(.*)\\}/```\\1/g"'
+    exec = "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --no-highlight --metadata title=%s | pandoc --from html --to markdown --wrap none --markdown-headings=atx"
+      .. ' | sed -r -e "s/```\\s*\\{\\.(.*)\\}/```\\1/g"',
   }
 end

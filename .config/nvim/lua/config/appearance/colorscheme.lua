@@ -21,18 +21,17 @@ end
 --  vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "NONE", ctermbg = "NONE" })
 --end
 
-
 if vim.fn.has("gui_running") == 1 then
   require("nightfox").setup({
     options = {
       terminal_colors = false,
-    }
+    },
   })
 else
   require("nightfox").setup({
     options = {
       transparent = true,
-    }
+    },
   })
 end
 
@@ -51,9 +50,21 @@ if vim.fn.has("terminal") == 1 and vim.fn.exists("*term_setansicolors") == 1 the
 
   -- terafox'
   vim.g.terminal_ansi_colors = {
-    "#2f3239", "#e85c51", "#7aa4a1", "#fda47f",
-    "#5a93aa", "#ad5c7c", "#a1cdd8", "#ebebeb",
-    "#4e5157", "#eb746b", "#8eb2af", "#fdb292",
-    "#73a3b7", "#b97490", "#afd4de", "#eeeeee"
+    "#2f3239",
+    "#e85c51",
+    "#7aa4a1",
+    "#fda47f",
+    "#5a93aa",
+    "#ad5c7c",
+    "#a1cdd8",
+    "#ebebeb",
+    "#4e5157",
+    "#eb746b",
+    "#8eb2af",
+    "#fdb292",
+    "#73a3b7",
+    "#b97490",
+    "#afd4de",
+    "#eeeeee",
   }
 end

@@ -23,7 +23,7 @@ jetpackPacker.add({
     requires = "denops.vim",
     config = function()
       vim.g.hitori_opener = "edit"
-    end
+    end,
   },
 
   -- telescope:
@@ -59,13 +59,13 @@ jetpackPacker.add({
       vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
       vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "Telescope oldfiles" })
       vim.keymap.set("n", "<leader>fl", launcher(require("config.launcher")), { desc = "Telescope launcher" })
-    end
+    end,
   },
 
   -- quickrun:
   {
     "https://github.com/thinca/vim-quickrun.git",
-    as = "vim-quickrun"
+    as = "vim-quickrun",
   },
 
   -- snippet:
@@ -80,7 +80,7 @@ jetpackPacker.add({
       vim.g.vsnip_filetypes.vue = { "javascript", "typescript" }
       vim.g.vsnip_filetypes.javascriptreact = { "javascript" }
       vim.g.vsnip_filetypes.typescriptreact = { "javascript", "typescript" }
-    end
+    end,
   },
   {
     "https://github.com/hrsh7th/vim-vsnip-integ.git",
@@ -119,26 +119,26 @@ jetpackPacker.add({
           ["<C-n>"] = cmp.mapping.select_next_item(),
           ["<C-l>"] = cmp.mapping.complete(),
           ["<C-e>"] = cmp.mapping.abort(),
-          ["<CR>"] = cmp.mapping.confirm { select = true },
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
         }),
         experimental = {
           ghost_text = true,
         },
       })
-    end
+    end,
   },
 
   -- lsp:
   {
     "https://github.com/neovim/nvim-lspconfig.git",
-    as = "nvim-lspconfig"
+    as = "nvim-lspconfig",
   },
   {
     "https://github.com/williamboman/mason.nvim.git",
     as = "mason.nvim",
     config = function()
       require("mason").setup()
-    end
+    end,
   },
   {
     "https://github.com/williamboman/mason-lspconfig.nvim.git",
@@ -148,9 +148,7 @@ jetpackPacker.add({
       require("mason-lspconfig").setup_handlers({
         function(server)
           local opt = {
-            capabilities = require("cmp_nvim_lsp").default_capabilities(
-              vim.lsp.protocol.make_client_capabilities()
-            )
+            capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
           }
           require("lspconfig")[server].setup(opt)
         end,
@@ -195,7 +193,7 @@ jetpackPacker.add({
           })
         end,
       })
-    end
+    end,
   },
 
   -- ai-chat:
@@ -217,36 +215,35 @@ jetpackPacker.add({
           vim.keymap.set("n", "<C-Space>", function()
             vim.fn["denops#request"]("ramble", "chat", { vim.api.nvim_get_current_buf() })
           end, { buffer = true })
-        end
+        end,
       })
-    end
+    end,
   },
 
   -- appearance:
   {
     "https://github.com/whatyouhide/vim-gotham.git",
-    as = "vim-gotham"
+    as = "vim-gotham",
   },
   {
     "https://github.com/EdenEast/nightfox.nvim.git",
-    as = "nightfox.nvim"
+    as = "nightfox.nvim",
   },
   {
     "https://github.com/rebelot/heirline.nvim.git",
     as = "heirline.nvim",
     requires = { "nightfox.nvim" },
-    config = function()
-    end
+    config = function() end,
   },
   {
     "https://github.com/nvim-treesitter/nvim-treesitter.git",
     as = "nvim-treesitter",
     run = ":TSUpdate",
     config = function()
-      require("nvim-treesitter.configs").setup {
-        highlight = { enable = true }
-      }
-    end
+      require("nvim-treesitter.configs").setup({
+        highlight = { enable = true },
+      })
+    end,
   },
   {
     "https://github.com/nvim-treesitter/nvim-treesitter-context.git",
@@ -263,36 +260,37 @@ jetpackPacker.add({
       -- Nerd Fonts Material Design Icons
       -- Nerd Fonts Codicons
       vim.g.ambiwidth_add_list = {
-        { 0xe62c, 0xe62d, 2 }, { 0xe62f, 0xe6b7, 2 },
+        { 0xe62c, 0xe62d, 2 },
+        { 0xe62f, 0xe6b7, 2 },
         { 0xe7c6, 0xe8ef, 2 },
         { 0xf0001, 0xf1af0, 2 },
         { 0xea60, 0xec1e, 2 },
       }
-    end
+    end,
   },
   {
     "https://github.com/OXY2DEV/markview.nvim.git",
-    as = "markview.nvim"
+    as = "markview.nvim",
   },
   {
     "https://github.com/lewis6991/gitsigns.nvim.git",
     as = "gitsigns.nvim",
-    config = function ()
+    config = function()
       require("gitsigns").setup()
-    end
+    end,
   },
   {
     "https://github.com/nvim-tree/nvim-web-devicons.git",
     as = "nvim-web-devicons",
-    config = function ()
+    config = function()
       require("nvim-web-devicons").setup()
-    end
+    end,
   },
   {
     "https://github.com/SmiteshP/nvim-navic.git",
     as = "nvim-navic",
     requires = { "nvim-lspconfig" },
-    config = function ()
+    config = function()
       require("nvim-navic").setup({
         lsp = {
           auto_attach = true,
@@ -300,8 +298,8 @@ jetpackPacker.add({
         highlight = true,
         depth_limit = 12,
       })
-    end
-  }
+    end,
+  },
 })
 
 for _, name in ipairs(jetpack.names()) do

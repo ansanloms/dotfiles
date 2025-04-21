@@ -6,124 +6,100 @@ M.tasks = {
   {
     name = "🤖 OpenAI - GPT-4o mini",
     execute = function()
-      vim.fn["denops#request"](
-        "ramble",
-        "new",
+      vim.fn["denops#request"]("ramble", "new", {
+        "OpenAI",
         {
-          "OpenAI",
+          model = "gpt-4o-mini",
+        },
+        {
           {
-            model = "gpt-4o-mini",
+            role = "system",
+            type = "text",
+            message = "",
           },
           {
-            {
-              role = "system",
-              type = "text",
-              message = ""
-            },
-            {
-              role = "user",
-              type = "text",
-              message = ""
-            }
-          }
-        }
-      )
+            role = "user",
+            type = "text",
+            message = "",
+          },
+        },
+      })
     end,
   },
   {
     name = "🤖 OpenAI - o1-mini",
     execute = function()
-      vim.fn["denops#request"](
-        "ramble",
-        "new",
+      vim.fn["denops#request"]("ramble", "new", {
+        "OpenAI",
         {
-          "OpenAI",
+          model = "o1-mini-2024-09-12",
+        },
+        {
           {
-            model = "o1-mini-2024-09-12",
+            role = "user",
+            type = "text",
+            message = "",
           },
-          {
-            {
-              role = "user",
-              type = "text",
-              message = ""
-            }
-          }
-        }
-      )
+        },
+      })
     end,
   },
   {
     name = "🤖 Google - Gemini Pro",
     execute = function()
-      vim.fn["denops#request"](
-        "ramble",
-        "new",
+      vim.fn["denops#request"]("ramble", "new", {
+        "GoogleGenerativeAI",
         {
-          "GoogleGenerativeAI",
+          model = "gemini-pro",
+        },
+        {
           {
-            model = "gemini-pro",
+            role = "system",
+            type = "text",
+            message = "",
           },
           {
-            {
-              role = "system",
-              type = "text",
-              message = ""
-            },
-            {
-              role = "user",
-              type = "text",
-              message = ""
-            }
-          }
-        }
-      )
+            role = "user",
+            type = "text",
+            message = "",
+          },
+        },
+      })
     end,
   },
   {
     name = "🤖 Anthropic - Claude 3.7 Sonnet",
     execute = function()
-      vim.fn["denops#request"](
-        "ramble",
-        "new",
+      vim.fn["denops#request"]("ramble", "new", {
+        "Anthropic",
         {
-          "Anthropic",
+          model = "claude-3-7-sonnet-20250219",
+        },
+        {
           {
-            model = "claude-3-7-sonnet-20250219",
+            role = "system",
+            type = "text",
+            message = "あなたはプロフェッショナルのフルスタックエンジニアです。それを念頭にアドバイスしてください。一度の説明は最大 300 文字程度にしてください。",
           },
           {
-            {
-              role = "system",
-              type = "text",
-              message = "あなたはプロフェッショナルのフルスタックエンジニアです。それを念頭にアドバイスしてください。一度の説明は最大 300 文字程度にしてください。"
-            },
-            {
-              role = "user",
-              type = "text",
-              message = ""
-            }
-          }
-        }
-      )
+            role = "user",
+            type = "text",
+            message = "",
+          },
+        },
+      })
     end,
   },
   {
     name = "Config",
     execute = function()
-      vim.fn["denops#request"](
-        "ramble",
-        "config",
-        {}
-      )
+      vim.fn["denops#request"]("ramble", "config", {})
     end,
   },
   {
     name = "Chat",
     execute = function()
-      vim.fn["denops#request"](
-        "ramble",
-        "chat",
-        { vim.api.nvim_get_current_buf()  }
-      )
+      vim.fn["denops#request"]("ramble", "chat", { vim.api.nvim_get_current_buf() })
     end,
   },
 }

@@ -16,13 +16,13 @@ vim.api.nvim_create_autocmd("FileType", {
 if vim.fn.executable("tsc") == 1 then
   vim.g.quickrun_config = vim.g.quickrun_config or {}
   vim.g.quickrun_config["typescript"] = {
-    type = "typescript/tsc"
+    type = "typescript/tsc",
   }
 
   vim.g.quickrun_config["typescript/tsc"] = {
     command = "tsc",
-    exec = {"%c --target esnext --module commonjs %o %s", "node %s:r.js"},
+    exec = { "%c --target esnext --module commonjs %o %s", "node %s:r.js" },
     tempfile = "%{tempname()}.ts",
-    ["hook/sweep/files"] = {"%S:p:r.js"}
+    ["hook/sweep/files"] = { "%S:p:r.js" },
   }
 end
