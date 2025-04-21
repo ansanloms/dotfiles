@@ -155,46 +155,46 @@ jetpackPacker.add({
           require("lspconfig")[server].setup(opt)
         end,
 
-		-- https://github.com/williamboman/mason-lspconfig.nvim/issues/371#issuecomment-2249935162
-      	["volar"] = function()
-      	  require("lspconfig").volar.setup({
-      	    filetypes = { "vue", "javascript", "typescript", "javascriptreact", "typescriptreact", "json" },
-      	    root_dir = require("lspconfig").util.root_pattern(
-      	      "vue.config.js",
-      	      "vue.config.ts",
-      	      "nuxt.config.js",
-      	      "nuxt.config.ts"
-      	    ),
-      	    init_options = {
-      	      vue = {
-      	        hybridMode = false,
-      	      },
-      	    },
-      	    settings = {
-      	      typescript = {
-      	        inlayHints = {
-      	          enumMemberValues = {
-      	            enabled = true,
-      	          },
-      	          functionLikeReturnTypes = {
-      	            enabled = true,
-      	          },
-      	          propertyDeclarationTypes = {
-      	            enabled = true,
-      	          },
-      	          parameterTypes = {
-      	            enabled = true,
-      	            suppressWhenArgumentMatchesName = true,
-      	          },
-      	          variableTypes = {
-      	            enabled = true,
-      	          },
-      	        },
-      	      },
-      	    },
-      	  })
-      	end,
-	  })
+        -- https://github.com/williamboman/mason-lspconfig.nvim/issues/371#issuecomment-2249935162
+        ["volar"] = function()
+          require("lspconfig").volar.setup({
+            filetypes = { "vue", "javascript", "typescript", "javascriptreact", "typescriptreact", "json" },
+            root_dir = require("lspconfig").util.root_pattern(
+              "vue.config.js",
+              "vue.config.ts",
+              "nuxt.config.js",
+              "nuxt.config.ts"
+            ),
+            init_options = {
+              vue = {
+                hybridMode = false,
+              },
+            },
+            settings = {
+              typescript = {
+                inlayHints = {
+                  enumMemberValues = {
+                    enabled = true,
+                  },
+                  functionLikeReturnTypes = {
+                    enabled = true,
+                  },
+                  propertyDeclarationTypes = {
+                    enabled = true,
+                  },
+                  parameterTypes = {
+                    enabled = true,
+                    suppressWhenArgumentMatchesName = true,
+                  },
+                  variableTypes = {
+                    enabled = true,
+                  },
+                },
+              },
+            },
+          })
+        end,
+      })
     end
   },
 
@@ -202,7 +202,7 @@ jetpackPacker.add({
   {
     "https://github.com/ansanloms/vim-ramble.git",
     as = "vim-ramble",
-    requires = {"denops.vim"},
+    requires = { "denops.vim" },
     config = function()
       local augroupRambleChat = vim.api.nvim_create_augroup("ramble-chat", { clear = true })
 
@@ -274,6 +274,34 @@ jetpackPacker.add({
     "https://github.com/OXY2DEV/markview.nvim.git",
     as = "markview.nvim"
   },
+  {
+    "https://github.com/lewis6991/gitsigns.nvim.git",
+    as = "gitsigns.nvim",
+    config = function ()
+      require("gitsigns").setup()
+    end
+  },
+  {
+    "https://github.com/nvim-tree/nvim-web-devicons.git",
+    as = "nvim-web-devicons",
+    config = function ()
+      require("nvim-web-devicons").setup()
+    end
+  },
+  {
+    "https://github.com/SmiteshP/nvim-navic.git",
+    as = "nvim-navic",
+    requires = { "nvim-lspconfig" },
+    config = function ()
+      require("nvim-navic").setup({
+        lsp = {
+          auto_attach = true,
+        },
+        highlight = true,
+        depth_limit = 12,
+      })
+    end
+  }
 })
 
 for _, name in ipairs(jetpack.names()) do
