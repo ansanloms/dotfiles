@@ -11,10 +11,10 @@ local jetpackPacker = require("jetpack.packer")
 
 jetpackPacker.add({
   -- plugin manager:
-  { "https://github.com/tani/vim-jetpack.git", as = "vim-jetpack", opt = true },
+  { "https://github.com/tani/vim-jetpack.git",      as = "vim-jetpack", opt = true },
 
   -- general:
-  { "https://github.com/vim-jp/vimdoc-ja.git", as = "vimdoc-ja" },
+  { "https://github.com/vim-jp/vimdoc-ja.git",      as = "vimdoc-ja" },
   { "https://github.com/vim-denops/denops.vim.git", as = "denops.vim" },
   --{ "https://github.com/ansanloms/vim-ime-set.git", as = "vim-ime-set", requires = "denops.vim" },
   {
@@ -153,6 +153,16 @@ jetpackPacker.add({
           require("lspconfig")[server].setup(opt)
         end,
 
+        ["denols"] = function()
+          require("lspconfig").denols.setup({
+            filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact", "json" },
+            root_dir = require("lspconfig").util.root_pattern(
+              "deno.json",
+              "deno.jsonc"
+            ),
+          })
+        end,
+
         -- https://github.com/williamboman/mason-lspconfig.nvim/issues/371#issuecomment-2249935162
         ["volar"] = function()
           require("lspconfig").volar.setup({
@@ -254,17 +264,22 @@ jetpackPacker.add({
     "https://github.com/rbtnn/vim-ambiwidth.git",
     as = "vim-ambiwidth",
     setup = function()
+      vim.g.ambiwidth_cica_enabled = false
+
       -- Nerd Fonts 関連の設定。
-      -- Nerd Fonts Seti-UI + Custom (0xe5fa-0xe62b,0xe62e は元々対応されてる)
-      -- Nerd Fonts Devicons (0xe700-0xe7c5 は元々対応されてる)
-      -- Nerd Fonts Material Design Icons
-      -- Nerd Fonts Codicons
       vim.g.ambiwidth_add_list = {
-        { 0xe62c, 0xe62d, 2 },
-        { 0xe62f, 0xe6b7, 2 },
-        { 0xe7c6, 0xe8ef, 2 },
+        -- Seti-UI + Custom (0xe62e は元々対応されてる)
+        { 0xe5fa,  0xe62d,  2 }, { 0xe62f, 0xe6b7, 2 },
+        -- Devicons
+        { 0xe700,  0xe8ef,  2 },
+        -- Material Design Icons
         { 0xf0001, 0xf1af0, 2 },
-        { 0xea60, 0xec1e, 2 },
+        -- Codicons
+        { 0xea60,  0xec1e,  2 },
+        -- Octicons
+        { 0xf400,  0xf533,  2 },
+        -- Font Awesome
+        { 0xed00,  0xedff,  2 }, { 0xee0c, 0xefce, 2 }, { 0xf000, 0xf2ff, 2 },
       }
     end,
   },
@@ -297,6 +312,21 @@ jetpackPacker.add({
         },
         highlight = true,
         depth_limit = 12,
+      })
+    end,
+  },
+  {
+    "https://github.com/shellRaining/hlchunk.nvim.git",
+    as = "hlchunk.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      require("hlchunk").setup({
+        chunk = {
+          enable = true
+        },
+        indent = {
+          enable = true
+        }
       })
     end,
   },

@@ -201,6 +201,9 @@ local FileName = {
     if filename == "" then
       return "[No Name]"
     end
+    if filename == "`=a:bufname`" then -- たぶんなんかどっか設定ミスってる。
+      return "[No Name]"
+    end
 
     -- now, if the filename would occupy more than 1/4th of the available
     -- space, we trim the file path to its initials
@@ -285,19 +288,18 @@ local Navic = {
 local TablineFlags = {
   {
     condition = function(self)
-      local wins = vim.api.nvim_tabpage_list_wins(self.tabpage)
       local active_win_id = vim.api.nvim_tabpage_get_win(self.tabpage)
       local buf_id = vim.api.nvim_win_get_buf(active_win_id)
+
       return vim.api.nvim_get_option_value("modified", { buf = buf_id })
     end,
     provider = "[+]",
-    hl = function(self)
+    hl = function()
       return { fg = "green" }
     end,
   },
   {
     condition = function(self)
-      local wins = vim.api.nvim_tabpage_list_wins(self.tabpage)
       local active_win_id = vim.api.nvim_tabpage_get_win(self.tabpage)
       local buf_id = vim.api.nvim_win_get_buf(active_win_id)
 
@@ -306,7 +308,6 @@ local TablineFlags = {
     end,
 
     provider = function(self)
-      local wins = vim.api.nvim_tabpage_list_wins(self.tabpage)
       local active_win_id = vim.api.nvim_tabpage_get_win(self.tabpage)
       local buf_id = vim.api.nvim_win_get_buf(active_win_id)
 
@@ -317,7 +318,7 @@ local TablineFlags = {
       end
     end,
 
-    hl = function(self)
+    hl = function()
       return { fg = "orange" }
     end,
   },
@@ -349,7 +350,12 @@ local Tabpage = {
     local filepath = vim.api.nvim_buf_get_name(buf_id)
     local filename = vim.fn.fnamemodify(filepath, ":t")
 
-    filename = filename == "" and "No Name" or filename
+    if filename == "" then
+      return "[No Name]"
+    end
+    if filename == "`=a:bufname`" then -- たぶんなんかどっか設定ミスってる。
+      return "[No Name]"
+    end
 
     return filename
   end,
@@ -363,13 +369,13 @@ local Tabpage = {
   end,
 }
 
-local TablineBlock = utils.surround({ " ", " " }, function(self)
+local TablineBlock = utils.surround({ "", "" }, function(self)
   if self.is_active then
     return utils.get_highlight("TabLineSel").bg
   else
     return utils.get_highlight("TabLine").bg
   end
-end, { TablineFileIcon, Tabpage, TablineFlags })
+end, { { provider = " " }, TablineFileIcon, Tabpage, TablineFlags, { provider = " " }, })
 
 local TabPages = {
   -- only show this component if there's 2 or more tabpages

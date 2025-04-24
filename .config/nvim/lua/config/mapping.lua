@@ -28,9 +28,8 @@ vim.keymap.set("n", "G", "Gzz")
 vim.keymap.set("n", "ZZ", "<Nop>")
 vim.keymap.set("n", "ZQ", "<Nop>")
 
--- 検索のハイライト削除とポップアップを消す。
---vim.api.nvim_create_user_command("Clear", "nohlsearch | lua vim.api.nvim_win_close_all_popups()", {})
---vim.keymap.set("n", "<Esc><Esc>", ":<C-u>Clear<CR>", { silent = true })
+-- 検索のハイライト削除を消す。
+vim.keymap.set("n", "<Esc><Esc>", ":<C-u>nohlsearch<CR>", { silent = true })
 
 -- very magic
 vim.keymap.set("n", "/", "/\\v")
