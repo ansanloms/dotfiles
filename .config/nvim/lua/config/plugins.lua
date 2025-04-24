@@ -11,12 +11,21 @@ local jetpackPacker = require("jetpack.packer")
 
 jetpackPacker.add({
   -- plugin manager:
-  { "https://github.com/tani/vim-jetpack.git",      as = "vim-jetpack", opt = true },
+  {
+    "https://github.com/tani/vim-jetpack.git",
+    as = "vim-jetpack",
+    opt = true
+  },
 
   -- general:
-  { "https://github.com/vim-jp/vimdoc-ja.git",      as = "vimdoc-ja" },
-  { "https://github.com/vim-denops/denops.vim.git", as = "denops.vim" },
-  --{ "https://github.com/ansanloms/vim-ime-set.git", as = "vim-ime-set", requires = "denops.vim" },
+  {
+    "https://github.com/vim-jp/vimdoc-ja.git",
+    as = "vimdoc-ja"
+  },
+  {
+    "https://github.com/vim-denops/denops.vim.git",
+    as = "denops.vim"
+  },
   {
     "https://github.com/yukimemi/hitori.vim.git",
     as = "hitori.vim",
@@ -90,15 +99,6 @@ jetpackPacker.add({
 
   -- cmp:
   {
-    "https://github.com/hrsh7th/cmp-vsnip.git",
-    as = "cmp-vsnip",
-    requires = { "vim-vsnip" },
-  },
-  {
-    "https://github.com/hrsh7th/cmp-nvim-lsp.git",
-    as = "cmp-nvim-lsp",
-  },
-  {
     "https://github.com/hrsh7th/nvim-cmp.git",
     as = "nvim-cmp",
     requires = { "cmp-vsnip", "cmp-nvim-lsp" },
@@ -127,6 +127,20 @@ jetpackPacker.add({
       })
     end,
   },
+  {
+    "https://github.com/hrsh7th/cmp-vsnip.git",
+    as = "cmp-vsnip",
+    requires = { "vim-vsnip" },
+  },
+  {
+    "https://github.com/hrsh7th/cmp-nvim-lsp.git",
+    as = "cmp-nvim-lsp",
+    config = function()
+      vim.lsp.config("*", {
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+      })
+    end,
+  },
 
   -- lsp:
   {
@@ -145,64 +159,7 @@ jetpackPacker.add({
     as = "mason-lspconfig.nvim",
     requires = { "nvim-lspconfig", "mason.nvim", "cmp-nvim-lsp" },
     config = function()
-      require("mason-lspconfig").setup_handlers({
-        function(server)
-          local opt = {
-            capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
-          }
-          require("lspconfig")[server].setup(opt)
-        end,
-
-        ["denols"] = function()
-          require("lspconfig").denols.setup({
-            filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact", "json" },
-            root_dir = require("lspconfig").util.root_pattern(
-              "deno.json",
-              "deno.jsonc"
-            ),
-          })
-        end,
-
-        -- https://github.com/williamboman/mason-lspconfig.nvim/issues/371#issuecomment-2249935162
-        ["volar"] = function()
-          require("lspconfig").volar.setup({
-            filetypes = { "vue", "javascript", "typescript", "javascriptreact", "typescriptreact", "json" },
-            root_dir = require("lspconfig").util.root_pattern(
-              "vue.config.js",
-              "vue.config.ts",
-              "nuxt.config.js",
-              "nuxt.config.ts"
-            ),
-            init_options = {
-              vue = {
-                hybridMode = false,
-              },
-            },
-            settings = {
-              typescript = {
-                inlayHints = {
-                  enumMemberValues = {
-                    enabled = true,
-                  },
-                  functionLikeReturnTypes = {
-                    enabled = true,
-                  },
-                  propertyDeclarationTypes = {
-                    enabled = true,
-                  },
-                  parameterTypes = {
-                    enabled = true,
-                    suppressWhenArgumentMatchesName = true,
-                  },
-                  variableTypes = {
-                    enabled = true,
-                  },
-                },
-              },
-            },
-          })
-        end,
-      })
+      vim.lsp.enable(require("mason-lspconfig").get_installed_servers())
     end,
   },
 
@@ -240,10 +197,11 @@ jetpackPacker.add({
     as = "nightfox.nvim",
   },
   {
-    "https://github.com/rebelot/heirline.nvim.git",
-    as = "heirline.nvim",
-    requires = { "nightfox.nvim" },
-    config = function() end,
+    "https://github.com/nvim-tree/nvim-web-devicons.git",
+    as = "nvim-web-devicons",
+    config = function()
+      require("nvim-web-devicons").setup()
+    end,
   },
   {
     "https://github.com/nvim-treesitter/nvim-treesitter.git",
@@ -284,21 +242,34 @@ jetpackPacker.add({
     end,
   },
   {
+    "https://github.com/rebelot/heirline.nvim.git",
+    as = "heirline.nvim",
+    requires = { "nightfox.nvim", "nvim-web-devicons" },
+    config = function() end,
+  },
+  {
     "https://github.com/OXY2DEV/markview.nvim.git",
     as = "markview.nvim",
+    requires = { "nvim-treesitter", "nvim-web-devicons" },
+    config = function()
+      require("markview").setup({
+        preview = {
+          enable = true,
+          filetypes = {
+            "markdown",
+            "md",
+            "ramble-chat",
+          },
+          ignore_buftypes = {},
+        }
+      })
+    end,
   },
   {
     "https://github.com/lewis6991/gitsigns.nvim.git",
     as = "gitsigns.nvim",
     config = function()
       require("gitsigns").setup()
-    end,
-  },
-  {
-    "https://github.com/nvim-tree/nvim-web-devicons.git",
-    as = "nvim-web-devicons",
-    config = function()
-      require("nvim-web-devicons").setup()
     end,
   },
   {
@@ -325,7 +296,7 @@ jetpackPacker.add({
           enable = true
         },
         indent = {
-          enable = true
+          enable = true,
         }
       })
     end,

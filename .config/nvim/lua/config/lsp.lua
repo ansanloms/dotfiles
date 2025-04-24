@@ -27,3 +27,61 @@ vim.diagnostic.config({
     },
   },
 })
+
+vim.lsp.config("denols", {
+  filetypes = {
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact",
+    "json"
+  },
+  root_dir = require("lspconfig").util.root_pattern(
+    "deno.json",
+    "deno.jsonc"
+  ),
+})
+
+vim.lsp.config("volar", {
+  filetypes = {
+    "vue",
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact",
+    "json"
+  },
+  root_dir = require("lspconfig").util.root_pattern(
+    "vue.config.js",
+    "vue.config.ts",
+    "nuxt.config.js",
+    "nuxt.config.ts"
+  ),
+  init_options = {
+    vue = {
+      hybridMode = false,
+    },
+  },
+  settings = {
+    typescript = {
+      inlayHints = {
+        enumMemberValues = {
+          enabled = true,
+        },
+        functionLikeReturnTypes = {
+          enabled = true,
+        },
+        propertyDeclarationTypes = {
+          enabled = true,
+        },
+        parameterTypes = {
+          enabled = true,
+          suppressWhenArgumentMatchesName = true,
+        },
+        variableTypes = {
+          enabled = true,
+        },
+      },
+    },
+  },
+})
