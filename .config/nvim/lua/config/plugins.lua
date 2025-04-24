@@ -99,6 +99,20 @@ jetpackPacker.add({
 
   -- cmp:
   {
+    "https://github.com/hrsh7th/cmp-vsnip.git",
+    as = "cmp-vsnip",
+    requires = { "vim-vsnip" },
+  },
+  {
+    "https://github.com/hrsh7th/cmp-nvim-lsp.git",
+    as = "cmp-nvim-lsp",
+    config = function()
+      vim.lsp.config("*", {
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+      })
+    end,
+  },
+  {
     "https://github.com/hrsh7th/nvim-cmp.git",
     as = "nvim-cmp",
     requires = { "cmp-vsnip", "cmp-nvim-lsp" },
@@ -124,20 +138,6 @@ jetpackPacker.add({
         experimental = {
           ghost_text = true,
         },
-      })
-    end,
-  },
-  {
-    "https://github.com/hrsh7th/cmp-vsnip.git",
-    as = "cmp-vsnip",
-    requires = { "vim-vsnip" },
-  },
-  {
-    "https://github.com/hrsh7th/cmp-nvim-lsp.git",
-    as = "cmp-nvim-lsp",
-    config = function()
-      vim.lsp.config("*", {
-        capabilities = require("cmp_nvim_lsp").default_capabilities(),
       })
     end,
   },
