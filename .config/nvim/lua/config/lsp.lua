@@ -36,10 +36,18 @@ vim.lsp.config("denols", {
     "typescriptreact",
     "json"
   },
-  root_dir = require("lspconfig").util.root_pattern(
-    "deno.json",
-    "deno.jsonc"
-  ),
+  root_dir = function(bufnr, callback)
+    local found_dirs = vim.fs.find({
+      "deno.json",
+      "deno.jsonc",
+    }, {
+      upward = true,
+      path = vim.fs.dirname(vim.fs.normalize(vim.api.nvim_buf_get_name(bufnr))),
+    })
+    if #found_dirs > 0 then
+      return callback(vim.fs.dirname(found_dirs[1]))
+    end
+  end,
 })
 
 vim.lsp.config("volar", {
@@ -51,12 +59,20 @@ vim.lsp.config("volar", {
     "typescriptreact",
     "json"
   },
-  root_dir = require("lspconfig").util.root_pattern(
-    "vue.config.js",
-    "vue.config.ts",
-    "nuxt.config.js",
-    "nuxt.config.ts"
-  ),
+  root_dir = function(bufnr, callback)
+    local found_dirs = vim.fs.find({
+      "vue.config.js",
+      "vue.config.ts",
+      "nuxt.config.js",
+      "nuxt.config.ts",
+    }, {
+      upward = true,
+      path = vim.fs.dirname(vim.fs.normalize(vim.api.nvim_buf_get_name(bufnr))),
+    })
+    if #found_dirs > 0 then
+      return callback(vim.fs.dirname(found_dirs[1]))
+    end
+  end,
   init_options = {
     vue = {
       hybridMode = false,
