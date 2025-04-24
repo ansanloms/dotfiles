@@ -106,11 +106,6 @@ jetpackPacker.add({
   {
     "https://github.com/hrsh7th/cmp-nvim-lsp.git",
     as = "cmp-nvim-lsp",
-    config = function()
-      vim.lsp.config("*", {
-        capabilities = require("cmp_nvim_lsp").default_capabilities(),
-      })
-    end,
   },
   {
     "https://github.com/hrsh7th/nvim-cmp.git",
@@ -158,9 +153,6 @@ jetpackPacker.add({
     "https://github.com/williamboman/mason-lspconfig.nvim.git",
     as = "mason-lspconfig.nvim",
     requires = { "nvim-lspconfig", "mason.nvim", "cmp-nvim-lsp" },
-    config = function()
-      vim.lsp.enable(require("mason-lspconfig").get_installed_servers())
-    end,
   },
 
   -- ai-chat:
@@ -301,6 +293,13 @@ jetpackPacker.add({
       })
     end,
   },
+  {
+    "https://github.com/petertriho/nvim-scrollbar.git",
+    as = "nvim-scrollbar",
+    config = function()
+      require("scrollbar").setup()
+    end,
+  }
 })
 
 for _, name in ipairs(jetpack.names()) do

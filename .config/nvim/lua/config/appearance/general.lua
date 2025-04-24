@@ -5,9 +5,9 @@ vim.opt.listchars = { tab = "| ", trail = "_", extends = ">", precedes = "<", nb
 
 -- 画面描画の設定。
 vim.opt.cursorline = false -- カーソルライン表示を無効に
-vim.opt.lazyredraw = true -- 遅延再描画を有効に
-vim.opt.showcmd = false -- コマンド表示を無効に
-vim.opt.ruler = false -- ルーラー表示を無効に
+vim.opt.lazyredraw = true  -- 遅延再描画を有効に
+vim.opt.showcmd = false    -- コマンド表示を無効に
+vim.opt.ruler = false      -- ルーラー表示を無効に
 
 -- 行番号を表示する。
 vim.opt.number = true
@@ -51,3 +51,6 @@ vim.opt.matchtime = 2
 
 -- 補完メニューの高さ(0 なら無制限)。
 vim.opt.pumheight = 0
+
+-- ステータスラインの共有化。
+vim.opt.laststatus = 3

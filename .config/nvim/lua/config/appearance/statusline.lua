@@ -250,6 +250,48 @@ local LSPActive = {
   hl = { fg = "green", bold = true },
 }
 
+local Diagnostics = {
+  condition = conditions.has_diagnostics,
+
+  init = function(self)
+    self.errors = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
+    self.warnings = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.WARN })
+    self.hints = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.HINT })
+    self.info = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.INFO })
+  end,
+
+  update = { "DiagnosticChanged", "BufEnter" },
+
+  {
+    provider = function(self)
+      -- 0 is just another output, we can decide to print it or not!
+      return self.errors > 0 and
+      (vim.diagnostic.config()["signs"]["text"][vim.diagnostic.severity.ERROR] .. self.errors .. " ")
+    end,
+    hl = { fg = "diag_error" },
+  },
+  {
+    provider = function(self)
+      return self.warnings > 0 and
+      (vim.diagnostic.config()["signs"]["text"][vim.diagnostic.severity.WARN] .. self.warnings .. " ")
+    end,
+    hl = { fg = "diag_warn" },
+  },
+  {
+    provider = function(self)
+      return self.info > 0 and
+      (vim.diagnostic.config()["signs"]["text"][vim.diagnostic.severity.INFO] .. self.info .. " ")
+    end,
+    hl = { fg = "diag_info" },
+  },
+  {
+    provider = function(self)
+      return self.hints > 0 and (vim.diagnostic.config()["signs"]["text"][vim.diagnostic.severity.HINT] .. self.hints)
+    end,
+    hl = { fg = "diag_hint" },
+  },
+}
+
 local Ruler = {
   -- %l = current line number
   -- %L = number of lines in the buffer
@@ -304,7 +346,7 @@ local TablineFlags = {
       local buf_id = vim.api.nvim_win_get_buf(active_win_id)
 
       return not vim.api.nvim_get_option_value("modifiable", { buf = buf_id })
-        or vim.api.nvim_get_option_value("readonly", { buf = buf_id })
+          or vim.api.nvim_get_option_value("readonly", { buf = buf_id })
     end,
 
     provider = function(self)
@@ -378,7 +420,7 @@ local TablineBlock = utils.surround({ "", "" }, function(self)
 end, { { provider = " " }, TablineFileIcon, Tabpage, TablineFlags, { provider = " " }, })
 
 local TabPages = {
-  -- only show this component if there's 2 or more tabpages
+  -- only show this component if there"s 2 or more tabpages
   condition = function()
     return #vim.api.nvim_list_tabpages() >= 2
   end,
@@ -387,9 +429,9 @@ local TabPages = {
 
 require("heirline").setup({
   statusline = {
-    { ViMode, { provider = " " }, Git, { provider = " " }, FileIcon, { provider = " " }, FileName, FileFlags },
+    { ViMode,         { provider = " " }, Git,       { provider = " " }, FileIcon, { provider = " " }, FileName, FileFlags },
     { provider = "%=" },
-    { LSPActive, { provider = " " }, Ruler, { provider = " " }, ScrollBar },
+    { Diagnostics,    { provider = " " }, LSPActive, { provider = " " }, Ruler,    { provider = " " }, ScrollBar },
   },
   winbar = { Navic },
   tabline = { TabPages },
