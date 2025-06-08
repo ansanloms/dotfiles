@@ -54,7 +54,7 @@ vim.lsp.config("denols", {
   end,
 })
 
-vim.lsp.config("volar", {
+vim.lsp.config("vue_ls", {
   filetypes = {
     "vue",
     "javascript",
@@ -105,5 +105,22 @@ vim.lsp.config("volar", {
     },
   },
 })
+
+-- volar(vue_ls) が text_document.version を考慮してないっぽいので、もう version 確認せず更新かける。
+-- @see https://github.com/neovim/neovim/issues/12970#issuecomment-794837542
+-- @see https://github.com/neovim/neovim/blob/release-0.11/runtime/lua/vim/lsp/util.lua#L428-L460
+vim.lsp.util.apply_text_document_edit = function(text_document_edit, index, position_encoding)
+  local text_document = text_document_edit.textDocument
+  local bufnr = vim.uri_to_bufnr(text_document.uri)
+  if position_encoding == nil then
+    vim.notify_once(
+      "apply_text_document_edit must be called with valid position encoding",
+      vim.log.levels.WARN
+    )
+    return
+  end
+
+  vim.lsp.util.apply_text_edits(text_document_edit.edits, bufnr, position_encoding)
+end
 
 vim.lsp.enable(require("mason-lspconfig").get_installed_servers())

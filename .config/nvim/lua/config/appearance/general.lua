@@ -52,5 +52,6 @@ vim.opt.matchtime = 2
 -- 補完メニューの高さ(0 なら無制限)。
 vim.opt.pumheight = 0
 
--- ステータスラインの共有化。
+-- ステータスライン。
 vim.opt.laststatus = 3
+vim.opt.cmdheight = 0

@@ -7,37 +7,39 @@ end
 vim.cmd("packadd vim-jetpack")
 
 local jetpack = require("jetpack")
-local jetpackPacker = require("jetpack.packer")
 
-jetpackPacker.add({
+require("jetpack.packer").startup(function (use)
   -- plugin manager:
-  {
+  use({
     "https://github.com/tani/vim-jetpack.git",
     as = "vim-jetpack",
-    opt = true
-  },
+	  opt = true
+  })
 
   -- general:
-  {
+  use({
     "https://github.com/vim-jp/vimdoc-ja.git",
     as = "vimdoc-ja"
-  },
-  {
+  })
+  use({
     "https://github.com/vim-denops/denops.vim.git",
     as = "denops.vim"
-  },
-  {
+  })
+  use({
     "https://github.com/yukimemi/hitori.vim.git",
     as = "hitori.vim",
     requires = "denops.vim",
     config = function()
       vim.g.hitori_opener = "edit"
     end,
-  },
+  })
 
   -- telescope:
-  { "https://github.com/nvim-lua/plenary.nvim.git", as = "plenary.nvim" },
-  {
+  use({
+    "https://github.com/nvim-lua/plenary.nvim.git",
+    as = "plenary.nvim"
+  })
+  use({
     "https://github.com/nvim-telescope/telescope.nvim.git",
     as = "telescope.nvim",
     requires = "plenary.nvim",
@@ -65,20 +67,21 @@ jetpackPacker.add({
       })
 
       vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
+      vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
       vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
       vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "Telescope oldfiles" })
       vim.keymap.set("n", "<leader>fl", launcher(require("config.launcher")), { desc = "Telescope launcher" })
     end,
-  },
+  })
 
   -- quickrun:
-  {
+  use({
     "https://github.com/thinca/vim-quickrun.git",
     as = "vim-quickrun",
-  },
+  })
 
   -- snippet:
-  {
+  use({
     "https://github.com/hrsh7th/vim-vsnip.git",
     as = "vim-vsnip",
     config = function()
@@ -90,24 +93,24 @@ jetpackPacker.add({
       vim.g.vsnip_filetypes.javascriptreact = { "javascript" }
       vim.g.vsnip_filetypes.typescriptreact = { "javascript", "typescript" }
     end,
-  },
-  {
+  })
+  use({
     "https://github.com/hrsh7th/vim-vsnip-integ.git",
     as = "vim-vsnip-integ",
     requires = { "vim-vsnip" },
-  },
+  })
 
   -- cmp:
-  {
+  use({
     "https://github.com/hrsh7th/cmp-vsnip.git",
     as = "cmp-vsnip",
     requires = { "vim-vsnip" },
-  },
-  {
+  })
+  use({
     "https://github.com/hrsh7th/cmp-nvim-lsp.git",
     as = "cmp-nvim-lsp",
-  },
-  {
+  })
+  use({
     "https://github.com/hrsh7th/nvim-cmp.git",
     as = "nvim-cmp",
     requires = { "cmp-vsnip", "cmp-nvim-lsp" },
@@ -135,28 +138,33 @@ jetpackPacker.add({
         },
       })
     end,
-  },
+  })
 
   -- lsp:
-  {
+  use({
     "https://github.com/neovim/nvim-lspconfig.git",
     as = "nvim-lspconfig",
-  },
-  {
+  })
+  use({
     "https://github.com/williamboman/mason.nvim.git",
     as = "mason.nvim",
     config = function()
       require("mason").setup()
     end,
-  },
-  {
+  })
+  use({
     "https://github.com/williamboman/mason-lspconfig.nvim.git",
     as = "mason-lspconfig.nvim",
     requires = { "nvim-lspconfig", "mason.nvim", "cmp-nvim-lsp" },
-  },
+    config = function()
+      require("mason-lspconfig").setup({
+        ensure_installed = { "lua_ls", "deno" },
+      })
+    end,
+  })
 
   -- ai-chat:
-  {
+  use({
     "https://github.com/ansanloms/vim-ramble.git",
     as = "vim-ramble",
     requires = { "denops.vim" },
@@ -177,25 +185,25 @@ jetpackPacker.add({
         end,
       })
     end,
-  },
+  })
 
   -- appearance:
-  {
+  use({
     "https://github.com/whatyouhide/vim-gotham.git",
     as = "vim-gotham",
-  },
-  {
+  })
+  use({
     "https://github.com/EdenEast/nightfox.nvim.git",
     as = "nightfox.nvim",
-  },
-  {
+  })
+  use({
     "https://github.com/nvim-tree/nvim-web-devicons.git",
     as = "nvim-web-devicons",
     config = function()
       require("nvim-web-devicons").setup()
     end,
-  },
-  {
+  })
+  use({
     "https://github.com/nvim-treesitter/nvim-treesitter.git",
     as = "nvim-treesitter",
     run = ":TSUpdate",
@@ -204,13 +212,13 @@ jetpackPacker.add({
         highlight = { enable = true },
       })
     end,
-  },
-  {
+  })
+  use({
     "https://github.com/nvim-treesitter/nvim-treesitter-context.git",
     as = "nvim-treesitter-context",
     requires = { "nvim-treesitter" },
-  },
-  {
+  })
+  use({
     "https://github.com/rbtnn/vim-ambiwidth.git",
     as = "vim-ambiwidth",
     setup = function()
@@ -232,14 +240,13 @@ jetpackPacker.add({
         { 0xed00,  0xedff,  2 }, { 0xee0c, 0xefce, 2 }, { 0xf000, 0xf2ff, 2 },
       }
     end,
-  },
-  {
+  })
+  use({
     "https://github.com/rebelot/heirline.nvim.git",
     as = "heirline.nvim",
     requires = { "nightfox.nvim", "nvim-web-devicons" },
-    config = function() end,
-  },
-  {
+  })
+  use({
     "https://github.com/OXY2DEV/markview.nvim.git",
     as = "markview.nvim",
     requires = { "nvim-treesitter", "nvim-web-devicons" },
@@ -256,15 +263,15 @@ jetpackPacker.add({
         }
       })
     end,
-  },
-  {
+  })
+  use({
     "https://github.com/lewis6991/gitsigns.nvim.git",
     as = "gitsigns.nvim",
     config = function()
       require("gitsigns").setup()
     end,
-  },
-  {
+  })
+  use({
     "https://github.com/SmiteshP/nvim-navic.git",
     as = "nvim-navic",
     requires = { "nvim-lspconfig" },
@@ -277,8 +284,8 @@ jetpackPacker.add({
         depth_limit = 12,
       })
     end,
-  },
-  {
+  })
+  use({
     "https://github.com/shellRaining/hlchunk.nvim.git",
     as = "hlchunk.nvim",
     event = { "BufReadPre", "BufNewFile" },
@@ -292,15 +299,15 @@ jetpackPacker.add({
         }
       })
     end,
-  },
-  {
+  })
+  use({
     "https://github.com/petertriho/nvim-scrollbar.git",
     as = "nvim-scrollbar",
     config = function()
       require("scrollbar").setup()
     end,
-  }
-})
+  })
+end)
 
 for _, name in ipairs(jetpack.names()) do
   if not jetpack.tap(name) then
