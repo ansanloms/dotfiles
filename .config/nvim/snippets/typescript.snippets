@@ -1,0 +1,77 @@
+snippet nuxt.plugin Nuxt の plugin テンプレート。
+	import { useNuxtApp, defineNuxtPlugin } from "nuxt/app";
+
+	export type Type = {};
+
+	export default defineNuxtPlugin({
+		name: "$1",
+		dependsOn: [],
+		setup: () => {
+			const $1: Type = {};
+
+			return {
+				provide: { $1 },
+			};
+		},
+	});
+
+snippet storybook.nuxt Storybook の nuxt 向けテンプレート。
+	import type { Meta, StoryObj } from "@nuxtjs/storybook";
+	import $1 from "./$1.vue";
+
+	type Story = StoryObj<typeof $1>;
+
+	const meta: Meta<typeof $1> = {
+		title: "$1.vue",
+		component: $1,
+		render: (args) => ({
+			components: { $1 },
+			setup() {
+				return { args };
+			},
+			template: '<$1 v-bind="args" v-on="args" />',
+		}),
+	};
+
+	export default meta;
+
+	export const Default: Story = {
+		args: {
+		},
+	};
+
+snippet vitest.nuxt.component Vitest の nuxt component 向けテンプレート。
+	// @vitest-environment nuxt
+	import { describe, test, expect } from "vitest";
+	import { mountSuspended } from "@nuxt/test-utils/runtime";
+	import $1 from "~/components/$1.vue";
+
+	describe("components/$1.vue", () => {
+		const props: InstanceType<typeof $1>["\$props"] = {};
+
+		test("コンポーネントが正常にマウントされること。", async () => {
+			const wrapper = await mountSuspended($1, { props });
+
+			expect(wrapper.vm).toBeTruthy();
+		});
+	});
+
+snippet vitest.nuxt.plugin Vitest の nuxt plugin 向けテンプレート。
+	// @vitest-environment nuxt
+	import { describe, test, expect } from "vitest";
+	import { useNuxtApp } from "nuxt/app";
+
+	describe("plugins/$1.ts", async () => {
+		const { \$$1 } = useNuxtApp();
+
+		test("$1.func(): テスト概要。", async () => {
+			expect(\$$1.func()).eq(true);
+		});
+	});
+
+snippet deno.serve deno serve のテンプレート。
+	export default {
+		fetch: async (req: Request) => {
+			return new Response(null, { status: 404 });
+		},
+	};

@@ -1,5 +1,5 @@
 $Env:LANG = "ja"
-$Env:EDITOR = "vim"
+$Env:EDITOR = "nvim"
 $Env:LESSCHARSET = "UTF-8"
 $Env:RIPGREP_CONFIG_PATH = (Join-Path $Env:userprofile "\.ripgreprc")
 
@@ -48,7 +48,8 @@ function togif() {
 }
 
 # alias
-Set-Alias -Name vi -Value vim
+Set-Alias -Name vi -Value nvim
+Set-Alias -Name vim -Value nvim
 Set-Alias -Name open -Value Invoke-Item
 Set-Alias -Name rm -Value (Join-Path $Env:homedrive "\msys64\usr\bin\rm.exe")
 Set-Alias -Name find -Value (Join-Path $Env:homedrive "\msys64\usr\bin\find.exe")

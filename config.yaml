@@ -28,8 +28,15 @@ link:
     - src: ./.config/vim
   ~/.config/nvim:
     - src: ./.config/nvim
+      targets:
+        - darwin
+        - linux
   ~/.vimrc:
     - src: ./.vimrc
+  ~/AppData/Local/nvim:
+    - src: ./.config/nvim
+      targets:
+        - windows
   ~/.minttyrc:
     - src: ./.minttyrc
       targets:
