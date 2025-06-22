@@ -32,6 +32,15 @@ vim.lsp.config("*", {
   capabilities = require("cmp_nvim_lsp").default_capabilities(),
 })
 
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+  vim.lsp.handlers.hover,
+  {
+    border = "shadow",
+    -- border = border
+    -- width = 100,
+  }
+)
+
 vim.lsp.config("denols", {
   filetypes = {
     "javascript",

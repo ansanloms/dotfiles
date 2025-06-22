@@ -33,6 +33,13 @@ require("jetpack.packer").startup(function (use)
       vim.g.hitori_opener = "edit"
     end,
   })
+  use({
+    "https://github.com/APZelos/blamer.nvim.git",
+    as = "blamer.nvim",
+    config = function()
+      vim.g.blamer_enabled = true
+    end,
+  })
 
   -- telescope:
   use({
