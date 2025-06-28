@@ -1,2 +1,2 @@
 [core]
-	editor = 'c:/Program Files/Vim/vim91/vim.exe'
+	editor = 'c:/Program Files/Neovim/bin/nvim.exe'

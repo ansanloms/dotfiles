@@ -1,0 +1,33 @@
+snippet compose compose.yaml テンプレート。
+	services:
+		backend:
+			build:
+				context: ./backend
+				dockerfile: Dockerfile
+			volumes:
+				- ../:/workspace:cached
+			command: sleep infinity
+			working_dir: /workspace
+			expose:
+	    		- "8000"
+			networks:
+				- app-network
+
+		frontend:
+			build:
+				context: ./frontend
+				dockerfile: Dockerfile
+			volumes:
+				- ../:/workspace:cached
+			command: sleep infinity
+			working_dir: /workspace
+			expose:
+				- "3000"
+			ports:
+				- "6006:6006"
+			networks:
+				- app-network
+
+		networks:
+			app-network:
+				driver: bridge
