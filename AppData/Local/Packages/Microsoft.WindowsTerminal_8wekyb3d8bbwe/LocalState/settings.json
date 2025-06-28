@@ -55,7 +55,6 @@
                 "weight": "normal"
             },
             "historySize": 99999,
-            "icon": "none",
             "opacity": 90,
             "padding": "0,0,0,0",
             "scrollbarState": "visible",
@@ -65,50 +64,40 @@
         "list":
         [
             {
-                "commandline": "%PROGRAMFILES%\\Vim\\vim91\\vim.exe",
-                "guid": "{9dc9967a-45c0-48df-93f2-ad380d993070}",
-                "hidden": false,
-                "icon": "%userprofile%\\.config/vim\\bitmaps\\vim.ico",
-                "name": "vim"
-            },
-            {
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
-                "icon": "%SystemRoot%\\System32\\cmd.exe",
                 "name": "cmd"
             },
             {
                 "commandline": "\\msys64\\msys2_shell.cmd -defterm -here -no-start -msys",
                 "guid": "{bae083f2-8da7-4234-a2c8-c530116345e5}",
                 "hidden": false,
-                "icon": "https://raw.githubusercontent.com/msys2/msys2-packages/master/filesystem/msys2.ico",
+                "icon": "C:\\msys64\\msys2.ico",
                 "name": "msys2"
             },
             {
                 "commandline": "\\msys64\\msys2_shell.cmd -defterm -here -no-start -mingw32",
                 "guid": "{db1fef1b-36e9-42e5-805f-316443b23164}",
                 "hidden": false,
-                "icon": "https://raw.githubusercontent.com/msys2/msys2-packages/master/filesystem/mingw32.ico",
+                "icon": "C:\\msys64\\mingw32.ico",
                 "name": "mingw-w64 win32"
             },
             {
                 "commandline": "\\msys64\\msys2_shell.cmd -defterm -here -no-start -mingw64",
                 "guid": "{965c5402-f0b0-4c06-88b6-8fb41dfa3046}",
                 "hidden": false,
-                "icon": "https://raw.githubusercontent.com/msys2/msys2-packages/master/filesystem/mingw64.ico",
+                "icon": "C:\\msys64\\mingw64.ico",
                 "name": "mingw-w64 win64"
             },
             {
                 "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
                 "hidden": false,
-                "icon": null,
                 "name": "PowerShell",
                 "source": "Windows.Terminal.PowershellCore"
             },
             {
                 "guid": "{a3a2e83a-884a-5379-baa8-16f193a13b21}",
                 "hidden": false,
-                "icon": null,
                 "name": "PowerShell 7 Preview",
                 "source": "Windows.Terminal.PowershellCore"
             },
@@ -116,9 +105,7 @@
                 "commandline": "wsl.exe -d Ubuntu",
                 "guid": "{b93fb378-2fea-46ae-bc2c-18eb9ae3a562}",
                 "hidden": false,
-                "icon": "https://assets.ubuntu.com/v1/49a1a858-favicon-32x32.png",
-                "name": "Ubuntu",
-                "tabTitle": "Ubuntu"
+                "name": "Ubuntu"
             }
         ]
     },
