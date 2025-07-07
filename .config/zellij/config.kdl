@@ -1,0 +1,12 @@
+mouse_mode true
+show_startup_tips false
+theme "nightfox"
+default_layout "default"
+
+keybinds {
+  normal {
+    unbind "Ctrl w"
+    unbind "Ctrl h"
+    unbind "Ctrl n"
+  }
+}

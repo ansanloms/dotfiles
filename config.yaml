@@ -26,17 +26,19 @@ link:
     - src: ./.config/wezterm
   ~/.config/vim:
     - src: ./.config/vim
+  ~/.vimrc:
+    - src: ./.vimrc
   ~/.config/nvim:
     - src: ./.config/nvim
       targets:
         - darwin
         - linux
-  ~/.vimrc:
-    - src: ./.vimrc
   ~/AppData/Local/nvim:
     - src: ./.config/nvim
       targets:
         - windows
+  ~/.config/zellij:
+    - src: ./.config/zellij
   ~/.minttyrc:
     - src: ./.minttyrc
       targets:
