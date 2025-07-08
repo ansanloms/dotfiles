@@ -39,6 +39,8 @@ link:
         - windows
   ~/.config/zellij:
     - src: ./.config/zellij
+  ~/.config/mise/config.toml:
+    - src: ./.config/mise/config.toml
   ~/.minttyrc:
     - src: ./.minttyrc
       targets:
