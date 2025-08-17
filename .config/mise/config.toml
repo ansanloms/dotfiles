@@ -2,3 +2,5 @@
 "npm:@anthropic-ai/claude-code" = "latest"
 "npm:@devcontainers/cli" = "latest"
 "npm:@google/gemini-cli" = "latest"
+"npm:@mermaid-js/mermaid-cli" = "latest"
+"npm:wsl-open" = "latest"
