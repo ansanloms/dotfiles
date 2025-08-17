@@ -8,12 +8,12 @@ vim.cmd("packadd vim-jetpack")
 
 local jetpack = require("jetpack")
 
-require("jetpack.packer").startup(function (use)
+require("jetpack.packer").startup(function(use)
   -- plugin manager:
   use({
     "https://github.com/tani/vim-jetpack.git",
     as = "vim-jetpack",
-	  opt = true
+    opt = true
   })
 
   -- general:
@@ -165,8 +165,30 @@ require("jetpack.packer").startup(function (use)
     requires = { "nvim-lspconfig", "mason.nvim", "cmp-nvim-lsp" },
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "deno" },
+        ensure_installed = {
+          "eslint",
+          --"prettier",
+          "denols",
+          "vtsls",
+          "vue_ls",
+          "docker_language_server",
+          "intelephense",
+          --"phpcs",
+          --"phpstan",
+          "jq",
+          "jsonls",
+          "lua_ls",
+          "sqls",
+        },
       })
+    end,
+  })
+  use({
+    "https://github.com/nvimdev/lspsaga.nvim.git",
+    as = "lspsaga.nvim",
+    requires = { "nvim-lspconfig", },
+    config = function()
+      require('lspsaga').setup({})
     end,
   })
 
