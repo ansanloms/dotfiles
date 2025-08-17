@@ -15,9 +15,15 @@ if [ -f /etc/bashrc ]; then
   source /etc/bashrc
 fi
 
+if [ -f "$HOME/.keychain/$(hostname)-sh" ]; then
+  source $HOME/.keychain/$(hostname)-sh
+fi
+
 #if [ isWsl ] && [ -z "$http_proxy" ]; then
 #  export http_proxy=http://$(ip route list default | awk '{print $3}'):30080
 #  export https_proxy=${http_proxy}
+#  export HTTP_PROXY=${http_proxy}
+#  export HTTPS_PROXY=${http_proxy}
 #fi
 
 if [ -d "$HOME/bin" ]; then

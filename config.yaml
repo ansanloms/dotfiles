@@ -7,6 +7,10 @@ link:
     - src: ./.bash_profile
       targets:
         - linux
+  ~/.bash_aliases:
+    - src: ./.bash_aliases
+      targets:
+        - linux
   ~/.inputrc:
     - src: ./.inputrc
       targets:
