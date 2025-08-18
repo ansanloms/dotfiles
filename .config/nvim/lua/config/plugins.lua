@@ -28,7 +28,7 @@ require("jetpack.packer").startup(function(use)
   use({
     "https://github.com/yukimemi/hitori.vim.git",
     as = "hitori.vim",
-    requires = "denops.vim",
+    requires = { "denops.vim" },
     config = function()
       vim.g.hitori_opener = "edit"
     end,
@@ -49,7 +49,7 @@ require("jetpack.packer").startup(function(use)
   use({
     "https://github.com/nvim-telescope/telescope.nvim.git",
     as = "telescope.nvim",
-    requires = "plenary.nvim",
+    requires = { "plenary.nvim" },
     config = function()
       local telescope = require("telescope")
       local builtin = require("telescope.builtin")
@@ -106,45 +106,10 @@ require("jetpack.packer").startup(function(use)
     as = "vim-vsnip-integ",
     requires = { "vim-vsnip" },
   })
-
-  -- cmp:
   use({
     "https://github.com/hrsh7th/cmp-vsnip.git",
     as = "cmp-vsnip",
     requires = { "vim-vsnip" },
-  })
-  use({
-    "https://github.com/hrsh7th/cmp-nvim-lsp.git",
-    as = "cmp-nvim-lsp",
-  })
-  use({
-    "https://github.com/hrsh7th/nvim-cmp.git",
-    as = "nvim-cmp",
-    requires = { "cmp-vsnip", "cmp-nvim-lsp" },
-    config = function()
-      local cmp = require("cmp")
-      cmp.setup({
-        snippet = {
-          expand = function(args)
-            vim.fn["vsnip#anonymous"](args.body)
-          end,
-        },
-        sources = {
-          { name = "nvim_lsp" },
-          { name = "vsnip" },
-        },
-        mapping = cmp.mapping.preset.insert({
-          ["<C-p>"] = cmp.mapping.select_prev_item(),
-          ["<C-n>"] = cmp.mapping.select_next_item(),
-          ["<C-l>"] = cmp.mapping.complete(),
-          ["<C-e>"] = cmp.mapping.abort(),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        }),
-        experimental = {
-          ghost_text = true,
-        },
-      })
-    end,
   })
 
   -- lsp:
@@ -158,6 +123,10 @@ require("jetpack.packer").startup(function(use)
     config = function()
       require("mason").setup()
     end,
+  })
+  use({
+    "https://github.com/hrsh7th/cmp-nvim-lsp.git",
+    as = "cmp-nvim-lsp",
   })
   use({
     "https://github.com/williamboman/mason-lspconfig.nvim.git",
@@ -178,7 +147,7 @@ require("jetpack.packer").startup(function(use)
           "jq",
           "jsonls",
           "lua_ls",
-          "sqls",
+          --"sqls",
         },
       })
     end,
@@ -188,7 +157,7 @@ require("jetpack.packer").startup(function(use)
     as = "lspsaga.nvim",
     requires = { "nvim-lspconfig", },
     config = function()
-      require('lspsaga').setup({})
+      require("lspsaga").setup({})
     end,
   })
 
@@ -336,6 +305,156 @@ require("jetpack.packer").startup(function(use)
       require("scrollbar").setup()
     end,
   })
+
+  -- skk
+  use({
+    "https://github.com/vim-skk/skkeleton.git",
+    as = "skkeleton",
+    requires = { "denops.vim" },
+    config = function()
+      -- @class Dictionary
+      -- @field url string ダウンロード用の URL 。
+      -- @field name string 辞書の名前またはファイル名。
+      -- @field encoding string ファイルのエンコーディング("euc-jp" | "utf-8")。
+
+      -- 辞書設定のリスト。
+      -- @type Dictionary[]
+      local dicts = {
+        {
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.L",
+          name = "SKK-JISYO.L",
+          encoding = "euc-jp"
+        },
+        {
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.jinmei",
+          name = "SKK-JISYO.jinmei",
+          encoding = "euc-jp"
+        },
+        {
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.fullname",
+          name = "SKK-JISYO.fullname",
+          encoding = "euc-jp"
+        },
+        {
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.geo",
+          name = "SKK-JISYO.geo",
+          encoding = "euc-jp"
+        },
+        {
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.propernoun",
+          name = "SKK-JISYO.propernoun",
+          encoding = "euc-jp"
+        },
+        {
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.station",
+          name = "SKK-JISYO.station",
+          encoding = "euc-jp"
+        },
+        {
+          url = "https://raw.githubusercontent.com/skk-dev/dict/refs/heads/master/SKK-JISYO.emoji",
+          name = "SKK-JISYO.emoji",
+          encoding = "utf-8"
+        },
+        {
+          url = "https://raw.githubusercontent.com/ymrl/SKK-JISYO.emoji-ja/master/SKK-JISYO.emoji-ja.utf8",
+          name = "SKK-JISYO.emoji-ja",
+          encoding = "utf-8"
+        },
+      }
+
+      -- 辞書の保存先。
+      local dictDir = vim.fn.expand("~/.local/share/nvim/skk")
+      if vim.fn.isdirectory(dictDir) == 0 then
+        vim.fn.mkdir(dictDir, "p")
+      end
+
+      for _, dict in ipairs(dicts) do
+        local filepath = vim.fn.expand(dictDir .. "/" .. dict.name)
+
+        if vim.fn.filereadable(filepath) ~= 1 then
+          local result = vim.system({
+            "curl",
+            "-L",
+            "-f",
+            "--silent",
+            "--show-error",
+            "-o", filepath,
+            dict.url
+          }, { text = true }):wait()
+
+          if result.code ~= 0 then
+            vim.notify(string.format("skkeleton - 辞書ダウンロード失敗: %s", dict.url), vim.log.levels.ERROR)
+          end
+        end
+      end
+
+      vim.fn["skkeleton#config"]({
+        globalDictionaries = vim.tbl_map(function(dict)
+          return vim.fn.expand(dictDir .. "/" .. dict.name)
+        end, dicts),
+        eggLikeNewline = true,
+        keepState = true,
+        showCandidatesCount = 2,
+        registerConvertResult = true,
+      })
+
+      vim.keymap.set(
+        { "i", "c", "t" },
+        [[<C-j>]],
+        [[<Plug>(skkeleton-toggle)]],
+        { noremap = true, desc = "skkeleton toggle" }
+      )
+    end,
+  })
+  use({
+    "https://github.com/delphinus/skkeleton_indicator.nvim.git",
+    as = "skkeleton_indicator.nvim",
+    requires = { "skkeleton" },
+    config = function()
+      require("skkeleton_indicator").setup({})
+    end,
+  })
+  use({
+    "https://github.com/uga-rosa/cmp-skkeleton.git",
+    as = "cmp-skkeleton",
+    requires = { "skkeleton" },
+    config = function()
+      require("skkeleton_indicator").setup({})
+    end,
+  })
+
+  -- cmp:
+  use({
+    "https://github.com/hrsh7th/nvim-cmp.git",
+    as = "nvim-cmp",
+    requires = { "cmp-vsnip", "cmp-nvim-lsp", "cmp-skkeleton" },
+    config = function()
+      local cmp = require("cmp")
+      cmp.setup({
+        snippet = {
+          expand = function(args)
+            vim.fn["vsnip#anonymous"](args.body)
+          end,
+        },
+        sources = {
+          { name = "nvim_lsp" },
+          { name = "vsnip" },
+          { name = "skkeleton" },
+        },
+        mapping = cmp.mapping.preset.insert({
+          ["<C-p>"] = cmp.mapping.select_prev_item(),
+          ["<C-n>"] = cmp.mapping.select_next_item(),
+          ["<C-l>"] = cmp.mapping.complete(),
+          ["<C-e>"] = cmp.mapping.abort(),
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        }),
+        experimental = {
+          ghost_text = true,
+        },
+      })
+    end,
+  })
+
 end)
 
 for _, name in ipairs(jetpack.names()) do
