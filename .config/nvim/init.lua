@@ -11,6 +11,7 @@ end
 -- general:
 require("config.general")
 require("config.im")
+require("config.clipboard")
 
 -- mapping:
 require("config.mapping")
