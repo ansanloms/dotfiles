@@ -407,20 +407,53 @@ require("jetpack.packer").startup(function(use)
     end,
   })
   use({
-    "https://github.com/delphinus/skkeleton_indicator.nvim.git",
-    as = "skkeleton_indicator.nvim",
+    "https://github.com/NI57721/skkeleton-state-popup.git",
+    as = "skkeleton-state-popup",
     requires = { "skkeleton" },
     config = function()
-      require("skkeleton_indicator").setup({})
+      vim.fn["skkeleton_state_popup#config"]({
+        labels = {
+          input = {
+            hira = "かな",
+            kata = "カナ",
+            hankata = "ｶﾅ",
+            zenkaku = "Ａ"
+          },
+          ["input:okurinasi"] = {
+            hira = "▽",
+            kata = "▽",
+            hankata = "▽",
+            abbrev = "ab"
+          },
+          ["input:okuriari"] = {
+            hira = "▽",
+            kata = "▽",
+            hankata = "▽"
+          },
+          henkan = {
+            hira = "▼",
+            kata = "▼",
+            hankata = "▼",
+            abbrev = "ab"
+          },
+          latin = "_A",
+        },
+        opts = {
+          relative = "cursor",
+          col = 0,
+          row = 1,
+          anchor = "NW",
+          zindex = 100,
+          style = "minimal",
+        },
+      })
+      vim.fn["skkeleton_state_popup#enable"]()
     end,
   })
   use({
     "https://github.com/uga-rosa/cmp-skkeleton.git",
     as = "cmp-skkeleton",
     requires = { "skkeleton" },
-    config = function()
-      require("skkeleton_indicator").setup({})
-    end,
   })
 
   -- cmp:
@@ -454,7 +487,6 @@ require("jetpack.packer").startup(function(use)
       })
     end,
   })
-
 end)
 
 for _, name in ipairs(jetpack.names()) do
