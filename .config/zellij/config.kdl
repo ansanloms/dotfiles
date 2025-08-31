@@ -2,6 +2,7 @@ mouse_mode true
 show_startup_tips false
 theme "nightfox"
 default_layout "default"
+scrollback_editor "nvim"
 
 keybinds {
   normal {
