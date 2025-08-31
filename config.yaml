@@ -41,6 +41,15 @@ link:
     - src: ./.config/nvim
       targets:
         - windows
+  ~/.config/efm-langserver/config.yaml:
+    - src: ./.config/efm-langserver/config.yaml
+      targets:
+        - darwin
+        - linux
+  ~/AppData/Roaming/efm-langserver/config.yaml:
+    - src: ./.config/efm-langserver/config.yaml
+      targets:
+        - windows
   ~/.config/zellij:
     - src: ./.config/zellij
   ~/.config/mise/config.toml:
@@ -71,10 +80,6 @@ link:
         - windows
   ~/AppData/Local/mpd/mpd.conf:
     - src: ./AppData/Local/mpd/mpd.conf
-      targets:
-        - windows
-  ~/AppData/Roaming/efm-langserver/config.yaml:
-    - src: ./AppData/Roaming/efm-langserver/config.yaml
       targets:
         - windows
   ~/Documents/PowerShell/profile.ps1:
