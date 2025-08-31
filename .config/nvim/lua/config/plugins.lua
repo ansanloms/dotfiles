@@ -131,23 +131,25 @@ require("jetpack.packer").startup(function(use)
   use({
     "https://github.com/williamboman/mason-lspconfig.nvim.git",
     as = "mason-lspconfig.nvim",
-    requires = { "nvim-lspconfig", "mason.nvim", "cmp-nvim-lsp" },
+    requires = { "nvim-lspconfig", "mason.nvim" },
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = {
           "eslint",
-          --"prettier",
+          "prettier",
           "denols",
           "vtsls",
           "vue_ls",
           "docker_language_server",
-          "intelephense",
+          --"intelephense",
+          "phpactor",
           --"phpcs",
           --"phpstan",
-          "jq",
-          "jsonls",
+          --"jqls",
+          --"jsonls",
           "lua_ls",
           --"sqls",
+          "efm"
         },
       })
     end,
@@ -158,30 +160,6 @@ require("jetpack.packer").startup(function(use)
     requires = { "nvim-lspconfig", },
     config = function()
       require("lspsaga").setup({})
-    end,
-  })
-
-  -- ai-chat:
-  use({
-    "https://github.com/ansanloms/vim-ramble.git",
-    as = "vim-ramble",
-    requires = { "denops.vim" },
-    config = function()
-      local augroupRambleChat = vim.api.nvim_create_augroup("ramble-chat", { clear = true })
-
-      vim.api.nvim_create_autocmd("FileType", {
-        group = augroupRambleChat,
-        pattern = "ramble-chat",
-        callback = function()
-          vim.keymap.set("n", "<C-@>", function()
-            vim.fn["denops#request"]("ramble", "chat", { vim.api.nvim_get_current_buf() })
-          end, { buffer = true })
-
-          vim.keymap.set("n", "<C-Space>", function()
-            vim.fn["denops#request"]("ramble", "chat", { vim.api.nvim_get_current_buf() })
-          end, { buffer = true })
-        end,
-      })
     end,
   })
 
@@ -204,10 +182,83 @@ require("jetpack.packer").startup(function(use)
   use({
     "https://github.com/nvim-treesitter/nvim-treesitter.git",
     as = "nvim-treesitter",
-    run = ":TSUpdate",
+    branch = "main",
     config = function()
-      require("nvim-treesitter.configs").setup({
-        highlight = { enable = true },
+      require("nvim-treesitter").setup({
+        install_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "site"),
+      })
+      require("nvim-treesitter").install({
+        "awk",
+        "bash",
+        "c",
+        "c_sharp",
+        "clojure",
+        "cpp",
+        "css",
+        "csv",
+        "diff",
+        "elixir",
+        "elm",
+        "erlang",
+        "git_config",
+        "git_rebase",
+        "gitattributes",
+        "gitcommit",
+        "gitignore",
+        "go",
+        "html",
+        "http",
+        "ini",
+        "java",
+        "javadoc",
+        "javascript",
+        "jq",
+        "jsdoc",
+        "json",
+        "json5",
+        "jsonc",
+        "kdl",
+        "kotlin",
+        "latex",
+        "lua",
+        "luadoc",
+        "make",
+        "markdown",
+        "markdown_inline",
+        "mermaid",
+        "nginx",
+        "perl",
+        "php",
+        "phpdoc",
+        "powershell",
+        "prisma",
+        "pug",
+        "python",
+        "robot",
+        "robots",
+        "rst",
+        "ruby",
+        "rust",
+        "scss",
+        "sql",
+        "styled",
+        "swift",
+        "tmux",
+        "toml",
+        "tsv",
+        "tsx",
+        "twig",
+        "typescript",
+        "vim",
+        "vimdoc",
+        "vue",
+        "xml",
+        "yaml",
+      }, {
+        force = false,
+        generate = true,
+        max_jobs = 4,
+        summary = false,
       })
     end,
   })
@@ -486,6 +537,12 @@ require("jetpack.packer").startup(function(use)
         },
       })
     end,
+  })
+
+  -- langs:
+  use({
+    "https://github.com/yukpiz/vim-volt-syntax.git",
+    as = "vim-volt-syntax",
   })
 end)
 
