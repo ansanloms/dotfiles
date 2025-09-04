@@ -183,10 +183,7 @@ require("jetpack.packer").startup(function(use)
     "https://github.com/nvim-treesitter/nvim-treesitter.git",
     as = "nvim-treesitter",
     branch = "main",
-    config = function()
-      require("nvim-treesitter").setup({
-        install_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "site"),
-      })
+    run = function()
       require("nvim-treesitter").install({
         "awk",
         "bash",
@@ -259,6 +256,11 @@ require("jetpack.packer").startup(function(use)
         generate = true,
         max_jobs = 4,
         summary = false,
+      })
+    end,
+    config = function()
+      require("nvim-treesitter").setup({
+        install_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "site"),
       })
     end,
   })
@@ -362,7 +364,7 @@ require("jetpack.packer").startup(function(use)
     "https://github.com/vim-skk/skkeleton.git",
     as = "skkeleton",
     requires = { "denops.vim" },
-    config = function()
+    run = function()
       -- @class Dictionary
       -- @field url string ダウンロード用の URL 。
       -- @field name string 辞書の名前またはファイル名。
@@ -422,27 +424,32 @@ require("jetpack.packer").startup(function(use)
       for _, dict in ipairs(dicts) do
         local filepath = vim.fn.expand(dictDir .. "/" .. dict.name)
 
-        if vim.fn.filereadable(filepath) ~= 1 then
-          local result = vim.system({
-            "curl",
-            "-L",
-            "-f",
-            "--silent",
-            "--show-error",
-            "-o", filepath,
-            dict.url
-          }, { text = true }):wait()
+        local result = vim.system({
+          "curl",
+          "-L",
+          "-f",
+          "--silent",
+          "--show-error",
+          "-o", filepath,
+          dict.url
+        }, { text = true }):wait()
 
-          if result.code ~= 0 then
-            vim.notify(string.format("skkeleton - 辞書ダウンロード失敗: %s", dict.url), vim.log.levels.ERROR)
-          end
+        if result.code == 0 then
+          vim.notify(string.format("[skkeleton] dict download succeeded: %s", dict.url), vim.log.levels.INFO)
+        else
+          vim.notify(string.format("[skkeleton] dict download failed: %s", dict.url), vim.log.levels.ERROR)
         end
       end
-
+    end,
+    config = function()
       vim.fn["skkeleton#config"]({
-        globalDictionaries = vim.tbl_map(function(dict)
-          return vim.fn.expand(dictDir .. "/" .. dict.name)
-        end, dicts),
+        globalDictionaries = vim.fs.find(function()
+          return true
+        end, {
+          path = vim.fn.expand("~/.local/share/nvim/skk"),
+          type = "file",
+          limit = math.huge
+        }),
         eggLikeNewline = true,
         keepState = true,
         showCandidatesCount = 2,
