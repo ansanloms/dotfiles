@@ -7,7 +7,7 @@ vim.opt.runtimepath:prepend("~/.config/nvim")
 vim.opt.packpath:prepend("~/.config/nvim")
 
 -- viminfo (shada) 設定。
-vim.opt.shada = "'10000,:100,<1000,s10,n~/.config/nvim/shada"
+vim.opt.shada = "'10000,:100,<1000,s10,n" .. vim.fn.expand(vim.fn.stdpath("data") .. "/shada")
 
 -- バックアップ設定。
 vim.opt.backupdir = vim.fn.expand(vim.fn.stdpath("data") .. "/backup")
