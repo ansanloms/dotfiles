@@ -10,7 +10,4 @@
 .config/git/config.os
 
 .config/nvim/lua/temp.lua
-.config/nvim/backup
 .config/nvim/shada
-.config/nvim/undo
-.config/nvim/view

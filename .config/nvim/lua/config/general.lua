@@ -2,25 +2,6 @@ vim.opt.encoding = "utf-8"
 vim.opt.fileencodings = "utf-8,sjis,cp932,euc-jp,iso-2022-jp"
 vim.opt.fileformats = "unix,mac,dos"
 
--- ディレクトリ作成。
-local dirs = {
-  --"~/.config/nvim/autoload",
-  --"~/.config/nvim/plugin",
-  "~/.config/nvim/backup",
-  "~/.config/nvim/view",
-  "~/.config/nvim/undo",
-  --"~/.config/nvim/syntax",
-  --"~/.config/nvim/pack",
-  "~/.config/nvim/logs",
-}
-
-for _, dir in ipairs(dirs) do
-  local expanded = vim.fn.expand(dir)
-  if vim.fn.isdirectory(expanded) == 0 then
-    vim.fn.mkdir(expanded, "p")
-  end
-end
-
 -- runtimepath と packpath の設定。
 vim.opt.runtimepath:prepend("~/.config/nvim")
 vim.opt.packpath:prepend("~/.config/nvim")
@@ -29,16 +10,16 @@ vim.opt.packpath:prepend("~/.config/nvim")
 vim.opt.shada = "'10000,:100,<1000,s10,n~/.config/nvim/shada"
 
 -- バックアップ設定。
-vim.opt.backupdir = vim.fn.expand("~/.config/nvim/backup")
+vim.opt.backupdir = vim.fn.expand(vim.fn.stdpath("data") .. "/backup")
 vim.opt.backup = true
 vim.opt.writebackup = true
 
 -- スワップファイル設定。
-vim.opt.directory = vim.fn.expand("~/.config/nvim/backup")
+vim.opt.directory = vim.fn.expand(vim.fn.stdpath("data") .. "/backup")
 vim.opt.swapfile = true
 
 -- mkview 設定。
-vim.opt.viewdir = vim.fn.expand("~/.config/nvim/view")
+vim.opt.viewdir = vim.fn.expand(vim.fn.stdpath("data") .. "/view")
 vim.opt.viewoptions = "cursor"
 
 -- mkview 自動保存読み込み。
@@ -63,7 +44,7 @@ vim.api.nvim_create_autocmd("BufRead", {
 })
 
 -- undo 設定。
-vim.opt.undodir = vim.fn.expand("~/.config/nvim/undo")
+vim.opt.undodir = vim.fn.expand(vim.fn.stdpath("data") .. "/undo")
 vim.opt.undofile = true
 
 -- 基本設定。

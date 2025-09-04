@@ -416,7 +416,7 @@ require("jetpack.packer").startup(function(use)
       }
 
       -- 辞書の保存先。
-      local dictDir = vim.fn.expand("~/.local/share/nvim/skk")
+      local dictDir = vim.fn.expand(vim.fn.stdpath("data") .. "/skkeleton")
       if vim.fn.isdirectory(dictDir) == 0 then
         vim.fn.mkdir(dictDir, "p")
       end
@@ -446,7 +446,7 @@ require("jetpack.packer").startup(function(use)
         globalDictionaries = vim.fs.find(function()
           return true
         end, {
-          path = vim.fn.expand("~/.local/share/nvim/skk"),
+          path = vim.fn.expand(vim.fn.stdpath("data") .. "/skkeleton"),
           type = "file",
           limit = math.huge
         }),
