@@ -1,4 +1,6 @@
 [tools]
+node = "latest"
+npm = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
 "npm:@devcontainers/cli" = "latest"
 "npm:@google/gemini-cli" = "latest"
