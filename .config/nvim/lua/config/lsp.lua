@@ -53,10 +53,6 @@ vim.lsp.config("denols", {
     "json",
     "json5"
   },
-  root_dir = require("lspconfig.util").root_pattern(
-    "deno.json",
-    "deno.jsonc"
-  ),
 })
 
 vim.lsp.config("vue_ls", {
@@ -102,6 +98,9 @@ vim.lsp.config("vtsls", {
       },
     },
   },
+  root_dir = require("lspconfig.util").root_pattern(
+    "package.json"
+  ),
 })
 
 vim.lsp.config("jsonls", {

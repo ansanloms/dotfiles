@@ -37,6 +37,10 @@ vim.opt.scrolloff = 4
 -- 左右の視界確保。
 vim.opt.sidescrolloff = 8
 
+-- signcolumn は常に表示。
+-- LSP のアイコンがでたりでなかったりでガタガタするから。
+vim.opt.signcolumn = "yes:4"
+
 -- 左右スクロール値の設定。
 vim.opt.sidescroll = 1
 
