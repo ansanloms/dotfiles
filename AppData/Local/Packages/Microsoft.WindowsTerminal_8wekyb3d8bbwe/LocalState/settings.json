@@ -1,10 +1,10 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions":
+    "actions": 
     [
         {
-            "command":
+            "command": 
             {
                 "action": "copy"
             },
@@ -21,47 +21,271 @@
     ],
     "alwaysShowTabs": true,
     "copyOnSelect": true,
-    "defaultProfile": "{b93fb378-2fea-46ae-bc2c-18eb9ae3a562}",
+    "defaultProfile": "{143fb84e-55c4-4f67-83b0-e75022282ac3}",
     "disableAnimations": true,
     "initialCols": 160,
     "initialRows": 40,
-    "keybindings": [],
+    "keybindings": 
+    [
+        {
+            "id": null,
+            "keys": "win+sc(41)"
+        },
+        {
+            "id": null,
+            "keys": "f11"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+period"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+numpad0"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+pgup"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+pgdn"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+a"
+        },
+        {
+            "id": null,
+            "keys": "menu"
+        },
+        {
+            "id": null,
+            "keys": "alt+shift+left"
+        },
+        {
+            "id": null,
+            "keys": "alt+shift+up"
+        },
+        {
+            "id": null,
+            "keys": "alt+shift+down"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+c"
+        },
+        {
+            "id": null,
+            "keys": "alt+shift+right"
+        },
+        {
+            "id": null,
+            "keys": "alt+shift+minus"
+        },
+        {
+            "id": null,
+            "keys": "alt+space"
+        },
+        {
+            "id": null,
+            "keys": "alt+shift+plus"
+        },
+        {
+            "id": null,
+            "keys": "alt+f4"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+w"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+p"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+k"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+d"
+        },
+        {
+            "id": null,
+            "keys": "enter"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+6"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+insert"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+comma"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+5"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+2"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+0"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+numpad_plus"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+3"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+minus"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+plus"
+        },
+        {
+            "id": null,
+            "keys": "alt+right"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+numpad_minus"
+        },
+        {
+            "id": null,
+            "keys": "alt+up"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+4"
+        },
+        {
+            "id": null,
+            "keys": "alt+down"
+        },
+        {
+            "id": null,
+            "keys": "alt+left"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+m"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+up"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+down"
+        },
+        {
+            "id": null,
+            "keys": "alt+enter"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+alt+left"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+7"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+home"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+end"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+space"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+1"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+8"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+9"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+alt+comma"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+alt+9"
+        },
+        {
+            "id": null,
+            "keys": "shift+insert"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+comma"
+        }
+    ],
     "launchMode": "default",
-    "newTabMenu":
+    "newTabMenu": 
     [
         {
             "type": "remainingProfiles"
+        },
+        {
+            "icon": null,
+            "profile": "{2c4de342-38b7-51cf-b940-2309a097f518}",
+            "type": "profile"
         }
     ],
-    "profiles":
+    "profiles": 
     {
-        "defaults":
+        "defaults": 
         {
             "adjustIndistinguishableColors": "never",
             "backgroundImage": null,
             "backgroundImageOpacity": 0.1,
             "backgroundImageStretchMode": "uniform",
             "colorScheme": "Terafox",
+            "compatibility.allowOSC52": true,
             "compatibility.reloadEnvironmentVariables": true,
             "cursorShape": "emptyBox",
             "experimental.retroTerminalEffect": false,
-            "font":
+            "font": 
             {
                 "builtinGlyphs": true,
                 "cellHeight": "1",
                 "colorGlyphs": false,
                 "face": "Moralerspace Krypton HWNF",
-                "size": 9,
+                "size": 8,
                 "weight": "normal"
             },
             "historySize": 99999,
             "opacity": 90,
             "padding": "0,0,0,0",
             "scrollbarState": "visible",
-            "suppressApplicationTitle": true,
+            "suppressApplicationTitle": false,
             "useAcrylic": false
         },
-        "list":
+        "list": 
         [
             {
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
@@ -102,14 +326,17 @@
                 "source": "Windows.Terminal.PowershellCore"
             },
             {
-                "commandline": "wsl.exe -d Ubuntu",
-                "guid": "{b93fb378-2fea-46ae-bc2c-18eb9ae3a562}",
+                "commandline": "C:\\WINDOWS\\system32\\wsl.exe -d Ubuntu",
+                "guid": "{143fb84e-55c4-4f67-83b0-e75022282ac3}",
                 "hidden": false,
-                "name": "Ubuntu"
+                "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
+                "name": "Ubuntu",
+                "pathTranslationStyle": "wsl",
+                "startingDirectory": "~"
             }
         ]
     },
-    "schemes":
+    "schemes": 
     [
         {
             "background": "#161616",
