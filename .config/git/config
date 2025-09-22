@@ -26,7 +26,8 @@
 [url "git@github.com:"]
 	pushinsteadof = https://github.com/
 [credential]
-	helper = store
+	helper = store --file ~/.config/git/credentials
+    helper = cache --timeout 30000
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f

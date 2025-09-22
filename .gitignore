@@ -8,5 +8,6 @@
 !.config/vim/launcher/002-ai-chat.yaml
 
 .config/git/config.os
+.config/git/credentials
 
 .config/nvim/lua/temp.lua
