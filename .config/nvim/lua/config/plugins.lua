@@ -307,8 +307,6 @@ require("jetpack.packer").startup(function(use)
           enable = true,
           filetypes = {
             "markdown",
-            "md",
-            "ramble-chat",
           },
           ignore_buftypes = {},
         }

@@ -14,8 +14,8 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.wrap = false
 
     -- フォーマット指定
-    if vim.fn.executable("sql-formatter") == 1 then
-      vim.opt_local.formatprg = "sql-formatter"
+    if vim.fn.executable("deno") == 1 then
+      vim.opt_local.formatprg = "deno fmt --ext sql --unstable-sql -"
     end
   end,
 })
