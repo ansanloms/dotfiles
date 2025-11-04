@@ -2,11 +2,10 @@
 	path = config.os
 [user]
 	useConfigOnly = true
-	name = ansanloms
-	email = ansanloms@users.noreply.github.com
 [core]
 	autoCRLF = false
 	preloadindex = true
+	editor = nvim
 	fscache = false
 	quotepath = false
 	excludesfile = ~/.config/git/ignore
@@ -20,14 +19,11 @@
 	encoding = utf-8
 [pull]
 	ff = only
-[github]
-	name = ansanloms
-	email = ansanloms@users.noreply.github.com
 [url "git@github.com:"]
 	pushinsteadof = https://github.com/
 [credential]
 	helper = store --file ~/.config/git/credentials
-    helper = cache --timeout 30000
+	helper = cache --timeout 30000
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
