@@ -59,3 +59,6 @@ vim.opt.pumheight = 0
 -- ステータスライン。
 vim.opt.laststatus = 3
 vim.opt.cmdheight = 0
+
+-- カラーコード表示。
+--vim.lsp.document_color.enable(true, 0, { style = "virtual" })

@@ -549,6 +549,13 @@ require("jetpack.packer").startup(function(use)
     "https://github.com/yukpiz/vim-volt-syntax.git",
     as = "vim-volt-syntax",
   })
+  use({
+    "https://github.com/hat0uma/csvview.nvim.git",
+    as = "csvview.nvim",
+    config = function()
+      require("csvview").setup();
+    end,
+  })
 end)
 
 for _, name in ipairs(jetpack.names()) do
