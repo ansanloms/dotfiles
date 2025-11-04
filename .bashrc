@@ -3,7 +3,7 @@ export LC_ALL=
 
 export LESSCHARSET=utf-8
 
-function isWsl() {
+function is-wsl() {
   if [ "$(uname)" == "Linux" ] && [[ "$(uname -r)" == *microsoft* ]]; then
     return 0
   else
@@ -11,19 +11,38 @@ function isWsl() {
   fi
 }
 
+function get-local-appdata() {
+  if [ is-wsl ]; then
+    local localappdata_win=$(powershell.exe -c "echo \$env:LOCALAPPDATA" | tr -d '\r')
+    wslpath "$localappdata_win"
+  fi
+}
+
 if [ -f /etc/bashrc ]; then
   source /etc/bashrc
 fi
 
-if [ -f "$HOME/.keychain/$(hostname)-sh" ]; then
-  source $HOME/.keychain/$(hostname)-sh
+# windows 側にある proxy を使う。
+if [ is-wsl ]; then
+  export http_proxy=http://$(ip route list default | awk '{print $3}'):30080
+  export https_proxy=${http_proxy}
+  export HTTP_PROXY=${http_proxy}
+  export HTTPS_PROXY=${http_proxy}
+  export no_proxy=localhost,127.0.0.1
+  export NO_PROXY=localhost,127.0.0.1
 fi
 
-#if [ isWsl ] && [ -z "$http_proxy" ]; then
-#  export http_proxy=http://$(ip route list default | awk '{print $3}'):30080
-#  export https_proxy=${http_proxy}
-#  export HTTP_PROXY=${http_proxy}
-#  export HTTPS_PROXY=${http_proxy}
+# wsl から windows 側の ssh-agent を使う。
+# socat が必要。
+#if [ is-wsl ]; then
+#  export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
+#
+#  if [[ ! -S "$SSH_AUTH_SOCK" ]]; then
+#    rm -f "$SSH_AUTH_SOCK"
+#
+#    # winget install albertony.npiperelay
+#    (setsid socat UNIX-LISTEN:"$SSH_AUTH_SOCK",fork EXEC:"$(get-local-appdata)/Microsoft/WinGet/Links/npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork &) >/dev/null 2>&1 &
+#  fi
 #fi
 
 if [ -d "$HOME/bin" ]; then
@@ -54,8 +73,4 @@ fi
 
 if [ -d "/opt/nvim-linux-x86_64/bin" ]; then
   export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
-fi
-
-if type -P mise > /dev/null; then
-  eval "$(mise activate bash)"
 fi
