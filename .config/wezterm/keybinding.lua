@@ -105,6 +105,13 @@ config.keys = {
     }),
   },
 
+  -- ペースト。
+  {
+    key = "v",
+    mods = "SHIFT|CTRL",
+    action = act.PasteFrom "Clipboard"
+  },
+
   -- コピーモード。
   {
     key = "w",
