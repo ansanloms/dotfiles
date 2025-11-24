@@ -97,3 +97,5 @@ link:
         - linux
   ~/.ripgreprc:
     - src: ./.ripgreprc
+  ~/.claude/CLAUDE.md:
+    - src: ./.claude/CLAUDE.md
