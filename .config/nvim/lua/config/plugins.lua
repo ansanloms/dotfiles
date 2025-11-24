@@ -40,6 +40,13 @@ require("jetpack.packer").startup(function(use)
       vim.g.blamer_enabled = true
     end,
   })
+  use({
+    "https://github.com/kevinhwang91/nvim-hlslens.git",
+    as = "nvim-hlslens",
+    config = function()
+      require("hlslens").setup()
+    end,
+  })
 
   -- telescope:
   use({
@@ -127,6 +134,23 @@ require("jetpack.packer").startup(function(use)
   use({
     "https://github.com/hrsh7th/cmp-nvim-lsp.git",
     as = "cmp-nvim-lsp",
+  })
+  use({
+    "https://github.com/hrsh7th/cmp-nvim-lsp-signature-help.git",
+    as = "cmp-nvim-lsp-signature-help",
+  })
+  use({
+    "https://github.com/j-hui/fidget.nvim.git",
+    as = "fidget.nvim",
+    config = function()
+      require("fidget").setup({
+        notification = {
+          window = {
+            winblend = 0, -- Background color opacity in the notification window
+          },
+        }
+      })
+    end,
   })
   use({
     "https://github.com/williamboman/mason-lspconfig.nvim.git",
@@ -328,6 +352,7 @@ require("jetpack.packer").startup(function(use)
       require("nvim-navic").setup({
         lsp = {
           auto_attach = true,
+          preference = { "vue_ls", "vtsls", "denols" },
         },
         highlight = true,
         depth_limit = 12,
@@ -516,7 +541,12 @@ require("jetpack.packer").startup(function(use)
   use({
     "https://github.com/hrsh7th/nvim-cmp.git",
     as = "nvim-cmp",
-    requires = { "cmp-vsnip", "cmp-nvim-lsp", "cmp-skkeleton" },
+    requires = {
+      "cmp-vsnip",
+      "cmp-nvim-lsp",
+      "cmp-nvim-lsp-signature-help",
+      "cmp-skkeleton"
+    },
     config = function()
       local cmp = require("cmp")
       cmp.setup({
@@ -527,6 +557,7 @@ require("jetpack.packer").startup(function(use)
         },
         sources = {
           { name = "nvim_lsp" },
+          { name = "nvim_lsp_signature_help" },
           { name = "vsnip" },
           { name = "skkeleton" },
         },

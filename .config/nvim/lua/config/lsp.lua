@@ -1,6 +1,8 @@
 require("jetpack").load("nvim-lspconfig")
 require("jetpack").load("cmp-nvim-lsp")
 
+local util = require("lspconfig.util")
+
 -- keyboard shortcut:
 --vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>")
 vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>")
@@ -47,25 +49,23 @@ vim.lsp.config("*", {
 vim.lsp.config("denols", {
   filetypes = {
     "javascript",
-    "typescript",
     "javascriptreact",
+    "javascript.jsx",
+    "typescript",
     "typescriptreact",
-    "json",
-    "json5"
+    "typescript.tsx"
   },
+  root_dir = util.root_pattern(
+    "deno.json",
+    "deno.jsonc"
+  ),
 })
 
 vim.lsp.config("vue_ls", {
   filetypes = {
-    "vue",
-    "javascript",
-    "typescript",
-    "javascriptreact",
-    "typescriptreact",
-    "json",
-    "json5"
+    "vue"
   },
-  root_dir = require("lspconfig.util").root_pattern(
+  root_dir = util.root_pattern(
     "vue.config.js",
     "vue.config.ts",
     "nuxt.config.js",
@@ -77,11 +77,11 @@ vim.lsp.config("vtsls", {
   filetypes = {
     "vue",
     "javascript",
-    "typescript",
     "javascriptreact",
+    "javascript.jsx",
+    "typescript",
     "typescriptreact",
-    "json",
-    "json5"
+    "typescript.tsx"
   },
   settings = {
     -- @see https://github.com/vuejs/language-tools/wiki/Neovim
@@ -98,7 +98,7 @@ vim.lsp.config("vtsls", {
       },
     },
   },
-  root_dir = require("lspconfig.util").root_pattern(
+  root_dir = util.root_pattern(
     "package.json"
   ),
 })
@@ -137,33 +137,6 @@ vim.lsp.config("efm", {
     rootMarkers = { ".git/" },
     languages = {
       php = {
-        --{
-        --  lintCommand = table.concat({
-        --    vim.fn.stdpath("data") .. "/mason/packages/phpstan/phpstan",
-        --    "analyse",
-        --    "--no-progress",
-        --    "--error-format",
-        --    "json",
-        --    "--no-ansi",
-        --    [["${INPUT}"]],
-        --    "|",
-        --    "jq",
-        --    "-r",
-        --    [['.files | to_entries[] | .key as $filepath | .value.messages[] | "\($filepath):\(.line):\(.identifier) - \(.message)"']]
-        --  }, " "),
-        --  lintSource = "efm/phpstan",
-        --  lintStdin = false,
-        --  lintIgnoreExitCode = true,
-        --  lintDebounce = "1s",
-        --  lintFormats = {
-        --    "%f:%l:%m"
-        --  },
-        --  rootmarkers = {
-        --    "phpstan.neon",
-        --    "phpstan.neon.dist",
-        --    "composer.json",
-        --  },
-        --},
         {
           lintCommand = table.concat({
             vim.fn.stdpath("data") .. "/mason/packages/easy-coding-standard/vendor/bin/ecs",
@@ -174,9 +147,9 @@ vim.lsp.config("efm", {
           }, " "),
           formatStdin = false,
           lintIgnoreExitCode = true,
-          rootmarkers = {
+          root_markers = {
             "ecs.php",
-            "composer.json",
+            "composer.json"
           },
         },
       }
@@ -190,13 +163,39 @@ vim.lsp.config("efm", {
 
 vim.lsp.enable({
   "eslint",
-  "denols",
-  "vtsls",
-  "vue_ls",
   "docker_language_server",
   "intelephense",
-  --"jq",
-  --"jsonls",
   "lua_ls",
   "efm"
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("lsp-start-vue", { clear = true }),
+  pattern = "vue",
+  callback = function()
+    vim.lsp.start(vim.lsp.config.vtsls)
+    vim.lsp.start(vim.lsp.config.vue_ls)
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("lsp-start-node-or-deno", { clear = true }),
+  pattern = {
+    "javascript",
+    "javascriptreact",
+    "javascript.jsx",
+    "typescript",
+    "typescriptreact",
+    "typescript.tsx",
+  },
+  callback = function()
+    -- node
+    if vim.fn.findfile("package.json", ".;") ~= "" then
+      vim.lsp.start(vim.lsp.config.vtsls)
+      return
+    end
+
+    -- deno
+    vim.lsp.start(vim.lsp.config.denols)
+  end,
 })
