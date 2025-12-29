@@ -3,11 +3,17 @@ show_startup_tips false
 theme "nightfox"
 default_layout "default"
 scrollback_editor "nvim"
+pane_frames false
+mouse_mode true
 
 keybinds {
   normal {
     unbind "Ctrl w"
     unbind "Ctrl h"
     unbind "Ctrl n"
+    unbind "Ctrl t"
+    unbind "Ctrl o"
+    unbind "Ctrl b"
+    unbind "Ctrl g"
   }
 }

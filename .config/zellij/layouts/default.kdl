@@ -1,21 +1,51 @@
 layout {
-  //pane size=1 borderless=true {
-  //  plugin location="zellij:status-bar"
-  //}
+  tab {
+    pane split_direction="vertical" {
+      pane {
+        pane {
+          name "nvim"
+          focus true
+          command "nvim"
+        }
 
-  pane size="75%" {
-    name "nvim"
-    focus true
-    command "nvim"
+        pane size="25%" {
+          name "terminal"
+          command "bash"
+          args "-li"
+        }
+      }
+
+      pane size="25%" {
+        name "Claude Code"
+        command "claude"
+      }
+    }
+
+    pane size=2 borderless=true {
+      plugin location="zellij:tab-bar"
+    }
   }
 
-  pane size="25%" {
-    name "terminal"
-    command "bash"
-		args "-li"
-  }
+  tab {
+    pane split_direction="vertical" {
+      pane {
+        name "Claude Code"
+        command "claude"
+      }
 
-  pane size=2 borderless=true {
-    plugin location="zellij:tab-bar"
+      pane {
+        name "Claude Code"
+        command "claude"
+      }
+
+      pane {
+        name "Claude Code"
+        command "claude"
+      }
+    }
+
+    pane size=2 borderless=true {
+      plugin location="zellij:tab-bar"
+    }
   }
 }
