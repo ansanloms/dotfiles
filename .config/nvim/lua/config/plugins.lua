@@ -31,6 +31,12 @@ require("jetpack.packer").startup(function(use)
     requires = { "denops.vim" },
     config = function()
       vim.g.hitori_opener = "edit"
+      vim.g.hitori_ignore_patterns = {
+        "\\.tmp$",
+        "\\.diff$",
+        "(COMMIT_EDIT|TAG_EDIT|MERGE_|SQUASH_)MSG$",
+        "\\/tmp\\/claude-prompt",
+      }
     end,
   })
   use({
@@ -160,7 +166,7 @@ require("jetpack.packer").startup(function(use)
       require("mason-lspconfig").setup({
         ensure_installed = {
           "eslint",
-          "prettier",
+          --"prettier",
           "denols",
           "vtsls",
           "vue_ls",
@@ -531,6 +537,15 @@ require("jetpack.packer").startup(function(use)
       vim.fn["skkeleton_state_popup#enable"]()
     end,
   })
+  use({
+    "https://github.com/NI57721/skkeleton-henkan-highlight.git",
+    as = "skkeleton-henkan-highlight",
+    requires = { "skkeleton" },
+    config = function()
+      vim.cmd("highlight SkkeletonHenkan gui=underline term=underline cterm=reverse")
+    end,
+  })
+
   use({
     "https://github.com/uga-rosa/cmp-skkeleton.git",
     as = "cmp-skkeleton",

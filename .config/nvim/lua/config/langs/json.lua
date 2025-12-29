@@ -15,8 +15,8 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.expandtab = true
 
     -- フォーマット指定
-    if vim.fn.executable("python") == 1 then
-      vim.opt_local.formatprg = "python -m json.tool"
+    if vim.fn.executable("deno") == 1 then
+      vim.opt_local.formatprg = "deno fmt --ext json -"
     end
   end,
 })
