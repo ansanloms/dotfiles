@@ -1,7 +1,6 @@
 #!/usr/bin/env deno
 
 import * as path from "jsr:@std/path@1.1.3";
-import * as fs from "jsr:@std/fs@1.0.20";
 
 interface StatuslineCommand {
   hook_event_name: string;
@@ -31,6 +30,12 @@ interface StatuslineCommand {
     total_input_tokens: number;
     total_output_tokens: number;
     context_window_size: number;
+    current_usage: {
+      input_tokens: number;
+      output_tokens: number;
+      cache_creation_input_tokens: number;
+      cache_read_input_tokens: number;
+    };
   };
 }
 
@@ -67,28 +72,6 @@ const gitManaged = async (filepath: string): Promise<boolean> => {
   return code === 0;
 };
 
-const getTokens = async (transcriptPath: string): Promise<number> => {
-  if (!(await fs.exists(transcriptPath))) {
-    return 0;
-  }
-
-  const transcripts = (await Deno.readTextFile(transcriptPath)).split("\n")
-    .filter((line) => line.trim().length > 0)
-    .map((line) => JSON.parse(line));
-
-  return transcripts.map((transcript) => {
-    const {
-      input_tokens: inputTokens = 0,
-      output_tokens: outputTokens = 0,
-      cache_creation_input_tokens: cacheCreationInputTokens = 0,
-      cache_read_input_tokens: cacheReadInputTokens = 0,
-    } = transcript.message?.usage ?? {};
-
-    return Number(inputTokens) + Number(outputTokens) +
-      Number(cacheCreationInputTokens) + Number(cacheReadInputTokens);
-  }).reduce((total, token) => total + token, 0);
-};
-
 const formatNumber = (num: number): string => {
   return new Intl.NumberFormat("en", {
     notation: "compact",
@@ -107,6 +90,25 @@ const data = await (async () => {
 
 (async () => {
   try {
+    const dir = (await gitManaged(data.workspace.current_dir))
+      ? (path.relative(
+        await gitRoot(data.workspace.current_dir),
+        data.workspace.current_dir,
+      ).trim() || `.${path.SEPARATOR}`)
+      : path.resolve(data.workspace.current_dir);
+
+    const tokens = data.context_window.current_usage.input_tokens +
+      data.context_window.current_usage.cache_creation_input_tokens +
+      data.context_window.current_usage.cache_read_input_tokens;
+
+    const tokenLimit = Math.min(
+      100,
+      Math.round(
+        (tokens / (data.context_window.context_window_size)) * 100,
+      ),
+    );
+
+    console.log(data.session_id);
     console.log(
       [
         [
@@ -115,16 +117,11 @@ const data = await (async () => {
         ],
         [
           "📁 ",
-          (await gitManaged(data.workspace.current_dir))
-            ? (path.relative(
-              await gitRoot(data.workspace.current_dir),
-              data.workspace.current_dir,
-            ).trim() || `.${path.SEPARATOR}`)
-            : path.resolve(data.workspace.current_dir),
+          dir,
         ],
         [
           "",
-          `${formatNumber(await getTokens(data.transcript_path))} tokens`,
+          `${formatNumber(tokens)} (${tokenLimit}%)`,
         ],
         [
           "💰",
@@ -132,7 +129,7 @@ const data = await (async () => {
         ],
       ].map(([icon, label]) => `${icon} ${label}`).join(" | "),
     );
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
   }
 })();

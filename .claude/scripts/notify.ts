@@ -1,7 +1,9 @@
 #!/usr/bin/env deno
 
-import type { NotifyRequest } from "https://raw.githubusercontent.com/ansanloms/wsl-notify/refs/tags/0.0.2/notifier.ts";
-import { SOCK_PATH } from "https://raw.githubusercontent.com/ansanloms/wsl-notify/refs/tags/0.0.2/socket.ts";
+import type { NotifyRequest } from "https://raw.githubusercontent.com/ansanloms/wsl-notify/refs/tags/0.0.5/notifier.ts";
+import { SOCK_PATH } from "https://raw.githubusercontent.com/ansanloms/wsl-notify/refs/tags/0.0.5/socket.ts";
+
+const BUFFER_SIZE = 16384; // 16KB
 
 interface HookCommand {
   session_id: string;
@@ -75,9 +77,8 @@ const conn = await Deno.connect({
   transport: "unix",
 });
 
-const req: NotifyRequest = {
-  title: `Claude Code (${data.hook_event_name})`,
-  message: await (async () => {
+try {
+  const message = await (async () => {
     const lines = (await tailLines(data.transcript_path, 10)).reverse();
     for (const line of lines) {
       const session = JSON.parse(line);
@@ -86,16 +87,29 @@ const req: NotifyRequest = {
         type === "text"
       )?.text;
       if (text) {
-        return String(text).split("\n").at(0) ?? "";
+        return String(text);
       }
     }
 
     return "";
-  })(),
-};
+  })();
 
-try {
+  const req: NotifyRequest = {
+    title: "Claude Code",
+    message,
+    attribution: `${data.session_id} (${data.hook_event_name})`,
+    audio: {
+      src: data.hook_event_name === "Stop"
+        ? "ms-winsoundevent:Notification.Looping.Alarm8"
+        : "ms-winsoundevent:Notification.Looping.Call7",
+    },
+    duration: "long",
+  };
+
   await conn.write(new TextEncoder().encode(JSON.stringify(req)));
+  await conn.read(new Uint8Array(BUFFER_SIZE));
+} catch (error) {
+  console.error("Client error:", error);
 } finally {
   conn.close();
 }
