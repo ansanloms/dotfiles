@@ -30,11 +30,11 @@ interface StatuslineCommand {
     total_input_tokens: number;
     total_output_tokens: number;
     context_window_size: number;
-    current_usage: {
-      input_tokens: number;
-      output_tokens: number;
-      cache_creation_input_tokens: number;
-      cache_read_input_tokens: number;
+    current_usage?: {
+      input_tokens?: number;
+      output_tokens?: number;
+      cache_creation_input_tokens?: number;
+      cache_read_input_tokens?: number;
     };
   };
 }
@@ -97,9 +97,9 @@ const data = await (async () => {
       ).trim() || `.${path.SEPARATOR}`)
       : path.resolve(data.workspace.current_dir);
 
-    const tokens = data.context_window.current_usage.input_tokens +
-      data.context_window.current_usage.cache_creation_input_tokens +
-      data.context_window.current_usage.cache_read_input_tokens;
+    const tokens = (data.context_window.current_usage?.input_tokens ?? 0) +
+      (data.context_window.current_usage?.cache_creation_input_tokens ?? 0) +
+      (data.context_window.current_usage?.cache_read_input_tokens ?? 0);
 
     const tokenLimit = Math.min(
       100,
