@@ -1,0 +1,39 @@
+{
+  "env": {
+    "DISABLE_AUTOUPDATER": "1",
+    "CLAlUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1"
+  },
+  "includeCoAuthoredBy": false,
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "deno run -A ~/.claude/scripts/notify.ts",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "deno run -A ~/.claude/scripts/notify.ts",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "deno run -A ~/.claude/scripts/statusline.ts",
+    "padding": 0
+  },
+  "alwaysThinkingEnabled": true
+}

@@ -99,3 +99,7 @@ link:
     - src: ./.ripgreprc
   ~/.claude/CLAUDE.md:
     - src: ./.claude/CLAUDE.md
+  ~/.claude/settings.json:
+    - src: ./.claude/settings.json
+  ~/.claude/scripts:
+    - src: ./.claude/scripts
