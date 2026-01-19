@@ -103,3 +103,11 @@ link:
     - src: ./.claude/settings.json
   ~/.claude/scripts:
     - src: ./.claude/scripts
+  ~/.config/systemd/user/wsl-notify.service:
+    - src: ./.config/systemd/user/wsl-notify.service
+      targets:
+        - linux
+  ~/.config/systemd/user/wsl2-ssh-agent.service:
+    - src: ./.config/systemd/user/wsl2-ssh-agent.service
+      targets:
+        - linux
