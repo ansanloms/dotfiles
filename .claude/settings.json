@@ -35,5 +35,6 @@
     "command": "deno run -A ~/.claude/scripts/statusline.ts",
     "padding": 0
   },
+  "language": "japanese",
   "alwaysThinkingEnabled": true
 }
