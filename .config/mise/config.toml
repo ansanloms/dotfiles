@@ -1,12 +1,19 @@
 [tools]
 node = "latest"
 npm = "latest"
+deno = "latest"
+rust = "latest"
+cargo = "latest"
+go = "latest"
+zellij = "latest"
+starship = "latest"
+aws-cli = { version = "latest", symlink_bins = "true" }
 "npm:@anthropic-ai/claude-code" = "latest"
 "npm:@devcontainers/cli" = "latest"
-"npm:@google/gemini-cli" = "latest"
-"npm:@mermaid-js/mermaid-cli" = "latest"
 "npm:wsl-open" = "latest"
 "npm:rulesync" = "latest"
+"cargo:eza" = "latest"
+"cargo:sheldon" = "latest"
 
 [tasks.chrome-remote-debug]
 run = """

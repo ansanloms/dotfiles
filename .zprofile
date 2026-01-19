@@ -4,10 +4,6 @@ export LESSCHARSET=utf-8
 
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
-if [ -f /etc/bashrc ]; then
-  source /etc/bashrc
-fi
-
-if [ -f "$HOME/.bashrc" ]; then
-  source "$HOME/.bashrc"
+if [ -f "$HOME/.zshrc" ]; then
+  source "$HOME/.zshrc"
 fi

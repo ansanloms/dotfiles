@@ -11,6 +11,14 @@ link:
     - src: ./.bash_aliases
       targets:
         - linux
+  ~/.zshrc:
+    - src: ./.zshrc
+      targets:
+        - linux
+  ~/.zprofile:
+    - src: ./.zprofile
+      targets:
+        - linux
   ~/.inputrc:
     - src: ./.inputrc
       targets:
@@ -34,6 +42,11 @@ link:
     - src: ./.vimrc
   ~/.config/nvim:
     - src: ./.config/nvim
+      targets:
+        - darwin
+        - linux
+  ~/.config/sheldon:
+    - src: ./.config/sheldon
       targets:
         - darwin
         - linux

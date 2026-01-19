@@ -10,7 +10,7 @@ layout {
 
         pane size="25%" {
           name "terminal"
-          command "bash"
+          command "zsh"
           args "-li"
         }
       }

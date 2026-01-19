@@ -5,9 +5,10 @@ alias ll="ls -l"
 alias vi="vim"
 alias vim="nvim"
 
-if command -v is-wsl >/dev/null 2>&1 && is-wsl; then
+if type wsl-open > /dev/null 2>&1; then
   alias open="wsl-open"
-  alias ssh="/mnt/c/WINDOWS/System32/OpenSSH/ssh.exe"
-else
-  alias open="xdg-open"
+fi
+
+if type eza > /dev/null 2>&1; then
+  alias ls="eza"
 fi
