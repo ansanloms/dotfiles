@@ -1,5 +1,6 @@
 [include]
 	path = config.os
+	path = config.work
 [user]
 	useConfigOnly = true
 [core]
