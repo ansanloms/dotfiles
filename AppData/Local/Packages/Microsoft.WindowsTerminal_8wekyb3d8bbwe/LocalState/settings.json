@@ -29,10 +29,6 @@
     [
         {
             "id": null,
-            "keys": "win+sc(41)"
-        },
-        {
-            "id": null,
             "keys": "f11"
         },
         {
@@ -53,11 +49,19 @@
         },
         {
             "id": null,
+            "keys": "win+sc(41)"
+        },
+        {
+            "id": null,
             "keys": "ctrl+shift+a"
         },
         {
             "id": null,
             "keys": "menu"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+alt+1"
         },
         {
             "id": null,
@@ -73,7 +77,7 @@
         },
         {
             "id": null,
-            "keys": "ctrl+shift+c"
+            "keys": "ctrl+alt+5"
         },
         {
             "id": null,
@@ -81,15 +85,19 @@
         },
         {
             "id": null,
+            "keys": "ctrl+shift+c"
+        },
+        {
+            "id": null,
             "keys": "alt+shift+minus"
         },
         {
             "id": null,
-            "keys": "alt+space"
+            "keys": "alt+shift+plus"
         },
         {
             "id": null,
-            "keys": "alt+shift+plus"
+            "keys": "alt+space"
         },
         {
             "id": null,
@@ -105,11 +113,11 @@
         },
         {
             "id": null,
-            "keys": "ctrl+shift+k"
+            "keys": "ctrl+shift+d"
         },
         {
             "id": null,
-            "keys": "ctrl+shift+d"
+            "keys": "ctrl+shift+k"
         },
         {
             "id": null,
@@ -117,23 +125,11 @@
         },
         {
             "id": null,
-            "keys": "ctrl+shift+6"
-        },
-        {
-            "id": null,
             "keys": "ctrl+insert"
         },
         {
             "id": null,
-            "keys": "ctrl+shift+comma"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+5"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+2"
+            "keys": "ctrl+shift+6"
         },
         {
             "id": null,
@@ -141,15 +137,19 @@
         },
         {
             "id": null,
+            "keys": "ctrl+shift+2"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+5"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+comma"
+        },
+        {
+            "id": null,
             "keys": "ctrl+numpad_plus"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+3"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+minus"
         },
         {
             "id": null,
@@ -157,7 +157,11 @@
         },
         {
             "id": null,
-            "keys": "alt+right"
+            "keys": "ctrl+minus"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+3"
         },
         {
             "id": null,
@@ -165,15 +169,19 @@
         },
         {
             "id": null,
+            "keys": "alt+right"
+        },
+        {
+            "id": null,
             "keys": "alt+up"
         },
         {
             "id": null,
-            "keys": "ctrl+shift+4"
+            "keys": "alt+down"
         },
         {
             "id": null,
-            "keys": "alt+down"
+            "keys": "ctrl+shift+4"
         },
         {
             "id": null,
@@ -201,11 +209,11 @@
         },
         {
             "id": null,
-            "keys": "ctrl+shift+7"
+            "keys": "ctrl+shift+home"
         },
         {
             "id": null,
-            "keys": "ctrl+shift+home"
+            "keys": "ctrl+shift+7"
         },
         {
             "id": null,
@@ -233,6 +241,10 @@
         },
         {
             "id": null,
+            "keys": "ctrl+alt+2"
+        },
+        {
+            "id": null,
             "keys": "ctrl+alt+9"
         },
         {
@@ -242,6 +254,26 @@
         {
             "id": null,
             "keys": "ctrl+comma"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+alt+3"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+alt+7"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+alt+4"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+alt+6"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+alt+8"
         }
     ],
     "launchMode": "default",
@@ -271,7 +303,7 @@
             "experimental.retroTerminalEffect": false,
             "font": 
             {
-                "builtinGlyphs": true,
+                "builtinGlyphs": false,
                 "cellHeight": "1",
                 "colorGlyphs": false,
                 "face": "Moralerspace Krypton HWNF",
@@ -279,9 +311,11 @@
                 "weight": "normal"
             },
             "historySize": 99999,
+            "intenseTextStyle": "none",
             "opacity": 90,
             "padding": "0,0,0,0",
             "scrollbarState": "visible",
+            "showMarksOnScrollbar": true,
             "suppressApplicationTitle": false,
             "useAcrylic": false
         },
@@ -320,12 +354,6 @@
                 "source": "Windows.Terminal.PowershellCore"
             },
             {
-                "guid": "{a3a2e83a-884a-5379-baa8-16f193a13b21}",
-                "hidden": false,
-                "name": "PowerShell 7 Preview",
-                "source": "Windows.Terminal.PowershellCore"
-            },
-            {
                 "commandline": "C:\\WINDOWS\\system32\\wsl.exe -d Ubuntu",
                 "guid": "{143fb84e-55c4-4f67-83b0-e75022282ac3}",
                 "hidden": false,
@@ -333,6 +361,11 @@
                 "name": "Ubuntu",
                 "pathTranslationStyle": "wsl",
                 "startingDirectory": "~"
+            },
+            {
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "name": "Windows PowerShell"
             }
         ]
     },
