@@ -29,19 +29,7 @@
     [
         {
             "id": null,
-            "keys": "f11"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+period"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+numpad0"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+pgup"
+            "keys": "win+sc(41)"
         },
         {
             "id": null,
@@ -49,15 +37,27 @@
         },
         {
             "id": null,
-            "keys": "win+sc(41)"
+            "keys": "ctrl+shift+pgup"
         },
         {
             "id": null,
-            "keys": "ctrl+shift+a"
+            "keys": "ctrl+numpad0"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+period"
+        },
+        {
+            "id": null,
+            "keys": "f11"
         },
         {
             "id": null,
             "keys": "menu"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+a"
         },
         {
             "id": null,
@@ -304,7 +304,7 @@
             "font": 
             {
                 "builtinGlyphs": false,
-                "cellHeight": "1",
+                "cellHeight": "1.2",
                 "colorGlyphs": false,
                 "face": "Moralerspace Krypton HWNF",
                 "size": 8,
