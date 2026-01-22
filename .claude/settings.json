@@ -32,7 +32,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "deno run -A ~/.claude/scripts/statusline.ts",
+    "command": "ccusage statusline",
     "padding": 0
   },
   "language": "japanese",
