@@ -66,3 +66,8 @@ if (Get-Command eza -errorAction SilentlyContinue) {
 if (Get-Command bat -errorAction SilentlyContinue) {
   Set-Alias -Name cat -Value bat
 }
+
+# mise
+if (Get-Command mise -errorAction SilentlyContinue) {
+  mise activate pwsh | Out-String | Invoke-Expression
+}
