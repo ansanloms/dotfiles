@@ -9,7 +9,10 @@ vim.cmd("packadd vim-jetpack")
 
 require("jetpack.packer").add({
   -- plugin manager:
-  { "tani/vim-jetpack", opt = true },
+  {
+    "tani/vim-jetpack",
+    opt = true
+  },
 
   -- general:
   { "vim-jp/vimdoc-ja" },
@@ -123,8 +126,6 @@ require("jetpack.packer").add({
       vim.g.vsnip_filetypes.typescriptreact = { "javascript", "typescript" }
     end,
   },
-  { "hrsh7th/vim-vsnip-integ" },
-  { "hrsh7th/cmp-vsnip" },
 
   -- lsp:
   { "neovim/nvim-lspconfig" },
@@ -134,8 +135,6 @@ require("jetpack.packer").add({
       require("mason").setup()
     end,
   },
-  { "hrsh7th/cmp-nvim-lsp" },
-  { "hrsh7th/cmp-nvim-lsp-signature-help" },
   {
     "williamboman/mason-lspconfig.nvim",
     config = function()
@@ -471,34 +470,83 @@ require("jetpack.packer").add({
       vim.cmd("highlight SkkeletonHenkan gui=underline term=underline cterm=reverse")
     end,
   },
-  { "uga-rosa/cmp-skkeleton" },
+  { "Xantibody/blink-cmp-skkeleton" },
 
   -- cmp:
   {
-    "hrsh7th/nvim-cmp",
+    "saghen/blink.cmp",
+    run = function()
+      local plugin_path = vim.fn.stdpath("data") .. "/site/pack/jetpack/opt/blink.cmp"
+      vim.api.nvim_echo({ { "[blink.cmp] Building Rust fuzzy matcher... (this may take a while)", "WarningMsg" } }, true,
+        {})
+      vim.cmd("redraw")
+
+      local result = vim.system({
+        "cargo", "build", "--release"
+      }, { cwd = plugin_path, text = true }):wait()
+
+      if result.code == 0 then
+        vim.notify("[blink.cmp] Build succeeded!", vim.log.levels.INFO)
+      else
+        vim.notify("[blink.cmp] Build failed: " .. (result.stderr or ""), vim.log.levels.ERROR)
+      end
+    end,
     config = function()
-      local cmp = require("cmp")
-      cmp.setup({
-        snippet = {
-          expand = function(args)
-            vim.fn["vsnip#anonymous"](args.body)
-          end,
+      require("blink.cmp").setup({
+        -- スニペット設定（vim-vsnip を使用）
+        snippets = {
+          preset = "vsnip",
         },
+
+        -- キーマッピング
+        keymap = {
+          preset = "none",
+          ["<C-p>"] = { "select_prev", "fallback" },
+          ["<C-n>"] = { "select_next", "fallback" },
+          ["<C-k>"] = { "select_prev", "fallback" },
+          ["<C-j>"] = { "select_next", "fallback" },
+          ["<Up>"] = { "select_prev", "fallback" },
+          ["<Down>"] = { "select_next", "fallback" },
+          ["<C-l>"] = { "show", "fallback" },
+          ["<C-e>"] = { "hide", "fallback" },
+          ["<CR>"] = { "accept", "fallback" },
+          ["<Space>"] = {} -- Required: Let skkeleton handle Space
+        },
+
+        -- 補完ソース
         sources = {
-          { name = "nvim_lsp" },
-          { name = "nvim_lsp_signature_help" },
-          { name = "vsnip" },
-          { name = "skkeleton" },
+          default = function()
+            if require("blink-cmp-skkeleton").is_enabled() then
+              return { "skkeleton" }
+            else
+              return { "lsp", "path", "snippets", "buffer" }
+            end
+          end,
+          providers = {
+            skkeleton = {
+              name = "skkeleton",
+              module = "blink-cmp-skkeleton",
+            },
+          },
         },
-        mapping = cmp.mapping.preset.insert({
-          ["<C-p>"] = cmp.mapping.select_prev_item(),
-          ["<C-n>"] = cmp.mapping.select_next_item(),
-          ["<C-l>"] = cmp.mapping.complete(),
-          ["<C-e>"] = cmp.mapping.abort(),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        }),
-        experimental = {
-          ghost_text = true,
+
+        -- 補完メニュー設定
+        completion = {
+          ghost_text = {
+            enabled = true,
+          },
+          menu = {
+            auto_show = true,
+          },
+        },
+
+        -- シグネチャヘルプ（トリガー文字で自動表示）
+        signature = {
+          enabled = true,
+          trigger = {
+            enabled = true,
+            show_on_trigger_character = true,
+          },
         },
       })
     end,

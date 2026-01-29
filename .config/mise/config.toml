@@ -2,7 +2,7 @@
 node = "latest"
 npm = "latest"
 deno = "latest"
-rust = "latest"
+rust = "nightly"
 cargo = "latest"
 go = "latest"
 zellij = "latest"

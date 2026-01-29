@@ -1,5 +1,5 @@
 require("jetpack").load("nvim-lspconfig")
-require("jetpack").load("cmp-nvim-lsp")
+require("jetpack").load("blink.cmp")
 
 local util = require("lspconfig.util")
 
@@ -42,7 +42,7 @@ vim.diagnostic.config({
 })
 
 vim.lsp.config("*", {
-  capabilities = require("cmp_nvim_lsp").default_capabilities(),
+  capabilities = require("blink.cmp").get_lsp_capabilities(),
 })
 
 vim.lsp.config("denols", {
