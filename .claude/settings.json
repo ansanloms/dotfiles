@@ -35,14 +35,15 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "example-skills@anthropic-agent-skills": true
+    "example-skills@anthropic-agent-skills": true,
+    "context7@claude-plugins-official": true
   },
+  "language": "japanese",
   "spinnerVerbs": {
     "mode": "replace",
     "verbs": [
       "にゃーん"
     ]
   },
-  "language": "japanese",
   "alwaysThinkingEnabled": true
 }
