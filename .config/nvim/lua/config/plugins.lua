@@ -1,34 +1,21 @@
 local jetpackfile = vim.fn.stdpath("data") .. "/site/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim"
 local jetpackurl = "https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim"
+
 if vim.fn.filereadable(jetpackfile) == 0 then
   vim.fn.system(string.format("curl -fsSLo %s --create-dirs %s", jetpackfile, jetpackurl))
 end
 
 vim.cmd("packadd vim-jetpack")
 
-local jetpack = require("jetpack")
-
-require("jetpack.packer").startup(function(use)
+require("jetpack.packer").add({
   -- plugin manager:
-  use({
-    "https://github.com/tani/vim-jetpack.git",
-    as = "vim-jetpack",
-    opt = true
-  })
+  { "tani/vim-jetpack", opt = true },
 
   -- general:
-  use({
-    "https://github.com/vim-jp/vimdoc-ja.git",
-    as = "vimdoc-ja"
-  })
-  use({
-    "https://github.com/vim-denops/denops.vim.git",
-    as = "denops.vim"
-  })
-  use({
-    "https://github.com/yukimemi/hitori.vim.git",
-    as = "hitori.vim",
-    requires = { "denops.vim" },
+  { "vim-jp/vimdoc-ja" },
+  { "vim-denops/denops.vim" },
+  {
+    "yukimemi/hitori.vim",
     config = function()
       vim.g.hitori_opener = "edit"
       vim.g.hitori_ignore_patterns = {
@@ -38,82 +25,60 @@ require("jetpack.packer").startup(function(use)
         "\\/tmp\\/claude-prompt",
       }
     end,
-  })
-  use({
-    "https://github.com/APZelos/blamer.nvim.git",
-    as = "blamer.nvim",
+  },
+  {
+    "APZelos/blamer.nvim",
     config = function()
       vim.g.blamer_enabled = true
     end,
-  })
-  use({
-    "https://github.com/kevinhwang91/nvim-hlslens.git",
-    as = "nvim-hlslens",
+  },
+  {
+    "kevinhwang91/nvim-hlslens",
     config = function()
       require("hlslens").setup()
     end,
-  })
-  use({
-    "https://github.com/MunifTanjim/nui.nvim.git",
-    as = "nui.nvim",
-  })
-  use({
-    "https://github.com/rcarriga/nvim-notify.git",
-    as = "nvim-notify",
-  })
-  use({
-    "https://github.com/folke/noice.nvim.git",
-    as = "noice.nvim",
-    requires = { "nui.nvim", "nvim-notify" },
+  },
+  { "MunifTanjim/nui.nvim" },
+  { "rcarriga/nvim-notify" },
+  {
+    "folke/noice.nvim",
     config = function()
       require("noice").setup({
         cmdline = {
-          enabled = true,         -- enables the Noice cmdline UI
-          view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
+          enabled = true,
+          view = "cmdline_popup",
         },
         messages = {
-          -- NOTE: If you enable messages, then the cmdline is enabled automatically.
-          -- This is a current Neovim limitation.
-          enabled = true,              -- enables the Noice messages UI
-          view = "notify",             -- default view for messages
-          view_error = "notify",       -- view for errors
-          view_warn = "notify",        -- view for warnings
-          view_history = "messages",   -- view for :messages
-          view_search = "virtualtext", -- view for search count messages. Set to `false` to disable
+          enabled = true,
+          view = "notify",
+          view_error = "notify",
+          view_warn = "notify",
+          view_history = "messages",
+          view_search = "virtualtext",
         },
         lsp = {
           progress = {
             enabled = true,
-            -- Lsp Progress is formatted using the builtins for lsp_progress. See config.format.builtin
-            -- See the section on formatting for more details on how to customize.
-            --- @type NoiceFormat|string
             format = "lsp_progress",
-            --- @type NoiceFormat|string
             format_done = "lsp_progress_done",
-            throttle = 1000 / 30, -- frequency to update lsp progress message
+            throttle = 1000 / 30,
             view = "mini",
           },
           hover = {
             enabled = true,
-            silent = false, -- set to true to not show a message if hover is not available
-            view = nil,     -- when nil, use defaults from documentation
-            ---@type NoiceViewOptions
-            opts = {},      -- merged with defaults from documentation
+            silent = false,
+            view = nil,
+            opts = {},
           },
         },
       })
     end,
-  })
+  },
 
   -- telescope:
-  use({
-    "https://github.com/nvim-lua/plenary.nvim.git",
-    as = "plenary.nvim"
-  })
-  use({
-    "https://github.com/nvim-telescope/telescope.nvim.git",
-    as = "telescope.nvim",
-    requires = { "plenary.nvim" },
+  { "nvim-lua/plenary.nvim" },
+  {
+    "nvim-telescope/telescope.nvim",
     config = function()
       local telescope = require("telescope")
       local builtin = require("telescope.builtin")
@@ -125,13 +90,9 @@ require("jetpack.packer").startup(function(use)
           mappings = {
             i = {
               ["<esc>"] = actions.close,
-              --["<C-j>"] = actions.move_selection_next,
-              --["<C-k>"] = actions.move_selection_previous,
             },
             n = {
               ["<esc>"] = actions.close,
-              --["<C-j>"] = actions.move_selection_next,
-              --["<C-k>"] = actions.move_selection_previous,
             },
           },
         },
@@ -144,18 +105,14 @@ require("jetpack.packer").startup(function(use)
       vim.keymap.set("n", "<leader>fs", builtin.git_status, { desc = "Telescope git status" })
       vim.keymap.set("n", "<leader>fl", launcher(require("config.launcher")), { desc = "Telescope launcher" })
     end,
-  })
+  },
 
   -- quickrun:
-  use({
-    "https://github.com/thinca/vim-quickrun.git",
-    as = "vim-quickrun",
-  })
+  { "thinca/vim-quickrun" },
 
   -- snippet:
-  use({
-    "https://github.com/hrsh7th/vim-vsnip.git",
-    as = "vim-vsnip",
+  {
+    "hrsh7th/vim-vsnip",
     config = function()
       vim.g.vsnip_snippet_dir = vim.fn.expand("~/.config/nvim/snippets")
 
@@ -165,42 +122,22 @@ require("jetpack.packer").startup(function(use)
       vim.g.vsnip_filetypes.javascriptreact = { "javascript" }
       vim.g.vsnip_filetypes.typescriptreact = { "javascript", "typescript" }
     end,
-  })
-  use({
-    "https://github.com/hrsh7th/vim-vsnip-integ.git",
-    as = "vim-vsnip-integ",
-    requires = { "vim-vsnip" },
-  })
-  use({
-    "https://github.com/hrsh7th/cmp-vsnip.git",
-    as = "cmp-vsnip",
-    requires = { "vim-vsnip" },
-  })
+  },
+  { "hrsh7th/vim-vsnip-integ" },
+  { "hrsh7th/cmp-vsnip" },
 
   -- lsp:
-  use({
-    "https://github.com/neovim/nvim-lspconfig.git",
-    as = "nvim-lspconfig",
-  })
-  use({
-    "https://github.com/williamboman/mason.nvim.git",
-    as = "mason.nvim",
+  { "neovim/nvim-lspconfig" },
+  {
+    "williamboman/mason.nvim",
     config = function()
       require("mason").setup()
     end,
-  })
-  use({
-    "https://github.com/hrsh7th/cmp-nvim-lsp.git",
-    as = "cmp-nvim-lsp",
-  })
-  use({
-    "https://github.com/hrsh7th/cmp-nvim-lsp-signature-help.git",
-    as = "cmp-nvim-lsp-signature-help",
-  })
-  use({
-    "https://github.com/williamboman/mason-lspconfig.nvim.git",
-    as = "mason-lspconfig.nvim",
-    requires = { "nvim-lspconfig", "mason.nvim" },
+  },
+  { "hrsh7th/cmp-nvim-lsp" },
+  { "hrsh7th/cmp-nvim-lsp-signature-help" },
+  {
+    "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = {
@@ -216,35 +153,25 @@ require("jetpack.packer").startup(function(use)
         },
       })
     end,
-  })
-  use({
-    "https://github.com/nvimdev/lspsaga.nvim.git",
-    as = "lspsaga.nvim",
-    requires = { "nvim-lspconfig", },
+  },
+  {
+    "nvimdev/lspsaga.nvim",
     config = function()
       require("lspsaga").setup({})
     end,
-  })
+  },
 
   -- appearance:
-  use({
-    "https://github.com/whatyouhide/vim-gotham.git",
-    as = "vim-gotham",
-  })
-  use({
-    "https://github.com/EdenEast/nightfox.nvim.git",
-    as = "nightfox.nvim",
-  })
-  use({
-    "https://github.com/nvim-tree/nvim-web-devicons.git",
-    as = "nvim-web-devicons",
+  { "whatyouhide/vim-gotham" },
+  { "EdenEast/nightfox.nvim" },
+  {
+    "nvim-tree/nvim-web-devicons",
     config = function()
       require("nvim-web-devicons").setup()
     end,
-  })
-  use({
-    "https://github.com/nvim-treesitter/nvim-treesitter.git",
-    as = "nvim-treesitter",
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
     branch = "main",
     run = function()
       require("nvim-treesitter").install({
@@ -275,7 +202,6 @@ require("jetpack.packer").startup(function(use)
         "jq",
         "jsdoc",
         "json",
-        "jsonc",
         "kdl",
         "kotlin",
         "latex",
@@ -324,21 +250,15 @@ require("jetpack.packer").startup(function(use)
         install_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "site"),
       })
     end,
-  })
-  use({
-    "https://github.com/nvim-treesitter/nvim-treesitter-context.git",
-    as = "nvim-treesitter-context",
-    requires = { "nvim-treesitter" },
-  })
-  use({
-    "https://github.com/rbtnn/vim-ambiwidth.git",
-    as = "vim-ambiwidth",
+  },
+  { "nvim-treesitter/nvim-treesitter-context" },
+  {
+    "rbtnn/vim-ambiwidth",
     setup = function()
       vim.g.ambiwidth_cica_enabled = false
 
-      -- Nerd Fonts 関連の設定。
       vim.g.ambiwidth_add_list = {
-        -- Seti-UI + Custom (0xe62e は元々対応されてる)
+        -- Seti-UI + Custom
         { 0xe5fa,  0xe62d,  2 }, { 0xe62f, 0xe6b7, 2 },
         -- Devicons
         { 0xe700,  0xe8ef,  2 },
@@ -352,16 +272,10 @@ require("jetpack.packer").startup(function(use)
         { 0xed00,  0xedff,  2 }, { 0xee0c, 0xefce, 2 }, { 0xf000, 0xf2ff, 2 },
       }
     end,
-  })
-  use({
-    "https://github.com/rebelot/heirline.nvim.git",
-    as = "heirline.nvim",
-    requires = { "nightfox.nvim", "nvim-web-devicons" },
-  })
-  use({
-    "https://github.com/OXY2DEV/markview.nvim.git",
-    as = "markview.nvim",
-    requires = { "nvim-treesitter", "nvim-web-devicons" },
+  },
+  { "rebelot/heirline.nvim" },
+  {
+    "OXY2DEV/markview.nvim",
     config = function()
       require("markview").setup({
         preview = {
@@ -373,18 +287,15 @@ require("jetpack.packer").startup(function(use)
         }
       })
     end,
-  })
-  use({
-    "https://github.com/lewis6991/gitsigns.nvim.git",
-    as = "gitsigns.nvim",
+  },
+  {
+    "lewis6991/gitsigns.nvim",
     config = function()
       require("gitsigns").setup()
     end,
-  })
-  use({
-    "https://github.com/SmiteshP/nvim-navic.git",
-    as = "nvim-navic",
-    requires = { "nvim-lspconfig" },
+  },
+  {
+    "SmiteshP/nvim-navic",
     config = function()
       require("nvim-navic").setup({
         lsp = {
@@ -395,10 +306,9 @@ require("jetpack.packer").startup(function(use)
         depth_limit = 12,
       })
     end,
-  })
-  use({
-    "https://github.com/shellRaining/hlchunk.nvim.git",
-    as = "hlchunk.nvim",
+  },
+  {
+    "shellRaining/hlchunk.nvim",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
       require("hlchunk").setup({
@@ -410,28 +320,18 @@ require("jetpack.packer").startup(function(use)
         }
       })
     end,
-  })
-  use({
-    "https://github.com/petertriho/nvim-scrollbar.git",
-    as = "nvim-scrollbar",
+  },
+  {
+    "petertriho/nvim-scrollbar",
     config = function()
       require("scrollbar").setup()
     end,
-  })
+  },
 
-  -- skk
-  use({
-    "https://github.com/vim-skk/skkeleton.git",
-    as = "skkeleton",
-    requires = { "denops.vim" },
+  -- skk:
+  {
+    "vim-skk/skkeleton",
     run = function()
-      -- @class Dictionary
-      -- @field url string ダウンロード用の URL 。
-      -- @field name string 辞書の名前またはファイル名。
-      -- @field encoding string ファイルのエンコーディング("euc-jp" | "utf-8")。
-
-      -- 辞書設定のリスト。
-      -- @type Dictionary[]
       local dicts = {
         {
           url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.L",
@@ -475,7 +375,6 @@ require("jetpack.packer").startup(function(use)
         },
       }
 
-      -- 辞書の保存先。
       local dictDir = vim.fn.expand(vim.fn.stdpath("data") .. "/skkeleton")
       if vim.fn.isdirectory(dictDir) == 0 then
         vim.fn.mkdir(dictDir, "p")
@@ -523,11 +422,9 @@ require("jetpack.packer").startup(function(use)
         { noremap = true, desc = "skkeleton toggle" }
       )
     end,
-  })
-  use({
-    "https://github.com/NI57721/skkeleton-state-popup.git",
-    as = "skkeleton-state-popup",
-    requires = { "skkeleton" },
+  },
+  {
+    "NI57721/skkeleton-state-popup",
     config = function()
       vim.fn["skkeleton_state_popup#config"]({
         labels = {
@@ -567,32 +464,18 @@ require("jetpack.packer").startup(function(use)
       })
       vim.fn["skkeleton_state_popup#enable"]()
     end,
-  })
-  use({
-    "https://github.com/NI57721/skkeleton-henkan-highlight.git",
-    as = "skkeleton-henkan-highlight",
-    requires = { "skkeleton" },
+  },
+  {
+    "NI57721/skkeleton-henkan-highlight",
     config = function()
       vim.cmd("highlight SkkeletonHenkan gui=underline term=underline cterm=reverse")
     end,
-  })
-
-  use({
-    "https://github.com/uga-rosa/cmp-skkeleton.git",
-    as = "cmp-skkeleton",
-    requires = { "skkeleton" },
-  })
+  },
+  { "uga-rosa/cmp-skkeleton" },
 
   -- cmp:
-  use({
-    "https://github.com/hrsh7th/nvim-cmp.git",
-    as = "nvim-cmp",
-    requires = {
-      "cmp-vsnip",
-      "cmp-nvim-lsp",
-      "cmp-nvim-lsp-signature-help",
-      "cmp-skkeleton"
-    },
+  {
+    "hrsh7th/nvim-cmp",
     config = function()
       local cmp = require("cmp")
       cmp.setup({
@@ -619,22 +502,19 @@ require("jetpack.packer").startup(function(use)
         },
       })
     end,
-  })
+  },
 
   -- langs:
-  use({
-    "https://github.com/yukpiz/vim-volt-syntax.git",
-    as = "vim-volt-syntax",
-  })
-  use({
-    "https://github.com/hat0uma/csvview.nvim.git",
-    as = "csvview.nvim",
+  { "yukpiz/vim-volt-syntax" },
+  {
+    "hat0uma/csvview.nvim",
     config = function()
-      require("csvview").setup();
+      require("csvview").setup()
     end,
-  })
-end)
+  },
+})
 
+local jetpack = require("jetpack")
 for _, name in ipairs(jetpack.names()) do
   if not jetpack.tap(name) then
     jetpack.sync()
