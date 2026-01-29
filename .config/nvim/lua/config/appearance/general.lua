@@ -5,7 +5,7 @@ vim.opt.listchars = { tab = "| ", trail = "_", extends = ">", precedes = "<", nb
 
 -- 画面描画の設定。
 vim.opt.cursorline = false -- カーソルライン表示を無効に
-vim.opt.lazyredraw = true  -- 遅延再描画を有効に
+--vim.opt.lazyredraw = true  -- 遅延再描画を有効に
 vim.opt.showcmd = false    -- コマンド表示を無効に
 vim.opt.ruler = false      -- ルーラー表示を無効に
 

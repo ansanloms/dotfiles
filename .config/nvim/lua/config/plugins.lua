@@ -53,6 +53,57 @@ require("jetpack.packer").startup(function(use)
       require("hlslens").setup()
     end,
   })
+  use({
+    "https://github.com/MunifTanjim/nui.nvim.git",
+    as = "nui.nvim",
+  })
+  use({
+    "https://github.com/rcarriga/nvim-notify.git",
+    as = "nvim-notify",
+  })
+  use({
+    "https://github.com/folke/noice.nvim.git",
+    as = "noice.nvim",
+    requires = { "nui.nvim", "nvim-notify" },
+    config = function()
+      require("noice").setup({
+        cmdline = {
+          enabled = true,         -- enables the Noice cmdline UI
+          view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
+        },
+        messages = {
+          -- NOTE: If you enable messages, then the cmdline is enabled automatically.
+          -- This is a current Neovim limitation.
+          enabled = true,              -- enables the Noice messages UI
+          view = "notify",             -- default view for messages
+          view_error = "notify",       -- view for errors
+          view_warn = "notify",        -- view for warnings
+          view_history = "messages",   -- view for :messages
+          view_search = "virtualtext", -- view for search count messages. Set to `false` to disable
+        },
+        lsp = {
+          progress = {
+            enabled = true,
+            -- Lsp Progress is formatted using the builtins for lsp_progress. See config.format.builtin
+            -- See the section on formatting for more details on how to customize.
+            --- @type NoiceFormat|string
+            format = "lsp_progress",
+            --- @type NoiceFormat|string
+            format_done = "lsp_progress_done",
+            throttle = 1000 / 30, -- frequency to update lsp progress message
+            view = "mini",
+          },
+          hover = {
+            enabled = true,
+            silent = false, -- set to true to not show a message if hover is not available
+            view = nil,     -- when nil, use defaults from documentation
+            ---@type NoiceViewOptions
+            opts = {},      -- merged with defaults from documentation
+          },
+        },
+      })
+    end,
+  })
 
   -- telescope:
   use({
@@ -147,19 +198,6 @@ require("jetpack.packer").startup(function(use)
     as = "cmp-nvim-lsp-signature-help",
   })
   use({
-    "https://github.com/j-hui/fidget.nvim.git",
-    as = "fidget.nvim",
-    config = function()
-      require("fidget").setup({
-        notification = {
-          window = {
-            winblend = 0, -- Background color opacity in the notification window
-          },
-        }
-      })
-    end,
-  })
-  use({
     "https://github.com/williamboman/mason-lspconfig.nvim.git",
     as = "mason-lspconfig.nvim",
     requires = { "nvim-lspconfig", "mason.nvim" },
@@ -167,20 +205,14 @@ require("jetpack.packer").startup(function(use)
       require("mason-lspconfig").setup({
         ensure_installed = {
           "eslint",
-          --"prettier",
           "denols",
           "vtsls",
           "vue_ls",
           "docker_language_server",
-          --"intelephense",
           "phpactor",
-          --"phpcs",
-          --"phpstan",
-          --"jqls",
-          --"jsonls",
+          "jsonls",
           "lua_ls",
-          --"sqls",
-          "efm"
+          "efm",
         },
       })
     end,
@@ -243,7 +275,6 @@ require("jetpack.packer").startup(function(use)
         "jq",
         "jsdoc",
         "json",
-        "json5",
         "jsonc",
         "kdl",
         "kotlin",
@@ -263,7 +294,6 @@ require("jetpack.packer").startup(function(use)
         "pug",
         "python",
         "robot",
-        "robots",
         "rst",
         "ruby",
         "rust",
