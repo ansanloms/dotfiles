@@ -8,15 +8,19 @@ go = "latest"
 zellij = "latest"
 starship = "latest"
 aws-cli = { version = "latest", symlink_bins = "true" }
-"npm:@anthropic-ai/claude-code" = "latest"
 "npm:@devcontainers/cli" = "latest"
 "npm:wsl-open" = "latest"
 "npm:rulesync" = "latest"
 "cargo:eza" = "latest"
 "cargo:sheldon" = "latest"
 "npm:ccusage" = "latest"
+claude = { version = "latest", bin = "claude", platforms = """
+[windows-x64]
+bin = "claude.exe"
+url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/{{ version }}/win32-x64/claude.exe"
+""", url = 'https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/{{ version }}/{{ os(macos="darwin") }}-{{ arch() }}/claude', version_list_url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/latest" }
 
 [tasks.chrome-remote-debug]
 run = """
-pwsh.exe -Command "& 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' --remote-debugging-port=9222 --remote-debugging-address=0.0.0.0 --user-data-dir='C:\\temp\\chrome-remote-debug'"
+bash ~/.config/mise/scripts/chrome-remote-debug.sh
 """

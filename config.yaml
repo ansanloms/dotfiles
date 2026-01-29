@@ -67,6 +67,8 @@ link:
     - src: ./.config/zellij
   ~/.config/mise/config.toml:
     - src: ./.config/mise/config.toml
+  ~/.config/mise/scripts:
+    - src: ./.config/mise/scripts
   ~/.minttyrc:
     - src: ./.minttyrc
       targets:
