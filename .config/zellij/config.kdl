@@ -15,5 +15,9 @@ keybinds {
     unbind "Ctrl o"
     unbind "Ctrl b"
     unbind "Ctrl g"
+    unbind "Ctrl p"
+    unbind "Ctrl q"
+    bind "Alt p" { SwitchToMode "Pane"; }
+    bind "Alt q" { Quit; }
   }
 }
