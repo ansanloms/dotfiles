@@ -527,6 +527,16 @@ require("jetpack.packer").add({
               name = "skkeleton",
               module = "blink-cmp-skkeleton",
             },
+            path = {
+              opts = {
+                -- pwd からのパス補完を有効にする（デフォルトはバッファのディレクトリ）
+                get_cwd = function(_)
+                  return vim.fn.getcwd()
+                end,
+                -- ドットファイル（隠しファイル）を補完候補に表示する
+                show_hidden_files_by_default = true,
+              },
+            },
           },
         },
 
