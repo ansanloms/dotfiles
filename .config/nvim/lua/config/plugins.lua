@@ -475,24 +475,60 @@ require("jetpack.packer").add({
   -- cmp:
   {
     "saghen/blink.cmp",
-    run = function()
-      local plugin_path = vim.fn.stdpath("data") .. "/site/pack/jetpack/opt/blink.cmp"
-      vim.api.nvim_echo({ { "[blink.cmp] Building Rust fuzzy matcher... (this may take a while)", "WarningMsg" } }, true,
-        {})
-      vim.cmd("redraw")
-
-      local result = vim.system({
-        "cargo", "build", "--release"
-      }, { cwd = plugin_path, text = true }):wait()
-
-      if result.code == 0 then
-        vim.notify("[blink.cmp] Build succeeded!", vim.log.levels.INFO)
-      else
-        vim.notify("[blink.cmp] Build failed: " .. (result.stderr or ""), vim.log.levels.ERROR)
-      end
-    end,
     config = function()
+      -- 最新バージョンを取得（1日キャッシュ）
+      local function get_blink_version()
+        local cache_path = vim.fn.stdpath("cache") .. "/blink_cmp_version.json"
+        local cache_max_age = 86400 -- 1日
+
+        -- キャッシュ読み込み
+        local cache_file = io.open(cache_path, "r")
+        if cache_file then
+          local content = cache_file:read("*a")
+          cache_file:close()
+          local ok, cache = pcall(vim.fn.json_decode, content)
+          if ok and cache.version and cache.timestamp then
+            if os.time() - cache.timestamp < cache_max_age then
+              return cache.version
+            end
+          end
+        end
+
+        -- GitHub API から最新バージョンを取得
+        local result = vim.system({
+          "curl", "--fail", "--silent", "--max-time", "3",
+          "https://api.github.com/repos/saghen/blink.cmp/releases/latest"
+        }, { text = true }):wait()
+
+        if result.code == 0 then
+          local ok, data = pcall(vim.fn.json_decode, result.stdout)
+          if ok and data.tag_name then
+            -- キャッシュに保存
+            local save_file = io.open(cache_path, "w")
+            if save_file then
+              save_file:write(vim.fn.json_encode({
+                version = data.tag_name,
+                timestamp = os.time(),
+              }))
+              save_file:close()
+            end
+            return data.tag_name
+          end
+        end
+
+        return "v1.8.0" -- フォールバック
+      end
+
       require("blink.cmp").setup({
+        -- fuzzy matcher 設定
+        fuzzy = {
+          implementation = "prefer_rust_with_warning",
+          prebuilt_binaries = {
+            download = true,
+            force_version = get_blink_version(),
+          },
+        },
+
         -- スニペット設定（vim-vsnip を使用）
         snippets = {
           preset = "vsnip",
