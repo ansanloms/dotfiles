@@ -2,6 +2,8 @@ vim.opt.encoding = "utf-8"
 vim.opt.fileencodings = "utf-8,sjis,cp932,euc-jp,iso-2022-jp"
 vim.opt.fileformats = "unix,mac,dos"
 
+vim.opt.exrc = true
+
 -- runtimepath と packpath の設定。
 vim.opt.runtimepath:prepend("~/.config/nvim")
 vim.opt.packpath:prepend("~/.config/nvim")

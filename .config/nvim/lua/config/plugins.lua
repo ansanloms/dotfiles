@@ -27,6 +27,16 @@ require("jetpack.packer").add({
         "(COMMIT_EDIT|TAG_EDIT|MERGE_|SQUASH_)MSG$",
         "\\/tmp\\/claude-prompt",
       }
+
+      if vim.env.ZELLIJ_SESSION_NAME then
+        -- セッション名からポート番号を生成
+        local session_name = vim.env.ZELLIJ_SESSION_NAME
+        local hash = 0
+        for i = 1, #session_name do
+          hash = (hash * 31 + session_name:byte(i)) % 930
+        end
+        vim.g.hitori_port = 7070 + hash
+      end
     end,
   },
   {

@@ -1,11 +1,20 @@
 layout {
   tab {
     pane split_direction="vertical" {
+      /*
+      pane size="10%" {
+        name "filer"
+        command "bash"
+        args "-c" "FILETREE_DEFAULT_CMD=\"nvim --server /tmp/nvim-${ZELLIJ_SESSION_NAME}.sock --remote <filepath>\" ft"
+      }
+      */
+
       pane {
         pane {
           name "nvim"
           focus true
-          command "nvim"
+          command "bash"
+          args "-c" "nvim --listen /tmp/nvim-${ZELLIJ_SESSION_NAME}.sock"
         }
 
         pane size="25%" {
@@ -15,14 +24,14 @@ layout {
         }
       }
 
-      pane size="25%" {
+      pane size="20%" {
         name "Claude Code"
         command "claude"
       }
     }
 
     pane size=2 borderless=true {
-      plugin location="zellij:tab-bar"
+      plugin location="zellij:compact-bar"
     }
   }
 }
