@@ -8,6 +8,9 @@ local function dynamic_require(module)
   end
 end
 
+-- singleton:
+require("config.singleton").setup()
+
 -- general:
 require("config.general")
 require("config.im")
