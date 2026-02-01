@@ -1,7 +1,25 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "autoUpdatesChannel": "stable",
   "env": {
-    "DISABLE_AUTOUPDATER": "1"
+    "DISABLE_AUTOUPDATER": "1",
+    "CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)"
+    ],
+    "ask": [
+      "Bash(gh pr create:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [
+      "Read(*.env)",
+      "Read(*.env.*)",
+      "Bash(rm:*)",
+      "Bash(curl:*)"
+    ],
+    "defaultMode": "default"
   },
   "hooks": {
     "Stop": [
@@ -42,6 +60,7 @@
   "spinnerVerbs": {
     "mode": "replace",
     "verbs": [
+      "愚かなお前にかわって頑張っています",
       "にゃーん"
     ]
   },
