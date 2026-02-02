@@ -4,6 +4,7 @@ local M = {}
 
 M.config = {
   ignore_patterns = {
+    "^%-$",
     "%.tmp$",
     "%.diff$",
     "COMMIT_EDITMSG$",
