@@ -12,7 +12,7 @@ for _, file_path in ipairs(config_files) do
   local file_name = vim.fn.fnamemodify(file_path, ":t:r")
 
   if file_name ~= "init" then
-    local config = require("config.launcher." .. file_name)
+    local config = require("ansanloms.launcher." .. file_name)
 
     table.insert(M.tasks, {
       name = config.title,

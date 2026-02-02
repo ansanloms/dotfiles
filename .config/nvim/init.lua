@@ -9,29 +9,29 @@ local function dynamic_require(module)
 end
 
 -- singleton:
-require("config.singleton").setup()
+require("ansanloms.singleton").setup()
 
 -- general:
-require("config.general")
-require("config.im")
-require("config.clipboard")
+require("ansanloms.general")
+require("ansanloms.im")
+require("ansanloms.clipboard")
 
 -- mapping:
-require("config.mapping")
+require("ansanloms.mapping")
 
 -- plugins:
-require("config.plugins")
+require("ansanloms.plugins")
 
 -- lsp:
-require("config.lsp")
+require("ansanloms.lsp")
 
 -- langs:
-require("config.langs")
+require("ansanloms.langs")
 
 -- appearance:
-require("config.appearance.general")
-require("config.appearance.colorscheme")
-require("config.appearance.statusline")
+require("ansanloms.appearance.general")
+require("ansanloms.appearance.colorscheme")
+require("ansanloms.appearance.statusline")
 
 dynamic_require("temp")
 dynamic_require("work")

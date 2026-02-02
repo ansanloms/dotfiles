@@ -94,7 +94,7 @@ require("jetpack.packer").add({
       vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
       vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "Telescope oldfiles" })
       vim.keymap.set("n", "<leader>fs", builtin.git_status, { desc = "Telescope git status" })
-      vim.keymap.set("n", "<leader>fl", launcher(require("config.launcher")), { desc = "Telescope launcher" })
+      vim.keymap.set("n", "<leader>fl", launcher(require("ansanloms.launcher")), { desc = "Telescope launcher" })
     end,
   },
 
