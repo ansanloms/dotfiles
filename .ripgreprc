@@ -1,3 +1,6 @@
+--hidden
 --path-separator=/
-
 --glob=!phpstan-baseline.*
+--glob=!.git/*
+--glob=!node_modules/*
+--crlf
