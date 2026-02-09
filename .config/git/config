@@ -36,3 +36,7 @@
 	defaultBranch = main
 [worktree]
 	useRelativePaths = true
+[alias]
+	st = status
+	br = branch
+	wt = worktree
