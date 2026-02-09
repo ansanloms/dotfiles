@@ -5,22 +5,23 @@
   },
   "permissions": {
     "allow": [
-      "Bash(git add:*)",
       "mcp__plugin_context7_context7__resolve-library-id",
       "mcp__plugin_context7_context7__query-docs",
       "WebSearch",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "WebFetch(domain:neovim.io)"
+      "WebFetch(domain:neovim.io)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git status:*)",
+      "Bash(git fetch:*)"
     ],
     "ask": [
       "Bash(gh pr create:*)",
-      "Bash(git commit:*)"
-    ],
-    "deny": [
       "Bash(rm:*)",
       "Bash(curl:*)"
     ],
+    "deny": [],
     "defaultMode": "default"
   },
   "hooks": {
@@ -66,5 +67,7 @@
       "にゃーん"
     ]
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "spinnerTipsEnabled": false,
+  "terminalProgressBarEnabled": true
 }
