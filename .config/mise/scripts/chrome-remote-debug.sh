@@ -9,10 +9,13 @@ cleanup() {
 
 trap cleanup SIGINT SIGTERM
 
+rm -rf /tmp/chrome-remote-debug
+
 # chrome
 google-chrome \
   --remote-debugging-port=9222 \
   --user-data-dir=/tmp/chrome-remote-debug \
+  --no-first-run \
   --disable-extensions &
 CHROME_PID=$!
 
