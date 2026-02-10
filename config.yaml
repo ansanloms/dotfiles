@@ -122,7 +122,3 @@ link:
     - src: ./.config/systemd/user/wsl-notify.service
       targets:
         - linux
-  ~/.config/systemd/user/wsl2-ssh-agent.service:
-    - src: ./.config/systemd/user/wsl2-ssh-agent.service
-      targets:
-        - linux
