@@ -1,14 +1,26 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions": 
+    "actions":
     [
         {
-            "command": 
+            "command":
             {
                 "action": "copy"
             },
             "id": "User.copy.644BA8F2"
+        },
+        {
+            "command": "resetFontSize",
+            "id": "User.resetFontSize"
+        },
+        {
+            "command":
+            {
+                "action": "adjustFontSize",
+                "delta": -1
+            },
+            "id": "User.adjustFontSize.E2698FAA"
         },
         {
             "command": "paste",
@@ -17,15 +29,25 @@
         {
             "command": "find",
             "id": "User.find"
+        },
+        {
+            "command":
+            {
+                "action": "adjustFontSize",
+                "delta": 1
+            },
+            "id": "User.adjustFontSize.E04D5229"
         }
     ],
     "alwaysShowTabs": true,
     "copyOnSelect": true,
     "defaultProfile": "{143fb84e-55c4-4f67-83b0-e75022282ac3}",
-    "disableAnimations": true,
+    "disableAnimations": false,
+    "experimental.enableColorSelection": true,
+    "focusFollowMouse": false,
     "initialCols": 160,
     "initialRows": 40,
-    "keybindings": 
+    "keybindings":
     [
         {
             "id": null,
@@ -41,15 +63,15 @@
         },
         {
             "id": null,
-            "keys": "ctrl+numpad0"
-        },
-        {
-            "id": null,
             "keys": "ctrl+shift+period"
         },
         {
             "id": null,
             "keys": "f11"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+numpad0"
         },
         {
             "id": null,
@@ -66,6 +88,10 @@
         {
             "id": null,
             "keys": "alt+shift+left"
+        },
+        {
+            "id": "User.adjustFontSize.E04D5229",
+            "keys": "ctrl+shift+plus"
         },
         {
             "id": null,
@@ -108,7 +134,7 @@
             "keys": "ctrl+shift+w"
         },
         {
-            "id": null,
+            "id": "User.resetFontSize",
             "keys": "ctrl+shift+p"
         },
         {
@@ -137,11 +163,11 @@
         },
         {
             "id": null,
-            "keys": "ctrl+shift+2"
+            "keys": "ctrl+shift+5"
         },
         {
             "id": null,
-            "keys": "ctrl+shift+5"
+            "keys": "ctrl+shift+2"
         },
         {
             "id": null,
@@ -268,6 +294,10 @@
             "keys": "ctrl+alt+4"
         },
         {
+            "id": "User.adjustFontSize.E2698FAA",
+            "keys": "ctrl+shift+minus"
+        },
+        {
             "id": null,
             "keys": "ctrl+alt+6"
         },
@@ -277,7 +307,7 @@
         }
     ],
     "launchMode": "default",
-    "newTabMenu": 
+    "newTabMenu":
     [
         {
             "type": "remainingProfiles"
@@ -288,9 +318,9 @@
             "type": "profile"
         }
     ],
-    "profiles": 
+    "profiles":
     {
-        "defaults": 
+        "defaults":
         {
             "adjustIndistinguishableColors": "never",
             "backgroundImage": null,
@@ -301,25 +331,25 @@
             "compatibility.reloadEnvironmentVariables": true,
             "cursorShape": "emptyBox",
             "experimental.retroTerminalEffect": false,
-            "font": 
+            "font":
             {
-                "builtinGlyphs": false,
+                "builtinGlyphs": true,
                 "cellHeight": "1.2",
-                "colorGlyphs": false,
+                "colorGlyphs": true,
                 "face": "Moralerspace Krypton HWNF",
                 "size": 8,
                 "weight": "normal"
             },
             "historySize": 99999,
             "intenseTextStyle": "none",
-            "opacity": 90,
+            "opacity": 80,
             "padding": "0,0,0,0",
             "scrollbarState": "visible",
             "showMarksOnScrollbar": true,
             "suppressApplicationTitle": false,
             "useAcrylic": false
         },
-        "list": 
+        "list":
         [
             {
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
@@ -369,7 +399,7 @@
             }
         ]
     },
-    "schemes": 
+    "schemes":
     [
         {
             "background": "#161616",
@@ -510,9 +540,11 @@
             "yellow": "#FDA47F"
         }
     ],
+    "searchWebDefaultQueryUrl": "https://www.google.com/search?q=%s",
     "showTabsInTitlebar": true,
     "tabWidthMode": "equal",
     "theme": "system",
     "themes": [],
-    "useAcrylicInTabRow": true
+    "useAcrylicInTabRow": true,
+    "warning.largePaste": false
 }
