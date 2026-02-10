@@ -8,7 +8,6 @@ go = "latest"
 zellij = "latest"
 starship = "latest"
 aws-cli = { version = "latest", symlink_bins = "true" }
-"npm:@devcontainers/cli" = "latest"
 "npm:wsl-open" = "latest"
 "npm:rulesync" = "latest"
 "cargo:eza" = "latest"
@@ -19,8 +18,9 @@ claude = { version = "latest", bin = "claude", platforms = """
 bin = "claude.exe"
 url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/{{ version }}/win32-x64/claude.exe"
 """, url = 'https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/{{ version }}/{{ os(macos="darwin") }}-{{ arch() }}/claude', version_list_url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/latest" }
+devcontainer-cli = "latest"
 
 [tasks.chrome-remote-debug]
 run = """
-bash ~/.config/mise/scripts/chrome-remote-debug.sh
+bash ~/.config/mise/scripts/chrome-remote-debug.sh 9222 9223
 """
