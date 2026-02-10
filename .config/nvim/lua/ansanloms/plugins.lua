@@ -457,7 +457,7 @@ require("jetpack.packer").add({
       vim.cmd("highlight SkkeletonHenkan gui=underline term=underline cterm=reverse")
     end,
   },
-  { "Xantibody/blink-cmp-skkeleton" },
+  -- { "Xantibody/blink-cmp-skkeleton" },
 
   -- cmp:
   {
@@ -539,17 +539,18 @@ require("jetpack.packer").add({
         -- 補完ソース
         sources = {
           default = function()
-            if require("blink-cmp-skkeleton").is_enabled() then
-              return { "skkeleton" }
-            else
-              return { "lsp", "path", "snippets", "buffer" }
-            end
+            --if require("blink-cmp-skkeleton").is_enabled() then
+            --  return { "skkeleton" }
+            --else
+            --  return { "lsp", "path", "snippets", "buffer" }
+            --end
+            return { "path", "snippets", "buffer" }
           end,
           providers = {
-            skkeleton = {
-              name = "skkeleton",
-              module = "blink-cmp-skkeleton",
-            },
+            --skkeleton = {
+            --  name = "skkeleton",
+            --  module = "blink-cmp-skkeleton",
+            --},
             path = {
               opts = {
                 -- pwd からのパス補完を有効にする（デフォルトはバッファのディレクトリ）
