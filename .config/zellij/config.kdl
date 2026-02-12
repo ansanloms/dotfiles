@@ -7,17 +7,14 @@ pane_frames false
 mouse_mode true
 
 keybinds {
-  normal {
-    unbind "Ctrl w"
-    unbind "Ctrl h"
-    unbind "Ctrl n"
-    unbind "Ctrl t"
-    unbind "Ctrl o"
-    unbind "Ctrl b"
-    unbind "Ctrl g"
-    unbind "Ctrl p"
-    unbind "Ctrl q"
-    bind "Alt p" { SwitchToMode "Pane"; }
-    bind "Alt q" { Quit; }
+  normal clear-defaults=true {
+    bind "Ctrl space" { SwitchToMode "Locked"; }
+  }
+
+  locked clear-defaults=true {
+    bind "Ctrl space" { SwitchToMode "Normal"; }
+    bind "Esc" { SwitchToMode "Normal"; }
+    bind "p" { SwitchToMode "Pane"; }
+    bind "q" { Quit; }
   }
 }
