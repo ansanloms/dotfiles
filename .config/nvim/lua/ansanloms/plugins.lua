@@ -544,7 +544,7 @@ require("jetpack.packer").add({
             --else
             --  return { "lsp", "path", "snippets", "buffer" }
             --end
-            return { "path", "snippets", "buffer" }
+            return { "lsp", "path", "snippets" }
           end,
           providers = {
             --skkeleton = {
