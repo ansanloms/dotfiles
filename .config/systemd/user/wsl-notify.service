@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=deno run --allow-net --allow-run --allow-read --allow-write --allow-env https://raw.githubusercontent.com/ansanloms/wsl-notify/refs/tags/0.0.5/server.ts
+ExecStart=deno run --allow-net --allow-run --allow-read --allow-write --allow-env https://raw.githubusercontent.com/ansanloms/wsl-notify/refs/tags/0.0.6/server.ts
 Restart=always
 RestartSec=3
 Environment=WSL_NOTIFY_SOCK=/tmp/wsl-notify.sock

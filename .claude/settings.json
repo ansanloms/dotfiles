@@ -16,12 +16,12 @@
       "Bash(git status:*)",
       "Bash(git fetch:*)"
     ],
+    "deny": [],
     "ask": [
       "Bash(gh pr create:*)",
       "Bash(rm:*)",
       "Bash(curl:*)"
     ],
-    "deny": [],
     "defaultMode": "default"
   },
   "hooks": {
@@ -60,6 +60,7 @@
     "context7@claude-plugins-official": true
   },
   "language": "japanese",
+  "spinnerTipsEnabled": false,
   "spinnerVerbs": {
     "mode": "replace",
     "verbs": [
@@ -68,6 +69,5 @@
     ]
   },
   "alwaysThinkingEnabled": true,
-  "spinnerTipsEnabled": false,
   "terminalProgressBarEnabled": true
 }
