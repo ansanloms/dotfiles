@@ -1,11 +1,3 @@
-#!/usr/bin/env deno
-
-import type { NotifyRequest } from "https://raw.githubusercontent.com/ansanloms/wsl-notify/refs/tags/0.0.6/notifier.ts";
-import { SOCK_PATH } from "https://raw.githubusercontent.com/ansanloms/wsl-notify/refs/tags/0.0.6/socket.ts";
-
-const __dirname = new URL(".", import.meta.url).pathname;
-const BUFFER_SIZE = 16384; // 16KB
-
 interface HookCommand {
   session_id: string;
   transcript_path: string;
@@ -64,61 +56,28 @@ const tailLines = async (filePath: string, n: number): Promise<string[]> => {
   }
 };
 
-const data = await (async () => {
+export const getInput = async () => {
   const decoder = new TextDecoder();
   let input = "";
   for await (const chunk of Deno.stdin.readable) {
     input += decoder.decode(chunk);
   }
+
   return JSON.parse(input) as HookCommand;
-})();
+};
 
-const conn = await Deno.connect({
-  path: SOCK_PATH,
-  transport: "unix",
-});
+export const getMessage = async (input: HookCommand) => {
+  const lines = (await tailLines(input.transcript_path, 10)).reverse();
+  for (const line of lines) {
+    const session = JSON.parse(line);
 
-try {
-  const message = await (async () => {
-    const lines = (await tailLines(data.transcript_path, 30)).reverse();
-    for (const line of lines) {
-      const session = JSON.parse(line);
-
-      const text = (Array.isArray(session?.message?.content)
-        ? session.message.content
-        : []).find(({ type }) =>
-          type === "text"
-        )?.text;
-      if (text) {
-        return String(text);
-      }
+    const text =
+      (Array.isArray(session?.message?.content) ? session.message.content : [])
+        .find(({ type }) => type === "text")?.text;
+    if (text) {
+      return String(text);
     }
+  }
 
-    return "";
-  })();
-
-  const req: NotifyRequest = {
-    title: "Claude Code",
-    message,
-    attribution: `${data.session_id} (${data.hook_event_name})`,
-    image: {
-      placement: "appLogoOverride",
-      hintCrop: "circle",
-      src: `${__dirname}/clawd.jpg`,
-    },
-    audio: {
-      src: data.hook_event_name === "Stop"
-        ? "ms-winsoundevent:Notification.Looping.Alarm8"
-        : "ms-winsoundevent:Notification.Looping.Call7",
-    },
-    duration: "long",
-  };
-
-  await conn.write(new TextEncoder().encode(JSON.stringify(req)));
-  await conn.read(new Uint8Array(BUFFER_SIZE));
-} catch (error) {
-  console.error("Client error:", error);
-  throw error;
-} finally {
-  conn.close();
-}
+  return undefined;
+};
