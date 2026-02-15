@@ -1,5 +1,5 @@
-import type { NotifyRequest } from "https://raw.githubusercontent.com/ansanloms/wsl-notify/refs/tags/0.0.6/notifier.ts";
-import { SOCK_PATH } from "https://raw.githubusercontent.com/ansanloms/wsl-notify/refs/tags/0.0.6/socket.ts";
+import type { NotifyRequest } from "https://raw.githubusercontent.com/ansanloms/wsl-notify/refs/tags/0.0.7/notifier.ts";
+import { SOCK_PATH } from "https://raw.githubusercontent.com/ansanloms/wsl-notify/refs/tags/0.0.7/socket.ts";
 
 import { getInput, getMessage } from "./utils.ts";
 
@@ -10,6 +10,18 @@ const conn = await Deno.connect({
   path: SOCK_PATH,
   transport: "unix",
 });
+
+const getAudioSrc = (eventName: string) => {
+  if (eventName === "Stop") {
+    return "ms-winsoundevent:Notification.Looping.Alarm8";
+  }
+
+  if (eventName === "Notification") {
+    return "ms-winsoundevent:Notification.Looping.Call7";
+  }
+
+  return "ms-winsoundevent:Notification.Looping.Call6";
+};
 
 try {
   const input = await getInput();
@@ -25,9 +37,7 @@ try {
       src: `${__dirname}/../clawd.jpg`,
     },
     audio: {
-      src: input.hook_event_name === "Stop"
-        ? "ms-winsoundevent:Notification.Looping.Alarm8"
-        : "ms-winsoundevent:Notification.Looping.Call7",
+      src: getAudioSrc(input.hook_event_name),
     },
     duration: "long",
   };

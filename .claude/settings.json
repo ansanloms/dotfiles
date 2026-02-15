@@ -56,6 +56,23 @@
           }
         ]
       }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "deno run -A ~/.claude/scripts/notify/windows.ts",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "deno run -A ~/.claude/scripts/notify/ntfy.ts",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
