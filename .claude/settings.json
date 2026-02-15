@@ -29,12 +29,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "deno run -A ~/.claude/scripts/notify/windows.ts",
+            "command": "deno run --env-file=$HOME/.claude/scripts/.env -A ~/.claude/scripts/notify/windows.ts",
             "timeout": 10
           },
           {
             "type": "command",
-            "command": "deno run -A ~/.claude/scripts/notify/ntfy.ts",
+            "command": "deno run --env-file=$HOME/.claude/scripts/.env -A ~/.claude/scripts/notify/ntfy.ts",
             "timeout": 10
           }
         ]
@@ -42,16 +42,16 @@
     ],
     "Notification": [
       {
-        "matcher": "",
+        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "deno run -A ~/.claude/scripts/notify/windows.ts",
+            "command": "deno run --env-file=$HOME/.claude/scripts/.env -A ~/.claude/scripts/notify/windows.ts",
             "timeout": 10
           },
           {
             "type": "command",
-            "command": "deno run -A ~/.claude/scripts/notify/ntfy.ts",
+            "command": "deno run --env-file=$HOME/.claude/scripts/.env -A ~/.claude/scripts/notify/ntfy.ts",
             "timeout": 10
           }
         ]
@@ -59,16 +59,16 @@
     ],
     "PermissionRequest": [
       {
-        "matcher": "",
+        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "deno run -A ~/.claude/scripts/notify/windows.ts",
+            "command": "deno run --env-file=$HOME/.claude/scripts/.env -A ~/.claude/scripts/notify/windows.ts",
             "timeout": 10
           },
           {
             "type": "command",
-            "command": "deno run -A ~/.claude/scripts/notify/ntfy.ts",
+            "command": "deno run --env-file=$HOME/.claude/scripts/.env -A ~/.claude/scripts/notify/ntfy.ts",
             "timeout": 10
           }
         ]

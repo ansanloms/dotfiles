@@ -14,7 +14,7 @@ try {
       headers: {
         Authorization: `Bearer ${token}`,
         Markdown: "yes",
-        Title: "Claude Code",
+        Title: `Claude Code (${input.cwd})`,
         Tags: input.hook_event_name,
       },
     });

@@ -1,11 +1,4 @@
-interface HookCommand {
-  session_id: string;
-  transcript_path: string;
-  cwd: string;
-  hook_event_name: string;
-  message: string;
-  notification_type: string;
-}
+import type { HookInput } from "npm:@anthropic-ai/claude-agent-sdk";
 
 const tailLines = async (filePath: string, n: number): Promise<string[]> => {
   const file = await Deno.open(filePath);
@@ -63,17 +56,17 @@ export const getInput = async () => {
     input += decoder.decode(chunk);
   }
 
-  return JSON.parse(input) as HookCommand;
+  return JSON.parse(input) as HookInput;
 };
 
-export const getMessage = async (input: HookCommand) => {
+export const getMessage = async (input: HookInput) => {
   const lines = (await tailLines(input.transcript_path, 10)).reverse();
   for (const line of lines) {
     const session = JSON.parse(line);
 
     const text =
       (Array.isArray(session?.message?.content) ? session.message.content : [])
-        .find(({ type }) => type === "text")?.text;
+        .find(({ type }: { type: string }) => type === "text")?.text;
     if (text) {
       return String(text);
     }

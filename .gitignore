@@ -1,3 +1,5 @@
+**/.env
+
 .config/vim/*
 !.config/vim/config/
 !.config/vim/autoload/
