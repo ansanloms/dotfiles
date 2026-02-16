@@ -80,10 +80,6 @@
     "command": "ccusage statusline",
     "padding": 0
   },
-  "enabledPlugins": {
-    "example-skills@anthropic-agent-skills": true,
-    "context7@claude-plugins-official": true
-  },
   "language": "japanese",
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
@@ -94,5 +90,8 @@
     ]
   },
   "alwaysThinkingEnabled": true,
-  "terminalProgressBarEnabled": true
+  "terminalProgressBarEnabled": true,
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true
+  }
 }

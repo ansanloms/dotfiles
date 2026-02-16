@@ -112,8 +112,8 @@ link:
         - linux
   ~/.ripgreprc:
     - src: ./.ripgreprc
-  ~/.claude/CLAUDE.md:
-    - src: ./.claude/CLAUDE.md
+  ~/.claude/rules:
+    - src: ./.claude/rules
   ~/.claude/settings.json:
     - src: ./.claude/settings.json
   ~/.claude/scripts:
