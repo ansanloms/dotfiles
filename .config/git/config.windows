@@ -1,2 +1,4 @@
 [core]
 	editor = 'c:/Program Files/Neovim/bin/nvim.exe'
+
+# vim:ft=gitconfig:
