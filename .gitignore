@@ -9,7 +9,9 @@
 !.config/vim/launcher/001-terminal.yaml
 !.config/vim/launcher/002-ai-chat.yaml
 
-.config/git/config.os
 .config/git/credentials
+.config/git/config.os
+.config/git/config.work
+.config/git/config.personal
 
 .config/nvim/lua/temp.lua
