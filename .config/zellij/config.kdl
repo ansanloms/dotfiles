@@ -15,6 +15,7 @@ keybinds {
     bind "Ctrl space" { SwitchToMode "Normal"; }
     bind "Esc" { SwitchToMode "Normal"; }
     bind "p" { SwitchToMode "Pane"; }
+    bind "t" { SwitchToMode "Tab"; }
     bind "q" { Quit; }
   }
 }
