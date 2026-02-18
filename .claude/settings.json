@@ -80,6 +80,10 @@
     "command": "ccusage statusline",
     "padding": 0
   },
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "github@claude-plugins-official": true
+  },
   "language": "japanese",
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
@@ -91,7 +95,5 @@
   },
   "alwaysThinkingEnabled": true,
   "terminalProgressBarEnabled": true,
-  "enabledPlugins": {
-    "context7@claude-plugins-official": true
-  }
+  "skipDangerousModePermissionPrompt": true
 }
