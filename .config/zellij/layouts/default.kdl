@@ -7,6 +7,18 @@ layout {
     children
   }
 
+  new_tab_template {
+    pane size=1 borderless=true {
+      plugin location="zellij:compact-bar"
+    }
+
+    pane {
+      name "terminal"
+      command "zsh"
+      args "-li"
+    }
+  }
+
   tab {
     pane split_direction="vertical" {
       /*
