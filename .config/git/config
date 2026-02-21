@@ -36,6 +36,13 @@
 [worktree]
 	useRelativePaths = true
 [alias]
-	st = status
-	br = branch
-	wt = worktree
+	s = status
+	b = branch
+	co = commit
+	wt = "!f() { \
+		case \"$1\" in \
+			ls) shift; git worktree list \"$@\" ;; \
+			rm) shift; git worktree remove \"$@\" ;; \
+			mv) shift; git worktree move \"$@\" ;; \
+			*) git worktree \"$@\" ;; \
+		esac; }; f"
