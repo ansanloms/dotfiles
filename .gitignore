@@ -15,3 +15,5 @@
 .config/git/config.personal
 
 .config/nvim/lua/temp.lua
+
+.config/alacritty/os.toml

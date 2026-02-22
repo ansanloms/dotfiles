@@ -165,7 +165,8 @@ vim.lsp.enable({
   "docker_language_server",
   "intelephense",
   "lua_ls",
-  "efm"
+  "efm",
+  "tombi"
 })
 
 vim.api.nvim_create_autocmd("FileType", {

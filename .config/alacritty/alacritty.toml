@@ -1,47 +1,25 @@
+[general]
+import = ["./os.toml", "./themes/terafox.toml"]
+
 [window]
 opacity = 0.8
+blur = false
+
+[scrolling]
+history = 100000
 
 [font]
 size = 8.0
+builtin_box_drawing = true
+normal = { family = "Moralerspace Krypton HWNF", style = "Regular" }
 
-[font.normal]
-family = "Moralerspace Krypton HWNF"
-style = "Regular"
+[terminal]
+osc52 = "CopyPaste"
 
-[font.offset]
-y = 2
+[selection]
+save_to_clipboard = true
 
-[cursor]
-style = { shape = "Hollow" }
-
-[colors.primary]
-background = "#152528"
-foreground = "#E6EAEA"
-
-[colors.cursor]
-text = "CellBackground"
-cursor = "#E6EAEA"
-
-[colors.selection]
-text = "CellForeground"
-background = "#293E40"
-
-[colors.normal]
-black = "#2F3239"
-red = "#E85C51"
-green = "#7AA4A1"
-yellow = "#FDA47F"
-blue = "#5A93AA"
-magenta = "#AD5C7C"
-cyan = "#A1CDD8"
-white = "#EBEBEB"
-
-[colors.bright]
-black = "#4E5157"
-red = "#EB746B"
-green = "#8EB2AF"
-yellow = "#FDB292"
-blue = "#73A3B7"
-magenta = "#B97490"
-cyan = "#AFD4DE"
-white = "#EEEEEE"
+[mouse]
+bindings = [
+  { mouse = "Right", action = "Paste" },
+]

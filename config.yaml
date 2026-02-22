@@ -67,8 +67,16 @@ link:
     - src: ./.config/alacritty
       targets:
         - linux
+  ~/.config/alacritty/os.toml:
+    - src: ./.config/alacritty/linux.toml
+      targets:
+        - linux
   ~/AppData/Roaming/alacritty:
     - src: ./.config/alacritty
+      targets:
+        - windows
+  ~/AppData/Roaming/alacritty/os.toml:
+    - src: ./.config/alacritty/windows.toml
       targets:
         - windows
   ~/.config/zellij:

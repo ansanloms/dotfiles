@@ -1,0 +1,12 @@
+[terminal]
+shell = { program = "C:\\WINDOWS\\system32\\wsl.exe", args = [
+  "--distribution",
+  "Ubuntu",
+  "--cd",
+  "~",
+] }
+
+[hints]
+enabled = [
+  { command = { program = "cmd", args = ["/c", "start", ""] }, mouse = { enabled = true, mods = "Control" }, hyperlinks = true, post_processing = true, regex = "(https?://[^\\s]+)" },
+]
