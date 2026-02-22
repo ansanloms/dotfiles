@@ -1,3 +1,5 @@
+require("jetpack").load("nightfox.nvim")
+
 local utils = require("heirline.utils")
 local conditions = require("heirline.conditions")
 

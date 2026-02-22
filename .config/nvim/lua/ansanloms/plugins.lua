@@ -149,8 +149,12 @@ require("jetpack.packer").add({
   },
 
   -- appearance:
-  { "whatyouhide/vim-gotham" },
-  { "EdenEast/nightfox.nvim" },
+  {
+    "whatyouhide/vim-gotham",
+  },
+  {
+    "EdenEast/nightfox.nvim",
+  },
   {
     "nvim-tree/nvim-web-devicons",
     config = function()
