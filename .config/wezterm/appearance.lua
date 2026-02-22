@@ -10,7 +10,7 @@ config.font = wezterm.font_with_fallback({
   { family = "Moralerspace Krypton HWNF", assume_emoji_presentation = false },
   { family = "Moralerspace Krypton HWNF", assume_emoji_presentation = true },
 })
-config.font_size = 8
+config.font_size = 10
 config.adjust_window_size_when_changing_font_size = false
 
 -- タイトルバーの設定。

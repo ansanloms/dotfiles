@@ -9,7 +9,7 @@ blur = false
 history = 100000
 
 [font]
-size = 8.0
+size = 10.0
 builtin_box_drawing = true
 normal = { family = "Moralerspace Krypton HWNF", style = "Regular" }
 
