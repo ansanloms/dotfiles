@@ -63,6 +63,14 @@ link:
     - src: ./.config/efm-langserver/config.yaml
       targets:
         - windows
+  ~/.config/alacritty:
+    - src: ./.config/alacritty
+      targets:
+        - linux
+  ~/AppData/Roaming/alacritty:
+    - src: ./.config/alacritty
+      targets:
+        - windows
   ~/.config/zellij:
     - src: ./.config/zellij
   ~/.config/mise/config.toml:
