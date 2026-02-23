@@ -1,10 +1,10 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions":
+    "actions": 
     [
         {
-            "command":
+            "command": 
             {
                 "action": "copy"
             },
@@ -15,7 +15,7 @@
             "id": "User.resetFontSize"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "adjustFontSize",
                 "delta": -1
@@ -31,7 +31,7 @@
             "id": "User.find"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "adjustFontSize",
                 "delta": 1
@@ -47,23 +47,11 @@
     "focusFollowMouse": false,
     "initialCols": 160,
     "initialRows": 40,
-    "keybindings":
+    "keybindings": 
     [
         {
             "id": null,
-            "keys": "win+sc(41)"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+pgdn"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+pgup"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+period"
+            "keys": "ctrl+numpad0"
         },
         {
             "id": null,
@@ -71,15 +59,27 @@
         },
         {
             "id": null,
-            "keys": "ctrl+numpad0"
+            "keys": "ctrl+shift+period"
         },
         {
             "id": null,
-            "keys": "menu"
+            "keys": "ctrl+shift+pgup"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+pgdn"
+        },
+        {
+            "id": null,
+            "keys": "win+sc(41)"
         },
         {
             "id": null,
             "keys": "ctrl+shift+a"
+        },
+        {
+            "id": null,
+            "keys": "menu"
         },
         {
             "id": null,
@@ -307,7 +307,7 @@
         }
     ],
     "launchMode": "default",
-    "newTabMenu":
+    "newTabMenu": 
     [
         {
             "type": "remainingProfiles"
@@ -318,9 +318,9 @@
             "type": "profile"
         }
     ],
-    "profiles":
+    "profiles": 
     {
-        "defaults":
+        "defaults": 
         {
             "adjustIndistinguishableColors": "never",
             "backgroundImage": null,
@@ -331,12 +331,12 @@
             "compatibility.reloadEnvironmentVariables": true,
             "cursorShape": "emptyBox",
             "experimental.retroTerminalEffect": false,
-            "font":
+            "font": 
             {
                 "builtinGlyphs": true,
                 "cellHeight": "1.2",
                 "colorGlyphs": true,
-                "face": "Moralerspace Krypton HWNF",
+                "face": "Moralerspace Krypton HWJPDOC",
                 "size": 10,
                 "weight": "normal"
             },
@@ -349,7 +349,7 @@
             "suppressApplicationTitle": false,
             "useAcrylic": false
         },
-        "list":
+        "list": 
         [
             {
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
@@ -399,7 +399,7 @@
             }
         ]
     },
-    "schemes":
+    "schemes": 
     [
         {
             "background": "#161616",

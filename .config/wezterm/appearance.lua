@@ -7,8 +7,8 @@ config.initial_rows = 40
 
 -- フォント。
 config.font = wezterm.font_with_fallback({
-  { family = "Moralerspace Krypton HWNF", assume_emoji_presentation = false },
-  { family = "Moralerspace Krypton HWNF", assume_emoji_presentation = true },
+  { family = "Moralerspace Krypton HWJPDOC", assume_emoji_presentation = false },
+  { family = "Moralerspace Krypton HWJPDOC", assume_emoji_presentation = true },
 })
 config.font_size = 10
 config.adjust_window_size_when_changing_font_size = false
