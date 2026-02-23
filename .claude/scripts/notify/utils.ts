@@ -1,6 +1,18 @@
-import type { HookInput } from "npm:@anthropic-ai/claude-agent-sdk";
+import type {
+  HookInput,
+  NotificationHookInput,
+  PermissionRequestHookInput,
+  StopHookInput,
+} from "npm:@anthropic-ai/claude-agent-sdk@latest";
 
-const tailLines = async (filePath: string, n: number): Promise<string[]> => {
+/**
+ * ファイル末尾から指定行数を効率的に読み込む。
+ * 大きなトランスクリプトファイルでも全体を読まず、末尾からチャンク単位で逆読みする。
+ */
+export const tailLines = async (
+  filePath: string,
+  n: number,
+): Promise<string[]> => {
   const file = await Deno.open(filePath);
   const stat = await file.stat();
   const fileSize = stat.size;
@@ -49,6 +61,9 @@ const tailLines = async (filePath: string, n: number): Promise<string[]> => {
   }
 };
 
+/**
+ * stdin から Claude Code の hook 入力 JSON を読み取り、HookInput として返す。
+ */
 export const getInput = async () => {
   const decoder = new TextDecoder();
   let input = "";
@@ -59,8 +74,12 @@ export const getInput = async () => {
   return JSON.parse(input) as HookInput;
 };
 
-export const getMessage = async (input: HookInput) => {
-  const lines = (await tailLines(input.transcript_path, 10)).reverse();
+/**
+ * トランスクリプトファイルの末尾から最新のアシスタントテキストメッセージを抽出する。
+ * トランスクリプトは JSONL 形式で、各行が `{ message: { content: [...] } }` 構造を持つ。
+ */
+export const getLastAssistantMessage = async (transcriptPath: string) => {
+  const lines = (await tailLines(transcriptPath, 10)).reverse();
   for (const line of lines) {
     const session = JSON.parse(line);
 
@@ -73,4 +92,88 @@ export const getMessage = async (input: HookInput) => {
   }
 
   return undefined;
+};
+
+/**
+ * Stop hook 用メッセージを取得する。
+ * `last_assistant_message` が提供されていればそれを使い、なければトランスクリプトから抽出する。
+ */
+export const getStopMessage = async (input: StopHookInput) => {
+  if (input.last_assistant_message) {
+    return input.last_assistant_message;
+  }
+  return await getLastAssistantMessage(input.transcript_path);
+};
+
+/**
+ * Notification hook 用メッセージを取得する。
+ * title があれば `title\nmessage` 形式、なければ message のみ返す。
+ */
+export const getNotificationMessage = (input: NotificationHookInput) => {
+  if (input.title) {
+    return `${input.title}\n${input.message}`;
+  }
+  return input.message;
+};
+
+/**
+ * ツール入力を人間が読みやすい形式にフォーマットする。
+ * ツールの種類に応じて最も重要な情報のみを抽出する。
+ */
+export const formatToolInput = (
+  toolName: string,
+  toolInput: unknown,
+): string => {
+  const input = toolInput as Record<string, unknown> | null;
+  if (!input) return "";
+
+  switch (toolName) {
+    case "Bash":
+      return String(input.command ?? "");
+    case "Edit":
+      return `${input.file_path ?? ""}\n${String(input.old_string ?? "").slice(0, 80)}...`;
+    case "Write":
+      return String(input.file_path ?? "");
+    case "Read":
+      return String(input.file_path ?? "");
+    case "Glob":
+      return String(input.pattern ?? "");
+    case "Grep":
+      return String(input.pattern ?? "");
+    default: {
+      const json = JSON.stringify(input, null, 2);
+      return json.length > 200 ? json.slice(0, 200) + "..." : json;
+    }
+  }
+};
+
+/**
+ * PermissionRequest hook 用メッセージを取得する。
+ * ツール名と入力内容を markdown 形式で返す。
+ */
+export const getPermissionRequestMessage = (
+  input: PermissionRequestHookInput,
+) => {
+  const detail = formatToolInput(input.tool_name, input.tool_input);
+  return `**${input.tool_name}** の実行許可を求めています\n${detail}`;
+};
+
+/**
+ * hook イベントの種類に応じた通知メッセージを生成する。
+ * - Stop: 最後のアシスタントメッセージ
+ * - Notification: 通知メッセージ本文
+ * - PermissionRequest: ツール名と入力の要約
+ * - その他: トランスクリプトからの最新メッセージ（フォールバック）
+ */
+export const getMessage = async (input: HookInput) => {
+  switch (input.hook_event_name) {
+    case "Stop":
+      return await getStopMessage(input);
+    case "Notification":
+      return getNotificationMessage(input);
+    case "PermissionRequest":
+      return getPermissionRequestMessage(input);
+    default:
+      return await getLastAssistantMessage(input.transcript_path);
+  }
 };
