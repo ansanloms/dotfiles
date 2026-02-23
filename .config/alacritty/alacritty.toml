@@ -2,7 +2,7 @@
 import = ["./os.toml", "./themes/terafox.toml"]
 
 [window]
-opacity = 0.8
+opacity = 0.9
 blur = false
 #dimensions = { columns = 240, lines = 60 }
 startup_mode = "Maximized"
