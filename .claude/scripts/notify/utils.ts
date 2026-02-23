@@ -140,6 +140,18 @@ export const formatToolInput = (
       return String(input.pattern ?? "");
     case "Grep":
       return String(input.pattern ?? "");
+    case "AskUserQuestion": {
+      const questions = input.questions as
+        | { question: string; options?: { label: string }[] }[]
+        | undefined;
+      if (!Array.isArray(questions)) return "";
+      return questions.map((q) => {
+        const opts = Array.isArray(q.options)
+          ? q.options.map((o) => `- ${o.label}`).join("\n")
+          : "";
+        return opts ? `${q.question}\n${opts}` : q.question;
+      }).join("\n");
+    }
     default: {
       const json = JSON.stringify(input, null, 2);
       return json.length > 200 ? json.slice(0, 200) + "..." : json;

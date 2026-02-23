@@ -201,6 +201,29 @@ Deno.test("formatToolInput: Grep はパターンを返す", () => {
   );
 });
 
+Deno.test("formatToolInput: AskUserQuestion は質問文と選択項目を返す", () => {
+  const result = formatToolInput("AskUserQuestion", {
+    questions: [
+      {
+        question: "どちらがいい？",
+        options: [{ label: "A" }, { label: "B" }],
+      },
+    ],
+  });
+  assertEquals(result, "どちらがいい？\n- A\n- B");
+});
+
+Deno.test("formatToolInput: AskUserQuestion で options がなければ質問文のみ返す", () => {
+  const result = formatToolInput("AskUserQuestion", {
+    questions: [{ question: "自由入力してください" }],
+  });
+  assertEquals(result, "自由入力してください");
+});
+
+Deno.test("formatToolInput: AskUserQuestion で questions がなければ空文字を返す", () => {
+  assertEquals(formatToolInput("AskUserQuestion", {}), "");
+});
+
 Deno.test("formatToolInput: 未知のツールは JSON を返す", () => {
   const result = formatToolInput("Unknown", { foo: "bar" });
   assertEquals(result, JSON.stringify({ foo: "bar" }, null, 2));
