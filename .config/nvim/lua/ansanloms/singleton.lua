@@ -4,13 +4,19 @@ local M = {}
 
 M.config = {
   ignore_patterns = {
-    "^%-$",
+    "^%-$", -- stdin
     "%.tmp$",
     "%.diff$",
-    "COMMIT_EDITMSG$",
-    "TAG_EDITMSG$",
-    "MERGE_MSG$",
-    "SQUASH_MSG$",
+    -- git
+    "COMMIT_EDITMSG$", -- git commit
+    "TAG_EDITMSG$", -- git tag -a
+    "MERGE_MSG$", -- git merge
+    "SQUASH_MSG$", -- git merge --squash
+    "EDIT_DESCRIPTION$", -- git branch --edit-description
+    "NOTES_EDITMSG$", -- git notes edit
+    "git%-rebase%-todo$", -- git rebase -i
+    "addp%-hunk%-edit%.diff$", -- git add -p (edit)
+    -- claude code
     "/tmp/claude%-prompt",
   },
 }
