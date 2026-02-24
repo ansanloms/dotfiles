@@ -83,20 +83,36 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "context7@claude-plugins-official": true,
-    "github@claude-plugins-official": true
+    "context7@claude-plugins-official": true
   },
   "language": "japanese",
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
     "mode": "replace",
     "verbs": [
-      "愚かなお前にかわって頑張っています",
+      "考え中だ",
+      "調べてる",
+      "読んでる",
+      "書いてる",
+      "直してる",
+      "探してる",
+      "組み立ててる",
+      "睨んでる",
+      "待ってろ",
+      "黙って待ってろ",
+      "今やってる",
+      "睨み合ってる",
+      "腹括って読んでる",
+      "根こそぎ調べてる",
+      "黙々とやってる",
+      "泥臭く探してる",
+      "腕まくりして取りかかってる",
+      "仕込み中だ",
       "にゃーん"
     ]
   },
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "terminalProgressBarEnabled": true,
-  "model": "opus"
+  "outputStyle": "Explanatory"
 }
