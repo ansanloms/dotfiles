@@ -1,8 +1,9 @@
 #!/usr/bin/env -S deno run --quiet --allow-run
 
 import { Select } from "jsr:@cliffy/prompt";
-import { cyan, green, yellow } from "jsr:@std/fmt/colors";
+import { cyan, green, stripAnsiCode, yellow } from "jsr:@std/fmt/colors";
 import { relative } from "jsr:@std/path";
+import { unicodeWidth } from "jsr:@std/cli/unicode-width";
 
 const process = new Deno.Command("git", {
   args: ["worktree", "list"],
@@ -36,16 +37,32 @@ const getDescription = async (branch: string): Promise<string> => {
 
 const mainPath = worktrees[0].path;
 
-const options = await Promise.all(
+const entries = await Promise.all(
   worktrees.map(async (wt) => {
     const desc = await getDescription(wt.branch);
     const relPath = relative(mainPath, wt.path) || ".";
-    const name = desc
-      ? `${green(wt.branch)} ${cyan(relPath)}  ${yellow("# " + desc)}`
-      : `${green(wt.branch)} ${cyan(relPath)}`;
-    return { name, value: wt.path };
+    return { ...wt, relPath, desc };
   }),
 );
+
+const pad = (str: string, width: number): string => {
+  const visible = unicodeWidth(stripAnsiCode(str));
+  return str + " ".repeat(Math.max(0, width - visible));
+};
+
+const maxPathLen = Math.max(...entries.map((e) => unicodeWidth(e.relPath)));
+const maxBranchLen = Math.max(
+  ...entries.map((e) => unicodeWidth(`[${e.branch}]`)),
+);
+
+const options = entries.map((e) => {
+  const path = pad(cyan(e.relPath), maxPathLen);
+  const branch = pad(green(`[${e.branch}]`), maxBranchLen);
+  const name = e.desc
+    ? `${path}  ${e.sha} ${branch}  ${yellow("# " + e.desc)}`
+    : `${path}  ${e.sha} ${branch}`;
+  return { name, value: e.path };
+});
 
 const cwd = Deno.cwd();
 const defaultValue = worktrees.find((wt) => cwd.startsWith(wt.path))?.path;
