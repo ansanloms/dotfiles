@@ -132,6 +132,8 @@ link:
     - src: ./.claude/rules
   ~/.claude/settings.json:
     - src: ./.claude/settings.json
+  ~/.local/bin/git-worktree-select:
+    - src: ./.local/bin/git-worktree-select
   ~/.claude/scripts:
     - src: ./.claude/scripts
   ~/.config/systemd/user/wsl-notify.service:

@@ -1,0 +1,57 @@
+#!/usr/bin/env -S deno run --allow-run
+
+import { Select } from "jsr:@cliffy/prompt";
+import { cyan, green, yellow } from "jsr:@std/fmt/colors";
+import { relative } from "jsr:@std/path";
+
+const process = new Deno.Command("git", {
+  args: ["worktree", "list"],
+  stdout: "piped",
+});
+
+const { stdout } = await process.output();
+const output = new TextDecoder().decode(stdout).trim();
+
+if (!output) {
+  console.error("No worktrees found.");
+  Deno.exit(1);
+}
+
+const worktrees = output.split("\n").map((line) => {
+  const match = line.match(/^(\S+)\s+(\S+)\s+\[(.+)\]$/);
+  if (!match) return null;
+  return { path: match[1], sha: match[2], branch: match[3] };
+}).filter((v) => v !== null);
+
+const getDescription = async (branch: string): Promise<string> => {
+  const proc = new Deno.Command("git", {
+    args: ["config", `branch.${branch}.description`],
+    stdout: "piped",
+    stderr: "null",
+  });
+  const { stdout, success } = await proc.output();
+  if (!success) return "";
+  return new TextDecoder().decode(stdout).trim().split("\n")[0];
+};
+
+const mainPath = worktrees[0].path;
+
+const options = await Promise.all(
+  worktrees.map(async (wt) => {
+    const desc = await getDescription(wt.branch);
+    const relPath = relative(mainPath, wt.path) || ".";
+    const name = desc
+      ? `${green(wt.branch)} ${cyan(relPath)}  ${yellow("# " + desc)}`
+      : `${green(wt.branch)} ${cyan(relPath)}`;
+    return { name, value: wt.path };
+  }),
+);
+
+const selected = await Select.prompt({
+  message: "Select worktree",
+  options,
+});
+
+Deno.stderr.writeSync(new TextEncoder().encode(selected));
+
+// vim:set ft=typescript:

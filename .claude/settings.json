@@ -85,6 +85,7 @@
   "enabledPlugins": {
     "context7@claude-plugins-official": true
   },
+  "outputStyle": "Explanatory",
   "language": "japanese",
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
@@ -114,5 +115,5 @@
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "terminalProgressBarEnabled": true,
-  "outputStyle": "Explanatory"
+  "model": "opus"
 }
