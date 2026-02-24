@@ -2,9 +2,16 @@ mouse_mode true
 show_startup_tips false
 theme "nightfox"
 default_layout "default"
+default_shell "zsh"
 scrollback_editor "nvim"
-//pane_frames false
+pane_frames true
 mouse_mode true
+
+ui {
+  pane_frames {
+    rounded_corners true
+  }
+}
 
 keybinds {
   normal clear-defaults=true {
