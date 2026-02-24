@@ -260,6 +260,11 @@ require("jetpack.packer").add({
         { 0xf400,  0xf533,  2 },
         -- Font Awesome
         { 0xed00,  0xedff,  2 }, { 0xee0c, 0xefce, 2 }, { 0xf000, 0xf2ff, 2 },
+        -- Geometric Shapes @see https://www.unicode.org/charts/PDF/U25A0.pdf
+        { 0x25a2, 0x25a9, 2 }, { 0x25ac, 0x25b3, 2 }, { 0x25b6, 0x25b7, 2 }, { 0x25bc, 0x25bd, 2 }, { 0x25c0, 0x25c1, 2 },
+        { 0x25c8, 0x25c9, 2 }, { 0x25d0, 0x25d7, 2 }, { 0x25e2, 0x25e5, 2 }, { 0x25e7, 0x25ef, 2 }, { 0x25f0, 0x25ff, 2 },
+        -- Mathematical Operators @see https://www.unicode.org/charts/PDF/U2200.pdf
+        { 0x2200, 0x2265, 2 }, { 0x2268, 0x22ff, 2 },
       }
     end,
   },
