@@ -331,42 +331,77 @@ require("jetpack.packer").add({
         {
           url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.L",
           name = "SKK-JISYO.L",
-          encoding = "euc-jp"
+          encoding = "euc-jp",
         },
         {
           url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.jinmei",
           name = "SKK-JISYO.jinmei",
-          encoding = "euc-jp"
+          encoding = "euc-jp",
         },
         {
           url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.fullname",
           name = "SKK-JISYO.fullname",
-          encoding = "euc-jp"
+          encoding = "euc-jis-2004",
         },
         {
           url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.geo",
           name = "SKK-JISYO.geo",
-          encoding = "euc-jp"
+          encoding = "euc-jp",
         },
         {
           url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.propernoun",
           name = "SKK-JISYO.propernoun",
-          encoding = "euc-jp"
+          encoding = "euc-jp",
         },
         {
           url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.station",
           name = "SKK-JISYO.station",
-          encoding = "euc-jp"
+          encoding = "euc-jp",
         },
         {
-          url = "https://raw.githubusercontent.com/skk-dev/dict/refs/heads/master/SKK-JISYO.emoji",
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.law",
+          name = "SKK-JISYO.law",
+          encoding = "euc-jp",
+        },
+        {
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.assoc",
+          name = "SKK-JISYO.assoc",
+          encoding = "euc-jp",
+        },
+        {
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.edict2",
+          name = "SKK-JISYO.edict2",
+          encoding = "utf-8",
+        },
+        {
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.itaiji",
+          name = "SKK-JISYO.itaiji",
+          encoding = "euc-jp",
+        },
+        {
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.itaiji.JIS3_4",
+          name = "SKK-JISYO.itaiji.JIS3_4",
+          encoding = "euc-jis-2004",
+        },
+        {
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.emoji",
           name = "SKK-JISYO.emoji",
-          encoding = "utf-8"
+          encoding = "utf-8",
         },
         {
-          url = "https://raw.githubusercontent.com/ymrl/SKK-JISYO.emoji-ja/master/SKK-JISYO.emoji-ja.utf8",
+          url = "https://github.com/ymrl/SKK-JISYO.emoji-ja/raw/refs/heads/master/SKK-JISYO.emoji-ja.utf8",
           name = "SKK-JISYO.emoji-ja",
-          encoding = "utf-8"
+          encoding = "utf-8",
+        },
+        {
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/zipcode/SKK-JISYO.zipcode",
+          name = "SKK-JISYO.zipcode",
+          encoding = "euc-jis-2004",
+        },
+        {
+          url = "https://github.com/skk-dev/dict/raw/refs/heads/master/zipcode/SKK-JISYO.office.zipcode",
+          name = "SKK-JISYO.office.zipcode",
+          encoding = "euc-jis-2004",
         },
       }
 
@@ -378,7 +413,7 @@ require("jetpack.packer").add({
       for _, dict in ipairs(dicts) do
         local filepath = vim.fn.expand(dictDir .. "/" .. dict.name)
 
-        local result = vim.system({
+        vim.system({
           "curl",
           "-L",
           "-f",
@@ -386,13 +421,15 @@ require("jetpack.packer").add({
           "--show-error",
           "-o", filepath,
           dict.url
-        }, { text = true }):wait()
-
-        if result.code == 0 then
-          vim.notify(string.format("[skkeleton] dict download succeeded: %s", dict.url), vim.log.levels.INFO)
-        else
-          vim.notify(string.format("[skkeleton] dict download failed: %s", dict.url), vim.log.levels.ERROR)
-        end
+        }, { text = true }, function(result)
+          vim.schedule(function()
+            if result.code == 0 then
+              vim.notify(string.format("[skkeleton] dict download succeeded: %s", dict.url), vim.log.levels.INFO)
+            else
+              vim.notify(string.format("[skkeleton] dict download failed: %s", dict.url), vim.log.levels.ERROR)
+            end
+          end)
+        end)
       end
     end,
     config = function()
