@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-run
+#!/usr/bin/env -S deno run --quiet --allow-run
 
 import { Select } from "jsr:@cliffy/prompt";
 import { cyan, green, yellow } from "jsr:@std/fmt/colors";
@@ -47,9 +47,13 @@ const options = await Promise.all(
   }),
 );
 
+const cwd = Deno.cwd();
+const defaultValue = worktrees.find((wt) => cwd.startsWith(wt.path))?.path;
+
 const selected = await Select.prompt({
   message: "Select worktree",
   options,
+  default: defaultValue,
 });
 
 Deno.stderr.writeSync(new TextEncoder().encode(selected));
