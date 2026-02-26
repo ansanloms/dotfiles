@@ -20,6 +20,13 @@ github = "zsh-users/zsh-autosuggestions"
 [plugins.fast-syntax-highlighting]
 github = "zdharma/fast-syntax-highlighting"
 
+[plugins.pure]
+github = "sindresorhus/pure"
+use = [
+    "async.zsh",
+    "pure.zsh",
+]
+
 # For example:
 #
 # [plugins.base16]

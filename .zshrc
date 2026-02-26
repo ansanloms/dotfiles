@@ -6,8 +6,7 @@ if is-wsl; then
   if [ -d "/mnt/c/Users/$(whoami)" ]; then
     export USERPROFILE="/mnt/c/Users/$(whoami)"
   else
-    WIN_USER=$(ls /mnt/c/Users | grep -v -E 'Public|Default|All Users|defaultuser0' | head -n1)
-    export USERPROFILE="/mnt/c/Users/$WIN_USER"
+    export USERPROFILE="/mnt/c/Users/$(ls /mnt/c/Users | grep -v -E 'Public|Default|All Users|defaultuser0' | head -n1)"
   fi
 fi
 
@@ -31,9 +30,9 @@ if type mise > /dev/null 2>&1; then
   eval "$(mise activate zsh)"
 fi
 
-if type starship > /dev/null 2>&1; then
-  eval "$(starship init zsh)"
-fi
+#if type starship > /dev/null 2>&1; then
+#  eval "$(starship init zsh)"
+#fi
 
 if type sheldon > /dev/null 2>&1; then
   eval "$(sheldon source)"
