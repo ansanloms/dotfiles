@@ -1,4 +1,14 @@
-import { green, red, yellow } from "@std/fmt/colors";
+import {
+  bgBrightBlack,
+  bgGreen,
+  bgRed,
+  bgYellow,
+  black,
+  green,
+  red,
+  white,
+  yellow,
+} from "@std/fmt/colors";
 import type { HookInput } from "../types.ts";
 
 /**
@@ -96,4 +106,39 @@ export const buildProgressBar = (pct: number, width: number): string => {
 export const coloredProgressBar = (pct: number, width: number): string => {
   const bar = buildProgressBar(pct, width);
   return pct >= 90 ? red(bar) : pct >= 70 ? yellow(bar) : green(bar);
+};
+
+/**
+ * ラベルをバー内に埋め込んだ背景色付きプログレスバーを返す。
+ * filled 領域と unfilled 領域で背景色を分け、ラベルが境界をまたぐ場合は
+ * それぞれの背景色を適用する。
+ * 90% 以上: 赤背景、70% 以上: 黄背景、それ以外: 緑背景。
+ * unfilled 領域は暗いグレー背景。
+ */
+export const buildInlineProgressBar = (
+  pct: number,
+  label: string,
+  width: number,
+): string => {
+  const filled = Math.floor(pct * width / 100);
+  const clipped = label.slice(0, width);
+  const splitAt = Math.min(filled, clipped.length);
+
+  const labelFilled = clipped.slice(0, splitAt);
+  const labelUnfilled = clipped.slice(splitAt);
+  const filledRemainder = "▓".repeat(Math.max(0, filled - clipped.length));
+  const unfilledRemainder = "░".repeat(
+    Math.max(0, width - Math.max(filled, clipped.length)),
+  );
+
+  const filledStr = labelFilled + filledRemainder;
+  const unfilledStr = labelUnfilled + unfilledRemainder;
+
+  if (pct >= 90) {
+    return bgRed(white(filledStr)) + bgBrightBlack(white(unfilledStr));
+  } else if (pct >= 70) {
+    return bgYellow(black(filledStr)) + bgBrightBlack(white(unfilledStr));
+  } else {
+    return bgGreen(black(filledStr)) + bgBrightBlack(white(unfilledStr));
+  }
 };

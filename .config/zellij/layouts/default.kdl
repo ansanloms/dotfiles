@@ -44,7 +44,7 @@ layout {
         }
       }
 
-      pane size="20%" {
+      pane size="72" {
         name "Claude Code"
         command "claude"
       }

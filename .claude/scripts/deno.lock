@@ -157,9 +157,6 @@
       "integrity": "sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg=="
     }
   },
-  "remote": {
-    "https://raw.githubusercontent.com/ansanloms/wsl-notify/refs/tags/0.0.7/socket.ts": "5a916b677ab1835807e583206c7cdb437a247016da189e8f7a772f919f8afdcf"
-  },
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@^1.0.19",

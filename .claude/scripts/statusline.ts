@@ -1,5 +1,9 @@
 import * as path from "@std/path";
-import { coloredProgressBar, formatCompact, getInput } from "./utils/common.ts";
+import {
+  buildInlineProgressBar,
+  formatCompact,
+  getInput,
+} from "./utils/common.ts";
 import * as git from "./utils/git.ts";
 import type { StatusLineInput } from "./types.ts";
 
@@ -27,7 +31,6 @@ try {
   const tokens = getTokens(input);
   const pct = Math.floor(input.context_window.used_percentage ?? 0);
 
-  console.log(input.session_id);
   console.log(
     [
       ["󰚩", model],
@@ -36,8 +39,14 @@ try {
     ].map(([icon, label]) => `${icon} ${label}`).join(" | "),
   );
   console.log(
-    `${coloredProgressBar(pct, 40)} ${pct}% (${formatCompact(tokens)} tokens)`,
+    buildInlineProgressBar(
+      pct,
+      ` ${pct}% (${formatCompact(tokens)} tokens)`,
+      60,
+    ),
   );
+  console.log(input.session_id);
 } catch (error) {
   console.error(error);
+  throw error;
 }
