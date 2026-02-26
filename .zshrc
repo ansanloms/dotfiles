@@ -1,5 +1,5 @@
 is-wsl() {
-  [[ "$(uname)" == "Linux" ]] && [[ "$(uname -r)" == *microsoft* ]]
+  [[ -f /proc/sys/fs/binfmt_misc/WSLInterop ]]
 }
 
 if is-wsl; then
