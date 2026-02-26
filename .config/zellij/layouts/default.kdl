@@ -29,6 +29,11 @@ layout {
       }
       */
 
+      pane size="72" {
+        name "Claude Code"
+        command "claude"
+      }
+
       pane {
         pane {
           name "nvim"
@@ -42,11 +47,6 @@ layout {
           command "zsh"
           args "-li"
         }
-      }
-
-      pane size="72" {
-        name "Claude Code"
-        command "claude"
       }
     }
   }

@@ -35,13 +35,13 @@ try {
     [
       ["󰚩", model],
       ["", dir],
-      ["💰", `$${cost.toLocaleString()}`],
-    ].map(([icon, label]) => `${icon} ${label}`).join(" | "),
+      ["", `$${cost.toLocaleString()}`],
+    ].map(([icon, label]) => `${icon}  ${label}`).join(" | "),
   );
   console.log(
     buildInlineProgressBar(
       pct,
-      ` ${pct}% (${formatCompact(tokens)} tokens)`,
+      ` ${pct}% (${formatCompact(tokens)} tokens) `,
       60,
     ),
   );
