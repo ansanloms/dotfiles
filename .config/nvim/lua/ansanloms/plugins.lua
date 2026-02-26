@@ -644,6 +644,9 @@ require("jetpack.packer").add({
       require("csvview").setup()
     end,
   },
+  {
+    "yaegassy/nette-neon.vim"
+  },
 })
 
 local jetpack = require("jetpack")
