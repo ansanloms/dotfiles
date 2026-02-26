@@ -265,6 +265,10 @@ require("jetpack.packer").add({
         { 0x25c8, 0x25c9, 2 }, { 0x25d0, 0x25d7, 2 }, { 0x25e2, 0x25e5, 2 }, { 0x25e7, 0x25ef, 2 }, { 0x25f0, 0x25ff, 2 },
         -- Mathematical Operators @see https://www.unicode.org/charts/PDF/U2200.pdf
         { 0x2200, 0x2265, 2 }, { 0x2268, 0x22ff, 2 },
+        -- Miscellaneous Technical @see https://www.unicode.org/charts/PDF/U2300.pdf
+        { 0x2300, 0x23FF, 2 },
+        -- General Punctuation @see https://www.unicode.org/charts/PDF/U2000.pdf
+        { 0x2025, 0x2027, 2 },
       }
     end,
   },
