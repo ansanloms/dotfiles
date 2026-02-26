@@ -34,9 +34,9 @@ if type wsl2-ssh-agent > /dev/null 2>&1; then
   eval $(wsl2-ssh-agent)
 fi
 
-# git wt を拡張: sel でworktree選択してcd
+# git wt ls で worktree 選択して cd
 git() {
-  if [[ "$1" == "wt" && "$2" == "sel" ]]; then
+  if [[ "$1" == "wt" && "$2" == "ls" ]]; then
     local dir
     dir=$(command git worktree-select 2>&1 >/dev/tty)
     [[ -n "$dir" ]] && cd "$dir"

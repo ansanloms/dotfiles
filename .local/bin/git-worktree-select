@@ -1,9 +1,9 @@
 #!/usr/bin/env -S deno run --quiet --allow-run
 
-import { Select } from "jsr:@cliffy/prompt";
-import { cyan, green, stripAnsiCode, yellow } from "jsr:@std/fmt/colors";
-import { relative } from "jsr:@std/path";
-import { unicodeWidth } from "jsr:@std/cli/unicode-width";
+import { Select } from "jsr:@cliffy/prompt@1.0.0";
+import { cyan, green, stripAnsiCode, yellow } from "jsr:@std/fmt@1.0.9/colors";
+import { relative } from "jsr:@std/path@1.1.4";
+import { unicodeWidth } from "jsr:@std/cli@1.0.28/unicode-width";
 
 const process = new Deno.Command("git", {
   args: ["worktree", "list"],
@@ -31,17 +31,19 @@ const getDescription = async (branch: string): Promise<string> => {
     stderr: "null",
   });
   const { stdout, success } = await proc.output();
-  if (!success) return "";
+  if (!success) {
+    return "";
+  }
   return new TextDecoder().decode(stdout).trim().split("\n")[0];
 };
 
 const mainPath = worktrees[0].path;
 
 const entries = await Promise.all(
-  worktrees.map(async (wt) => {
-    const desc = await getDescription(wt.branch);
-    const relPath = relative(mainPath, wt.path) || ".";
-    return { ...wt, relPath, desc };
+  worktrees.map(async (worktree) => {
+    const desc = await getDescription(worktree.branch);
+    const relativePath = relative(mainPath, worktree.path) || ".";
+    return { ...worktree, relativePath, desc };
   }),
 );
 
@@ -50,29 +52,24 @@ const pad = (str: string, width: number): string => {
   return str + " ".repeat(Math.max(0, width - visible));
 };
 
-const maxPathLen = Math.max(...entries.map((e) => unicodeWidth(e.relPath)));
+const maxPathLen = Math.max(...entries.map((entry) => unicodeWidth(entry.relativePath)));
 const maxBranchLen = Math.max(
-  ...entries.map((e) => unicodeWidth(`[${e.branch}]`)),
+  ...entries.map((entry) => unicodeWidth(`[${entry.branch}]`)),
 );
-
-const options = entries.map((e) => {
-  const path = pad(cyan(e.relPath), maxPathLen);
-  const branch = pad(green(`[${e.branch}]`), maxBranchLen);
-  const name = e.desc
-    ? `${path}  ${e.sha} ${branch}  ${yellow("# " + e.desc)}`
-    : `${path}  ${e.sha} ${branch}`;
-  return { name, value: e.path };
-});
-
-const cwd = Deno.cwd();
-const defaultValue = worktrees.find((wt) => cwd.startsWith(wt.path))?.path;
 
 const selected = await Select.prompt({
   message: "Select worktree",
-  options,
-  default: defaultValue,
+  options: entries.map((entry) => {
+    const path = pad(cyan(entry.relativePath), maxPathLen);
+    const branch = pad(green(`[${entry.branch}]`), maxBranchLen);
+    const name = entry.desc
+      ? `${path}  ${entry.sha} ${branch}  ${yellow("# " + entry.desc)}`
+      : `${path}  ${entry.sha} ${branch}`;
+    return { name, value: entry.path };
+  }),
+  default: worktrees.find((wt) => Deno.cwd().startsWith(wt.path))?.path,
 });
 
-Deno.stderr.writeSync(new TextEncoder().encode(selected));
+await Deno.stderr.write(new TextEncoder().encode(selected));
 
 // vim:set ft=typescript:

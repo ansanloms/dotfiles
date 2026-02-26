@@ -41,8 +41,8 @@
 	co = commit
 	wt = "!f() { \
 		case \"$1\" in \
-			ls) shift; git worktree list \"$@\" ;; \
-			rm) shift; git worktree remove \"$@\" ;; \
-			mv) shift; git worktree move \"$@\" ;; \
+			ls) selected=$(git-worktree-select 2>&1 1>/dev/tty) && echo \"$selected\" ;; \
+			rm) selected=$(git-worktree-select 2>&1 1>/dev/tty) && git worktree remove \"$selected\" ;; \
+			mv) new_path=\"$2\"; selected=$(git-worktree-select 2>&1 1>/dev/tty) && git worktree move \"$selected\" \"$new_path\" ;; \
 			*) git worktree \"$@\" ;; \
 		esac; }; f"
