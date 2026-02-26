@@ -2,6 +2,15 @@ is-wsl() {
   [[ "$(uname)" == "Linux" ]] && [[ "$(uname -r)" == *microsoft* ]]
 }
 
+if is-wsl; then
+  if [ -d "/mnt/c/Users/$(whoami)" ]; then
+    export USERPROFILE="/mnt/c/Users/$(whoami)"
+  else
+    WIN_USER=$(ls /mnt/c/Users | grep -v -E 'Public|Default|All Users|defaultuser0' | head -n1)
+    export USERPROFILE="/mnt/c/Users/$WIN_USER"
+  fi
+fi
+
 if [ -d "$HOME/bin" ]; then
   export PATH="$HOME/bin:$PATH"
 fi

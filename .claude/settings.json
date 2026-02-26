@@ -1,7 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
-    "DISABLE_AUTOUPDATER": "1"
+    "DISABLE_AUTOUPDATER": "1",
+    "CLAUDE_CODE_SKIP_WINDOWS_PROFILE": "1"
   },
   "permissions": {
     "allow": [
@@ -85,6 +86,7 @@
   "enabledPlugins": {
     "context7@claude-plugins-official": true
   },
+  "outputStyle": "Explanatory",
   "language": "japanese",
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
@@ -113,6 +115,5 @@
   },
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "terminalProgressBarEnabled": true,
-  "outputStyle": "Explanatory"
+  "terminalProgressBarEnabled": true
 }
