@@ -11,6 +11,10 @@ link:
     - src: ./.bash_aliases
       targets:
         - linux
+  ~/.zshenv:
+    - src: ./.zshenv
+      targets:
+        - linux
   ~/.zshrc:
     - src: ./.zshrc
       targets:
