@@ -32,12 +32,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "deno run --env-file=$HOME/.claude/scripts/.env -A ~/.claude/scripts/notify/windows.ts",
-            "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "deno run --env-file=$HOME/.claude/scripts/.env -A ~/.claude/scripts/notify/ntfy.ts",
+            "command": "deno task --cwd ~/.claude/scripts notify",
             "timeout": 10
           }
         ]
@@ -49,12 +44,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "deno run --env-file=$HOME/.claude/scripts/.env -A ~/.claude/scripts/notify/windows.ts",
-            "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "deno run --env-file=$HOME/.claude/scripts/.env -A ~/.claude/scripts/notify/ntfy.ts",
+            "command": "deno task --cwd ~/.claude/scripts notify",
             "timeout": 10
           }
         ]
@@ -66,12 +56,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "deno run --env-file=$HOME/.claude/scripts/.env -A ~/.claude/scripts/notify/windows.ts",
-            "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "deno run --env-file=$HOME/.claude/scripts/.env -A ~/.claude/scripts/notify/ntfy.ts",
+            "command": "deno task --cwd ~/.claude/scripts notify",
             "timeout": 10
           }
         ]
@@ -80,7 +65,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "deno run -A ~/.claude/scripts/statusline.ts",
+    "command": "deno task --cwd ~/.claude/scripts statusline",
     "padding": 0
   },
   "enabledPlugins": {

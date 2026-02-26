@@ -1,9 +1,9 @@
-import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
+import { assertEquals } from "@std/assert";
 import type {
   NotificationHookInput,
   PermissionRequestHookInput,
   StopHookInput,
-} from "npm:@anthropic-ai/claude-agent-sdk@latest";
+} from "@anthropic-ai/claude-agent-sdk";
 import {
   formatToolInput,
   getLastAssistantMessage,
@@ -11,8 +11,7 @@ import {
   getNotificationMessage,
   getPermissionRequestMessage,
   getStopMessage,
-  tailLines,
-} from "./utils.ts";
+} from "./hook.ts";
 
 const baseInput = {
   session_id: "test-session",
@@ -20,48 +19,18 @@ const baseInput = {
   cwd: "/tmp",
 };
 
-// --- tailLines ---
-
-Deno.test("tailLines: 空ファイルは空配列を返す", async () => {
-  const tmp = await Deno.makeTempFile();
-  try {
-    const result = await tailLines(tmp, 5);
-    assertEquals(result, []);
-  } finally {
-    await Deno.remove(tmp);
-  }
-});
-
-Deno.test("tailLines: 指定行数分の末尾行を返す", async () => {
-  const tmp = await Deno.makeTempFile();
-  try {
-    await Deno.writeTextFile(tmp, "line1\nline2\nline3\nline4\nline5\n");
-    const result = await tailLines(tmp, 3);
-    assertEquals(result, ["line3", "line4", "line5"]);
-  } finally {
-    await Deno.remove(tmp);
-  }
-});
-
-Deno.test("tailLines: ファイルの行数が n 未満の場合は全行を返す", async () => {
-  const tmp = await Deno.makeTempFile();
-  try {
-    await Deno.writeTextFile(tmp, "line1\nline2\n");
-    const result = await tailLines(tmp, 10);
-    assertEquals(result, ["line1", "line2"]);
-  } finally {
-    await Deno.remove(tmp);
-  }
-});
-
 // --- getLastAssistantMessage ---
 
 Deno.test("getLastAssistantMessage: テキストメッセージを抽出する", async () => {
   const tmp = await Deno.makeTempFile();
   try {
     const lines = [
-      JSON.stringify({ message: { content: [{ type: "tool_use", name: "Bash" }] } }),
-      JSON.stringify({ message: { content: [{ type: "text", text: "hello world" }] } }),
+      JSON.stringify({
+        message: { content: [{ type: "tool_use", name: "Bash" }] },
+      }),
+      JSON.stringify({
+        message: { content: [{ type: "text", text: "hello world" }] },
+      }),
     ];
     await Deno.writeTextFile(tmp, lines.join("\n") + "\n");
     const result = await getLastAssistantMessage(tmp);
@@ -90,7 +59,9 @@ Deno.test("getLastAssistantMessage: テキストがなければ undefined を返
   const tmp = await Deno.makeTempFile();
   try {
     const lines = [
-      JSON.stringify({ message: { content: [{ type: "tool_use", name: "Read" }] } }),
+      JSON.stringify({
+        message: { content: [{ type: "tool_use", name: "Read" }] },
+      }),
     ];
     await Deno.writeTextFile(tmp, lines.join("\n") + "\n");
     const result = await getLastAssistantMessage(tmp);
@@ -118,7 +89,9 @@ Deno.test("getStopMessage: last_assistant_message がなければトランスク
   try {
     await Deno.writeTextFile(
       tmp,
-      JSON.stringify({ message: { content: [{ type: "text", text: "from transcript" }] } }) + "\n",
+      JSON.stringify({
+        message: { content: [{ type: "text", text: "from transcript" }] },
+      }) + "\n",
     );
     const input: StopHookInput = {
       ...baseInput,
