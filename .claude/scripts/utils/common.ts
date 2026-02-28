@@ -126,8 +126,8 @@ export const buildInlineProgressBar = (
 
   const labelFilled = clipped.slice(0, splitAt);
   const labelUnfilled = clipped.slice(splitAt);
-  const filledRemainder = "▓".repeat(Math.max(0, filled - clipped.length));
-  const unfilledRemainder = "░".repeat(
+  const filledRemainder = " ".repeat(Math.max(0, filled - clipped.length));
+  const unfilledRemainder = " ".repeat(
     Math.max(0, width - Math.max(filled, clipped.length)),
   );
 
