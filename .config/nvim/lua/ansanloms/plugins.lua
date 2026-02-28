@@ -126,18 +126,37 @@ require("jetpack.packer").add({
   {
     "williamboman/mason-lspconfig.nvim",
     config = function()
-      require("mason-lspconfig").setup({
-        ensure_installed = {
+      local ensure = {}
+
+      if vim.fn.executable("node") == 1 then
+        vim.list_extend(ensure, {
           "eslint",
-          "denols",
           "vtsls",
           "vue_ls",
-          "docker_language_server",
-          "phpactor",
           "jsonls",
-          "lua_ls",
-          "efm",
-        },
+        })
+      end
+
+      if vim.fn.executable("deno") == 1 then
+        vim.list_extend(ensure, {
+          "denols",
+        })
+      end
+
+      if vim.fn.executable("php") == 1 then
+        vim.list_extend(ensure, {
+          "phpactor",
+        })
+      end
+
+      vim.list_extend(ensure, {
+        "docker_language_server",
+        "lua_ls",
+        "efm",
+      })
+
+      require("mason-lspconfig").setup({
+        ensure_installed = ensure,
       })
     end,
   },

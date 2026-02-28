@@ -1,8 +1,6 @@
 require("jetpack").load("nvim-lspconfig")
 require("jetpack").load("blink.cmp")
 
-local util = require("lspconfig.util")
-
 -- keyboard shortcut:
 vim.keymap.set("n", "K", vim.lsp.buf.hover)
 vim.keymap.set("n", "gf", vim.lsp.buf.format)
@@ -52,24 +50,24 @@ vim.lsp.config("denols", {
     "javascript.jsx",
     "typescript",
     "typescriptreact",
-    "typescript.tsx"
+    "typescript.tsx",
   },
-  root_dir = util.root_pattern(
+  root_markers = {
     "deno.json",
-    "deno.jsonc"
-  ),
+    "deno.jsonc",
+  },
 })
 
 vim.lsp.config("vue_ls", {
   filetypes = {
-    "vue"
+    "vue",
   },
-  root_dir = util.root_pattern(
+  root_markers = {
     "vue.config.js",
     "vue.config.ts",
     "nuxt.config.js",
-    "nuxt.config.ts"
-  ),
+    "nuxt.config.ts",
+  },
 })
 
 vim.lsp.config("vtsls", {
@@ -80,7 +78,7 @@ vim.lsp.config("vtsls", {
     "javascript.jsx",
     "typescript",
     "typescriptreact",
-    "typescript.tsx"
+    "typescript.tsx",
   },
   settings = {
     -- @see https://github.com/vuejs/language-tools/wiki/Neovim
@@ -97,9 +95,19 @@ vim.lsp.config("vtsls", {
       },
     },
   },
-  root_dir = util.root_pattern(
-    "package.json"
-  ),
+  root_markers = {
+    "package.json",
+  },
+  callback = function()
+    -- deno 優先
+    if vim.fn.findfile("deno.json", ".;") ~= "" or vim.fn.findfile("deno.jsonc", ".;") ~= "" then
+      vim.lsp.start(vim.lsp.config.denols)
+      return
+    end
+
+    -- node
+    vim.lsp.start(vim.lsp.config.vtsls)
+  end,
 })
 
 vim.lsp.config("jsonls", {
@@ -161,41 +169,13 @@ vim.lsp.config("efm", {
 })
 
 vim.lsp.enable({
+  "denols",
+  "vtsls",
+  "vue_ls",
   "eslint",
   "docker_language_server",
   "intelephense",
   "lua_ls",
   "efm",
-  "tombi"
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  group = vim.api.nvim_create_augroup("lsp-start-vue", { clear = true }),
-  pattern = "vue",
-  callback = function()
-    vim.lsp.start(vim.lsp.config.vtsls)
-    vim.lsp.start(vim.lsp.config.vue_ls)
-  end,
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  group = vim.api.nvim_create_augroup("lsp-start-node-or-deno", { clear = true }),
-  pattern = {
-    "javascript",
-    "javascriptreact",
-    "javascript.jsx",
-    "typescript",
-    "typescriptreact",
-    "typescript.tsx",
-  },
-  callback = function()
-    -- node
-    if vim.fn.findfile("package.json", ".;") ~= "" then
-      vim.lsp.start(vim.lsp.config.vtsls)
-      return
-    end
-
-    -- deno
-    vim.lsp.start(vim.lsp.config.denols)
-  end,
+  "tombi",
 })
