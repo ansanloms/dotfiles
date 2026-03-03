@@ -1,0 +1,27 @@
+{
+  "lua": {
+    "command": "lua-language-server",
+    "args": [],
+    "extensionToLanguage": {
+      ".lua": "lua"
+    },
+    "transport": "stdio",
+    "settings": {
+      "Lua": {
+        "runtime": {
+          "version": "LuaJIT"
+        },
+        "diagnostics": {
+          "globals": ["vim"]
+        },
+        "workspace": {
+          "checkThirdParty": false
+        },
+        "telemetry": {
+          "enable": false
+        }
+      }
+    },
+    "maxRestarts": 3
+  }
+}

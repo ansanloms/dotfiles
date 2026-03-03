@@ -1,0 +1,9 @@
+{
+  "name": "vtsls",
+  "description": "TypeScript/JavaScript language server (vtsls)",
+  "version": "1.0.0",
+  "author": {
+    "name": "ansanloms"
+  },
+  "license": "MIT"
+}

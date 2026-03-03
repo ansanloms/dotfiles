@@ -1,0 +1,42 @@
+{
+  "name": "lsp",
+  "owner": {
+    "name": "ansanloms"
+  },
+  "metadata": {
+    "description": "LSP plugins for Claude Code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "vtsls",
+      "source": "./plugins/vtsls",
+      "version": "1.0.0",
+      "description": "TypeScript/JavaScript language server (vtsls)"
+    },
+    {
+      "name": "denols",
+      "source": "./plugins/denols",
+      "version": "1.0.0",
+      "description": "Deno language server"
+    },
+    {
+      "name": "vue-ls",
+      "source": "./plugins/vue_ls",
+      "version": "1.0.0",
+      "description": "Vue language server"
+    },
+    {
+      "name": "phpactor",
+      "source": "./plugins/phpactor",
+      "version": "1.0.0",
+      "description": "PHP language server (Phpactor)"
+    },
+    {
+      "name": "lua-ls",
+      "source": "./plugins/lua_ls",
+      "version": "1.0.0",
+      "description": "Lua language server (lua-language-server)"
+    }
+  ]
+}

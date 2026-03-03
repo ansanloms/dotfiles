@@ -132,14 +132,16 @@ link:
         - linux
   ~/.ripgreprc:
     - src: ./.ripgreprc
-  ~/.claude/rules:
-    - src: ./.claude/rules
   ~/.claude/settings.json:
     - src: ./.claude/settings.json
-  ~/.local/bin/git-worktree-select:
-    - src: ./.local/bin/git-worktree-select
+  ~/.claude/rules:
+    - src: ./.claude/rules
+  ~/.claude/lsp:
+    - src: ./.claude/lsp
   ~/.claude/scripts:
     - src: ./.claude/scripts
+  ~/.local/bin/git-worktree-select:
+    - src: ./.local/bin/git-worktree-select
   ~/.config/systemd/user/wsl-notify.service:
     - src: ./.config/systemd/user/wsl-notify.service
       targets:

@@ -1,0 +1,21 @@
+{
+  "deno": {
+    "command": "deno",
+    "args": ["lsp"],
+    "extensionToLanguage": {
+      ".ts": "typescript",
+      ".tsx": "typescriptreact",
+      ".js": "javascript",
+      ".jsx": "javascriptreact",
+      ".mts": "typescript",
+      ".mjs": "javascript"
+    },
+    "transport": "stdio",
+    "initializationOptions": {
+      "enable": true,
+      "lint": true,
+      "unstable": []
+    },
+    "maxRestarts": 3
+  }
+}

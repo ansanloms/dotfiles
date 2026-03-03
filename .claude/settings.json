@@ -2,7 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
     "DISABLE_AUTOUPDATER": "1",
-    "CLAUDE_CODE_SKIP_WINDOWS_PROFILE": "1"
+    "CLAUDE_CODE_SKIP_WINDOWS_PROFILE": "1",
+    "ENABLE_LSP_TOOL": "1"
   },
   "permissions": {
     "allow": [
@@ -23,7 +24,7 @@
       "Bash(rm:*)",
       "Bash(curl:*)"
     ],
-    "defaultMode": "default"
+    "defaultMode": "bypassPermissions"
   },
   "hooks": {
     "Stop": [
@@ -69,7 +70,12 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "context7@claude-plugins-official": true
+    "context7@claude-plugins-official": true,
+    "denols@lsp": true,
+    "lua-ls@lsp": true,
+    "phpactor@lsp": true,
+    "vtsls@lsp": true,
+    "vue-ls@lsp": true
   },
   "outputStyle": "Explanatory",
   "language": "japanese",
