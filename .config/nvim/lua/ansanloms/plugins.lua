@@ -622,10 +622,20 @@ require("jetpack.packer").add({
             --},
             path = {
               opts = {
-                -- pwd からのパス補完を有効にする（デフォルトはバッファのディレクトリ）
-                get_cwd = function(_)
+                get_cwd = function(context)
+                  local col = context.bounds.start_col - (context.bounds.length == 0 and 1 or 0)
+                  local before = context.line:sub(1, col)
+
+                  -- ./ や ../ で始まるパスはバッファのディレクトリ起点
+                  if before:match('%./$') or before:match('%.%./$') then
+                    return vim.fn.expand(('#%d:p:h'):format(context.bufnr))
+                  end
+
+                  -- それ以外（/ 含む）は pwd 起点
                   return vim.fn.getcwd()
                 end,
+                -- / をルート(/)ではなく get_cwd() 起点にする
+                ignore_root_slash = true,
                 -- ドットファイル（隠しファイル）を補完候補に表示する
                 show_hidden_files_by_default = true,
               },
