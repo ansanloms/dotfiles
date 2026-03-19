@@ -1,0 +1,87 @@
+#!/usr/bin/env -S deno run --quiet --allow-run --allow-read --allow-write
+
+// .worktreeinclude に記載されたファイルをメインワークツリーから指定の worktree にコピーする。
+// git worktree add と同じ引数を受け取り、パスを特定してコピーする。
+// 使い方: git-worktree-include [<options>] <path> [<commit-ish>]
+
+import { expandGlob } from "jsr:@std/fs@1.0.17/expand-glob";
+import { dirname, join, relative, resolve } from "jsr:@std/path@1.1.4";
+import { ensureDir } from "jsr:@std/fs@1.0.17/ensure-dir";
+import { parseArgs } from "jsr:@std/cli@1.0.28/parse-args";
+
+// メインワークツリーのルートを取得
+const process = new Deno.Command("git", {
+  args: ["worktree", "list", "--porcelain"],
+  stdout: "piped",
+});
+const { stdout } = await process.output();
+const mainWt = new TextDecoder()
+  .decode(stdout)
+  .split("\n")[0]
+  .replace(/^worktree /, "");
+
+const includeFile = join(mainWt, ".worktreeinclude");
+
+try {
+  await Deno.stat(includeFile);
+} catch {
+  Deno.exit(0);
+}
+
+// git worktree add と同じ引数からパスを特定する
+// git worktree add [<options>] <path> [<commit-ish>]
+const args = parseArgs(Deno.args, {
+  boolean: [
+    "force",
+    "detach",
+    "checkout",
+    "no-checkout",
+    "lock",
+    "quiet",
+    "track",
+    "no-track",
+    "guess-remote",
+    "no-guess-remote",
+  ],
+  string: ["b", "B", "reason"],
+  alias: { f: "force", q: "quiet" },
+});
+
+const dst = args._[0];
+
+if (typeof dst !== "string") {
+  Deno.exit(0);
+}
+
+const dstPath = resolve(dst);
+
+// .worktreeinclude を読んでパターンごとに処理
+const content = await Deno.readTextFile(includeFile);
+const patterns = content
+  .split("\n")
+  .map((line) => line.trimEnd())
+  .filter((line) => line.length > 0 && !line.startsWith("#"));
+
+for (const raw of patterns) {
+  // gitignore 互換: / を含まないパターンは **/pattern として扱う
+  let pattern = raw;
+  if (!pattern.includes("/")) {
+    pattern = `**/${pattern}`;
+  }
+
+  // 先頭の / を除去（ルート相対）
+  pattern = pattern.replace(/^\//, "");
+
+  for await (const entry of expandGlob(pattern, { root: mainWt })) {
+    if (!entry.isFile) continue;
+
+    const rel = relative(mainWt, entry.path);
+    const destPath = join(dstPath, rel);
+
+    await ensureDir(dirname(destPath));
+    await Deno.copyFile(entry.path, destPath);
+    console.log(`Copied: ${rel}`);
+  }
+}
+
+// vim:set ft=typescript:

@@ -142,6 +142,8 @@ link:
     - src: ./.claude/scripts
   ~/.local/bin/git-worktree-select:
     - src: ./.local/bin/git-worktree-select
+  ~/.local/bin/git-worktree-include:
+    - src: ./.local/bin/git-worktree-include
   ~/.config/systemd/user/wsl-notify.service:
     - src: ./.config/systemd/user/wsl-notify.service
       targets:
