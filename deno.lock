@@ -7,10 +7,12 @@
     "jsr:@cliffy/internal@1.0.0-rc.8": "1.0.0-rc.8",
     "jsr:@cliffy/table@1.0.0-rc.8": "1.0.0-rc.8",
     "jsr:@std/fmt@~1.0.2": "1.0.9",
+    "jsr:@std/fs@1.0.17": "1.0.17",
     "jsr:@std/fs@1.0.19": "1.0.19",
     "jsr:@std/internal@^1.0.10": "1.0.12",
     "jsr:@std/internal@^1.0.9": "1.0.12",
     "jsr:@std/path@1.1.2": "1.1.2",
+    "jsr:@std/path@^1.0.9": "1.1.2",
     "jsr:@std/path@^1.1.1": "1.1.2",
     "jsr:@std/text@~1.0.7": "1.0.17",
     "jsr:@std/yaml@1.0.10": "1.0.10",
@@ -51,6 +53,12 @@
     },
     "@std/fmt@1.0.9": {
       "integrity": "2487343e8899fb2be5d0e3d35013e54477ada198854e52dd05ed0422eddcabe0"
+    },
+    "@std/fs@1.0.17": {
+      "integrity": "1c00c632677c1158988ef7a004cb16137f870aafdb8163b9dce86ec652f3952b",
+      "dependencies": [
+        "jsr:@std/path@^1.0.9"
+      ]
     },
     "@std/fs@1.0.19": {
       "integrity": "051968c2b1eae4d2ea9f79a08a3845740ef6af10356aff43d3e2ef11ed09fb06",
