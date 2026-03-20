@@ -65,8 +65,8 @@ const dstPath = resolve(dst);
 const content = await Deno.readTextFile(includeFile);
 const ig = ignore().add(content);
 
-// ! パターンを expandGlob の exclude に渡して走査効率を確保
-const excludePatterns: string[] = [];
+// デフォルトの除外パターンと ! パターンを expandGlob の exclude に渡して走査効率を確保
+const excludePatterns: string[] = [".git"];
 
 for (const line of content.split("\n")) {
   const trimmed = line.trimEnd();
