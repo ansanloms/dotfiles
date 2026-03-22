@@ -2,32 +2,22 @@
 <skk>
   <section name="dictionary">
     <list>
-      <row path="https://skk-dev.github.io/dict/SKK-JISYO.L.gz" enabled="1" />
-      <row
-        path="https://skk-dev.github.io/dict/SKK-JISYO.jinmei.gz"
-        enabled="1"
-      />
-      <row
-        path="https://skk-dev.github.io/dict/SKK-JISYO.fullname.gz"
-        enabled="1"
-      />
-      <row path="https://skk-dev.github.io/dict/SKK-JISYO.geo.gz" enabled="1" />
-      <row
-        path="https://skk-dev.github.io/dict/SKK-JISYO.propernoun.gz"
-        enabled="1"
-      />
-      <row
-        path="https://skk-dev.github.io/dict/SKK-JISYO.station.gz"
-        enabled="1"
-      />
-      <row
-        path="https://raw.githubusercontent.com/uasi/skk-emoji-jisyo/master/SKK-JISYO.emoji.utf8"
-        enabled="1"
-      />
-      <row
-        path="https://raw.githubusercontent.com/ymrl/SKK-JISYO.emoji-ja/master/SKK-JISYO.emoji-ja.utf8"
-        enabled="1"
-      />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.L" enabled="1" />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.jinmei" enabled="1" />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.fullname" enabled="1" />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.geo" enabled="1" />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.propernoun" enabled="1" />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.station" enabled="1" />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.law" enabled="1" />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.assoc" enabled="1" />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.edict2" enabled="1" />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.itaiji" enabled="1" />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.itaiji.JIS3_4" enabled="1" />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.emoji" enabled="1" />
+      <row path="https://github.com/ymrl/SKK-JISYO.emoji-ja/raw/refs/heads/master/SKK-JISYO.emoji-ja.utf8" enabled="1" />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/zipcode/SKK-JISYO.zipcode" enabled="1" />
+      <row path="https://github.com/skk-dev/dict/raw/refs/heads/master/zipcode/SKK-JISYO.office.zipcode" enabled="1" />
+      <row path="https://github.com/ansanloms/skk-dict-mountain/releases/latest/download/SKK-JISYO.mountain" enabled="1" />
     </list>
   </section>
   <section name="server">
@@ -61,13 +51,13 @@
     <key name="setbydirect" value="0" />
     <key name="compmultinum" value="8" />
     <key name="stacompmulti" value="1" />
-    <key name="dynamiccomp" value="0" />
-    <key name="dyncompmulti" value="0" />
-    <key name="compuserdic" value="0" />
-    <key name="compincback" value="0" />
+    <key name="dynamiccomp" value="1" />
+    <key name="dyncompmulti" value="1" />
+    <key name="compuserdic" value="1" />
+    <key name="compincback" value="1" />
   </section>
   <section name="font">
-    <key name="name" value="メイリオ" />
+    <key name="name" value="Yu Gothic UI" />
     <key name="size" value="12" />
     <key name="weight" value="400" />
     <key name="italic" value="0" />
