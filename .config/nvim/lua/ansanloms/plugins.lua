@@ -426,6 +426,11 @@ require("jetpack.packer").add({
           name = "SKK-JISYO.office.zipcode",
           encoding = "euc-jis-2004",
         },
+        {
+          url = "https://github.com/ansanloms/skk-dict-mountain/releases/latest/download/SKK-JISYO.mountain",
+          name = "SKK-JISYO.mountain",
+          encoding = "utf-8",
+        },
       }
 
       local dictDir = vim.fn.expand(vim.fn.stdpath("data") .. "/skkeleton")
@@ -526,7 +531,7 @@ require("jetpack.packer").add({
       vim.cmd("highlight SkkeletonHenkan gui=underline term=underline cterm=reverse")
     end,
   },
-  -- { "Xantibody/blink-cmp-skkeleton" },
+  { "Xantibody/blink-cmp-skkeleton" },
 
   -- cmp:
   {
@@ -608,18 +613,17 @@ require("jetpack.packer").add({
         -- 補完ソース
         sources = {
           default = function()
-            --if require("blink-cmp-skkeleton").is_enabled() then
-            --  return { "skkeleton" }
-            --else
-            --  return { "lsp", "path", "snippets", "buffer" }
-            --end
-            return { "lsp", "path", "snippets" }
+            if require("blink-cmp-skkeleton").is_enabled() then
+              return { "skkeleton" }
+            else
+              return { "lsp", "path", "snippets" }
+            end
           end,
           providers = {
-            --skkeleton = {
-            --  name = "skkeleton",
-            --  module = "blink-cmp-skkeleton",
-            --},
+            skkeleton = {
+              name = "skkeleton",
+              module = "blink-cmp-skkeleton",
+            },
             path = {
               opts = {
                 get_cwd = function(context)
