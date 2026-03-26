@@ -36,8 +36,9 @@ vim.diagnostic.config({
   },
 })
 
+local ok, blink = pcall(require, "blink.cmp")
 vim.lsp.config("*", {
-  capabilities = require("blink.cmp").get_lsp_capabilities(),
+  capabilities = ok and blink.get_lsp_capabilities() or vim.lsp.protocol.make_client_capabilities(),
 })
 
 vim.lsp.config("denols", {
