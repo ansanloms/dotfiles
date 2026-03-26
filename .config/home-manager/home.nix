@@ -10,6 +10,13 @@
   # nixpkgs を更新しても、ここは変更不要。
   home.stateVersion = "25.05";
 
+  # nixpkgs の設定。unfree ライセンスのパッケージを個別に許可する。
+  # 新たに unfree パッケージを追加する場合はここにも追記が必要。
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (pkgs.lib.getName pkg) [
+      "claude-code"
+    ];
+
   # home-manager 自身を home-manager 経由で管理する。
   # これにより `home-manager` コマンドが PATH に入る。
   programs.home-manager.enable = true;
