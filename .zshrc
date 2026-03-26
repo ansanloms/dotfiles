@@ -2,10 +2,6 @@ if [ -f "$HOME/.bash_aliases" ]; then
   source "$HOME/.bash_aliases"
 fi
 
-if type mise > /dev/null 2>&1; then
-  eval "$(mise activate zsh)"
-fi
-
 if type starship > /dev/null 2>&1; then
   eval "$(starship init zsh)"
 fi

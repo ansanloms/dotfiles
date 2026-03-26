@@ -85,10 +85,14 @@ link:
         - windows
   ~/.config/zellij:
     - src: ./.config/zellij
-  ~/.config/mise/config.toml:
-    - src: ./.config/mise/config.toml
-  ~/.config/mise/scripts:
-    - src: ./.config/mise/scripts
+  ~/.config/nix:
+    - src: ./.config/nix
+      targets:
+        - linux
+  ~/.config/home-manager:
+    - src: ./.config/home-manager
+      targets:
+        - linux
   ~/.minttyrc:
     - src: ./.minttyrc
       targets:
@@ -142,8 +146,16 @@ link:
     - src: ./.claude/scripts
   ~/.local/bin/git-worktree-select:
     - src: ./.local/bin/git-worktree-select
+      targets:
+        - linux
   ~/.local/bin/git-worktree-include:
     - src: ./.local/bin/git-worktree-include
+      targets:
+        - linux
+  ~/.local/bin/chrome-remote-debug:
+    - src: ./.local/bin/chrome-remote-debug
+      targets:
+        - linux
   ~/.config/systemd/user/wsl-notify.service:
     - src: ./.config/systemd/user/wsl-notify.service
       targets:
