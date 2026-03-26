@@ -4,6 +4,7 @@ export LESSCHARSET=utf-8
 export TERM=xterm-256color
 
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+export COLORTERM=truecolor
 
 if [ -f "$HOME/.zshrc" ]; then
   source "$HOME/.zshrc"
