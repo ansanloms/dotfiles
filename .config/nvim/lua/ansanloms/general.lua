@@ -53,7 +53,6 @@ vim.opt.undofile = true
 vim.opt.history = 1000
 vim.opt.backspace = "start,eol,indent"
 vim.opt.virtualedit = "block"
-vim.opt.clipboard = "unnamed,unnamedplus" -- @todo https://github.com/neovim/neovim/issues/2325
 vim.opt.helplang = "ja,en"
 vim.opt.whichwrap = "b,s,h,l,<,>,[,]"
 vim.opt.mouse = ""
