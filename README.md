@@ -18,7 +18,7 @@ cd dotfiles
 [dot-mori](https://github.com/ansanloms/dot-mori) でシンボリックリンクを作成する。
 
 ```sh
-deno task install
+nix run nixpkgs#deno -- task install
 ```
 
 ### 4. Apply Home Manager
@@ -37,12 +37,6 @@ home-manager switch --flake ~/.config/home-manager --impure
 
 # nixpkgs / home-manager の更新
 nix flake update --flake ~/.config/home-manager
-```
-
-### 5. Setup Rust toolchain
-
-```sh
-rustup default stable
 ```
 
 ## Uninstall
