@@ -1,5 +1,3 @@
-require("jetpack").load("nightfox.nvim")
-
 -- シンタックス ON
 vim.cmd("syntax enable")
 vim.opt.background = "dark"

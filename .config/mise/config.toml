@@ -5,6 +5,7 @@ deno = "latest"
 rust = "nightly"
 cargo = "latest"
 go = "latest"
+tree-sitter = "latest"
 zellij = "latest"
 starship = "latest"
 aws-cli = { version = "latest", symlink_bins = "true" }

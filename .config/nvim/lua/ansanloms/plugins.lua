@@ -1,19 +1,21 @@
-local jetpackfile = vim.fn.stdpath("data") .. "/site/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim"
-local jetpackurl = "https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim"
-
-if vim.fn.filereadable(jetpackfile) == 0 then
-  vim.fn.system(string.format("curl -fsSLo %s --create-dirs %s", jetpackfile, jetpackurl))
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
 end
+vim.opt.rtp:prepend(lazypath)
 
-vim.cmd("packadd vim-jetpack")
-
-require("jetpack.packer").add({
-  -- plugin manager:
-  {
-    "tani/vim-jetpack",
-    opt = true
-  },
-
+require("lazy").setup({
   -- general:
   { "vim-jp/vimdoc-ja" },
   { "vim-denops/denops.vim" },
@@ -183,87 +185,89 @@ require("jetpack.packer").add({
   {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
-    run = function()
-      require("nvim-treesitter").install({
-        "awk",
-        "bash",
-        "c",
-        "c_sharp",
-        "clojure",
-        "cpp",
-        "css",
-        "csv",
-        "diff",
-        "elixir",
-        "elm",
-        "erlang",
-        "git_config",
-        "git_rebase",
-        "gitattributes",
-        "gitcommit",
-        "gitignore",
-        "go",
-        "html",
-        "http",
-        "ini",
-        "java",
-        "javadoc",
-        "javascript",
-        "jq",
-        "json",
-        "kdl",
-        "kotlin",
-        "latex",
-        "lua",
-        "luadoc",
-        "make",
-        "markdown",
-        "markdown_inline",
-        "mermaid",
-        "nginx",
-        "perl",
-        "php",
-        "phpdoc",
-        "powershell",
-        "prisma",
-        "pug",
-        "python",
-        "robot",
-        "rst",
-        "ruby",
-        "rust",
-        "scss",
-        "sql",
-        "styled",
-        "swift",
-        "tmux",
-        "toml",
-        "tsv",
-        "tsx",
-        "twig",
-        "typescript",
-        "vim",
-        "vimdoc",
-        "vue",
-        "xml",
-        "yaml",
-      }, {
-        force = false,
-        generate = true,
-        max_jobs = 4,
-        summary = false,
-      })
-    end,
     config = function()
-      require("nvim-treesitter").setup({
+      local ts = require("nvim-treesitter")
+      ts.setup({
         install_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "site"),
       })
+
+      if vim.fn.executable("tree-sitter") == 1 then
+        ts.install({
+          "awk",
+          "bash",
+          "c",
+          "c_sharp",
+          "clojure",
+          "cpp",
+          "css",
+          "csv",
+          "diff",
+          "elixir",
+          "elm",
+          "erlang",
+          "git_config",
+          "git_rebase",
+          "gitattributes",
+          "gitcommit",
+          "gitignore",
+          "go",
+          "html",
+          "http",
+          "ini",
+          "java",
+          "javadoc",
+          "javascript",
+          "jq",
+          "json",
+          "kdl",
+          "kotlin",
+          "latex",
+          "lua",
+          "luadoc",
+          "make",
+          "markdown",
+          "markdown_inline",
+          "mermaid",
+          "nginx",
+          "perl",
+          "php",
+          "phpdoc",
+          "powershell",
+          "prisma",
+          "pug",
+          "python",
+          "robot",
+          "rst",
+          "ruby",
+          "rust",
+          "scss",
+          "sql",
+          "styled",
+          "swift",
+          "tmux",
+          "toml",
+          "tsv",
+          "tsx",
+          "twig",
+          "typescript",
+          "vim",
+          "vimdoc",
+          "vue",
+          "xml",
+          "yaml",
+        }, {
+          force = false,
+          generate = false,
+          max_jobs = 4,
+          summary = false,
+        })
+      end
     end,
   },
   { "nvim-treesitter/nvim-treesitter-context" },
   {
     "rbtnn/vim-ambiwidth",
-    setup = function()
+    init = function()
       vim.g.ambiwidth_cica_enabled = false
 
       vim.g.ambiwidth_add_list = {
@@ -349,7 +353,8 @@ require("jetpack.packer").add({
   -- skk:
   {
     "vim-skk/skkeleton",
-    run = function()
+    dependencies = { "vim-denops/denops.vim" },
+    build = function()
       local dicts = {
         {
           url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.L",
@@ -536,58 +541,12 @@ require("jetpack.packer").add({
   -- cmp:
   {
     "saghen/blink.cmp",
+    version = "1.*",
     config = function()
-      -- 最新バージョンを取得（1日キャッシュ）
-      local function get_blink_version()
-        local cache_path = vim.fn.stdpath("cache") .. "/blink_cmp_version.json"
-        local cache_max_age = 86400 -- 1日
-
-        -- キャッシュ読み込み
-        local cache_file = io.open(cache_path, "r")
-        if cache_file then
-          local content = cache_file:read("*a")
-          cache_file:close()
-          local ok, cache = pcall(vim.fn.json_decode, content)
-          if ok and cache.version and cache.timestamp then
-            if os.time() - cache.timestamp < cache_max_age then
-              return cache.version
-            end
-          end
-        end
-
-        -- GitHub API から最新バージョンを取得
-        local result = vim.system({
-          "curl", "--fail", "--silent", "--max-time", "3",
-          "https://api.github.com/repos/saghen/blink.cmp/releases/latest"
-        }, { text = true }):wait()
-
-        if result.code == 0 then
-          local ok, data = pcall(vim.fn.json_decode, result.stdout)
-          if ok and data.tag_name then
-            -- キャッシュに保存
-            local save_file = io.open(cache_path, "w")
-            if save_file then
-              save_file:write(vim.fn.json_encode({
-                version = data.tag_name,
-                timestamp = os.time(),
-              }))
-              save_file:close()
-            end
-            return data.tag_name
-          end
-        end
-
-        return "v1.8.0" -- フォールバック
-      end
-
       require("blink.cmp").setup({
         -- fuzzy matcher 設定
         fuzzy = {
           implementation = "prefer_rust_with_warning",
-          prebuilt_binaries = {
-            download = true,
-            force_version = get_blink_version(),
-          },
         },
 
         -- スニペット設定（vim-vsnip を使用）
@@ -681,11 +640,3 @@ require("jetpack.packer").add({
     "yaegassy/nette-neon.vim"
   },
 })
-
-local jetpack = require("jetpack")
-for _, name in ipairs(jetpack.names()) do
-  if not jetpack.tap(name) then
-    jetpack.sync()
-    break
-  end
-end

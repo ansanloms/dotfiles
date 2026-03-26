@@ -1,6 +1,3 @@
-require("jetpack").load("nvim-lspconfig")
-require("jetpack").load("blink.cmp")
-
 -- keyboard shortcut:
 vim.keymap.set("n", "K", vim.lsp.buf.hover)
 vim.keymap.set("n", "gf", vim.lsp.buf.format)

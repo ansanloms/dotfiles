@@ -15,5 +15,6 @@
 .config/git/config.personal
 
 .config/nvim/lua/temp.lua
+.config/nvim/lazy-lock.json
 
 .config/alacritty/os.toml
