@@ -1,8 +1,7 @@
 # モジュール引数:
 #   config - この home-manager 設定自身への参照 (他のオプション値を参照する際に使う)
 #   pkgs   - nixpkgs のパッケージセット (flake.nix の pkgs が渡される)
-#   neovim-nightly-overlay, system - flake.nix の extraSpecialArgs から渡された値
-{ config, pkgs, neovim-nightly-overlay, system, ... }:
+{ config, pkgs, ... }:
 
 {
   # stateVersion: この設定を最初に作成した時点のバージョン。
@@ -23,7 +22,6 @@
 
   # home.packages: インストールするパッケージのリスト。
   # `with pkgs;` で pkgs. のプレフィックスを省略できる。
-  # nixpkgs 外のパッケージ (neovim nightly) は ++ で結合する。
   home.packages = (with pkgs; [
     nodejs       # npm 同梱
     deno
@@ -39,9 +37,6 @@
     devcontainer
     claude-code
     just
-  ]) ++ [
-    # overlay を適用せず直接パッケージを参照する方式。
-    # overlay 方式だと nixpkgs 内の treesitter パーサとハッシュが食い違う場合がある。
-    neovim-nightly-overlay.packages.${system}.default
-  ];
+    neovim
+  ]);
 }

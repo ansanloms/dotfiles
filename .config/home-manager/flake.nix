@@ -14,16 +14,11 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # neovim-nightly-overlay: Neovim の nightly ビルドを提供する。
-    neovim-nightly-overlay = {
-      url = "github:nix-community/neovim-nightly-overlay";
-    };
   };
 
   # outputs: inputs を受け取り、この flake が提供するものを定義する。
   # home-manager の場合は homeConfigurations を定義する。
-  outputs = { nixpkgs, home-manager, neovim-nightly-overlay, ... }:
+  outputs = { nixpkgs, home-manager, ... }:
     let
       # builtins.getEnv は環境変数を取得する。
       # flakes の pure evaluation では禁止されるため、--impure フラグが必要。
@@ -41,10 +36,7 @@
         # pkgs: このシステム向けの nixpkgs パッケージセット。
         pkgs = nixpkgs.legacyPackages.${system};
 
-        # extraSpecialArgs: ここで渡した値が home.nix のモジュール引数として使える。
-        # 例えば neovim-nightly-overlay を home.nix 側で参照するために渡している。
         extraSpecialArgs = {
-          inherit neovim-nightly-overlay system;
         };
 
         # modules: 読み込む設定ファイルのリスト。
