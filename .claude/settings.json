@@ -59,7 +59,7 @@
     ],
     "PermissionRequest": [
       {
-        "matcher": "*",
+        "matcher": ".*",
         "hooks": [
           {
             "type": "command",
@@ -112,5 +112,6 @@
   },
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "terminalProgressBarEnabled": true
+  "terminalProgressBarEnabled": true,
+  "model": "opus[1m]"
 }
