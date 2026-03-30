@@ -144,6 +144,8 @@ link:
     - src: ./.claude/lsp
   ~/.claude/scripts:
     - src: ./.claude/scripts
+  ~/.config/just/justfile:
+    - src: ./.config/just/justfile
   ~/.local/bin/git-worktree-select:
     - src: ./.local/bin/git-worktree-select
       targets:

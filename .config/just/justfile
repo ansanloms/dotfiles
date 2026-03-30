@@ -1,0 +1,2 @@
+# 会社用の設定があったら読み込む。
+mod? work "conf.d/work.just"
