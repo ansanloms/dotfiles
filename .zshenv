@@ -25,11 +25,6 @@ if [ -d "$HOME/.local/bin" ]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
-if [ -d "/opt/nvim-linux-x86_64/bin" ]; then
-  export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+if type npm > /dev/null 2>&1; then
+  export PATH=$PATH:`npm prefix --location=global`/bin
 fi
-
-# pure
-export PURE_PROMPT_SYMBOL=">"
-export PURE_PROMPT_VICMD_SYMBOL="<"
-export PURE_SUSPENDED_JOBS_SYMBOL="+"
