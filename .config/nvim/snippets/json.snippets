@@ -4,8 +4,17 @@ snippet deno.json deno.json のテンプレート。
 		"fmt": {
 			"proseWrap": "preserve"
 		},
+		"lint": {
+			"rules": { "tags": ["recommended"] },
+			"plugins": ["jsr:@aireone/deno-lint-curly"]
+		},
 		"imports": {},
-		"tasks": {}
+		"tasks": {
+			"test": "deno test -A --parallel --coverage",
+			"check": "deno check **/*.ts",
+			"lint": "deno lint && deno fmt --check",
+			"fix": "deno lint --fix && deno fmt"
+		}
 	}
 
 snippet devcontainer.json devcontainer.json のテンプレート。
