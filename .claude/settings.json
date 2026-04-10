@@ -67,7 +67,6 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "context7@claude-plugins-official": true,
     "denols@lsp": true,
     "lua-ls@lsp": true,
     "phpactor@lsp": true,
