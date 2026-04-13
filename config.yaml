@@ -146,16 +146,14 @@ link:
     - src: ./.claude/scripts
   ~/.config/just/justfile:
     - src: ./.config/just/justfile
+  ~/.config/just/scripts:
+    - src: ./.config/just/scripts
   ~/.local/bin/git-worktree-select:
     - src: ./.local/bin/git-worktree-select
       targets:
         - linux
   ~/.local/bin/git-worktree-include:
     - src: ./.local/bin/git-worktree-include
-      targets:
-        - linux
-  ~/.local/bin/chrome-remote-debug:
-    - src: ./.local/bin/chrome-remote-debug
       targets:
         - linux
   ~/.config/systemd/user/wsl-notify.service:

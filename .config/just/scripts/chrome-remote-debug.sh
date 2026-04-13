@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Chrome をリモートデバッグモードで起動し、socat で外部からアクセス可能にする。
-# Usage: chrome-remote-debug [CHROME_PORT] [SOCAT_PORT]
-CHROME_PORT=${1:-9222}
-SOCAT_PORT=${2:-9223}
+# Usage: chrome-remote-debug.bash [CHROME_PORT] [SOCAT_PORT]
+CHROME_PORT=${1:-9223}
+SOCAT_PORT=${2:-9222}
 
 cleanup() {
   echo "Shutting down..."

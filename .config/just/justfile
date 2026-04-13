@@ -1,5 +1,9 @@
 list:
 	@just --global-justfile --list --list-submodules
 
+# Chrome をリモートデバッグモードで起動し、socat で外部からアクセス可能にする。
+chrome-remote-debug chrome_port="9223" socat_port="9222":
+    bash {{ justfile_directory() }}/scripts/chrome-remote-debug.sh {{ chrome_port }} {{ socat_port }}
+
 # 会社用の設定があったら読み込む。
 mod? work "conf.d/work.just"
