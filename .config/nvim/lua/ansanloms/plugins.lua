@@ -69,7 +69,6 @@ require("lazy").setup({
   },
 
   -- telescope:
-  { "nvim-lua/plenary.nvim" },
   {
     "nvim-telescope/telescope.nvim",
     config = function()
