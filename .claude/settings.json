@@ -21,7 +21,7 @@
     ],
     "deny": [],
     "ask": [],
-    "defaultMode": "bypassPermissions"
+    "defaultMode": "auto"
   },
   "hooks": {
     "Stop": [
@@ -101,7 +101,10 @@
     ]
   },
   "alwaysThinkingEnabled": true,
-  "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "terminalProgressBarEnabled": true
+  "editorMode": "vim",
+  "terminalProgressBarEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true,
+  "effortLevel": "xhigh"
 }
