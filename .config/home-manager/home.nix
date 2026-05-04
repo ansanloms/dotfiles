@@ -22,6 +22,7 @@
     go
     tree-sitter
     zellij
+    tmux
     starship
     awscli2
     eza
