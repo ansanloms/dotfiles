@@ -8,9 +8,9 @@
 
 ### 実行手順
 
-1. ライブラリの特定の為に `deno run --no-lock --allow-env --allow-sys --allow-read --allow-net=context7.com npm:ctx7@latest library <name> "<user's question>"` を実行する。
+1. ライブラリの特定の為に `deno run --no-lock --allow-env --allow-sys --allow-read --allow-write --allow-net=context7.com,registry.npmjs.org npm:ctx7@latest library <name> "<user's question>"` を実行する。
 2. 最適なライブラリ ID (形式: `/org/project`)を選択する。
-3. ドキュメントを取得する為に `deno run --no-lock --allow-env --allow-sys --allow-read --allow-net=context7.com npm:ctx7@latest docs <libraryId> "<user's question>"` を実行する。
+3. ドキュメントを取得する為に `deno run --no-lock --allow-env --allow-sys --allow-read --allow-write --allow-net=context7.com,registry.npmjs.org npm:ctx7@latest docs <libraryId> "<user's question>"` を実行する。
 4. 取得したドキュメントに基づいて回答する。
 
 ### 注意事項
