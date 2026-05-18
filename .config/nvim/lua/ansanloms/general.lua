@@ -15,6 +15,7 @@ vim.opt.shada = "'10000,:100,<1000,s10,n" .. vim.fn.expand(vim.fn.stdpath("data"
 vim.opt.backupdir = vim.fn.expand(vim.fn.stdpath("data") .. "/backup")
 vim.opt.backup = true
 vim.opt.writebackup = true
+vim.opt.backupcopy = "yes"
 
 -- スワップファイル設定。
 vim.opt.directory = vim.fn.expand(vim.fn.stdpath("data") .. "/backup")
