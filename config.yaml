@@ -144,6 +144,8 @@ link:
     - src: ./.claude/lsp
   ~/.claude/scripts:
     - src: ./.claude/scripts
+  ~/.codeium/windsurf/memories/global_rules.md:
+    - src: ./.codeium/windsurf/memories/global_rules.md
   ~/.config/just/justfile:
     - src: ./.config/just/justfile
   ~/.local/bin/git-worktree-select:
