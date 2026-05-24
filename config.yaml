@@ -146,8 +146,6 @@ link:
     - src: ./.claude/scripts
   ~/.config/just/justfile:
     - src: ./.config/just/justfile
-  ~/.config/just/scripts:
-    - src: ./.config/just/scripts
   ~/.local/bin/git-worktree-select:
     - src: ./.local/bin/git-worktree-select
       targets:

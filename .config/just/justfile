@@ -1,9 +1,50 @@
+# 一覧。
 list:
-	@just --global-justfile --list --list-submodules
+  @just --global-justfile --list --list-submodules
 
 # Chrome をリモートデバッグモードで起動し、socat で外部からアクセス可能にする。
 chrome-remote-debug chrome_port="9223" socat_port="9222":
-    bash {{ justfile_directory() }}/scripts/chrome-remote-debug.sh {{ chrome_port }} {{ socat_port }}
+  #!/usr/bin/env bash
+  set -euo pipefail
+
+  cleanup() {
+    echo "Shutting down..."
+    kill $CHROME_PID $SOCAT_PID 2>/dev/null
+    wait
+    exit 0
+  }
+
+  trap cleanup SIGINT SIGTERM
+
+  rm -rf /tmp/chrome-remote-debug
+
+  socat TCP-LISTEN:{{ socat_port }},fork,reuseaddr,bind=0.0.0.0 TCP:127.0.0.1:{{ chrome_port }} &
+  SOCAT_PID=$!
+
+  google-chrome \
+    --remote-debugging-port={{ chrome_port }} \
+    --user-data-dir=/tmp/chrome-remote-debug \
+    --no-first-run \
+    --disable-extensions &
+  CHROME_PID=$!
+
+  echo "Chrome PID: $CHROME_PID"
+  echo "Socat PID: $SOCAT_PID"
+  echo "Listening on 0.0.0.0:{{ socat_port }} -> 127.0.0.1:{{ chrome_port }}"
+  echo "Press Ctrl+C to stop"
+
+  wait
+
+# windsurf を起動する。
+windsurf:
+  #!/usr/bin/env bash
+  set -euo pipefail
+
+  if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
+    windsurf --folder-uri "vscode-remote://wsl+Ubuntu$(readlink -f .)"
+  else
+    windsurf .
+  fi
 
 # 会社用の設定があったら読み込む。
-mod? work "conf.d/work.just"
+import? "conf.d/work.just"
