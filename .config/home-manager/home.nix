@@ -32,5 +32,6 @@
     claude-code
     just
     neovim
+    platformio-core
   ]);
 }
