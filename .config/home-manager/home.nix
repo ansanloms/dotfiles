@@ -33,5 +33,6 @@
     just
     neovim
     platformio-core
+	shellcheck
   ]);
 }
