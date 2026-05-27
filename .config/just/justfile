@@ -1,50 +1,102 @@
 # 一覧。
 list:
-  @just --global-justfile --list --list-submodules
+    @just --global-justfile --list --list-submodules
 
 # Chrome をリモートデバッグモードで起動し、socat で外部からアクセス可能にする。
 chrome-remote-debug chrome_port="9223" socat_port="9222":
-  #!/usr/bin/env bash
-  set -euo pipefail
+    #!/usr/bin/env bash
+    set -euo pipefail
 
-  cleanup() {
-    echo "Shutting down..."
-    kill $CHROME_PID $SOCAT_PID 2>/dev/null
+    cleanup() {
+      echo "Shutting down..."
+      kill $CHROME_PID $SOCAT_PID 2>/dev/null
+      wait
+      exit 0
+    }
+
+    trap cleanup SIGINT SIGTERM
+
+    rm -rf /tmp/chrome-remote-debug
+
+    socat TCP-LISTEN:{{ socat_port }},fork,reuseaddr,bind=0.0.0.0 TCP:127.0.0.1:{{ chrome_port }} &
+    SOCAT_PID=$!
+
+    google-chrome \
+      --remote-debugging-port={{ chrome_port }} \
+      --user-data-dir=/tmp/chrome-remote-debug \
+      --no-first-run \
+      --disable-extensions &
+    CHROME_PID=$!
+
+    echo "Chrome PID: $CHROME_PID"
+    echo "Socat PID: $SOCAT_PID"
+    echo "Listening on 0.0.0.0:{{ socat_port }} -> 127.0.0.1:{{ chrome_port }}"
+    echo "Press Ctrl+C to stop"
+
     wait
-    exit 0
-  }
-
-  trap cleanup SIGINT SIGTERM
-
-  rm -rf /tmp/chrome-remote-debug
-
-  socat TCP-LISTEN:{{ socat_port }},fork,reuseaddr,bind=0.0.0.0 TCP:127.0.0.1:{{ chrome_port }} &
-  SOCAT_PID=$!
-
-  google-chrome \
-    --remote-debugging-port={{ chrome_port }} \
-    --user-data-dir=/tmp/chrome-remote-debug \
-    --no-first-run \
-    --disable-extensions &
-  CHROME_PID=$!
-
-  echo "Chrome PID: $CHROME_PID"
-  echo "Socat PID: $SOCAT_PID"
-  echo "Listening on 0.0.0.0:{{ socat_port }} -> 127.0.0.1:{{ chrome_port }}"
-  echo "Press Ctrl+C to stop"
-
-  wait
 
 # windsurf を起動する。
-windsurf:
-  #!/usr/bin/env bash
-  set -euo pipefail
+[arg("type", pattern="default|devcontainer")]
+[arg("config", long="config")]
+windsurf type="default" config=".devcontainer/devcontainer.json":
+    #!/usr/bin/env bash
+    set -euo pipefail
 
-  if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
-    windsurf --folder-uri "vscode-remote://wsl+Ubuntu$(readlink -f .)"
-  else
-    windsurf .
-  fi
+    CWD="$(pwd -P)"
+
+    REMOTES=()
+    FOLDER="${CWD}"
+
+    # remote: devcontainer
+    if [ "{{ type }}" = "devcontainer" ]; then
+      MAIN_REPO="$(realpath "$(dirname "$(git rev-parse --git-common-dir)")")"
+      DEVCONTAINER_JSON="${MAIN_REPO%/}/{{ config }}"
+
+      if [ ! -f "${DEVCONTAINER_JSON}" ]; then
+        echo "error: ${DEVCONTAINER_JSON} が見つからない。" >&2
+        exit 1
+      fi
+
+      PAYLOAD=$(jq -nc \
+        --arg wp "${MAIN_REPO}" \
+        --arg dp "${DEVCONTAINER_JSON}" \
+        '{workspacePath: $wp, devcontainerPath: $dp}')
+      HEX=$(printf '%s' "${PAYLOAD}" | xxd -p -c 4096)
+      REMOTES+=("dev-container+${HEX}")
+
+      # 開くディレクトリは devcontainer 内のパスを指定する。
+      WORKSPACE_FOLDER=$(jq -r '.workspaceFolder // empty' "${DEVCONTAINER_JSON}")
+      if [ -z "${WORKSPACE_FOLDER}" ]; then
+        WORKSPACE_FOLDER="/"
+      fi
+      REL_PATH="$(realpath --relative-to "${MAIN_REPO}" "${CWD}")"
+      if [ "${REL_PATH}" = "." ]; then
+        FOLDER="${WORKSPACE_FOLDER%/}"
+      else
+        FOLDER="${WORKSPACE_FOLDER%/}/${REL_PATH%/}"
+      fi
+    fi
+
+    # remote: wsl
+    if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
+      if [ -z "${WSL_DISTRO_NAME:-}" ]; then
+        echo "error: WSL_DISTRO_NAME が設定されていない。" >&2
+        exit 1
+      fi
+
+      REMOTES+=("wsl+${WSL_DISTRO_NAME}")
+    fi
+
+    REMOTE="$(IFS="@"; echo "${REMOTES[*]}")"
+
+    echo "remote: ${REMOTE}"
+    echo "folder: ${FOLDER}"
+
+    if [ -n "${REMOTE:-}" ]; then
+      windsurf --remote "${REMOTE}" "${FOLDER}"
+    else
+      windsurf "${FOLDER}"
+    fi
 
 # 会社用の設定があったら読み込む。
 import? "conf.d/work.just"
