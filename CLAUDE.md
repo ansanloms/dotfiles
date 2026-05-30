@@ -18,7 +18,7 @@ deno task uninstall
 # パッケージ適用（Home Manager）
 home-manager switch --flake ~/.config/home-manager --impure
 
-# パッケージ更新（nixpkgs / home-manager / neovim-nightly）
+# パッケージ更新（nixpkgs / home-manager / nix-claude-code）
 nix flake update --flake ~/.config/home-manager
 ```
 
