@@ -137,6 +137,7 @@ vim.lsp.config("phpactor", {
 vim.lsp.config("efm", {
   filetypes = {
     "php",
+    "nix",
   },
   settings = {
     rootMarkers = { ".git/" },
@@ -157,7 +158,19 @@ vim.lsp.config("efm", {
             "composer.json"
           },
         },
-      }
+      },
+      nix = {
+        {
+          -- statix: アンチパターンを lint(stdin で受け errfmt 形式で出力)
+          lintCommand = "statix check --stdin --format=errfmt",
+          lintStdin = true,
+          lintFormats = { "<stdin>>%l:%c:%t:%n:%m" },
+          lintIgnoreExitCode = true,
+          -- nixfmt: 整形(stdin を受けて整形結果を stdout に出力)
+          formatCommand = "nixfmt",
+          formatStdin = true,
+        },
+      },
     }
   },
   init_options = {
