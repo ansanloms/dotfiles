@@ -228,6 +228,7 @@ require("lazy").setup({
           "markdown_inline",
           "mermaid",
           "nginx",
+          "nix",
           "perl",
           "php",
           "phpdoc",
