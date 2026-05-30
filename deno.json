@@ -12,6 +12,8 @@
   "tasks": {
     "dot-mori": "deno run -A dot-mori/cli.ts",
     "install": "deno task dot-mori --config ./config.yaml",
-    "uninstall": "deno task dot-mori --config ./config.yaml --clean"
+    "uninstall": "deno task dot-mori --config ./config.yaml --clean",
+    "switch": "nix profile upgrade --all --impure",
+    "upgrade": "nix flake update --flake \"$HOME/.config/nix\" && nix profile upgrade --all --impure"
   }
 }

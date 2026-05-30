@@ -18,3 +18,6 @@
 .config/nvim/lazy-lock.json
 
 .config/alacritty/os.toml
+
+# nix build の成果物（store パスへの symlink）
+result

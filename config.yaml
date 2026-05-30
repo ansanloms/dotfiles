@@ -89,10 +89,6 @@ link:
     - src: ./.config/nix
       targets:
         - linux
-  ~/.config/home-manager:
-    - src: ./.config/home-manager
-      targets:
-        - linux
   ~/.minttyrc:
     - src: ./.minttyrc
       targets:
