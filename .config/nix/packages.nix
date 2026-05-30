@@ -19,4 +19,6 @@ pkgs: with pkgs; [
   neovim
   platformio-core
   shellcheck
+  statix
+  deadnix
 ]
