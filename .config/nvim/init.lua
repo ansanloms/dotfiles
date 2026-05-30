@@ -19,6 +19,9 @@ require("ansanloms.clipboard")
 -- mapping:
 require("ansanloms.mapping")
 
+-- reload:
+require("ansanloms.reload")
+
 -- plugins:
 require("ansanloms.plugins")
 
