@@ -16,9 +16,9 @@
   # home.packages: インストールするパッケージのリスト。
   # `with pkgs;` で pkgs. のプレフィックスを省略できる。
   home.packages = (with pkgs; [
-    nodejs       # npm 同梱
+    nodejs
     deno
-    rustup       # `rustup default stable` で toolchain をインストールする
+    rustup
     go
     tree-sitter
     zellij
