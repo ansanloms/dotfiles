@@ -11,7 +11,8 @@
   };
 
   # outputs: inputs を受け取り、この flake が提供するものを定義する。
-  outputs = { nixpkgs, nix-claude-code, ... }:
+  outputs =
+    { nixpkgs, nix-claude-code, ... }:
     let
       # builtins.currentSystem: 実行環境のアーキテクチャ (例: "x86_64-linux")。
       system = builtins.currentSystem;
@@ -20,8 +21,7 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = [ nix-claude-code.overlays.default ];
-        config.allowUnfreePredicate = pkg:
-          builtins.elem (nixpkgs.lib.getName pkg) [ "claude" ];
+        config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "claude" ];
       };
     in
     {
