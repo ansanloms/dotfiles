@@ -37,22 +37,23 @@ extra-trusted-users = <username>
 sudo systemctl restart nix-daemon
 ```
 
-### 5. Apply Home Manager
+### 5. Apply packages
 
-[Home Manager](https://github.com/nix-community/home-manager) でパッケージをインストールする。
+`.config/nix/` の flake で定義したパッケージを nix profile に導入する。
 
 ```sh
-nix run home-manager/master -- switch --flake ~/.config/home-manager --impure
+# 初回: profile に導入
+nix profile install ~/.config/nix#default --impure
 ```
 
 以降のパッケージ更新:
 
 ```sh
-# nixpkgs / home-manager の更新
-nix flake update --flake ~/.config/home-manager
+# パッケージ定義（packages.nix）の変更を反映
+deno task switch
 
-# パッケージ定義の適用
-home-manager switch --flake ~/.config/home-manager --impure
+# 依存（nixpkgs / nix-claude-code）を更新して反映
+deno task upgrade
 ```
 
 ## Uninstall
