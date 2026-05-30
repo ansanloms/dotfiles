@@ -13,16 +13,16 @@ zellij セッション内で起動している nvim は `/tmp/nvim-${ZELLIJ_SESS
 - MUST: ユーザにファイルを参照させる場面では、コンソールに内容を貼り付けるのではなく nvim で開く。
 
   ```sh
-  nvim --server "/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock" --remote <filepath>
+  nvim --server "/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock" --remote-tab <filepath>
   ```
 
 ## diff を nvim で開く
 
-- MUST: 2 ファイル間の diff を見せる場合は片方を `--remote` で開いた後、`diffsplit` を送る。`<Esc>` を前置して insert mode の影響を避ける。
+- MUST: 2 ファイル間の diff を見せる場合は片方を `--remote-tab` で新規タブに開いた後、`diffsplit` を送る。`<Esc>` を前置して insert mode の影響を避ける。
 
   ```sh
   sock="/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock"
-  nvim --server "$sock" --remote <file1>
+  nvim --server "$sock" --remote-tab <file1>
   nvim --server "$sock" --remote-send '<Esc>:vert diffsplit <file2><CR>'
   ```
 
@@ -31,33 +31,34 @@ zellij セッション内で起動している nvim は `/tmp/nvim-${ZELLIJ_SESS
   ```sh
   tmp=$(mktemp --suffix=.diff)
   git diff > "$tmp"
-  nvim --server "/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock" --remote "$tmp"
+  nvim --server "/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock" --remote-tab "$tmp"
   ```
 
 ## 出力結果を nvim で開く
 
-- MUST: コマンド実行結果や調査結果等、長文の出力をユーザに見せる場合は一時ファイルに書き出して `--remote` で開く。
+- MUST: コマンド実行結果や調査結果等、長文の出力をユーザに見せる場合は一時ファイルに書き出して `--remote-tab` で開く。
 - MUST: 拡張子は内容に合わせる (`.md` / `.log` / `.json` / `.txt` 等)。filetype 判定が効く。
 - MUST NOT: 一時ファイルを削除しない。nvim 側で開いている間に消えると参照できなくなる。
 
   ```sh
   tmp=$(mktemp --suffix=.md)
   <command> > "$tmp"
-  nvim --server "/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock" --remote "$tmp"
+  nvim --server "/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock" --remote-tab "$tmp"
   ```
 
 ## plan mode の plan を nvim で開く
 
-- MUST: plan mode で plan ファイルを書き終え `ExitPlanMode` を呼んだ直後、plan ファイルのパスを `--remote` で開く。
+- MUST: plan mode で plan ファイルを書き終え `ExitPlanMode` を呼んだ直後、plan ファイルのパスを `--remote-tab` で開く。
 
   ```sh
-  nvim --server "/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock" --remote <plan-file-path>
+  nvim --server "/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock" --remote-tab <plan-file-path>
   ```
 
 - plan ファイルは plan mode により既に生成済みの為、新規作成は不要。パスをそのまま渡す。
 
 ## 注意事項
 
+- MUST: ファイルを開く際は `--remote` ではなく `--remote-tab` を使用する。ユーザが編集中のバッファを上書きしない為、必ず新規タブに開く。
 - `--remote-send` で送るキーシーケンスは nvim 記法 (`<Esc>` / `<CR>` 等) を使用する。
 - nvim が insert mode 等にいる可能性を考慮し、Ex コマンド送信前には `<Esc>` を前置する。
 - socket 接続失敗時はエラー扱いせず通常出力にフォールバックする。
