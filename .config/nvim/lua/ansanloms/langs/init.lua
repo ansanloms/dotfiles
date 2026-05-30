@@ -1,35 +1,10 @@
--- 言語固有の設定を読み込む
-require("ansanloms.langs.lua")
-require("ansanloms.langs.clang")
-require("ansanloms.langs.javascript")
-require("ansanloms.langs.typescript")
-require("ansanloms.langs.vue")
-require("ansanloms.langs.html")
-require("ansanloms.langs.css")
-require("ansanloms.langs.scss")
-require("ansanloms.langs.stylus")
-require("ansanloms.langs.yaml")
-require("ansanloms.langs.json")
-require("ansanloms.langs.markdown")
-require("ansanloms.langs.python")
-require("ansanloms.langs.sh")
-require("ansanloms.langs.vim")
-require("ansanloms.langs.xml")
-require("ansanloms.langs.asciidoc")
-require("ansanloms.langs.plantuml")
-require("ansanloms.langs.sql")
-require("ansanloms.langs.groovy")
-require("ansanloms.langs.graphql")
-require("ansanloms.langs.dart")
-require("ansanloms.langs.toml")
-require("ansanloms.langs.prisma")
-require("ansanloms.langs.powershell")
-require("ansanloms.langs.mustache")
-require("ansanloms.langs.terraform")
-require("ansanloms.langs.rust")
-require("ansanloms.langs.binary")
-require("ansanloms.langs.php")
-require("ansanloms.langs.conf")
-require("ansanloms.langs.java")
-require("ansanloms.langs.kdl")
-require("ansanloms.langs.just")
+-- 言語固有の設定を読み込む。
+-- langs/ ディレクトリ内の *.lua を走査して自動で require する
+-- (init.lua 自身は除外)。新しい言語設定はファイルを置くだけで読み込まれる。
+local langs_dir = vim.fn.stdpath("config") .. "/lua/ansanloms/langs"
+for _, file in ipairs(vim.fn.readdir(langs_dir)) do
+  local name = file:match("^(.+)%.lua$")
+  if name and name ~= "init" then
+    require("ansanloms.langs." .. name)
+  end
+end
