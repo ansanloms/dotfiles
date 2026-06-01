@@ -3,6 +3,7 @@
 pkgs: with pkgs; [
   nodejs
   deno
+  bun
   rustup
   go
   tree-sitter
