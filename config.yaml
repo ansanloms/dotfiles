@@ -140,6 +140,8 @@ link:
     - src: ./.claude/lsp
   ~/.claude/scripts:
     - src: ./.claude/scripts
+  ~/.claude/skills:
+    - src: ./.claude/skills
   ~/.codeium/windsurf/memories/global_rules.md:
     - src: ./.codeium/windsurf/memories/global_rules.md
   ~/.config/just/justfile:

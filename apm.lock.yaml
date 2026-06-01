@@ -1,0 +1,14 @@
+lockfile_version: '1'
+generated_at: '2026-06-01T06:36:55.419785+00:00'
+apm_version: 0.16.0
+dependencies:
+- repo_url: ansanloms/skills
+  host: github.com
+  resolved_commit: fb3147215cd7f94d51553bd5ec4aae861b49eed8
+  resolved_ref: fb3147215cd7f94d51553bd5ec4aae861b49eed8
+  virtual_path: library-docs
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .claude/skills/library-docs
+  content_hash: sha256:404ad533655e088a605cd6d2708ec5778fd7b407dde06059cc651bd4b9b89d4a

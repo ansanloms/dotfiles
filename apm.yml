@@ -1,0 +1,10 @@
+name: dotfiles
+version: 1.0.0
+description: APM project for dotfiles
+author: ansanloms
+dependencies:
+  apm:
+  - ansanloms/skills/library-docs#fb3147215cd7f94d51553bd5ec4aae861b49eed8
+  mcp: []
+includes: auto
+scripts: {}

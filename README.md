@@ -56,6 +56,24 @@ deno task switch
 deno task upgrade
 ```
 
+## Agent Skills
+
+Claude Code 等の Agent Skills は [apm](https://github.com/microsoft/apm)（`packages.nix` で導入）で管理し、`.claude/skills/` に取り込んでリポジトリにコミットしている。
+
+セットアップ時の追加作業は不要。skill 本体はコミット済みのため、`deno task install`（[Deploy dotfiles](#3-deploy-dotfiles)）で `~/.claude/skills` にシンボリックリンクされる。
+
+skill を追加・更新する場合のみ apm を使用する。
+
+```sh
+# skill を新規追加
+apm install <org>/<repo>/<skill> --target claude
+
+# 既存 skill を最新へ更新
+apm update --yes
+```
+
+`apm.yml` / `apm.lock.yaml` は commit hash でバージョンを固定している。追加・更新後は、これらと `.claude/skills/` の差分をコミットする。
+
 ## Uninstall
 
 ```sh
