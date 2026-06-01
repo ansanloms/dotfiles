@@ -17,10 +17,15 @@
       # builtins.currentSystem: 実行環境のアーキテクチャ (例: "x86_64-linux")。
       system = builtins.currentSystem;
 
-      # nix-claude-code の overlay を適用した pkgs を構築する。
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ nix-claude-code.overlays.default ];
+        overlays = [
+          # nix-claude-code の overlay を適用した pkgs を構築する。
+          nix-claude-code.overlays.default
+
+          # nixpkgs 未収録の apm を callPackage で注入する。
+          (final: prev: { apm = final.callPackage ./apm.nix { }; })
+        ];
         config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "claude" ];
       };
     in

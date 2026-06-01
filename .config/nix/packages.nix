@@ -15,6 +15,7 @@ pkgs: with pkgs; [
   wsl-open
   devcontainer
   claude-code
+  apm
   just
   neovim
   platformio-core
