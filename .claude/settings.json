@@ -69,7 +69,8 @@
     "lua-ls@lsp": true,
     "phpactor@lsp": true,
     "vtsls@lsp": true,
-    "vue-ls@lsp": true
+    "vue-ls@lsp": true,
+    "discord@claude-plugins-official": true
   },
   "outputStyle": "Explanatory",
   "language": "japanese",
@@ -99,10 +100,10 @@
     ]
   },
   "alwaysThinkingEnabled": true,
+  "effortLevel": "xhigh",
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
   "terminalProgressBarEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true,
-  "effortLevel": "xhigh"
+  "voiceEnabled": true
 }
