@@ -73,6 +73,7 @@
     "discord@claude-plugins-official": true
   },
   "outputStyle": "Explanatory",
+  "viewMode": "verbose",
   "language": "japanese",
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
@@ -102,9 +103,6 @@
   "effortLevel": "xhigh",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
-  "editorMode": "vim",
-  "preferredNotifChannel": "auto",
   "terminalProgressBarEnabled": true,
-  "skipAutoPermissionPrompt": true,
   "voiceEnabled": true
 }
