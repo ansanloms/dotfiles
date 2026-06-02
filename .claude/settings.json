@@ -105,5 +105,6 @@
   "editorMode": "vim",
   "terminalProgressBarEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "tui": "fullscreen"
 }

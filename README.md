@@ -52,7 +52,7 @@ nix profile install ~/.config/nix#default --impure
 # パッケージ定義（packages.nix）の変更を反映
 deno task switch
 
-# 依存（nixpkgs / nix-claude-code）を更新して反映
+# 依存を更新して反映
 deno task upgrade
 ```
 

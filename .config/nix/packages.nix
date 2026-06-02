@@ -24,4 +24,5 @@ pkgs: with pkgs; [
   statix
   deadnix
   nixfmt-rfc-style
+  gh
 ]
