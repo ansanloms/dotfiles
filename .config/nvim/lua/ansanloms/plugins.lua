@@ -20,12 +20,6 @@ require("lazy").setup({
   { "vim-jp/vimdoc-ja" },
   { "vim-denops/denops.vim" },
   {
-    "APZelos/blamer.nvim",
-    config = function()
-      vim.g.blamer_enabled = true
-    end,
-  },
-  {
     "kevinhwang91/nvim-hlslens",
     config = function()
       require("hlslens").setup()
@@ -316,7 +310,14 @@ require("lazy").setup({
   {
     "lewis6991/gitsigns.nvim",
     config = function()
-      require("gitsigns").setup()
+      require("gitsigns").setup({
+        current_line_blame = true,
+        current_line_blame_opts = {
+          delay = 1000,
+          virt_text_pos = "eol",
+        },
+        current_line_blame_formatter = "   <author>, <author_time:%Y/%m/%d %H:%M> - <summary>",
+      })
     end,
   },
   {
