@@ -26,7 +26,7 @@
           # nixpkgs 未収録の apm を callPackage で注入する。
           (final: prev: { apm = final.callPackage ./apm.nix { }; })
         ];
-        config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "claude" ];
+        config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "claude" "google-chrome" ];
       };
     in
     {
