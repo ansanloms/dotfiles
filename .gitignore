@@ -22,6 +22,5 @@
 # nix build の成果物（store パスへの symlink）
 result
 
-
 # APM dependencies
 apm_modules/

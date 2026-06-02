@@ -49,7 +49,7 @@ nix profile install ~/.config/nix#default --impure
 以降のパッケージ更新:
 
 ```sh
-# パッケージ定義（packages.nix）の変更を反映
+# パッケージ定義の変更を反映
 deno task switch
 
 # 依存を更新して反映
