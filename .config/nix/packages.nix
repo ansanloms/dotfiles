@@ -27,4 +27,5 @@ pkgs: with pkgs; [
   deadnix
   nixfmt-rfc-style
   gh
+  drawio
 ]
