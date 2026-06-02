@@ -25,7 +25,7 @@ pkgs: with pkgs; [
   shellcheck
   statix
   deadnix
-  nixfmt-rfc-style
+  nixfmt
   gh
   drawio
 ]
