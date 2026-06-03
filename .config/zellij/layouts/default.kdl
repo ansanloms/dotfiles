@@ -13,7 +13,7 @@ layout {
     }
 
     pane {
-      name "terminal"
+      name "Terminal"
       command "zsh"
       args "-li"
     }
@@ -21,29 +21,22 @@ layout {
 
   tab {
     pane split_direction="vertical" {
-      /*
-      pane size="10%" {
-        name "filer"
-        command "bash"
-        args "-c" "FILETREE_DEFAULT_CMD=\"nvim --server /tmp/nvim-${ZELLIJ_SESSION_NAME}.sock --remote <filepath>\" ft"
-      }
-      */
-
       pane size="72" {
-        name "Claude Code"
-        command "claude"
+        name "AI Agent"
+        command "bash"
+        args "-c" "exec ${ZELLIJ_AI_AGENT:-claude}"
       }
 
       pane {
         pane {
-          name "nvim"
+          name "Neovim"
           focus true
           command "bash"
           args "-c" "nvim --listen /tmp/nvim-${ZELLIJ_SESSION_NAME}.sock"
         }
 
         pane size="25%" {
-          name "terminal"
+          name "Terminal"
           command "zsh"
           args "-li"
         }
