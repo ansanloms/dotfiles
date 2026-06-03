@@ -61,4 +61,6 @@ vim.opt.laststatus = 3
 vim.opt.cmdheight = 0
 
 -- カラーコード表示。
---vim.lsp.document_color.enable(true, 0, { style = "virtual" })
+if vim.lsp.document_color then
+  vim.lsp.document_color.enable(true, { }, { style = "virtual" })
+end
