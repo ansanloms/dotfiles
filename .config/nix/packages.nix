@@ -30,4 +30,5 @@ pkgs: with pkgs; [
   wsl-open
   zellij
   zsh
+  devin-cli
 ]

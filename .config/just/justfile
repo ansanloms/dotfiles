@@ -35,10 +35,10 @@ chrome-remote-debug chrome_port="9223" socat_port="9222":
 
     wait
 
-# windsurf を起動する。
+# devin を起動する。
 [arg("type", pattern="default|devcontainer")]
 [arg("config", long="config")]
-windsurf type="default" config=".devcontainer/devcontainer.json":
+devin type="default" config=".devcontainer/devcontainer.json":
     #!/usr/bin/env bash
     set -euo pipefail
 
@@ -93,9 +93,9 @@ windsurf type="default" config=".devcontainer/devcontainer.json":
     echo "folder: ${FOLDER}"
 
     if [ -n "${REMOTE:-}" ]; then
-      windsurf --remote "${REMOTE}" "${FOLDER}"
+      devin-desktop --remote "${REMOTE}" "${FOLDER}"
     else
-      windsurf "${FOLDER}"
+      devin-desktop "${FOLDER}"
     fi
 
 # 会社用の設定があったら読み込む。
