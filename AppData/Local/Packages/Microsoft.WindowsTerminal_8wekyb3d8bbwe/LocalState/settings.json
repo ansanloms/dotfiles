@@ -1,10 +1,10 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions": 
+    "actions":
     [
         {
-            "command": 
+            "command":
             {
                 "action": "copy"
             },
@@ -15,7 +15,7 @@
             "id": "User.resetFontSize"
         },
         {
-            "command": 
+            "command":
             {
                 "action": "adjustFontSize",
                 "delta": -1
@@ -31,7 +31,7 @@
             "id": "User.find"
         },
         {
-            "command": 
+            "command":
             {
                 "action": "adjustFontSize",
                 "delta": 1
@@ -47,7 +47,7 @@
     "focusFollowMouse": false,
     "initialCols": 160,
     "initialRows": 40,
-    "keybindings": 
+    "keybindings":
     [
         {
             "id": null,
@@ -307,7 +307,7 @@
         }
     ],
     "launchMode": "default",
-    "newTabMenu": 
+    "newTabMenu":
     [
         {
             "type": "remainingProfiles"
@@ -318,9 +318,9 @@
             "type": "profile"
         }
     ],
-    "profiles": 
+    "profiles":
     {
-        "defaults": 
+        "defaults":
         {
             "adjustIndistinguishableColors": "never",
             "backgroundImage": null,
@@ -331,7 +331,7 @@
             "compatibility.reloadEnvironmentVariables": true,
             "cursorShape": "emptyBox",
             "experimental.retroTerminalEffect": false,
-            "font": 
+            "font":
             {
                 "builtinGlyphs": true,
                 "cellHeight": "1.2",
@@ -349,33 +349,12 @@
             "suppressApplicationTitle": false,
             "useAcrylic": false
         },
-        "list": 
+        "list":
         [
             {
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
                 "name": "cmd"
-            },
-            {
-                "commandline": "\\msys64\\msys2_shell.cmd -defterm -here -no-start -msys",
-                "guid": "{bae083f2-8da7-4234-a2c8-c530116345e5}",
-                "hidden": false,
-                "icon": "C:\\msys64\\msys2.ico",
-                "name": "msys2"
-            },
-            {
-                "commandline": "\\msys64\\msys2_shell.cmd -defterm -here -no-start -mingw32",
-                "guid": "{db1fef1b-36e9-42e5-805f-316443b23164}",
-                "hidden": false,
-                "icon": "C:\\msys64\\mingw32.ico",
-                "name": "mingw-w64 win32"
-            },
-            {
-                "commandline": "\\msys64\\msys2_shell.cmd -defterm -here -no-start -mingw64",
-                "guid": "{965c5402-f0b0-4c06-88b6-8fb41dfa3046}",
-                "hidden": false,
-                "icon": "C:\\msys64\\mingw64.ico",
-                "name": "mingw-w64 win64"
             },
             {
                 "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
@@ -399,7 +378,7 @@
             }
         ]
     },
-    "schemes": 
+    "schemes":
     [
         {
             "background": "#161616",

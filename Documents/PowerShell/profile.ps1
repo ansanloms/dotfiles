@@ -3,10 +3,7 @@ $Env:EDITOR = "nvim"
 $Env:LESSCHARSET = "UTF-8"
 $Env:RIPGREP_CONFIG_PATH = (Join-Path $Env:userprofile "\.ripgreprc")
 
-$Env:Path += ";" + (Join-Path $Env:homedrive "\msys64\usr\bin")
-$Env:Path += ";" + (Join-Path $Env:homedrive "\msys64\mingw64\bin")
 $Env:Path += ";" + (Join-Path $Env:userprofile "\.deno\bin")
-$Env:Path += ";" + (Join-Path $Env:programfiles "\Vim\vim91")
 
 # bash ライクな補完
 Set-PSReadLineKeyHandler -Key Tab -Function Complete
@@ -51,10 +48,6 @@ function togif() {
 Set-Alias -Name vi -Value nvim
 Set-Alias -Name vim -Value nvim
 Set-Alias -Name open -Value Invoke-Item
-Set-Alias -Name rm -Value (Join-Path $Env:homedrive "\msys64\usr\bin\rm.exe")
-Set-Alias -Name find -Value (Join-Path $Env:homedrive "\msys64\usr\bin\find.exe")
-Set-Alias -Name tree -Value (Join-Path $Env:homedrive "\msys64\usr\bin\tree.exe")
-Set-Alias -Name mkdir -Value (Join-Path $Env:homedrive "\msys64\usr\bin\mkdir.exe")
 
 if (Get-Command eza -errorAction SilentlyContinue) {
   Set-Alias -Name ls -Value eza

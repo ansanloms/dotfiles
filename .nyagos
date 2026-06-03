@@ -5,11 +5,7 @@ nyagos.env.LESSCHARSET = "utf-8"
 nyagos.envadd(
   "PATH",
   nyagos.env.userprofile .. "\\bin",
-  nyagos.env.homedrive .. "\\msys64\\usr\\bin",
-  nyagos.env.homedrive .. "\\msys64\\mingw64\\bin",
   nyagos.env.userprofile .. "\\.deno\\bin",
-  nyagos.env.programfiles .. "\\Vim\\vim91",
-  nyagos.env.localappdata .. "\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin"
 )
 
 -- prompt
@@ -37,9 +33,5 @@ nyagos.alias.vi = "vim"
 nyagos.alias.grep = "grep --color=auto"
 nyagos.alias.egrep = "egrep --color=auto"
 nyagos.alias.fgrep = "fgrep --color=auto"
-nyagos.alias.echo = [[\msys64\usr\bin\echo.exe]]
-nyagos.alias.find = [[\msys64\usr\bin\find.exe]]
-nyagos.alias.tree = [[\msys64\usr\bin\tree.exe]]
-nyagos.alias.mkdir = [[\msys64\usr\bin\mkdir.exe]]
 
 -- vim:set ft=lua:
