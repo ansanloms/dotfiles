@@ -4,14 +4,15 @@ apm_version: 0.16.1
 dependencies:
 - repo_url: ansanloms/skills
   host: github.com
-  resolved_commit: fb3147215cd7f94d51553bd5ec4aae861b49eed8
-  resolved_ref: fb3147215cd7f94d51553bd5ec4aae861b49eed8
+  resolved_commit: 2725831c0e6e75268b0f6381bdda8c6a5a6afeb8
+  resolved_ref: 2725831c0e6e75268b0f6381bdda8c6a5a6afeb8
   virtual_path: library-docs
   is_virtual: true
   package_type: claude_skill
   deployed_files:
+  - .agents/skills/library-docs
   - .claude/skills/library-docs
-  content_hash: sha256:404ad533655e088a605cd6d2708ec5778fd7b407dde06059cc651bd4b9b89d4a
+  content_hash: sha256:78e82ec1be59c8c6b3f407b1f4c1deb77f7163623248c4a6ebd22332ed161d1a
 - repo_url: mizchi/skills
   host: github.com
   resolved_commit: 89c1b34018ba0d85a770c065ba22f83a8d004d34

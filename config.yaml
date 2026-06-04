@@ -76,6 +76,15 @@ link:
     - src: ./.config/devin/config.json
       targets:
         - windows
+  ~/.config/devin/AGENTS.md:
+    - src: ./.agents/AGENTS.md
+      targets:
+        - darwin
+        - linux
+  ~/AppData/Roaming/devin/AGENTS.md:
+    - src: ./.agents/AGENTS.md
+      targets:
+        - windows
   ~/.config/alacritty:
     - src: ./.config/alacritty
       targets:
@@ -141,6 +150,8 @@ link:
         - linux
   ~/.ripgreprc:
     - src: ./.ripgreprc
+  ~/.claude/CLAUDE.md:
+    - src: ./.agents/AGENTS.md
   ~/.claude/settings.json:
     - src: ./.claude/settings.json
   ~/.claude/rules:
@@ -151,8 +162,10 @@ link:
     - src: ./.claude/scripts
   ~/.claude/skills:
     - src: ./.claude/skills
+  ~/.agents/skills:
+    - src: ./.agents/skills
   ~/.codeium/windsurf/memories/global_rules.md:
-    - src: ./.codeium/windsurf/memories/global_rules.md
+    - src: ./.agents/AGENTS.md
   ~/.config/just/justfile:
     - src: ./.config/just/justfile
   ~/.local/bin/git-worktree-select:

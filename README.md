@@ -64,21 +64,37 @@ deno task upgrade
 
 ## Agent Skills
 
-Claude Code 等の Agent Skills は [apm](https://github.com/microsoft/apm)（`packages.nix` で導入）で管理し、`.claude/skills/` に取り込んでリポジトリにコミットしている。
+Agent Skills は [apm](https://github.com/microsoft/apm)（`packages.nix` で導入）で管理し、skill 本体をリポジトリにコミットしている。セットアップ時の追加作業は不要で、`deno task install`（[Deploy dotfiles](#3-deploy-dotfiles)）で各エージェントへシンボリックリンクされる。
 
-セットアップ時の追加作業は不要。skill 本体はコミット済みのため、`deno task install`（[Deploy dotfiles](#3-deploy-dotfiles)）で `~/.claude/skills` にシンボリックリンクされる。
+配置先は 2 系統ある。apm の `--target` で振り分ける。
+
+- `.claude/skills/` → `~/.claude/skills`（Claude Code）。target は `claude`。
+- `.agents/skills/` → `~/.agents/skills`（Devin CLI / Devin Desktop が参照する cross-agent ディレクトリ）。target は `agent-skills`。
+
+skill ごとの方針は以下のとおり。
+
+| skill | 取得元 | 配置先 |
+| --- | --- | --- |
+| library-docs | `ansanloms/skills`（apm） | `.claude/skills/` + `.agents/skills/` |
+| empirical-prompt-tuning | `mizchi/skills`（apm, devDependencies） | `.claude/skills/` のみ |
+| nvim-remote | 自作（apm 非管理） | `.agents/skills/nvim-remote`（実体）+ `.claude/skills/nvim-remote`（シンボリックリンク） |
 
 skill を追加・更新する場合のみ apm を使用する。
 
 ```sh
-# skill を新規追加
+# Claude Code のみに導入
 apm install <org>/<repo>/<skill> --target claude
+
+# Claude Code と cross-agent（.agents/skills/）の両方に導入
+apm install <org>/<repo>/<skill> --target claude,agent-skills
 
 # 既存 skill を最新へ更新
 apm update --yes
 ```
 
-`apm.yml` / `apm.lock.yaml` は commit hash でバージョンを固定している。追加・更新後は、これらと `.claude/skills/` の差分をコミットする。
+nvim-remote は自作 skill のため apm を介さない。`.agents/skills/nvim-remote/` をソースとして編集し、`.claude/skills/nvim-remote` はそこへのシンボリックリンクで Claude Code へ共有する。
+
+`apm.yml` / `apm.lock.yaml` は commit hash でバージョンを固定している。追加・更新後は、これらと `.claude/skills/` / `.agents/skills/` の差分をコミットする。
 
 ## Local scripts
 

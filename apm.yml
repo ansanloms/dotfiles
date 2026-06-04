@@ -4,10 +4,10 @@ description: APM project for dotfiles
 author: ansanloms
 dependencies:
   apm:
-    - ansanloms/skills/library-docs#fb3147215cd7f94d51553bd5ec4aae861b49eed8
+  - ansanloms/skills/library-docs#2725831c0e6e75268b0f6381bdda8c6a5a6afeb8
   mcp: []
 devDependencies:
   apm:
-    - mizchi/skills/meta/empirical-prompt-tuning#89c1b340
+  - mizchi/skills/meta/empirical-prompt-tuning#89c1b340
 includes: auto
 scripts: {}
