@@ -67,6 +67,15 @@ link:
     - src: ./.config/efm-langserver/config.yaml
       targets:
         - windows
+  ~/.config/devin/config.json:
+    - src: ./.config/devin/config.json
+      targets:
+        - darwin
+        - linux
+  ~/AppData/Roaming/devin/config.json:
+    - src: ./.config/devin/config.json
+      targets:
+        - windows
   ~/.config/alacritty:
     - src: ./.config/alacritty
       targets:

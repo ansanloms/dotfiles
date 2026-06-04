@@ -6,6 +6,7 @@
 **/.claude/**/*.local.md
 **/.claude/plans/*
 **/.claude/worktrees/*
+**/.devin/config.local.json
 
 # nvim
 **/.nvim
