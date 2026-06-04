@@ -39,15 +39,31 @@ deno task upgrade
 - `.claude/` - Claude Code のグローバル設定（`~/.claude/` にリンク）
 - `.local/bin/` - ユーザースクリプト
 
-## Neovim 設定構造
+## 自前 nix パッケージの更新
 
-`.config/nvim/init.lua` がエントリーポイント。以下のモジュールを順番にロード：
+`.config/nix/` には nixpkgs 未収録のパッケージを自前 derivation で管理している。
 
-1. `config/general.lua` - 基本設定
-2. `config/im.lua` - IME 設定
-3. `config/clipboard.lua` - クリップボード設定
-4. `config/mapping.lua` - キーマッピング
-5. `config/plugins.lua` - プラグイン設定
-6. `config/lsp.lua` - LSP 設定
-7. `config/langs/` - 言語別設定
-8. `config/appearance/` - 外観設定（colorscheme, statusline）
+- `playwright-cli.nix`（`@playwright/cli`、npm パッケージ / buildNpmPackage、wrapper で nixpkgs `google-chrome` を駆動）
+- `apm.nix`（`microsoft/apm`、プリビルドバイナリ / fetchurl + autoPatchelfHook）
+
+### バージョンを上げる
+
+`deno task bump`（両方）/ `deno task bump:playwright-cli [version]` / `deno task bump:apm [version]`（version 省略で最新）で、依存 version・lockfile・ハッシュを更新する。具体的な処理は各スクリプトを参照:
+
+- `.config/nix/playwright-cli/upgrade.ts`
+- `.config/nix/apm/upgrade.ts`
+
+bump はファイルを書き換えるだけで反映はしない。完了後に `git diff` で確認し、`git add` してから `deno task switch` で反映する（`switch` = `nix profile upgrade --all --impure` は git flake を参照するため、ステージしていない変更、特に新規ファイルは反映されない）。
+
+### bump で拾えない変更
+
+bump が更新するのは version 文字列と FOD ハッシュという、機械的に再計算できる値だけ。新版が次を変えた場合は bump 後の `switch` がビルドエラーになるので、エラーを読んで derivation を手当てする:
+
+- **apm**: 同梱 PyInstaller バンドルの Python 拡張モジュールが要求する native ライブラリが増えると、autoPatchelf が解決できず失敗する。不足分を `apm.nix` の `buildInputs` に追加する（例: 0.16.1 で sqlite / lzma / ffi / bz2 / uuid / readline / zlib が必要になった）。
+- **playwright-cli**: 新版で bin のパスや名前が変わると、`playwright-cli.nix` の wrapper（`--add-flags` のパス）が合わなくなる。`find` で実 bin を確認して修正する。
+
+このため bump 後は必ず `deno task switch` までやってビルドが通ることを確認すること。
+
+### nixpkgs 収録されたら
+
+`@playwright/cli` が nixpkgs に収録されたら（`nix search nixpkgs playwright-cli` で確認）、自前 derivation 一式を削除して `packages.nix` の 1 行に乗り換える。
