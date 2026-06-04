@@ -15,6 +15,12 @@ cd dotfiles
 
 ### 3. Deploy dotfiles
 
+`.local/bin/` 配下のスクリプトは `scripts/` のソースから生成するため、先にビルドする（[Local scripts](#local-scripts) 参照）。
+
+```sh
+nix run nixpkgs#deno -- task build
+```
+
 [dot-mori](https://github.com/ansanloms/dot-mori) でシンボリックリンクを作成する。
 
 ```sh
@@ -73,6 +79,20 @@ apm update --yes
 ```
 
 `apm.yml` / `apm.lock.yaml` は commit hash でバージョンを固定している。追加・更新後は、これらと `.claude/skills/` の差分をコミットする。
+
+## Local scripts
+
+`.local/bin/` 配下のコマンド（`git-worktree-select` / `git-worktree-include` 等）は、`scripts/` 以下の TypeScript を `deno bundle` で単一ファイルにビルドした生成物。依存は `deno.json` の `imports` で一元管理する。
+
+- ソース: `scripts/*.ts`（shebang に実行時の権限フラグを記述。`deno bundle` が生成物の先頭へ引き継ぐ）
+- ビルド: `deno task build` で `scripts/*.ts` を `.local/bin/<name>` に bundle し、実行ビットを付与する
+- 生成物は `.gitignore` 済みでコミットしない。`deno task install` でシンボリックリンクするため、**install の前に build しておく**こと
+
+ソースを編集したら `deno task build` で再生成する。
+
+```sh
+deno task build
+```
 
 ## Uninstall
 

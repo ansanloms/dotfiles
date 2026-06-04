@@ -1,21 +1,64 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@aireone/deno-lint-curly@*": "0.2.0",
+    "jsr:@cliffy/ansi@1.1.1": "1.1.1",
+    "jsr:@cliffy/internal@1.1.1": "1.1.1",
+    "jsr:@cliffy/keycode@1.1.1": "1.1.1",
+    "jsr:@cliffy/prompt@1.1.1": "1.1.1",
     "jsr:@gunshi/gunshi@0.32.0": "0.32.0",
+    "jsr:@std/assert@^1.0.19": "1.0.19",
+    "jsr:@std/cli@1.0.30": "1.0.30",
+    "jsr:@std/encoding@^1.0.10": "1.0.10",
     "jsr:@std/fmt@1.0.10": "1.0.10",
+    "jsr:@std/fmt@^1.0.9": "1.0.10",
     "jsr:@std/fs@1.0.24": "1.0.24",
     "jsr:@std/internal@^1.0.14": "1.0.14",
+    "jsr:@std/io@~0.225.3": "0.225.3",
     "jsr:@std/path@1.1.5": "1.1.5",
+    "jsr:@std/path@^1.1.4": "1.1.5",
     "jsr:@std/path@^1.1.5": "1.1.5",
+    "jsr:@std/text@^1.0.17": "1.0.19",
     "jsr:@std/yaml@1.1.1": "1.1.1",
     "npm:@gunshi/plugin-global@0.32.0": "0.32.0",
     "npm:@gunshi/plugin-i18n@0.32.0": "0.32.0_@gunshi+plugin-global@0.32.0",
     "npm:@gunshi/plugin-renderer@0.32.0": "0.32.0_@gunshi+plugin-i18n@0.32.0__@gunshi+plugin-global@0.32.0_@gunshi+plugin-global@0.32.0",
     "npm:ajv@8.20.0": "8.20.0",
     "npm:args-tokens@0.25": "0.25.2",
+    "npm:ignore@7.0.5": "7.0.5",
     "npm:json-schema-to-ts@3.1.1": "3.1.1"
   },
   "jsr": {
+    "@aireone/deno-lint-curly@0.2.0": {
+      "integrity": "c182ea5d2ed999c06ffa88a21aac2aed3cf0d14a1128d7fad3034337f7822b48"
+    },
+    "@cliffy/ansi@1.1.1": {
+      "integrity": "9b4a5c5b7720261460fa527cc795e6db41de1ea7e567f58be702461023b4bdbf",
+      "dependencies": [
+        "jsr:@cliffy/internal",
+        "jsr:@std/encoding",
+        "jsr:@std/io"
+      ]
+    },
+    "@cliffy/internal@1.1.1": {
+      "integrity": "a658c9ec5ac30819b8c25e6bff0250f57eec90c5047a8c8b19109b54a16bb89b"
+    },
+    "@cliffy/keycode@1.1.1": {
+      "integrity": "c1ced8c854d839b394734b34da3b42b1ebcb97ef0487bc74a994f394654325b5"
+    },
+    "@cliffy/prompt@1.1.1": {
+      "integrity": "05a41908647f2f61e1ef05e32400ea82c28fa0d740c738a1dcbabdd0234a81ed",
+      "dependencies": [
+        "jsr:@cliffy/ansi",
+        "jsr:@cliffy/internal",
+        "jsr:@cliffy/keycode",
+        "jsr:@std/assert",
+        "jsr:@std/fmt@^1.0.9",
+        "jsr:@std/io",
+        "jsr:@std/path@^1.1.4",
+        "jsr:@std/text"
+      ]
+    },
     "@gunshi/gunshi@0.32.0": {
       "integrity": "19c600bb3944a0a0a62a32586e6f630d7d33df6dbd89194147bc269325aebe51",
       "dependencies": [
@@ -24,6 +67,15 @@
         "npm:@gunshi/plugin-renderer",
         "npm:args-tokens"
       ]
+    },
+    "@std/assert@1.0.19": {
+      "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e"
+    },
+    "@std/cli@1.0.30": {
+      "integrity": "769446536522d0417d7127ebcabcafac1ab0ce6766d0eb3fca1d36326fe98d13"
+    },
+    "@std/encoding@1.0.10": {
+      "integrity": "8783c6384a2d13abd5e9e87a7ae0520a30e9f56aeeaa3bdf910a3eaaf5c811a1"
     },
     "@std/fmt@1.0.10": {
       "integrity": "90dfba288802ac6de82fb31d0917eb9e4450b9925b954d5e51fc29ac07419db5"
@@ -38,11 +90,17 @@
     "@std/internal@1.0.14": {
       "integrity": "291516b3d4c35024d6ffbc0a9df5bf4c64116e05b50012cf846710152d2ffdf7"
     },
+    "@std/io@0.225.3": {
+      "integrity": "27b07b591384d12d7b568f39e61dff966b8230559122df1e9fd11cc068f7ddd1"
+    },
     "@std/path@1.1.5": {
       "integrity": "ccea00982ea28c36becaf6e62f855406c76a8c32d462f66f415bbb7d83a271bc",
       "dependencies": [
         "jsr:@std/internal"
       ]
+    },
+    "@std/text@1.0.19": {
+      "integrity": "003a0e032d360e8c3a4e0410fb792c77a66bd6553fee9d60c6ec1bce30d29223"
     },
     "@std/yaml@1.1.1": {
       "integrity": "a57665ecf3d17b926380593a56625d8a10cc7281802f1e993b5ebc94a48e71f8"
@@ -96,6 +154,9 @@
     "fast-uri@3.1.2": {
       "integrity": "sha512-rVjf7ArG3LTk+FS6Yw81V1DLuZl1bRbNrev6Tmd/9RaroeeRRJhAt7jg/6YFxbvAQXUCavSoZhPPj6oOx+5KjQ=="
     },
+    "ignore@7.0.5": {
+      "integrity": "sha512-Hs59xBNfUIunMFgWAbGX5cq6893IbWg4KnrjbYwX3tx0ztorVgTDA6B2sxf8ejHJ4wz8BqGUMYlnzNBer5NvGg=="
+    },
     "json-schema-to-ts@3.1.1": {
       "integrity": "sha512-+DWg8jCJG2TEnpy7kOm/7/AxaYoaRbjVB4LFZLySZlWn8exGs3A4OLJR966cVvU26N7X9TWxl+Jsw7dzAqKT6g==",
       "dependencies": [
@@ -147,5 +208,15 @@
     "https://deno.land/x/dir@1.5.2/home_dir/mod.ts": "6128b52da60124f78a4fc176cd4687a073e9b0331803dd602dfb685fa4fe4ae1",
     "https://deno.land/x/dir@1.5.2/mod.ts": "95e1519b7b629c995025652342b36fbf64a6a9a0bd7822b0c4573a22f42f0529",
     "https://deno.land/x/dir@1.5.2/tmp_dir/mod.ts": "c89c792d454fa1e3b2882f34faa87e9b92fc2866118b348d9984d68d33773c58"
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@cliffy/prompt@1.1.1",
+      "jsr:@std/cli@1.0.30",
+      "jsr:@std/fmt@1.0.10",
+      "jsr:@std/fs@1.0.24",
+      "jsr:@std/path@1.1.5",
+      "npm:ignore@7.0.5"
+    ]
   }
 }

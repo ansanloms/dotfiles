@@ -13,7 +13,13 @@
     "plugins": ["jsr:@aireone/deno-lint-curly"]
   },
   "imports": {
-    "dot-mori/": "https://cdn.jsdelivr.net/gh/ansanloms/dot-mori@0.1.5/"
+    "dot-mori/": "https://cdn.jsdelivr.net/gh/ansanloms/dot-mori@0.1.5/",
+    "@cliffy/prompt": "jsr:@cliffy/prompt@1.1.1",
+    "@std/cli": "jsr:@std/cli@1.0.30",
+    "@std/fmt": "jsr:@std/fmt@1.0.10",
+    "@std/fs": "jsr:@std/fs@1.0.24",
+    "@std/path": "jsr:@std/path@1.1.5",
+    "ignore": "npm:ignore@7.0.5"
   },
   "tasks": {
     "dot-mori": {
@@ -22,6 +28,8 @@
     },
     "lint": "deno lint && deno fmt --check",
     "fix": "deno lint --fix && deno fmt",
+    "check": "deno check ./scripts/* .config/nix/**/*.ts",
+    "build": "deno run --allow-read=scripts --allow-write=.local/bin --allow-run=deno scripts/build.ts",
     "install": "deno task dot-mori --config ./config.yaml",
     "uninstall": "deno task dot-mori --config ./config.yaml --clean",
     "switch": "nix profile upgrade --all --impure",

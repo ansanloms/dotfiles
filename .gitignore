@@ -24,3 +24,8 @@ result
 
 # APM dependencies
 apm_modules/
+
+# .local/bin/ 配下は scripts/ から deno bundle で生成する（deno task build）。
+# ディレクトリ自体は .gitkeep で残し、生成物はコミットしない。
+/.local/bin/*
+!/.local/bin/.gitkeep

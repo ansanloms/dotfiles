@@ -1,0 +1,107 @@
+#!/usr/bin/env -S deno run --quiet --allow-run --allow-read --allow-write
+
+// .worktreeinclude に記載されたファイルをメインワークツリーから指定の worktree にコピーする。
+// git worktree add と同じ引数を受け取り、パスを特定してコピーする。
+// .worktreeinclude は gitignore 互換の構文（ignore ライブラリ準拠）。
+// 使い方: git-worktree-include [<options>] <path> [<commit-ish>]
+
+import { expandGlob } from "@std/fs/expand-glob";
+import { dirname, join, relative, resolve } from "@std/path";
+import { ensureDir } from "@std/fs/ensure-dir";
+import { parseArgs } from "@std/cli/parse-args";
+import ignore from "ignore";
+
+// メインワークツリーのルートを取得
+const process = new Deno.Command("git", {
+  args: ["worktree", "list", "--porcelain"],
+  stdout: "piped",
+});
+const { stdout } = await process.output();
+const worktreeLines = new TextDecoder().decode(stdout).trim().split("\n");
+const mainWt = worktreeLines[0].replace(/^worktree /, "");
+
+// メインワークツリー以外の worktree パスを取得（除外対象）
+const otherWorktrees = worktreeLines
+  .filter((line) => line.startsWith("worktree "))
+  .map((line) => line.replace(/^worktree /, ""))
+  .filter((path) => path !== mainWt);
+
+const includeFile = join(mainWt, ".worktreeinclude");
+
+try {
+  await Deno.stat(includeFile);
+} catch {
+  Deno.exit(0);
+}
+
+// git worktree add と同じ引数からパスを特定する
+// git worktree add [<options>] <path> [<commit-ish>]
+const args = parseArgs(Deno.args, {
+  boolean: [
+    "force",
+    "detach",
+    "checkout",
+    "no-checkout",
+    "lock",
+    "quiet",
+    "track",
+    "no-track",
+    "guess-remote",
+    "no-guess-remote",
+  ],
+  string: ["b", "B", "reason"],
+  alias: { f: "force", q: "quiet" },
+});
+
+const dst = args._[0];
+
+if (typeof dst !== "string") {
+  Deno.exit(0);
+}
+
+const dstPath = resolve(dst);
+
+// .worktreeinclude を読んで ignore インスタンスを構築
+const content = await Deno.readTextFile(includeFile);
+const ig = ignore().add(content);
+
+// デフォルトの除外パターンと ! パターンを expandGlob の exclude に渡して走査効率を確保
+const excludePatterns: string[] = [".git"];
+
+for (const line of content.split("\n")) {
+  const trimmed = line.trimEnd();
+  if (trimmed.startsWith("!")) {
+    excludePatterns.push(trimmed.slice(1));
+  }
+}
+
+// 他の worktree パスも走査対象から除外
+for (const wt of otherWorktrees) {
+  const rel = relative(mainWt, wt);
+  excludePatterns.push(`${rel}/**`);
+}
+
+// メインワークツリー配下を全走査し、ignore でマッチ判定
+for await (
+  const entry of expandGlob("**/*", {
+    root: mainWt,
+    exclude: excludePatterns,
+  })
+) {
+  if (!entry.isFile) {
+    continue;
+  }
+
+  const rel = relative(mainWt, entry.path);
+
+  // ignore ライブラリでマッチ判定（マッチ = コピー対象）
+  if (!ig.ignores(rel)) {
+    continue;
+  }
+
+  const destPath = join(dstPath, rel);
+
+  await ensureDir(dirname(destPath));
+  await Deno.copyFile(entry.path, destPath);
+  console.log(`Copied: ${rel}`);
+}
