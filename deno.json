@@ -5,7 +5,8 @@
     "exclude": [
       "AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json",
       "AppData/Roaming/CorvusSKK/config.xml",
-      "apm.lock.yaml"
+      "apm.lock.yaml",
+      ".claude/skills/empirical-prompt-tuning/"
     ]
   },
   "lint": {

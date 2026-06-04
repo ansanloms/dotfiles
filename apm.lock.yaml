@@ -1,6 +1,6 @@
 lockfile_version: '1'
-generated_at: '2026-06-01T06:36:55.419785+00:00'
-apm_version: 0.16.0
+generated_at: '2026-06-04T05:18:24.941688+00:00'
+apm_version: 0.16.1
 dependencies:
 - repo_url: ansanloms/skills
   host: github.com
@@ -12,3 +12,13 @@ dependencies:
   deployed_files:
   - .claude/skills/library-docs
   content_hash: sha256:404ad533655e088a605cd6d2708ec5778fd7b407dde06059cc651bd4b9b89d4a
+- repo_url: mizchi/skills
+  host: github.com
+  resolved_commit: 89c1b34018ba0d85a770c065ba22f83a8d004d34
+  resolved_ref: 89c1b340
+  virtual_path: meta/empirical-prompt-tuning
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .claude/skills/empirical-prompt-tuning
+  content_hash: sha256:0caa36857ba4e1f7193fa9ee3e22cac38d7e9787eda95e1726d4a39e40fb9479

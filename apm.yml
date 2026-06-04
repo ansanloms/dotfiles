@@ -6,5 +6,8 @@ dependencies:
   apm:
     - ansanloms/skills/library-docs#fb3147215cd7f94d51553bd5ec4aae861b49eed8
   mcp: []
+devDependencies:
+  apm:
+    - mizchi/skills/meta/empirical-prompt-tuning#89c1b340
 includes: auto
 scripts: {}
