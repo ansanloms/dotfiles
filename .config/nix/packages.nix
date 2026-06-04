@@ -20,6 +20,7 @@ pkgs: with pkgs; [
   nixfmt
   nodejs
   platformio-core
+  playwright-cli
   rustup
   sheldon
   shellcheck
