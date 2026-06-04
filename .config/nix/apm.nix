@@ -6,29 +6,36 @@
   fetchurl,
   autoPatchelfHook,
   openssl,
+  zlib,
+  sqlite,
+  libffi,
+  bzip2,
+  libuuid,
+  readline,
+  xz,
 }:
 
 let
-  version = "0.16.0";
+  version = "0.16.1";
 
   # プラットフォームごとのリリースアセット名とハッシュ。
   # ハッシュは各 .tar.gz.sha256 を SRI 形式へ変換したもの。
   sources = {
     "x86_64-linux" = {
       asset = "apm-linux-x86_64";
-      hash = "sha256-K2rOeSVzKKlZmyVp9HUeXjcuIa6tqekLQj1R35XyT00=";
+      hash = "sha256-fjx6rjlyOYiF2F7frrQTT/Btecn/Y9Fhhz40B+incpw=";
     };
     "aarch64-linux" = {
       asset = "apm-linux-arm64";
-      hash = "sha256-swyKSKR7qwQW30fz4BcHX7tEmZch4qdtStog6Z20mZk=";
+      hash = "sha256-xButn8xVGAKV/X78VKCIVD7pSYy4k0NEkW/JvTYJ15c=";
     };
     "x86_64-darwin" = {
       asset = "apm-darwin-x86_64";
-      hash = "sha256-SrsW/pm8aVSuZDBfLaf/LphLo5tQ5kPd0yTkqiPcZ5c=";
+      hash = "sha256-lvBOqWHqC/OIWQb7ZHVpU0em3l1v8sRtPmQUU+fGiuk=";
     };
     "aarch64-darwin" = {
       asset = "apm-darwin-arm64";
-      hash = "sha256-+ZDMoDlmWIB2IuA/I8ToAbH537+cBlA+Cud1FsUUxwE=";
+      hash = "sha256-V3cUUvAXq6IINRqx0LOEJzxGP68rtFFslOukIqT+Ao0=";
     };
   };
 
@@ -48,11 +55,20 @@ stdenv.mkDerivation {
   # autoPatchelfHook は Linux 専用。ELF インタプリタと RPATH を nix の glibc へ張り替える。
   nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  # 同梱 .so が要求するランタイム。openssl は _ssl / _hashlib が必要とするが
-  # バンドルに同梱されていないため明示的に補う。
+  # 同梱 PyInstaller バンドルの Python 拡張モジュールが要求する native ライブラリ。
+  # バンドルに含まれないため明示的に補う (openssl: _ssl/_hashlib, zlib: zlib/binascii,
+  # sqlite: _sqlite3, libffi: _ctypes, bzip2: _bz2, libuuid: _uuid,
+  # readline: readline, xz: _lzma)。
   buildInputs = lib.optionals stdenv.isLinux [
     stdenv.cc.cc.lib
     openssl
+    zlib
+    sqlite
+    libffi
+    bzip2
+    libuuid
+    readline
+    xz
   ];
 
   # PyInstaller onedir 形式は apm 本体と _internal/ が同階層にある必要がある。
