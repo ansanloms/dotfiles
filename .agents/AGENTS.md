@@ -78,7 +78,7 @@ feat: ログイン画面にパスワードリセットリンクを追加
 
 zellij セッション内で起動している nvim は `/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock` で listen している (`.config/zellij/layouts/default.kdl` 参照)。この socket 経由で nvim を遠隔操作し、作業結果を隣ペインの nvim に流し込む。
 
-この節は「いつ nvim で開くべきか」の判断を定める。具体的な操作手順は `nvim-remote` skill を参照する。
+この節は「いつ nvim で開くべきか」の判断と、socket パスの導出・存在チェックを定める。これらは呼び出し側 (このルール) の責務とする。導出した socket パスを使った nvim 操作の具体手順は `nvim-remote` skill を参照する。
 
 ### 前提条件
 
@@ -97,7 +97,9 @@ zellij セッション内で起動している nvim は `/tmp/nvim-${ZELLIJ_SESS
 
 ### 実行手順
 
-- MUST: 上記の場面で nvim を操作する具体手順 (socket パスの組み立て、`--remote-tab` / `--remote-send` の送り方、一時ファイルの扱い、注意事項) は `nvim-remote` skill に従う。
+- MUST: socket パスの導出は呼び出し側であるこのルールが行う。`sock="/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock"` で組み立て、前提条件 (socket の存在) を満たすことを確認した上で、この絶対パスを `nvim-remote` skill に渡して操作させる。
+- MUST: 渡した socket パスでの nvim 操作の具体手順 (`--remote-tab` / `--remote-send` の送り方、diff の開き方、一時ファイルの扱い、注意事項) は `nvim-remote` skill に従う。skill は socket の導出・存在チェック・フォールバック判断には関与しない。
+- MUST: socket が存在しない場合は skill を使わず、前提条件の節に従いコンソール出力へフォールバックする。
 
 ## Tips
 

@@ -1,11 +1,11 @@
 lockfile_version: '1'
-generated_at: '2026-06-04T05:18:24.941688+00:00'
+generated_at: '2026-06-04T09:20:34.158008+00:00'
 apm_version: 0.16.1
 dependencies:
 - repo_url: ansanloms/skills
   host: github.com
-  resolved_commit: 2725831c0e6e75268b0f6381bdda8c6a5a6afeb8
-  resolved_ref: 2725831c0e6e75268b0f6381bdda8c6a5a6afeb8
+  resolved_commit: c888f87faef782536db9a540c52e09525f61985a
+  resolved_ref: c888f87faef782536db9a540c52e09525f61985a
   virtual_path: library-docs
   is_virtual: true
   package_type: claude_skill
@@ -13,6 +13,17 @@ dependencies:
   - .agents/skills/library-docs
   - .claude/skills/library-docs
   content_hash: sha256:78e82ec1be59c8c6b3f407b1f4c1deb77f7163623248c4a6ebd22332ed161d1a
+- repo_url: ansanloms/skills
+  host: github.com
+  resolved_commit: c888f87faef782536db9a540c52e09525f61985a
+  resolved_ref: c888f87faef782536db9a540c52e09525f61985a
+  virtual_path: nvim-remote
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/nvim-remote
+  - .claude/skills/nvim-remote
+  content_hash: sha256:45cc68c43ecdeb343013a5ec445b356cbb06d4593cc77047fe18c3412781c5db
 - repo_url: mizchi/skills
   host: github.com
   resolved_commit: 89c1b34018ba0d85a770c065ba22f83a8d004d34
