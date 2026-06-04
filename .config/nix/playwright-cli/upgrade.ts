@@ -83,5 +83,7 @@ nix = replaceNixString(nix, "npmDepsHash", hash);
 await Deno.writeTextFile(nixPath, nix);
 
 console.log("\n更新完了。git diff で確認し、問題なければ反映:");
-console.log("  git add .config/nix/playwright-cli.nix .config/nix/playwright-cli/");
+console.log(
+  "  git add .config/nix/playwright-cli.nix .config/nix/playwright-cli/",
+);
 console.log("  deno task switch");

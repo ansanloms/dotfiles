@@ -70,7 +70,9 @@ let nix = await Deno.readTextFile(nixPath);
 
 // version
 const verRe = /(\bversion = ")[^"]*(";)/;
-if (!verRe.test(nix)) throw new Error(`${nixPath} に version の定義が見つからない`);
+if (!verRe.test(nix)) {
+  throw new Error(`${nixPath} に version の定義が見つからない`);
+}
 nix = nix.replace(verRe, `$1${version}$2`);
 
 // 各 asset に対応する hash（asset 行をアンカーに直後の hash 行を置換）

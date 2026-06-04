@@ -1,4 +1,4 @@
-import { assertEquals, assertMatch } from "@std/assert";
+import { assert, assertEquals } from "@std/assert";
 import { stripAnsiCode } from "@std/fmt/colors";
 import {
   buildProgressBar,
@@ -87,13 +87,13 @@ Deno.test("coloredProgressBar: ANSI コードを除いた文字列が buildProgr
 });
 
 Deno.test("coloredProgressBar: 69% は緑", () => {
-  assertMatch(coloredProgressBar(69, 10), /^\x1b\[32m/);
+  assert(coloredProgressBar(69, 10).startsWith("\x1b[32m"));
 });
 
 Deno.test("coloredProgressBar: 70% は黄", () => {
-  assertMatch(coloredProgressBar(70, 10), /^\x1b\[33m/);
+  assert(coloredProgressBar(70, 10).startsWith("\x1b[33m"));
 });
 
 Deno.test("coloredProgressBar: 90% は赤", () => {
-  assertMatch(coloredProgressBar(90, 10), /^\x1b\[31m/);
+  assert(coloredProgressBar(90, 10).startsWith("\x1b[31m"));
 });

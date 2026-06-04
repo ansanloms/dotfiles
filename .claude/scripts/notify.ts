@@ -24,7 +24,9 @@ const notifyNtfy = async (input: HookInput, message: string) => {
   const url = Deno.env.get("NTFW_URL");
   const token = Deno.env.get("NTFW_TOKEN");
 
-  if (!url || !token) return;
+  if (!url || !token) {
+    return;
+  }
 
   try {
     await fetch(url, {

@@ -3,14 +3,25 @@
   "fmt": {
     "proseWrap": "preserve",
     "exclude": [
-      "AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
+      "AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json",
+      "AppData/Roaming/CorvusSKK/config.xml",
+      "apm.lock.yaml"
     ]
   },
+  "lint": {
+    "rules": { "tags": ["recommended"] },
+    "plugins": ["jsr:@aireone/deno-lint-curly"]
+  },
   "imports": {
-    "dot-mori/": "https://cdn.jsdelivr.net/gh/ansanloms/dot-mori@v0.1.4/"
+    "dot-mori/": "https://cdn.jsdelivr.net/gh/ansanloms/dot-mori@0.1.5/"
   },
   "tasks": {
-    "dot-mori": "deno run -A dot-mori/cli.ts",
+    "dot-mori": {
+      "description": "Manage and install dotfiles.",
+      "command": "deno run --allow-env=NODE_*,HOME,USERPROFILE --allow-read --allow-write dot-mori/cli.ts"
+    },
+    "lint": "deno lint && deno fmt --check",
+    "fix": "deno lint --fix && deno fmt",
     "install": "deno task dot-mori --config ./config.yaml",
     "uninstall": "deno task dot-mori --config ./config.yaml --clean",
     "switch": "nix profile upgrade --all --impure",

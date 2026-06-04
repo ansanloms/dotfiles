@@ -57,7 +57,9 @@ export const formatToolInput = (
   toolInput: unknown,
 ): string => {
   const input = toolInput as Record<string, unknown> | null;
-  if (!input) return "";
+  if (!input) {
+    return "";
+  }
 
   switch (toolName) {
     case "Bash":
@@ -78,7 +80,9 @@ export const formatToolInput = (
       const questions = input.questions as
         | { question: string; options?: { label: string }[] }[]
         | undefined;
-      if (!Array.isArray(questions)) return "";
+      if (!Array.isArray(questions)) {
+        return "";
+      }
       return questions.map((q) => {
         const opts = Array.isArray(q.options)
           ? q.options.map((o) => `- ${o.label}`).join("\n")
