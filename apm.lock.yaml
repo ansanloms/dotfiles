@@ -4,19 +4,8 @@ apm_version: 0.16.1
 dependencies:
 - repo_url: ansanloms/skills
   host: github.com
-  resolved_commit: c888f87faef782536db9a540c52e09525f61985a
-  resolved_ref: c888f87faef782536db9a540c52e09525f61985a
-  virtual_path: library-docs
-  is_virtual: true
-  package_type: claude_skill
-  deployed_files:
-  - .agents/skills/library-docs
-  - .claude/skills/library-docs
-  content_hash: sha256:78e82ec1be59c8c6b3f407b1f4c1deb77f7163623248c4a6ebd22332ed161d1a
-- repo_url: ansanloms/skills
-  host: github.com
-  resolved_commit: c888f87faef782536db9a540c52e09525f61985a
-  resolved_ref: c888f87faef782536db9a540c52e09525f61985a
+  resolved_commit: e7638501cc48a6f20f30ee9e7f19692e61d6755d
+  resolved_ref: e7638501cc48a6f20f30ee9e7f19692e61d6755d
   virtual_path: nvim-remote
   is_virtual: true
   package_type: claude_skill
@@ -24,6 +13,17 @@ dependencies:
   - .agents/skills/nvim-remote
   - .claude/skills/nvim-remote
   content_hash: sha256:45cc68c43ecdeb343013a5ec445b356cbb06d4593cc77047fe18c3412781c5db
+- repo_url: ansanloms/skills
+  host: github.com
+  resolved_commit: e7638501cc48a6f20f30ee9e7f19692e61d6755d
+  resolved_ref: e7638501cc48a6f20f30ee9e7f19692e61d6755d
+  virtual_path: find-docs
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/find-docs
+  - .claude/skills/find-docs
+  content_hash: sha256:2dc66974f2c064cb04595c0db3cd9ccd2e67453a2fa2287a64c69ffa539a668a
 - repo_url: mizchi/skills
   host: github.com
   resolved_commit: 89c1b34018ba0d85a770c065ba22f83a8d004d34

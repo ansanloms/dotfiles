@@ -4,9 +4,9 @@ description: APM project for dotfiles
 author: ansanloms
 dependencies:
   apm:
-  - ansanloms/skills/library-docs#c888f87faef782536db9a540c52e09525f61985a
-  - ansanloms/skills/nvim-remote#c888f87faef782536db9a540c52e09525f61985a
+  - ansanloms/skills/nvim-remote#e7638501cc48a6f20f30ee9e7f19692e61d6755d
   - mizchi/skills/meta/empirical-prompt-tuning#89c1b340
+  - ansanloms/skills/find-docs#e7638501cc48a6f20f30ee9e7f19692e61d6755d
   mcp: []
 includes: auto
 scripts: {}
