@@ -104,5 +104,7 @@
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "terminalProgressBarEnabled": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "alwaysThinkingEnabled": true,
+  "showThinkingSummaries": true
 }
