@@ -32,4 +32,5 @@ pkgs: with pkgs; [
   zellij
   zsh
   devin-cli
+  hadolint
 ]
