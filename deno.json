@@ -35,7 +35,7 @@
     "uninstall": "deno task dot-mori --config ./config.yaml --clean",
     "switch": "nix profile upgrade --all --impure",
     "upgrade": "nix flake update --flake \"$HOME/.config/nix\" && nix profile upgrade --all --impure",
-    "bump": "deno task bump:playwright-cli && deno task bump:apm",
+    "bump": "deno task bump:*",
     "bump:playwright-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=npm,nix .config/nix/playwright-cli/upgrade.ts",
     "bump:apm": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=nix,gh .config/nix/apm/upgrade.ts"
   }
