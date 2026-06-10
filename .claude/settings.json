@@ -21,6 +21,7 @@
     "ask": [],
     "defaultMode": "auto"
   },
+  "model": "claude-fable-5",
   "hooks": {
     "Stop": [
       {
@@ -100,11 +101,11 @@
       "にゃーん"
     ]
   },
+  "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
   "tui": "fullscreen",
+  "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
   "terminalProgressBarEnabled": true,
-  "voiceEnabled": true,
-  "alwaysThinkingEnabled": true,
-  "showThinkingSummaries": true
+  "voiceEnabled": true
 }
