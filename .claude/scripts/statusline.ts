@@ -1,8 +1,10 @@
 import * as path from "@std/path";
+import { bgBlue, bgMagenta, white } from "@std/fmt/colors";
 import {
   buildInlineProgressBar,
   formatCompact,
   getInput,
+  type ProgressBarColorScheme,
 } from "./utils/common.ts";
 import * as git from "./utils/git.ts";
 import type { StatusLineInput, StatusLineRateLimitWindow } from "./types.ts";
@@ -23,6 +25,7 @@ const formatBarLabel = (name: string, pct: number, detail: string) => {
 const buildRateLimitBar = (
   window: StatusLineRateLimitWindow | undefined,
   label: string,
+  scheme: Partial<ProgressBarColorScheme>,
 ) => {
   if (window === undefined) {
     return undefined;
@@ -40,6 +43,7 @@ const buildRateLimitBar = (
     pct,
     formatBarLabel(`Limit ${label}`, pct, `~${resetsAt}`),
     60,
+    scheme,
   );
 };
 
@@ -74,8 +78,12 @@ try {
   );
   for (
     const bar of [
-      buildRateLimitBar(input.rate_limits?.five_hour, "5h"),
-      buildRateLimitBar(input.rate_limits?.seven_day, "7d"),
+      buildRateLimitBar(input.rate_limits?.five_hour, "5h", {
+        low: (s) => bgBlue(white(s)),
+      }),
+      buildRateLimitBar(input.rate_limits?.seven_day, "7d", {
+        low: (s) => bgMagenta(white(s)),
+      }),
     ]
   ) {
     if (bar !== undefined) {

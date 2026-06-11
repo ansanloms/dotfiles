@@ -109,9 +109,31 @@ export const coloredProgressBar = (pct: number, width: number): string => {
 };
 
 /**
+ * インラインプログレスバーの色スキーム。
+ * 各閾値帯の filled 領域を塗る関数を指定する。
+ */
+export interface ProgressBarColorScheme {
+  /** 70% 未満の filled 領域の塗り。 */
+  low: (s: string) => string;
+
+  /** 70% 以上 90% 未満の filled 領域の塗り。 */
+  mid: (s: string) => string;
+
+  /** 90% 以上の filled 領域の塗り。 */
+  high: (s: string) => string;
+}
+
+const defaultProgressBarColorScheme: ProgressBarColorScheme = {
+  low: (s) => bgGreen(black(s)),
+  mid: (s) => bgYellow(black(s)),
+  high: (s) => bgRed(white(s)),
+};
+
+/**
  * ラベルをバー内に埋め込んだ背景色付きプログレスバーを返す。
  * filled 領域と unfilled 領域で背景色を分け、ラベルが境界をまたぐ場合は
  * それぞれの背景色を適用する。
+ * filled の色は scheme で差し替えられる。既定では
  * 90% 以上: 赤背景、70% 以上: 黄背景、それ以外: 緑背景。
  * unfilled 領域は暗いグレー背景。
  */
@@ -119,6 +141,7 @@ export const buildInlineProgressBar = (
   pct: number,
   label: string,
   width: number,
+  scheme: Partial<ProgressBarColorScheme> = {},
 ): string => {
   const filled = Math.floor(pct * width / 100);
   const clipped = label.slice(0, width);
@@ -134,11 +157,11 @@ export const buildInlineProgressBar = (
   const filledStr = labelFilled + filledRemainder;
   const unfilledStr = labelUnfilled + unfilledRemainder;
 
-  if (pct >= 90) {
-    return bgRed(white(filledStr)) + bgBrightBlack(white(unfilledStr));
-  } else if (pct >= 70) {
-    return bgYellow(black(filledStr)) + bgBrightBlack(white(unfilledStr));
-  } else {
-    return bgGreen(black(filledStr)) + bgBrightBlack(white(unfilledStr));
-  }
+  const paint = pct >= 90
+    ? (scheme.high ?? defaultProgressBarColorScheme.high)
+    : pct >= 70
+    ? (scheme.mid ?? defaultProgressBarColorScheme.mid)
+    : (scheme.low ?? defaultProgressBarColorScheme.low);
+
+  return paint(filledStr) + bgBrightBlack(white(unfilledStr));
 };
