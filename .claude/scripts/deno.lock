@@ -651,6 +651,9 @@
       "integrity": "sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ=="
     }
   },
+  "remote": {
+    "https://cdn.jsdelivr.net/gh/ansanloms/wsl-notify@0.0.7/socket.ts": "5a916b677ab1835807e583206c7cdb437a247016da189e8f7a772f919f8afdcf"
+  },
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@1.0.19",
