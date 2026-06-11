@@ -53,6 +53,12 @@ export interface StatusLineInput {
   /** Session cost and performance metrics. */
   cost: StatusLineCost;
 
+  /**
+   * Rate limit usage. Only present for Claude.ai subscribers (Pro/Max)
+   * after the first API response in the session.
+   */
+  rate_limits?: StatusLineRateLimits;
+
   /** Vim mode state. Only present when vim mode is enabled. */
   vim?: StatusLineVim;
 
@@ -133,6 +139,22 @@ export interface StatusLineCost {
 
   /** Total lines of code removed in session. */
   total_lines_removed: number;
+}
+
+export interface StatusLineRateLimits {
+  /** 5-hour rate limit window. May be independently absent. */
+  five_hour?: StatusLineRateLimitWindow;
+
+  /** 7-day rate limit window. May be independently absent. */
+  seven_day?: StatusLineRateLimitWindow;
+}
+
+export interface StatusLineRateLimitWindow {
+  /** Percentage of the rate limit consumed (0-100). */
+  used_percentage: number;
+
+  /** Unix epoch seconds when the rate limit window resets. */
+  resets_at: number;
 }
 
 export interface StatusLineVim {

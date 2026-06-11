@@ -24,6 +24,16 @@ const mockInput = {
     total_lines_added: 10,
     total_lines_removed: 3,
   },
+  rate_limits: {
+    five_hour: {
+      used_percentage: 23.5,
+      resets_at: 1738425600,
+    },
+    seven_day: {
+      used_percentage: 41.2,
+      resets_at: 1738857600,
+    },
+  },
   context_window: {
     total_input_tokens: 15000,
     total_output_tokens: 4000,
