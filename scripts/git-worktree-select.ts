@@ -41,8 +41,16 @@ const getDescription = async (branch: string): Promise<string> => {
 
 const mainPath = worktrees[0].path;
 
+const excludeMain = Deno.args.includes("--exclude-main");
+const targets = excludeMain ? worktrees.slice(1) : worktrees;
+
+if (targets.length === 0) {
+  console.error("No worktrees to select.");
+  Deno.exit(1);
+}
+
 const entries = await Promise.all(
-  worktrees.map(async (worktree) => {
+  targets.map(async (worktree) => {
     const desc = await getDescription(worktree.branch);
     const relativePath = relative(mainPath, worktree.path) || ".";
     return { ...worktree, relativePath, desc };
@@ -71,7 +79,8 @@ const selected = await Select.prompt({
       : `${path}  ${entry.sha} ${branch}`;
     return { name, value: entry.path };
   }),
-  default: worktrees.find((wt) => Deno.cwd().startsWith(wt.path))?.path,
+  default: targets.find((wt) => Deno.cwd().startsWith(wt.path))?.path,
+  hideDefault: true,
 });
 
 await Deno.stderr.write(new TextEncoder().encode(selected));

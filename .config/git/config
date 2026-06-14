@@ -42,8 +42,8 @@
 	wt = "!f() { \
 		case \"$1\" in \
 			ls) selected=$(git-worktree-select 2>&1 1>/dev/tty) && echo \"$selected\" ;; \
-			rm) shift; selected=$(git-worktree-select 2>&1 1>/dev/tty) && git worktree remove \"$@\" \"$selected\" ;; \
-			mv) new_path=\"$2\"; selected=$(git-worktree-select 2>&1 1>/dev/tty) && git worktree move \"$selected\" \"$new_path\" ;; \
+			rm) shift; selected=$(git-worktree-select --exclude-main 2>&1 1>/dev/tty) && git worktree remove \"$@\" \"$selected\" ;; \
+			mv) new_path=\"$2\"; selected=$(git-worktree-select --exclude-main 2>&1 1>/dev/tty) && git worktree move \"$selected\" \"$new_path\" ;; \
 			add) shift; git worktree add \"$@\" && git-worktree-include \"$@\" ;; \
 			*) git worktree \"$@\" ;; \
 		esac; }; f"
