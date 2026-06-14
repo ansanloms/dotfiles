@@ -1,11 +1,14 @@
 # memo
 .memo/
 
-# AI
+# claude
 **/.claude/settings.local.json
 **/.claude/**/*.local.md
 **/.claude/plans/*
 **/.claude/worktrees/*
+**/.claude/memories/*
+
+# devin
 **/.devin/config.local.json
 
 # nvim

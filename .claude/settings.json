@@ -100,6 +100,8 @@
       "にゃーん"
     ]
   },
+  "plansDirectory": ".claude/plans",
+  "autoMemoryDirectory": ".claude/memories",
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
   "tui": "fullscreen",
