@@ -21,7 +21,6 @@
     "ask": [],
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5",
   "hooks": {
     "Stop": [
       {

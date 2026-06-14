@@ -16,26 +16,26 @@
 }:
 
 let
-  version = "0.19.0";
+  version = "0.20.0";
 
   # プラットフォームごとのリリースアセット名とハッシュ。
   # ハッシュは各 .tar.gz.sha256 を SRI 形式へ変換したもの。
   sources = {
     "x86_64-linux" = {
       asset = "apm-linux-x86_64";
-      hash = "sha256-k8RH2ghX2lX/EucHGlr5dMD4XelxcVXn3AZoK8Gv42I=";
+      hash = "sha256-uZPjKXslA068MOQWJtSrGpHb7fQk9NJKLlWCSqLNlog=";
     };
     "aarch64-linux" = {
       asset = "apm-linux-arm64";
-      hash = "sha256-GjgfAwpHX4BsONUaM7mvX24ur1HPIP1in3Mi2gyj3Xg=";
+      hash = "sha256-XLZ2LtKRSZkgzqOT5WWyLoNMawIYzIOfWTk38vw6VQk=";
     };
     "x86_64-darwin" = {
       asset = "apm-darwin-x86_64";
-      hash = "sha256-SFhHBz4gjNJiFZyk6TTjnIW1TQKyfDTto2pq/IAbILM=";
+      hash = "sha256-EW9M3DKmR8k07dFTmloXVFoT26kfuDFjJ8N5iD0NXgg=";
     };
     "aarch64-darwin" = {
       asset = "apm-darwin-arm64";
-      hash = "sha256-Br/OxL46/31lbpAaI35ly4NfJEy8DgLgLHgOcvts8pQ=";
+      hash = "sha256-md2f89fzJUHufNPYABZUnKJs/hmONJEbLCknKLIRvv0=";
     };
   };
 
