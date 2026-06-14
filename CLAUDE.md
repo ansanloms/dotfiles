@@ -50,11 +50,11 @@ Agent Skills は [apm](https://github.com/microsoft/apm)（`packages.nix` で導
 
 skill ごとの方針:
 
-| skill | 取得元 | 配置先 |
-| --- | --- | --- |
-| find-docs | `ansanloms/skills`（apm） | `.claude/skills/` + `.agents/skills/` |
-| empirical-prompt-tuning | `mizchi/skills`（apm） | `.claude/skills/` のみ |
-| nvim-remote | `ansanloms/skills`（apm） | `.claude/skills/` + `.agents/skills/` |
+| skill                   | 取得元                    | 配置先                                |
+| ----------------------- | ------------------------- | ------------------------------------- |
+| find-docs               | `ansanloms/skills`（apm） | `.claude/skills/` + `.agents/skills/` |
+| empirical-prompt-tuning | `mizchi/skills`（apm）    | `.claude/skills/` のみ                |
+| nvim-remote             | `ansanloms/skills`（apm） | `.claude/skills/` + `.agents/skills/` |
 
 skill を追加・更新する場合のみ apm を使用する。target は **必ず明示** すること。省略すると apm が auto-detect で `claude` のみに絞り、`.agents/skills/`（cross-agent）への配置が lock から外れる。
 

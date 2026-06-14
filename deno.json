@@ -15,7 +15,7 @@
   },
   "imports": {
     "dot-mori/": "https://cdn.jsdelivr.net/gh/ansanloms/dot-mori@0.1.5/",
-    "@cliffy/prompt": "jsr:@cliffy/prompt@1.1.1",
+    "@cliffy/prompt": "jsr:@cliffy/prompt@1.2.1",
     "@std/cli": "jsr:@std/cli@1.0.30",
     "@std/fmt": "jsr:@std/fmt@1.0.10",
     "@std/fs": "jsr:@std/fs@1.0.24",
