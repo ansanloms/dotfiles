@@ -57,6 +57,18 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '%s' '{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"REMINDER: conduct all internal reasoning in English, ASCII only (no multibyte characters in the thinking channel) to avoid tool-call XML corruption; respond to the user in Japanese.\"}}'",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
