@@ -162,6 +162,8 @@ link:
     - src: ./.claude/scripts
   ~/.claude/skills:
     - src: ./.claude/skills
+  ~/.agents/AGENTS.md:
+    - src: ./.agents/AGENTS.md
   ~/.agents/skills:
     - src: ./.agents/skills
   ~/.codeium/windsurf/memories/global_rules.md:
