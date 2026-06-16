@@ -10,18 +10,22 @@ link:
   ~/.bash_aliases:
     - src: ./.bash_aliases
       targets:
+        - darwin
         - linux
   ~/.zshenv:
     - src: ./.zshenv
       targets:
+        - darwin
         - linux
   ~/.zshrc:
     - src: ./.zshrc
       targets:
+        - darwin
         - linux
   ~/.zprofile:
     - src: ./.zprofile
       targets:
+        - darwin
         - linux
   ~/.inputrc:
     - src: ./.inputrc
@@ -38,6 +42,11 @@ link:
         - linux
   ~/.config/starship.toml:
     - src: ./.config/starship.toml
+  ~/.config/zsh/prompt.zsh:
+    - src: ./.config/zsh/prompt.zsh
+      targets:
+        - darwin
+        - linux
   ~/.config/wezterm:
     - src: ./.config/wezterm
   ~/.config/vim:

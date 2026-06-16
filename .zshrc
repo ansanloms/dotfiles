@@ -2,8 +2,8 @@ if [ -f "$HOME/.bash_aliases" ]; then
   source "$HOME/.bash_aliases"
 fi
 
-if type starship > /dev/null 2>&1; then
-  eval "$(starship init zsh)"
+if [ -f "$HOME/.config/zsh/prompt.zsh" ]; then
+  source "$HOME/.config/zsh/prompt.zsh"
 fi
 
 if type sheldon > /dev/null 2>&1; then
