@@ -1,3 +1,3 @@
 @../.agents/AGENTS.md
-@rules/thinking.md
+@rules/tool-call-stability.md
 @rules/lsp.md
