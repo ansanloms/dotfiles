@@ -55,6 +55,7 @@ skill ごとの方針:
 | find-docs               | `ansanloms/skills`（apm） | `.claude/skills/` + `.agents/skills/` |
 | empirical-prompt-tuning | `mizchi/skills`（apm）    | `.claude/skills/` のみ                |
 | nvim-remote             | `ansanloms/skills`（apm） | `.claude/skills/` + `.agents/skills/` |
+| worktree                | `ansanloms/skills`（apm） | `.claude/skills/` + `.agents/skills/` |
 
 skill を追加・更新する場合のみ apm を使用する。target は **必ず明示** すること。省略すると apm が auto-detect で `claude` のみに絞り、`.agents/skills/`（cross-agent）への配置が lock から外れる。
 

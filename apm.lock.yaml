@@ -24,6 +24,22 @@ dependencies:
   - .agents/skills/find-docs
   - .claude/skills/find-docs
   content_hash: sha256:2dc66974f2c064cb04595c0db3cd9ccd2e67453a2fa2287a64c69ffa539a668a
+- repo_url: ansanloms/skills
+  host: github.com
+  resolved_commit: 840c28f9e51aac8390f34880c3154fb0f62ad333
+  resolved_ref: 840c28f9e51aac8390f34880c3154fb0f62ad333
+  virtual_path: worktree
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/worktree
+  - .agents/skills/worktree/SKILL.md
+  - .claude/skills/worktree
+  - .claude/skills/worktree/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/worktree/SKILL.md: sha256:a48dbeaaa68bcb05397e6a2e9d36edd3388dee5af41bcabc7367976a447f1606
+    .claude/skills/worktree/SKILL.md: sha256:a48dbeaaa68bcb05397e6a2e9d36edd3388dee5af41bcabc7367976a447f1606
+  content_hash: sha256:09db68ef9131d39b795d615c2d4456be67ec92ae74ca0f948e364feea0c4c574
 - repo_url: mizchi/skills
   host: github.com
   resolved_commit: 89c1b34018ba0d85a770c065ba22f83a8d004d34
