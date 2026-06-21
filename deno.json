@@ -39,7 +39,7 @@
     },
     "upgrade": {
       "description": "Update flake inputs (nixpkgs / nix-claude-code / deno).",
-      "command": "nix flake update --flake \"$HOME/.config/nix\""
+      "command": "nix flake update --flake ./.config/nix"
     },
     "bump": {
       "description": "Bump self-built nix package versions and hashes (playwright-cli / apm).",
