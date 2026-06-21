@@ -9,5 +9,7 @@ dependencies:
   - ansanloms/skills/find-docs#e7638501cc48a6f20f30ee9e7f19692e61d6755d
   - ansanloms/skills/worktree#840c28f9e51aac8390f34880c3154fb0f62ad333
   mcp: []
+targets:
+  - agent-skills
 includes: auto
 scripts: {}

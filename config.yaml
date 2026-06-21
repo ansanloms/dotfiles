@@ -170,7 +170,7 @@ link:
   ~/.claude/scripts:
     - src: ./.claude/scripts
   ~/.claude/skills:
-    - src: ./.claude/skills
+    - src: ./.agents/skills
   ~/.agents/AGENTS.md:
     - src: ./.agents/AGENTS.md
   ~/.agents/skills:

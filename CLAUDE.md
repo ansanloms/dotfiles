@@ -43,33 +43,29 @@ deno task upgrade
 
 Agent Skills は [apm](https://github.com/microsoft/apm)（`packages.nix` で導入）で管理し、skill 本体をリポジトリにコミットしている。`deno task install` で各エージェントへシンボリックリンクされる。
 
-配置先は 2 系統あり、apm の `--target` で振り分ける。
+skill の実体は `.agents/skills/` の 1 箇所に置く。`~/.agents/skills`（Devin CLI / Devin Desktop が参照する cross-agent ディレクトリ）と `~/.claude/skills`（Claude Code）は、どちらも `.agents/skills/` を指すシンボリックリンク（`config.yaml` で設定）。両エージェントが同一実体を参照し、claude 専用・cross-agent 専用の配置区別は持たない。
 
-- `.claude/skills/` → `~/.claude/skills`（Claude Code）。target は `claude`。
-- `.agents/skills/` → `~/.agents/skills`（Devin CLI / Devin Desktop が参照する cross-agent ディレクトリ）。target は `agent-skills`。
+apm のデプロイ先は `apm.yml` の `targets: [agent-skills]` で `.agents/skills/` に固定している。target の解決順は `--target` > `apm.yml` の `targets:` > auto-detect で、この固定により install 時に `--target` を省略しても `.agents/skills/` へ配置される（省略時の auto-detect は `.claude/` の存在を見て `claude` を選ぶため、固定が無いと `.claude/` 側へ流れる）。
 
-skill ごとの方針:
+導入済み skill:
 
-| skill                   | 取得元                    | 配置先                                |
-| ----------------------- | ------------------------- | ------------------------------------- |
-| find-docs               | `ansanloms/skills`（apm） | `.claude/skills/` + `.agents/skills/` |
-| empirical-prompt-tuning | `mizchi/skills`（apm）    | `.claude/skills/` のみ                |
-| nvim-remote             | `ansanloms/skills`（apm） | `.claude/skills/` + `.agents/skills/` |
-| worktree                | `ansanloms/skills`（apm） | `.claude/skills/` + `.agents/skills/` |
+| skill                   | 取得元                    |
+| ----------------------- | ------------------------- |
+| find-docs               | `ansanloms/skills`（apm） |
+| empirical-prompt-tuning | `mizchi/skills`（apm）    |
+| nvim-remote             | `ansanloms/skills`（apm） |
+| worktree                | `ansanloms/skills`（apm） |
 
-skill を追加・更新する場合のみ apm を使用する。target は **必ず明示** すること。省略すると apm が auto-detect で `claude` のみに絞り、`.agents/skills/`（cross-agent）への配置が lock から外れる。
+skill を追加・更新する場合のみ apm を使用する。`apm.yml` の `targets` で配置先（`.agents/skills/`）を固定済みのため、install は `--target` 無しでよい。
 
 ```sh
-# Claude Code のみに配置（例: empirical-prompt-tuning）
-apm install <org>/<repo>/<skill>#<commit> --target claude
-
-# Claude Code と cross-agent（.agents/skills/）の両方に配置（例: find-docs, nvim-remote）
-apm install <org>/<repo>/<skill>#<commit> --target claude,agent-skills
+# skill の追加・更新（apm.yml の targets: agent-skills により .agents/skills/ へ配置）
+apm install <org>/<repo>/<skill>#<commit>
 ```
 
-更新も同じ install で commit を上げる。`apm update` は使わない。target を per-package で扱えず auto-detect で `.agents/skills/` を落とすうえ、`--target` を付けても全 skill 一律になり、claude のみ配置の skill まで `.agents/skills/` へ広げてしまうため。最新 commit は `git ls-remote <repo> HEAD` 等で確認する。
+更新も同じ install で commit を上げる。`apm update` は使わない。`apm update` は最新の一致 ref へ更新してしまい、commit hash 固定と噛み合わないため。最新 commit は `git ls-remote <repo> HEAD` 等で確認する。
 
-`apm.yml` / `apm.lock.yaml` は commit hash でバージョンを固定している。追加・更新後は、これらと `.claude/skills/` / `.agents/skills/` の差分をコミットする。
+`apm.yml` / `apm.lock.yaml` は commit hash でバージョンを固定している。追加・更新後は、これらと `.agents/skills/` の差分をコミットする。
 
 ## Local scripts
 
