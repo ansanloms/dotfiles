@@ -31,6 +31,6 @@ worktree 操作は git alias `git wt` (`.config/git/config` 定義、`git-worktr
   - worktree を新規に用意したとき (新ブランチ・既存ブランチを問わず): 着手前に設定する。既存ブランチに既に description があればそのまま使ってよい。
   - 既存の worktree で作業を続けるとき: description が未設定なら、その場で設定してから着手する (誰が作ったかに関係なく適用する)。
 - 設定方法: `git config branch.<branch>.description "<作業概要>"`。
-- 内容は「その worktree で何をするか」が分かる作業概要を **1 行** で書く。
+- 内容は「その worktree で何をするか」が分かる作業概要を **1 行** で書く。文体はコミットメッセージの subject に準じる (日本語。AGENTS.md のコミット規約参照)。
 - 理由: `git wt ls` (= `git-worktree-select`) は worktree 一覧に description を表示するが、`branch.<branch>.description` の **先頭 1 行のみ** を読む (`.split("\n")[0]`、2 行目以降は捨てる)。未設定だと一覧でタスクを識別できず、複数 worktree の区別がつかない。
 - 注意: `git wt ls` は人間向けの対話セレクタ (`git-worktree-select`)。エージェントがプログラム的に実行すると入力待ちでハングするため使わない。description や worktree の確認は `git config --get branch.<branch>.description` と `git worktree list` を非対話で使う。
