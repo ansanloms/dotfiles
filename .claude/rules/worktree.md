@@ -17,10 +17,10 @@ worktree 操作は git alias `git wt` (`.config/git/config` 定義、`git-worktr
 ## 作成手順
 
 1. worktree を用意する。`<main>` はメイン worktree の絶対パス。
-   - 新しいブランチを切る場合: `git wt add <main>.worktrees/<name> -b <branch>`。
-   - 既存ブランチ (例: 既に main から切られたブランチ) を調べる/続ける場合: `git wt add <main>.worktrees/<name> <branch>` (`-b` を付けない。既存ブランチをそのままチェックアウトする)。
-   - path 規約: メイン worktree の兄弟ディレクトリ `<main>.worktrees/<name>` に置く。例: メインが `~/dev/foo` なら worktree は `~/dev/foo.worktrees/<name>`。
-   - `git wt add` の path 引数は絶対パスで渡す。どの cwd から実行しても兄弟ディレクトリへ確実に置くため。
+   - 新しいブランチを切る場合: `git wt add <main>/.claude/worktrees/<name> -b <branch>`。
+   - 既存ブランチ (例: 既に main から切られたブランチ) を調べる/続ける場合: `git wt add <main>/.claude/worktrees/<name> <branch>` (`-b` を付けない。既存ブランチをそのままチェックアウトする)。
+   - path 規約: リポジトリ内の `.claude/worktrees/<name>` に置く。例: メインが `~/dev/foo` なら worktree は `~/dev/foo/.claude/worktrees/<name>`。`.claude/worktrees/` はグローバル gitignore (`~/.config/git/ignore` の `**/.claude/worktrees/*`) で除外済みのため、リポジトリ内に置いてもメインの `git status` を汚さない。
+   - `git wt add` の path 引数は絶対パスで渡す。どの cwd から実行しても所定のディレクトリへ確実に置くため。
    - `git wt add` は `git worktree add` の後に `.worktreeinclude` 記載のファイルをメインから複製する (ローカル設定の持ち込み)。`.worktreeinclude` が無ければ複製は何もしない (エラーではない)。
    - `<name>` / `<branch>` はタスク内容がわかる短い名前にする。
 2. その branch に description を設定する (下記「branch description」)。
@@ -33,3 +33,4 @@ worktree 操作は git alias `git wt` (`.config/git/config` 定義、`git-worktr
 - 設定方法: `git config branch.<branch>.description "<作業概要>"`。
 - 内容は「その worktree で何をするか」が分かる作業概要を **1 行** で書く。
 - 理由: `git wt ls` (= `git-worktree-select`) は worktree 一覧に description を表示するが、`branch.<branch>.description` の **先頭 1 行のみ** を読む (`.split("\n")[0]`、2 行目以降は捨てる)。未設定だと一覧でタスクを識別できず、複数 worktree の区別がつかない。
+- 注意: `git wt ls` は人間向けの対話セレクタ (`git-worktree-select`)。エージェントがプログラム的に実行すると入力待ちでハングするため使わない。description や worktree の確認は `git config --get branch.<branch>.description` と `git worktree list` を非対話で使う。
