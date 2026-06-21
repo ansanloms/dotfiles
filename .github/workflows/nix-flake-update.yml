@@ -1,0 +1,65 @@
+name: nix flake update
+
+# flake input (nixpkgs / nix-claude-code / deno) を更新し、ビルド検証のうえ PR を作成する。
+# 適用 (deno task switch) はローカルで行う。CI では profile を変更しない。
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # 毎週月曜 06:00 UTC (15:00 JST)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v30
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Update flake inputs
+        run: deno task upgrade
+
+      - name: Stage changes
+        run: git add -A
+
+      - name: Verify build
+        id: build
+        continue-on-error: true
+        run: nix build ./.config/nix#packages.x86_64-linux.default --impure --no-link --print-build-logs
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: ci/nix-flake-update
+          base: main
+          delete-branch: true
+          commit-message: |
+            chore: flake input を更新
+
+            nixpkgs / nix-claude-code / deno を最新へ更新した。
+          title: "chore: flake input を更新"
+          body: |
+            `deno task upgrade` (`nix flake update --flake ./.config/nix`) による flake.lock の自動更新。
+
+            - ビルド検証 (`nix build .#default --impure`): **${{ steps.build.outcome }}**
+
+            反映 (`deno task switch`) はローカルで行うこと。CI では profile を変更しない。
+
+      - name: Fail if build failed
+        if: steps.build.outcome == 'failure'
+        run: |
+          echo "nix build failed - see build logs above" >&2
+          exit 1

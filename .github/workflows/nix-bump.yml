@@ -1,0 +1,73 @@
+name: nix bump
+
+# 自前 derivation (playwright-cli / apm) の version・ハッシュ・lockfile を更新し、
+# ビルド検証のうえ PR を作成する。
+# 適用 (deno task switch) はローカルで行う。CI では profile を変更しない。
+
+on:
+  schedule:
+    - cron: "0 7 * * 1" # 毎週月曜 07:00 UTC (16:00 JST)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v30
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      # bump:apm が GitHub API (最新リリース tag 取得) で gh を使う。
+      - name: Bump self-built packages
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: deno task bump
+
+      - name: Stage changes
+        run: git add -A
+
+      - name: Verify build
+        id: build
+        continue-on-error: true
+        run: nix build ./.config/nix#packages.x86_64-linux.default --impure --no-link --print-build-logs
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: ci/nix-bump
+          base: main
+          delete-branch: true
+          commit-message: |
+            chore: 自前 nix パッケージのバージョンを更新
+
+            playwright-cli / apm の version・ハッシュ・lockfile を更新した。
+          title: "chore: 自前 nix パッケージのバージョンを更新"
+          body: |
+            `deno task bump` による自動更新 (playwright-cli / apm)。
+
+            - ビルド検証 (`nix build .#default --impure`): **${{ steps.build.outcome }}**
+
+            ビルドが failure の場合、新版が derivation 修正を要する可能性がある
+            (apm の buildInputs 追加、playwright-cli の wrapper パス変更等)。
+            CLAUDE.md「bump で拾えない変更」を参照して手当てすること。
+
+            反映 (`deno task switch`) はローカルで行うこと。CI では profile を変更しない。
+
+      - name: Fail if build failed
+        if: steps.build.outcome == 'failure'
+        run: |
+          echo "nix build failed - see build logs above" >&2
+          exit 1
