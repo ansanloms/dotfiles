@@ -33,9 +33,18 @@
     "build": "deno run --allow-read=scripts --allow-write=.local/bin --allow-run=deno scripts/build.ts",
     "install": "deno task dot-mori --config ./config.yaml",
     "uninstall": "deno task dot-mori --config ./config.yaml --clean",
-    "switch": "nix profile upgrade --all --impure",
-    "upgrade": "nix flake update --flake \"$HOME/.config/nix\" && nix profile upgrade --all --impure",
-    "bump": "deno task bump:*",
+    "switch": {
+      "description": "Apply package changes to the profile (packages.nix / *.nix / flake.lock).",
+      "command": "nix profile upgrade --all --impure"
+    },
+    "upgrade": {
+      "description": "Update flake inputs (nixpkgs / nix-claude-code / deno).",
+      "command": "nix flake update --flake \"$HOME/.config/nix\""
+    },
+    "bump": {
+      "description": "Bump self-built nix package versions and hashes (playwright-cli / apm).",
+      "command": "deno task bump:*"
+    },
     "bump:playwright-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=npm,nix .config/nix/playwright-cli/upgrade.ts",
     "bump:apm": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=nix,gh .config/nix/apm/upgrade.ts"
   }
