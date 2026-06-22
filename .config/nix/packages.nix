@@ -12,6 +12,7 @@ pkgs: with pkgs; [
   eza
   ffmpeg
   gh
+  git
   go
   google-chrome
   jq
