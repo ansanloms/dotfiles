@@ -43,10 +43,9 @@
       "command": "nix flake update --flake ./.config/nix"
     },
     "bump": {
-      "description": "Bump self-built nix package versions and hashes (playwright-cli / apm).",
+      "description": "Bump self-built nix package versions and hashes (playwright-cli).",
       "command": "deno task bump:*"
     },
-    "bump:playwright-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=npm,nix .config/nix/playwright-cli/upgrade.ts",
-    "bump:apm": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=nix,gh .config/nix/apm/upgrade.ts"
+    "bump:playwright-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=npm,nix .config/nix/playwright-cli/upgrade.ts"
   }
 }

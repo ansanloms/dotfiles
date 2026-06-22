@@ -1,7 +1,7 @@
 # 導入するパッケージの一覧。
 # flake.nix から `import ./packages.nix pkgs` で読み込まれ、buildEnv の paths になる。
 pkgs: with pkgs; [
-  apm
+  apm-cli
   awscli2
   bun
   claude-code

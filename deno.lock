@@ -1,6 +1,7 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@aireone/deno-lint-curly@*": "0.2.0",
     "jsr:@cliffy/ansi@1.2.1": "1.2.1",
     "jsr:@cliffy/internal@1.2.1": "1.2.1",
     "jsr:@cliffy/keycode@1.2.1": "1.2.1",
@@ -26,6 +27,9 @@
     "npm:json-schema-to-ts@3.1.1": "3.1.1"
   },
   "jsr": {
+    "@aireone/deno-lint-curly@0.2.0": {
+      "integrity": "c182ea5d2ed999c06ffa88a21aac2aed3cf0d14a1128d7fad3034337f7822b48"
+    },
     "@cliffy/ansi@1.2.1": {
       "integrity": "b8702def9c0110b6eeb2b3b71e0b26cbe0a427facbb4f9c0189da0ba19feb549",
       "dependencies": [
