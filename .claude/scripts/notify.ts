@@ -3,24 +3,26 @@ import { SOCK_PATH } from "@ansanloms/wsl-notify/socket.ts";
 
 import type { HookInput } from "./types.ts";
 import { getInput } from "./utils/common.ts";
-import { getMessage } from "./utils/hook.ts";
+import { buildNotification, type Notification } from "./utils/hook.ts";
 
 const BUFFER_SIZE = 16384; // 16KB
 const __dirname = new URL(".", import.meta.url).pathname;
 
-const getAudioSrc = (eventName: string) => {
-  if (eventName === "Stop") {
-    return "ms-winsoundevent:Notification.Looping.Alarm8";
+/**
+ * 非 ASCII を含む文字列を HTTP ヘッダ値へ載せられる形にする。
+ * fetch のヘッダ値は Latin-1（0-255）しか許さないため、UTF-8 バイト列を
+ * 1 バイト 1 文字へ写す。ntfy サーバは受け取った生バイトを UTF-8 として解釈する。
+ */
+const encodeHeader = (text: string): string => {
+  const bytes = new TextEncoder().encode(text);
+  let out = "";
+  for (const byte of bytes) {
+    out += String.fromCharCode(byte);
   }
-
-  if (eventName === "Notification") {
-    return "ms-winsoundevent:Notification.Looping.Call7";
-  }
-
-  return "ms-winsoundevent:Notification.Looping.Call6";
+  return out;
 };
 
-const notifyNtfy = async (input: HookInput, message: string) => {
+const notifyNtfy = async (notification: Notification) => {
   const url = Deno.env.get("NTFW_URL");
   const token = Deno.env.get("NTFW_TOKEN");
 
@@ -31,12 +33,12 @@ const notifyNtfy = async (input: HookInput, message: string) => {
   try {
     await fetch(url, {
       method: "POST",
-      body: message,
+      body: notification.body,
       headers: {
         Authorization: `Bearer ${token}`,
         Markdown: "yes",
-        Title: `Claude Code (${input.cwd})`,
-        Tags: input.hook_event_name,
+        Title: encodeHeader(notification.title),
+        Tags: notification.tag,
       },
     });
   } catch (error) {
@@ -44,7 +46,7 @@ const notifyNtfy = async (input: HookInput, message: string) => {
   }
 };
 
-const notifyWindows = async (input: HookInput, message: string) => {
+const notifyWindows = async (input: HookInput, notification: Notification) => {
   const conn = await Deno.connect({
     path: SOCK_PATH,
     transport: "unix",
@@ -52,16 +54,16 @@ const notifyWindows = async (input: HookInput, message: string) => {
 
   try {
     const req: NotifyRequest = {
-      title: "Claude Code",
-      message,
-      attribution: `${input.session_id} (${input.hook_event_name})`,
+      title: `${notification.emoji} ${notification.title}`,
+      message: notification.body,
+      attribution: input.cwd,
       image: {
         placement: "appLogoOverride",
         hintCrop: "circle",
         src: `${__dirname}/clawd.jpg`,
       },
       audio: {
-        src: getAudioSrc(input.hook_event_name),
+        src: notification.sound,
       },
       duration: "long",
     };
@@ -77,6 +79,9 @@ const notifyWindows = async (input: HookInput, message: string) => {
 };
 
 const input = await getInput();
-const message = (await getMessage(input)) ?? "";
+const notification = await buildNotification(input);
 
-await Promise.all([notifyNtfy(input, message), notifyWindows(input, message)]);
+await Promise.all([
+  notifyNtfy(notification),
+  notifyWindows(input, notification),
+]);
