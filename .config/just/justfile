@@ -98,13 +98,5 @@ devin type="default" config=".devcontainer/devcontainer.json":
       devin-desktop "${FOLDER}"
     fi
 
-# ワークスペースを起動する。
-[arg("ai_agent", long="ai-agent")]
-workspace ai_agent="claude":
-    #!/usr/bin/env bash
-    set -euo pipefail
-
-    ZELLIJ_AI_AGENT={{ ai_agent }} zellij
-
 # 会社用の設定があったら読み込む。
 import? "conf.d/work.just"

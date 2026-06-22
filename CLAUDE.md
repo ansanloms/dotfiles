@@ -16,7 +16,7 @@ deno task install
 deno task uninstall
 
 # パッケージ初回導入
-nix profile install ~/.config/nix#default --impure
+nix profile install path:.config/nix#default --impure
 
 # パッケージ適用（packages.nix の変更を反映）
 deno task switch
@@ -89,7 +89,7 @@ apm install <org>/<repo>/<skill>#<commit>
 
 - `.config/nix/playwright-cli/upgrade.ts`
 
-bump はファイルを書き換えるだけで反映はしない。完了後に `git diff` で確認し、`git add` してから `deno task switch` で反映する（`switch` = `nix profile upgrade --all --impure` は git flake を参照するため、ステージしていない変更、特に新規ファイルは反映されない）。
+bump はファイルを書き換えるだけで反映はしない。完了後に `git diff` で確認してから `deno task switch` で反映する。`switch` = `nix profile upgrade --all --impure` はプロファイルが `path:.config/nix#default` で登録されている前提で、`.config/nix` の作業ツリーの現在の内容を反映する（git のステージ状態を見ないため、`git add` の有無に関わらず、未追跡の新規ファイルも含めて反映される）。`git add` は反映のためではなくコミット準備として行う。
 
 ### bump で拾えない変更
 
