@@ -268,7 +268,6 @@ Deno.test("getMessage: PermissionRequest イベント", async () => {
 
 Deno.test("getEventDescriptor: 既知イベントは対応する属性を返す", () => {
   assertEquals(getEventDescriptor("Stop").label, "完了");
-  assertEquals(getEventDescriptor("SubagentStop").label, "サブ完了");
   assertEquals(getEventDescriptor("StopFailure").label, "失敗");
   assertEquals(getEventDescriptor("Notification").label, "確認待ち");
   assertEquals(getEventDescriptor("PermissionRequest").label, "許可待ち");

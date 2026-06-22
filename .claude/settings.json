@@ -34,18 +34,6 @@
         ]
       }
     ],
-    "SubagentStop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "deno task --cwd ~/.claude/scripts notify",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
     "StopFailure": [
       {
         "matcher": "",

@@ -161,12 +161,6 @@ const eventDescriptors: Record<string, EventDescriptor> = {
     emoji: "✅",
     sound: "ms-winsoundevent:Notification.Looping.Alarm8",
   },
-  SubagentStop: {
-    label: "サブ完了",
-    tag: "ballot_box_with_check",
-    emoji: "☑️",
-    sound: "ms-winsoundevent:Notification.Looping.Call5",
-  },
   StopFailure: {
     label: "失敗",
     tag: "rotating_light",
