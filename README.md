@@ -13,6 +13,14 @@ cd dotfiles
 
 [Determinate Nix Installer](https://github.com/DeterminateSystems/nix-installer) を使用する。
 
+```sh
+# install:
+curl -fsSL https://install.determinate.systems/nix | sh -s -- install
+
+# upgrade:
+sudo determinate-nixd upgrade
+```
+
 ### 3. Deploy dotfiles
 
 `.local/bin/` 配下のスクリプトは `scripts/` のソースから生成するため、先にビルドする。
