@@ -24,7 +24,7 @@ layout {
       pane size="72" {
         name "AI Agent"
         command "bash"
-        args "-c" "exec ${ZELLIJ_AI_AGENT:-claude}"
+        args "-c" "if [ -n \"$ZELLIJ_AI_AGENT\" ]; then exec $ZELLIJ_AI_AGENT; else exec claude agents --cwd \"$PWD\"; fi"
       }
 
       pane {
