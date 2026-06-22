@@ -1,6 +1,6 @@
 lockfile_version: '1'
-generated_at: '2026-06-21T23:47:10.144205+00:00'
-apm_version: 0.21.0
+generated_at: '2026-06-22T06:38:51.269073+00:00'
+apm_version: 0.18.0
 dependencies:
 - repo_url: ansanloms/skills
   host: github.com
@@ -11,9 +11,6 @@ dependencies:
   package_type: claude_skill
   deployed_files:
   - .agents/skills/find-docs
-  - .agents/skills/find-docs/SKILL.md
-  deployed_file_hashes:
-    .agents/skills/find-docs/SKILL.md: sha256:bc2723051c39480a9fb63c587bfec01d65f1f650a2be64a76efb9ebf9b118042
   content_hash: sha256:2dc66974f2c064cb04595c0db3cd9ccd2e67453a2fa2287a64c69ffa539a668a
 - repo_url: ansanloms/skills
   host: github.com
@@ -24,9 +21,6 @@ dependencies:
   package_type: claude_skill
   deployed_files:
   - .agents/skills/nvim-remote
-  - .agents/skills/nvim-remote/SKILL.md
-  deployed_file_hashes:
-    .agents/skills/nvim-remote/SKILL.md: sha256:ed815ecfed70d46cd39890b48c9a536ba5d49952a263a1474c31e890bd589864
   content_hash: sha256:45cc68c43ecdeb343013a5ec445b356cbb06d4593cc77047fe18c3412781c5db
 - repo_url: ansanloms/skills
   host: github.com
@@ -37,9 +31,6 @@ dependencies:
   package_type: claude_skill
   deployed_files:
   - .agents/skills/worktree
-  - .agents/skills/worktree/SKILL.md
-  deployed_file_hashes:
-    .agents/skills/worktree/SKILL.md: sha256:a48dbeaaa68bcb05397e6a2e9d36edd3388dee5af41bcabc7367976a447f1606
   content_hash: sha256:09db68ef9131d39b795d615c2d4456be67ec92ae74ca0f948e364feea0c4c574
 - repo_url: mizchi/skills
   host: github.com
@@ -50,9 +41,4 @@ dependencies:
   package_type: claude_skill
   deployed_files:
   - .agents/skills/empirical-prompt-tuning
-  - .agents/skills/empirical-prompt-tuning/SKILL-ja.md
-  - .agents/skills/empirical-prompt-tuning/SKILL.md
-  deployed_file_hashes:
-    .agents/skills/empirical-prompt-tuning/SKILL-ja.md: sha256:0a38d830802c2e08a7faca13928fedf6911e00b896946b4b03910d662de6dea5
-    .agents/skills/empirical-prompt-tuning/SKILL.md: sha256:252418e7ef022981d2dda2e3ec57fa1c786d30af68c50b7e062edf1d7361b0cb
   content_hash: sha256:0caa36857ba4e1f7193fa9ee3e22cac38d7e9787eda95e1726d4a39e40fb9479
