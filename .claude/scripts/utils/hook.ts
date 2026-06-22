@@ -1,3 +1,4 @@
+import { basename } from "@std/path";
 import type {
   HookInput,
   NotificationHookInput,
@@ -126,4 +127,134 @@ export const getMessage = async (input: HookInput) => {
     default:
       return await getLastAssistantMessage(input.transcript_path);
   }
+};
+
+/**
+ * hook イベント種別ごとの表示属性。
+ * 「どのラベル・どの絵文字・どの音か」をこの 1 箇所で定義する。
+ */
+export interface EventDescriptor {
+  /** 通知タイトルの先頭に出す、一目で種別が分かるラベル。 */
+  label: string;
+
+  /** ntfy の Tags に渡す絵文字キーワード（受信側でアイコンに変換される）。 */
+  tag: string;
+
+  /**
+   * 絵文字リテラル。Windows トーストは Tags のようなキーワード変換を持たないため、
+   * タイトル先頭へ直接前置するのに使う。`tag` と同じ意味の絵文字を指す。
+   */
+  emoji: string;
+
+  /** Windows トーストの通知音（ms-winsoundevent URI）。 */
+  sound: string;
+}
+
+/**
+ * イベント種別 → 表示属性の対応表。
+ * 新しいイベントを通知対象に加える場合や、ラベル・音を変える場合はここを編集する。
+ */
+const eventDescriptors: Record<string, EventDescriptor> = {
+  Stop: {
+    label: "完了",
+    tag: "white_check_mark",
+    emoji: "✅",
+    sound: "ms-winsoundevent:Notification.Looping.Alarm8",
+  },
+  SubagentStop: {
+    label: "サブ完了",
+    tag: "ballot_box_with_check",
+    emoji: "☑️",
+    sound: "ms-winsoundevent:Notification.Looping.Call5",
+  },
+  StopFailure: {
+    label: "失敗",
+    tag: "rotating_light",
+    emoji: "🚨",
+    sound: "ms-winsoundevent:Notification.Looping.Alarm2",
+  },
+  Notification: {
+    label: "確認待ち",
+    tag: "bell",
+    emoji: "🔔",
+    sound: "ms-winsoundevent:Notification.Looping.Call7",
+  },
+  PermissionRequest: {
+    label: "許可待ち",
+    tag: "warning",
+    emoji: "⚠️",
+    sound: "ms-winsoundevent:Notification.Looping.Call6",
+  },
+};
+
+/** 対応表にないイベント用のフォールバック属性。 */
+const defaultDescriptor: EventDescriptor = {
+  label: "通知",
+  tag: "speech_balloon",
+  emoji: "💬",
+  sound: "ms-winsoundevent:Notification.Looping.Call6",
+};
+
+/**
+ * イベント名に対応する表示属性を返す。未知のイベントは既定値を返す。
+ */
+export const getEventDescriptor = (eventName: string): EventDescriptor =>
+  eventDescriptors[eventName] ?? defaultDescriptor;
+
+/**
+ * StopFailure hook 用メッセージを取得する。
+ * ターンが API エラーで終了したことと、判明すればその error type を返す。
+ * error type のフィールド名は公式に確定していないため、候補を順に探し、
+ * いずれも無ければ種別なしの固定文言にフォールバックする。
+ */
+export const getStopFailureMessage = (input: HookInput): string => {
+  const record = input as Record<string, unknown>;
+  const errorType = record.error_type ?? record.error ?? record.reason;
+  return typeof errorType === "string" && errorType
+    ? `API エラーでターンが終了: ${errorType}`
+    : "API エラーでターンが終了";
+};
+
+/**
+ * 送信経路に依存しない通知 1 件分の構成要素。
+ * 各経路（ntfy / Windows トースト）はこれを自分の形式へ流し込む。
+ */
+export interface Notification {
+  /** タイトル。「ラベル | プロジェクト名」形式（絵文字は含まない）。 */
+  title: string;
+
+  /** 本文。イベント別メッセージそのまま。 */
+  body: string;
+
+  /** ntfy の Tags に渡す絵文字キーワード。 */
+  tag: string;
+
+  /** タイトル先頭へ前置する絵文字リテラル（Windows トースト用）。 */
+  emoji: string;
+
+  /** Windows トーストの通知音。 */
+  sound: string;
+}
+
+/**
+ * hook 入力から、種別ラベル付きで読みやすい通知 1 件を組み立てる。
+ * - タイトル: 「<ラベル> | <プロジェクト名>」（プロジェクト名は cwd の basename）
+ * - 本文: イベント別メッセージそのまま
+ */
+export const buildNotification = async (
+  input: HookInput,
+): Promise<Notification> => {
+  const descriptor = getEventDescriptor(input.hook_event_name);
+  const project = basename(input.cwd);
+  const message = (input.hook_event_name as string) === "StopFailure"
+    ? getStopFailureMessage(input)
+    : (await getMessage(input)) ?? "";
+
+  return {
+    title: `${descriptor.label} | ${project}`,
+    body: message,
+    tag: descriptor.tag,
+    emoji: descriptor.emoji,
+    sound: descriptor.sound,
+  };
 };

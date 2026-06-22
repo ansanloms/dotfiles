@@ -5,11 +5,14 @@ import type {
   StopHookInput,
 } from "@anthropic-ai/claude-agent-sdk";
 import {
+  buildNotification,
   formatToolInput,
+  getEventDescriptor,
   getLastAssistantMessage,
   getMessage,
   getNotificationMessage,
   getPermissionRequestMessage,
+  getStopFailureMessage,
   getStopMessage,
 } from "./hook.ts";
 
@@ -259,4 +262,70 @@ Deno.test("getMessage: PermissionRequest イベント", async () => {
     await getMessage(input),
     "**Write** の実行許可を求めています\n/tmp/out.ts",
   );
+});
+
+// --- getEventDescriptor ---
+
+Deno.test("getEventDescriptor: 既知イベントは対応する属性を返す", () => {
+  assertEquals(getEventDescriptor("Stop").label, "完了");
+  assertEquals(getEventDescriptor("SubagentStop").label, "サブ完了");
+  assertEquals(getEventDescriptor("StopFailure").label, "失敗");
+  assertEquals(getEventDescriptor("Notification").label, "確認待ち");
+  assertEquals(getEventDescriptor("PermissionRequest").label, "許可待ち");
+});
+
+// --- getStopFailureMessage ---
+
+Deno.test("getStopFailureMessage: error_type があれば種別を含める", () => {
+  const input = {
+    ...baseInput,
+    hook_event_name: "StopFailure",
+    error_type: "rate_limit",
+  } as unknown as Parameters<typeof getStopFailureMessage>[0];
+  assertEquals(
+    getStopFailureMessage(input),
+    "API エラーでターンが終了: rate_limit",
+  );
+});
+
+Deno.test("getStopFailureMessage: error type が無ければ固定文言を返す", () => {
+  const input = {
+    ...baseInput,
+    hook_event_name: "StopFailure",
+  } as unknown as Parameters<typeof getStopFailureMessage>[0];
+  assertEquals(getStopFailureMessage(input), "API エラーでターンが終了");
+});
+
+Deno.test("getEventDescriptor: 未知イベントは既定値を返す", () => {
+  const descriptor = getEventDescriptor("Unknown");
+  assertEquals(descriptor.label, "通知");
+  assertEquals(descriptor.tag, "speech_balloon");
+});
+
+// --- buildNotification ---
+
+Deno.test("buildNotification: タイトルはラベルとプロジェクト名を結合する", async () => {
+  const input: StopHookInput = {
+    ...baseInput,
+    cwd: "/home/user/dev/dotfiles",
+    hook_event_name: "Stop",
+    stop_hook_active: false,
+    last_assistant_message: "作業完了",
+  };
+  const notification = await buildNotification(input);
+  assertEquals(notification.title, "完了 | dotfiles");
+  assertEquals(notification.body, "作業完了");
+  assertEquals(notification.tag, "white_check_mark");
+  assertEquals(notification.emoji, "✅");
+});
+
+Deno.test("buildNotification: 本文はメッセージをそのまま渡す", async () => {
+  const input: StopHookInput = {
+    ...baseInput,
+    hook_event_name: "Stop",
+    stop_hook_active: false,
+    last_assistant_message: "x".repeat(200),
+  };
+  const notification = await buildNotification(input);
+  assertEquals(notification.body, "x".repeat(200));
 });
