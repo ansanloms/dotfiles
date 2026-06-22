@@ -82,14 +82,12 @@ apm install <org>/<repo>/<skill>#<commit>
 `.config/nix/` には nixpkgs 未収録のパッケージを自前 derivation で管理している。
 
 - `playwright-cli.nix`（`@playwright/cli`、npm パッケージ / buildNpmPackage、wrapper で nixpkgs `google-chrome` を駆動）
-- `apm.nix`（`microsoft/apm`、プリビルドバイナリ / fetchurl + autoPatchelfHook）
 
 ### バージョンを上げる
 
-`deno task bump`（両方）/ `deno task bump:playwright-cli [version]` / `deno task bump:apm [version]`（version 省略で最新）で、依存 version・lockfile・ハッシュを更新する。具体的な処理は各スクリプトを参照:
+`deno task bump` / `deno task bump:playwright-cli [version]`（version 省略で最新）で、依存 version・lockfile・ハッシュを更新する。具体的な処理は各スクリプトを参照:
 
 - `.config/nix/playwright-cli/upgrade.ts`
-- `.config/nix/apm/upgrade.ts`
 
 bump はファイルを書き換えるだけで反映はしない。完了後に `git diff` で確認し、`git add` してから `deno task switch` で反映する（`switch` = `nix profile upgrade --all --impure` は git flake を参照するため、ステージしていない変更、特に新規ファイルは反映されない）。
 
@@ -97,7 +95,6 @@ bump はファイルを書き換えるだけで反映はしない。完了後に
 
 bump が更新するのは version 文字列と FOD ハッシュという、機械的に再計算できる値だけ。新版が次を変えた場合は bump 後の `switch` がビルドエラーになるので、エラーを読んで derivation を手当てする:
 
-- **apm**: 同梱 PyInstaller バンドルの Python 拡張モジュールが要求する native ライブラリが増えると、autoPatchelf が解決できず失敗する。不足分を `apm.nix` の `buildInputs` に追加する（例: 0.16.1 で sqlite / lzma / ffi / bz2 / uuid / readline / zlib が必要になった）。
 - **playwright-cli**: 新版で bin のパスや名前が変わると、`playwright-cli.nix` の wrapper（`--add-flags` のパス）が合わなくなる。`find` で実 bin を確認して修正する。
 
 このため bump 後は必ず `deno task switch` までやってビルドが通ることを確認すること。

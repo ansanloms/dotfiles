@@ -1,6 +1,6 @@
 name: nix bump
 
-# 自前 derivation (playwright-cli / apm) の version・ハッシュ・lockfile を更新し、
+# 自前 derivation (playwright-cli) の version・ハッシュ・lockfile を更新し、
 # ビルド検証のうえ直接 main へコミットする。適用 (deno task switch) はローカルで行う。
 
 on:
@@ -28,10 +28,7 @@ jobs:
         with:
           deno-version: v2.x
 
-      # bump:apm が GitHub API (最新リリース tag 取得) で gh を使う。
       - name: Bump self-built packages
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: deno task bump
 
       - name: Stage and detect changes
