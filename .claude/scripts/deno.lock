@@ -7,8 +7,10 @@
     "jsr:@std/internal@^1.0.12": "1.0.14",
     "jsr:@std/internal@^1.0.14": "1.0.14",
     "jsr:@std/path@1.1.3": "1.1.3",
+    "jsr:@std/path@1.1.4": "1.1.4",
     "jsr:@std/path@1.1.5": "1.1.5",
-    "npm:@anthropic-ai/claude-agent-sdk@0.3.181": "0.3.181_@anthropic-ai+sdk@0.104.2__zod@4.4.3_@modelcontextprotocol+sdk@1.29.0__zod@4.4.3_zod@4.4.3"
+    "npm:@anthropic-ai/claude-agent-sdk@0.3.181": "0.3.181_@anthropic-ai+sdk@0.104.2__zod@4.4.3_@modelcontextprotocol+sdk@1.29.0__zod@4.4.3_zod@4.4.3",
+    "npm:xmlbuilder2@4.0.3": "4.0.3"
   },
   "jsr": {
     "@aireone/deno-lint-curly@0.2.0": {
@@ -28,6 +30,12 @@
     },
     "@std/path@1.1.3": {
       "integrity": "b015962d82a5e6daea980c32b82d2c40142149639968549c649031a230b1afb3",
+      "dependencies": [
+        "jsr:@std/internal@^1.0.12"
+      ]
+    },
+    "@std/path@1.1.4": {
+      "integrity": "1d2d43f39efb1b42f0b1882a25486647cb851481862dc7313390b2bb044314b5",
       "dependencies": [
         "jsr:@std/internal@^1.0.12"
       ]
@@ -141,6 +149,30 @@
         "zod-to-json-schema"
       ]
     },
+    "@oozcitak/dom@2.0.2": {
+      "integrity": "sha512-GjpKhkSYC3Mj4+lfwEyI1dqnsKTgwGy48ytZEhm4A/xnH/8z9M3ZVXKr/YGQi3uCLs1AEBS+x5T2JPiueEDW8w==",
+      "dependencies": [
+        "@oozcitak/infra",
+        "@oozcitak/url",
+        "@oozcitak/util"
+      ]
+    },
+    "@oozcitak/infra@2.0.2": {
+      "integrity": "sha512-2g+E7hoE2dgCz/APPOEK5s3rMhJvNxSMBrP+U+j1OWsIbtSpWxxlUjq1lU8RIsFJNYv7NMlnVsCuHcUzJW+8vA==",
+      "dependencies": [
+        "@oozcitak/util"
+      ]
+    },
+    "@oozcitak/url@3.0.0": {
+      "integrity": "sha512-ZKfET8Ak1wsLAiLWNfFkZc/BraDccuTJKR6svTYc7sVjbR+Iu0vtXdiDMY4o6jaFl5TW2TlS7jbLl4VovtAJWQ==",
+      "dependencies": [
+        "@oozcitak/infra",
+        "@oozcitak/util"
+      ]
+    },
+    "@oozcitak/util@10.0.0": {
+      "integrity": "sha512-hAX0pT/73190NLqBPPWSdBVGtbY6VOhWYK3qqHqtXQ1gK7kS2yz4+ivsN07hpJ6I3aeMtKP6J6npsEKOAzuTLA=="
+    },
     "@stablelib/base64@1.0.1": {
       "integrity": "sha512-1bnPQqSxSuc3Ii6MhBysoWCg58j97aUjuCSZrGSmDxNqtytIi0k8utUenAwTZN4V5mXXYGsVUI9zeBqy+jBOSQ=="
     },
@@ -168,6 +200,9 @@
         "json-schema-traverse",
         "require-from-string"
       ]
+    },
+    "argparse@2.0.1": {
+      "integrity": "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q=="
     },
     "body-parser@2.3.0": {
       "integrity": "sha512-2cGmJupaNgg+QUwVLAucDuWuoMZ6EX9iHDRswZ5lsNYEmwPaRknMPCLZz07yTzVq/83p4o/wzbDZbBrTvGGTIw==",
@@ -420,6 +455,13 @@
     "jose@6.2.3": {
       "integrity": "sha512-YYVDInQKFJfR/xa3ojUTl8c2KoTwiL1R5Wg9YCydwH0x0B9grbzlg5HC7mMjCtUJjbQ/YnGEZIhI5tCgfTb4Hw=="
     },
+    "js-yaml@4.2.0": {
+      "integrity": "sha512-ePWsvanv0DWuDRsW8dnt+R4jQ31SCRCQ7hhNcPXZPsoBZiemuZNYGf7adZdqX2D86j6rvKp3RpCxVTSb8WQlOw==",
+      "dependencies": [
+        "argparse"
+      ],
+      "bin": true
+    },
     "json-schema-to-ts@3.1.1": {
       "integrity": "sha512-+DWg8jCJG2TEnpy7kOm/7/AxaYoaRbjVB4LFZLySZlWn8exGs3A4OLJR966cVvU26N7X9TWxl+Jsw7dzAqKT6g==",
       "dependencies": [
@@ -641,6 +683,15 @@
     "wrappy@1.0.2": {
       "integrity": "sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ=="
     },
+    "xmlbuilder2@4.0.3": {
+      "integrity": "sha512-bx8Q1STctnNaaDymWnkfQLKofs0mGNN7rLLapJlGuV3VlvegD7Ls4ggMjE3aUSWItCCzU0PEv45lI87iSigiCA==",
+      "dependencies": [
+        "@oozcitak/dom",
+        "@oozcitak/infra",
+        "@oozcitak/util",
+        "js-yaml"
+      ]
+    },
     "zod-to-json-schema@3.25.2_zod@4.4.3": {
       "integrity": "sha512-O/PgfnpT1xKSDeQYSCfRI5Gy3hPf91mKVDuYLUHZJMiDFptvP41MSnWofm8dnCm0256ZNfZIM7DSzuSMAFnjHA==",
       "dependencies": [
@@ -652,6 +703,7 @@
     }
   },
   "remote": {
+    "https://cdn.jsdelivr.net/gh/ansanloms/wsl-notify@0.0.8/notifier.ts": "a35badcd6b1c72cd70ffbecc28268832258c08cfd43b9f775694111a8de1dbe8",
     "https://cdn.jsdelivr.net/gh/ansanloms/wsl-notify@0.0.8/socket.ts": "c08b0f8605f4c807f2a9c1b9152b12211f4eb56c3f86a67716be059a4b167aed"
   },
   "workspace": {

@@ -17,6 +17,7 @@
     "lint": "deno lint && deno fmt --check",
     "fix": "deno lint --fix && deno fmt",
     "notify": "deno run --env-file=.env -A ./notify.ts",
-    "statusline": "deno run -A ./statusline.ts"
+    "statusline": "deno run -A ./statusline.ts",
+    "worktree-state": "deno run -A ./worktree-state.ts"
   }
 }

@@ -182,3 +182,28 @@ export interface StatusLineSettings {
   /** Horizontal padding. Set to 0 to let status line go to edge. */
   padding?: number;
 }
+
+/**
+ * PostToolUse hook 入力のうち worktree-state が参照する部分集合。
+ */
+export interface PostToolUseHookInput {
+  hook_event_name: "PostToolUse";
+  session_id: string;
+  cwd: string;
+  tool_name: string;
+  tool_input: Record<string, unknown>;
+}
+
+/**
+ * SessionEnd hook 入力のうち worktree-state が参照する部分集合。
+ */
+export interface SessionEndHookInput {
+  hook_event_name: "SessionEnd";
+  session_id: string;
+  cwd: string;
+}
+
+/** worktree-state スクリプトが受け取る hook 入力。 */
+export type WorktreeStateHookInput =
+  | PostToolUseHookInput
+  | SessionEndHookInput;

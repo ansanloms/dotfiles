@@ -7,6 +7,7 @@ import {
   type ProgressBarColorScheme,
 } from "./utils/common.ts";
 import * as git from "./utils/git.ts";
+import { readWorktree } from "./utils/worktree.ts";
 import type { StatusLineInput, StatusLineRateLimitWindow } from "./types.ts";
 
 const getDir = async (input: StatusLineInput) => {
@@ -53,6 +54,20 @@ const getTokens = (input: StatusLineInput) => {
     (input.context_window.current_usage?.cache_read_input_tokens ?? 0);
 };
 
+const resolveWorktreeBranch = async (
+  sessionId: string,
+): Promise<string | null> => {
+  const root = await readWorktree(sessionId);
+  if (root === null) {
+    return null;
+  }
+  const live = await git.linkedWorktreeRoot(root);
+  if (live === null) {
+    return null;
+  }
+  return (await git.branch(live)) || path.basename(live);
+};
+
 try {
   const input = await getInput<StatusLineInput>();
 
@@ -61,13 +76,18 @@ try {
   const cost = input.cost.total_cost_usd;
   const tokens = getTokens(input);
   const pct = Math.floor(input.context_window.used_percentage ?? 0);
+  const worktreeBranch = await resolveWorktreeBranch(input.session_id);
 
+  const line1: [string, string][] = [
+    ["󰚩", model],
+    ["", dir],
+    ["", `$${cost.toLocaleString()}`],
+  ];
+  if (worktreeBranch !== null) {
+    line1.splice(1, 0, ["\uE0A0", worktreeBranch]);
+  }
   console.log(
-    [
-      ["󰚩", model],
-      ["", dir],
-      ["", `$${cost.toLocaleString()}`],
-    ].map(([icon, label]) => `${icon}  ${label}`).join(" | "),
+    line1.map(([icon, label]) => `${icon}  ${label}`).join(" | "),
   );
   console.log(
     buildInlineProgressBar(
