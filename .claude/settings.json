@@ -112,13 +112,13 @@
       "にゃーん"
     ]
   },
-  "plansDirectory": ".claude/plans",
-  "autoMemoryDirectory": ".claude/memories",
   "alwaysThinkingEnabled": true,
-  "effortLevel": "xhigh",
+  "plansDirectory": ".claude/plans",
   "tui": "fullscreen",
+  "autoMemoryDirectory": ".claude/memories",
   "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
   "terminalProgressBarEnabled": true,
   "voiceEnabled": true
 }
