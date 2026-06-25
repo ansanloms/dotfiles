@@ -3,6 +3,7 @@
 pkgs: with pkgs; [
   apm-cli
   awscli2
+  ssm-session-manager-plugin
   bun
   claude-code
   deadnix
@@ -34,4 +35,9 @@ pkgs: with pkgs; [
   zsh
   devin-cli
   hadolint
+  ripgrep
+  percona-toolkit
+  noto-fonts-cjk-sans
+  noto-fonts-cjk-serif
+  curl
 ]
