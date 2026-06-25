@@ -1,5 +1,5 @@
 lockfile_version: '1'
-generated_at: '2026-06-22T06:38:51.269073+00:00'
+generated_at: '2026-06-25T01:47:38.489808+00:00'
 apm_version: 0.18.0
 dependencies:
 - repo_url: ansanloms/skills
@@ -42,3 +42,12 @@ dependencies:
   deployed_files:
   - .agents/skills/empirical-prompt-tuning
   content_hash: sha256:0caa36857ba4e1f7193fa9ee3e22cac38d7e9787eda95e1726d4a39e40fb9479
+- repo_url: mizchi/skills
+  host: github.com
+  resolved_commit: d85abbf3adac3c00662ac62647efd3accc42dd2f
+  virtual_path: meta/retrospective-codify
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/retrospective-codify
+  content_hash: sha256:3ff8c5c61545f778b8731f8d08eccb2bb38c15bc6fa618db509113f48e0ef670
