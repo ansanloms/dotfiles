@@ -26,6 +26,8 @@ pkgs: with pkgs; [
   rustup
   sheldon
   shellcheck
+  sonarqube-cli
+  sonar-scanner-cli
   starship
   statix
   tmux
