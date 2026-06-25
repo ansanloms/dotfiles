@@ -1,17 +1,5 @@
 {
   "nodes": {
-    "deno-bin": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-NHC5b+45DfHShznp/hlOxDzHthIs5Ed4NM0vPYaF7jo=",
-        "type": "file",
-        "url": "https://github.com/denoland/deno/releases/latest/download/deno-x86_64-unknown-linux-gnu.zip"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://github.com/denoland/deno/releases/latest/download/deno-x86_64-unknown-linux-gnu.zip"
-      }
-    },
     "nix-claude-code": {
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -64,7 +52,6 @@
     },
     "root": {
       "inputs": {
-        "deno-bin": "deno-bin",
         "nix-claude-code": "nix-claude-code",
         "nixpkgs": "nixpkgs_2"
       }
