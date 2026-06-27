@@ -21,7 +21,7 @@ nix profile install path:.config/nix#default --impure
 # パッケージ適用（packages.nix の変更を反映）
 deno task switch
 
-# パッケージ更新（nixpkgs / nix-claude-code を更新して反映）
+# パッケージ更新（nixpkgs / llm-agents を更新して反映）
 deno task upgrade
 ```
 

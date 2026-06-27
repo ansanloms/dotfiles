@@ -45,7 +45,7 @@
       "command": "nix profile upgrade --all --impure"
     },
     "upgrade": {
-      "description": "Update flake inputs (nixpkgs / nix-claude-code).",
+      "description": "Update flake inputs (nixpkgs / llm-agents).",
       "command": "nix flake update --flake path:.config/nix"
     },
     "remove": {
