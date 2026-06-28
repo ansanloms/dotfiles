@@ -52,3 +52,16 @@ vim.keymap.set("t", "<C-w>gr", "<C-w>gT")
 vim.keymap.set("t", "<S-space>", "<space>")
 vim.keymap.set("t", "<C-BS>", "<BS>")
 vim.keymap.set("t", "<C-CR>", "<CR>")
+
+-- ai-agent (zellij 経由で AI Agent ペインへ送信)。zellij セッション内でのみ定義。
+if require("zellij").in_session() then
+  local ai_agent = require("ansanloms.ai-agent")
+  vim.keymap.set("n", "<Leader>as", function() ai_agent.send_buffer(true) end,
+    { silent = true, desc = "ai-agent: send buffer" })
+  vim.keymap.set("x", "<Leader>as", function() ai_agent.send_selection(true) end,
+    { silent = true, desc = "ai-agent: send selection" })
+  vim.keymap.set("n", "<Leader>ap", function() ai_agent.send_buffer(false) end,
+    { silent = true, desc = "ai-agent: paste buffer" })
+  vim.keymap.set("x", "<Leader>ap", function() ai_agent.send_selection(false) end,
+    { silent = true, desc = "ai-agent: paste selection" })
+end

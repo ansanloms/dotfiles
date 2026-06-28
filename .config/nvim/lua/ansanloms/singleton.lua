@@ -1,5 +1,7 @@
 -- .config/nvim/lua/config/singleton.lua
 -- zellij 環境で Neovim を singleton として動作させる
+local zellij = require("zellij")
+
 local M = {}
 
 M.config = {
@@ -20,16 +22,6 @@ M.config = {
     "/tmp/claude%-prompt",
   },
 }
-
-local function get_socket_path()
-  local session_name = vim.env.ZELLIJ_SESSION_NAME
-
-  if not session_name then
-    return nil
-  end
-
-  return "/tmp/nvim-" .. session_name .. ".sock"
-end
 
 local function socket_exists(path)
   return vim.uv.fs_stat(path) ~= nil
@@ -62,7 +54,7 @@ local function send_to_server(socket_path, files)
 end
 
 function M.setup()
-  local socket_path = get_socket_path()
+  local socket_path = zellij.nvim_socket_path()
 
   if not socket_path then
     return
