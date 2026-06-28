@@ -31,6 +31,7 @@
   glib,
   dash,
   which,
+  typescript,
 }:
 
 let
@@ -65,12 +66,14 @@ let
 
   # mcconfig が実行時にアプリをビルドする際に必要なツール群を PATH へ前置する。
   # cc / make は stdenv.cc / stdenv が提供。x-cli-lin は pkg-config + gio-2.0 (glib) も要る。
+  # TypeScript モジュール (.ts) を含むアプリは mcconfig が `tsc` を呼ぶため typescript も要る。
   runtimeInputs = [
     stdenv.cc
     dash
     which
     pkg-config
     glib
+    typescript
   ];
 
   # 実行時 pkg-config が gio-2.0 を解決できるよう PKG_CONFIG_PATH を構成する。
@@ -96,6 +99,24 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [ glib ];
+
+  # Moddable は ESP-IDF のバージョンを `git describe` で取得する (公式は git clone 前提)。
+  # nix 提供の ESP-IDF では tag が解決できず `git describe --always` が commit hash を
+  # 返してしまい、バージョンチェック (versionCheck.py) が失敗する。ESP-IDF は root の
+  # version.txt に正規バージョン (例 v6.0.0) を持つので、これを優先して読む (git は fallback)。
+  postPatch = ''
+    substituteInPlace tools/mcconfig/make.esp32.mk \
+      --replace-fail 'cd $(IDF_PATH) && git describe --always --abbrev=0")' \
+                     'cat $(IDF_PATH)/version.txt 2>/dev/null || (cd $(IDF_PATH) && git describe --always --abbrev=0)")'
+
+    # mcmanifest.js は .ts コンパイル時の TypeScript lib/target に es2025 を
+    # ハードコードするが、安定版 TypeScript (5.9) は es2025 を未サポート
+    # (es2024 が最新)。Moddable は将来の TS 6.0 を見込んでいる。現状の tsc で
+    # ビルドできるよう es2024 へ下げる。
+    substituteInPlace tools/mcmanifest.js \
+      --replace-fail 'lib: ["es2025"]' 'lib: ["es2024"]' \
+      --replace-fail 'target: "es2025"' 'target: "es2024"'
+  '';
 
   buildPhase = ''
     runHook preBuild
