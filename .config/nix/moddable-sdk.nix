@@ -1,8 +1,9 @@
-# Moddable SDK CLI tools (mcconfig / mcrun / mcpack ...).
+# Moddable SDK tools (mcconfig / mcrun / mcpack ... + mcsim / xsbug).
 # nixpkgs 未収録。
 #
-# scope: Linux 専用かつ CLI ツールのみ。GTK ベースの GUI (xsbug デバッガ / mcsim
-# シミュレータ) はビルドしない。アプリのターゲットは x-cli-lin を想定する。
+# scope: Linux 専用。CLI ツールに加え、GTK ベースの GUI (mcsim シミュレータ /
+# xsbug デバッガ) もビルドする (x-lin ターゲット)。GUI の実行には X/Wayland 表示
+# (WSL の場合 WSLg) が要る。
 #
 # 設計上の要点:
 #   1. Moddable のツール群 (mcconfig 等) は単一マルチコールバイナリ `tools` への
@@ -27,8 +28,11 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
+  wrapGAppsHook3,
   pkg-config,
   glib,
+  gtk3,
+  freetype,
   dash,
   which,
   typescript,
@@ -64,6 +68,13 @@ let
     "serial2xsbug"
   ];
 
+  # GTK ベースの GUI ツール。mcconfig -p x-lin でビルドされ、実行に GTK ランタイムと
+  # 表示環境が要るため CLI とは別に wrapGAppsHook3 で包装する。
+  guiTools = [
+    "mcsim"
+    "xsbug"
+  ];
+
   # mcconfig が実行時にアプリをビルドする際に必要なツール群を PATH へ前置する。
   # cc / make は stdenv.cc / stdenv が提供。x-cli-lin は pkg-config + gio-2.0 (glib) も要る。
   # TypeScript モジュール (.ts) を含むアプリは mcconfig が `tsc` を呼ぶため typescript も要る。
@@ -76,8 +87,13 @@ let
     typescript
   ];
 
-  # 実行時 pkg-config が gio-2.0 を解決できるよう PKG_CONFIG_PATH を構成する。
-  pkgConfigPath = lib.makeSearchPathOutput "dev" "lib/pkgconfig" [ glib ];
+  # 実行時 pkg-config が gio-2.0 / gtk+-3.0 / freetype2 を解決できるよう
+  # PKG_CONFIG_PATH を構成する (x-lin / x-cli-lin アプリのビルドに必要)。
+  pkgConfigPath = lib.makeSearchPathOutput "dev" "lib/pkgconfig" [
+    glib
+    gtk3
+    freetype
+  ];
 in
 stdenv.mkDerivation {
   pname = "moddable-sdk";
@@ -92,13 +108,23 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeWrapper
+    # GUI ツール (mcsim/xsbug) を GTK ランタイム環境付きで包装する。
+    wrapGAppsHook3
     which
     # tools.mk が `SHELL = dash` を指定するため、ビルド時 PATH に dash が要る。
     dash
     pkg-config
   ];
 
-  buildInputs = [ glib ];
+  buildInputs = [
+    glib
+    gtk3
+    freetype
+  ];
+
+  # GUI ツールは preFixup で makeWrapper + gappsWrapperArgs で手動包装するため、
+  # wrapGAppsHook3 の自動包装 (CLI まで巻き込む) は無効化する。
+  dontWrapGApps = true;
 
   # Moddable は ESP-IDF のバージョンを `git describe` で取得する (公式は git clone 前提)。
   # nix 提供の ESP-IDF では tag が解決できず `git describe --always` が commit hash を
@@ -129,13 +155,32 @@ stdenv.mkDerivation {
     export BUILD_DIR="$MODDABLE/build"
     cd build/makefiles/lin
 
-    # GUI (xsbug / mcsim) を除いた sub-makefile のみをビルドする。
-    # 上流 release ターゲットの先頭 5 行と同じ。末尾 2 行 (GUI) は実行しない。
+    # 上流 release ターゲットと同じ手順。まず CLI sub-makefile を直接叩き、
+    # 続けて GUI (xsbug / mcsim) を mcconfig -p x-lin でビルドする。
     make GOAL=release -f "$MODDABLE/xs/makefiles/lin/xsc.mk"
     make GOAL=release -f "$MODDABLE/xs/makefiles/lin/xsid.mk"
     make GOAL=release -f "$MODDABLE/xs/makefiles/lin/xsl.mk"
     make GOAL=release -f serial2xsbug.mk
     make GOAL=release -f tools.mk
+
+    # 続く GUI ビルドでは mcconfig (bash ラッパ) を実行するが、ビルド成果物の shebang が
+    # `#!/usr/bin/env ...` を指しており nix のビルドサンドボックスには /usr/bin/env が
+    # 存在しないため "bad interpreter" で落ちる。nix の bash 等へ書き換える。
+    patchShebangs "$MODDABLE/build/bin/lin/release"
+
+    # GUI ビルドで mcconfig が生成する makefile は xsc / xsl / mcrez 等の CLI ツールを
+    # PATH 上に探す。ビルド済みツールのディレクトリを前置する。
+    export PATH="$MODDABLE/build/bin/lin/release:$PATH"
+
+    # nix stdenv は cross-compile 用に STRINGS=strings 等のツール名を環境変数へ
+    # 自動 export する。Moddable の GUI makefile は $(STRINGS) を「未定義=空」前提で
+    # 書いているため、値が入っていると `strings` を make のターゲットと誤認し
+    # "No rule to make target 'strings'" で落ちる。GUI ビルド中は unset する。
+    unset STRINGS
+
+    # GUI ツール (GTK)。pkg-config は buildInputs の gtk3/freetype/glib を解決する。
+    "$MODDABLE/build/bin/lin/release/mcconfig" -m -p x-lin "$MODDABLE/tools/xsbug/manifest.json"
+    "$MODDABLE/build/bin/lin/release/mcconfig" -m -p x-lin "$MODDABLE/tools/mcsim/manifest.json"
 
     runHook postBuild
   '';
@@ -162,8 +207,23 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  # GUI ツール (mcsim / xsbug) を MODDABLE + GTK ランタイム環境付きで包装する。
+  # gappsWrapperArgs は wrapGAppsHook3 が preFixup までに用意する。
+  preFixup = ''
+    binDir="$out/share/moddable/build/bin/lin/release"
+    for t in ${lib.concatStringsSep " " guiTools}; do
+      [ -e "$binDir/$t" ] || continue
+      makeWrapper "$binDir/$t" "$out/bin/$t" \
+        --set MODDABLE "$out/share/moddable" \
+        --prefix PATH : "$binDir" \
+        --prefix PATH : "${lib.makeBinPath runtimeInputs}" \
+        --prefix PKG_CONFIG_PATH : "${pkgConfigPath}" \
+        "''${gappsWrapperArgs[@]}"
+    done
+  '';
+
   meta = {
-    description = "Moddable SDK command-line tools (mcconfig/mcrun/mcpack), Linux, GUI excluded";
+    description = "Moddable SDK tools (mcconfig/mcrun/mcpack + mcsim/xsbug GUI), Linux";
     homepage = "https://github.com/Moddable-OpenSource/moddable";
     license = lib.licenses.gpl3Plus;
     platforms = [
