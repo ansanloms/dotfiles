@@ -28,8 +28,18 @@
 
           # nixpkgs 未収録の sonarqube-cli (sonar コマンド) を callPackage で注入する。
           (final: prev: { sonarqube-cli = final.callPackage ./sonarqube-cli.nix { }; })
+
+          # nixpkgs 未収録の Moddable SDK CLI ツール (mcconfig 等) を callPackage で注入する。
+          (final: prev: { moddable-sdk = final.callPackage ./moddable-sdk.nix { }; })
         ];
-        config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "claude" "claude-code" "google-chrome" "devin-cli" ];
+        config.allowUnfreePredicate =
+          pkg:
+          builtins.elem (nixpkgs.lib.getName pkg) [
+            "claude"
+            "claude-code"
+            "google-chrome"
+            "devin-cli"
+          ];
       };
     in
     {

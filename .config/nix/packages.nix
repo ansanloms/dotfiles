@@ -18,6 +18,7 @@ pkgs: with pkgs; [
   google-chrome
   jq
   just
+  moddable-sdk
   neovim
   nixfmt
   nodejs
