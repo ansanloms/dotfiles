@@ -65,3 +65,17 @@ if require("zellij").in_session() then
   vim.keymap.set("x", "<Leader>ap", function() ai_agent.send_selection(false) end,
     { silent = true, desc = "ai-agent: paste selection" })
 end
+
+-- clip-image (キャプチャ画像のパス挿入)。clip-image があるホストでのみ定義。
+do
+  local clip_image = require("ansanloms.clip-image")
+  if clip_image.available() then
+    -- ノーマル: カーソル位置にパスを挿入。
+    vim.keymap.set("n", "<Leader>ip", clip_image.put,
+      { silent = true, desc = "clip-image: put image path" })
+    -- インサート: expr で返したパスをその場に挿入 (insert mode で Leader は
+    -- 危険なので Ctrl 系にする)。
+    vim.keymap.set("i", "<C-g>p", function() return clip_image.path() or "" end,
+      { expr = true, silent = true, desc = "clip-image: insert image path" })
+  end
+end
