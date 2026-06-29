@@ -1,0 +1,13 @@
+[Unit]
+Description=Notify
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/notify
+Restart=always
+RestartSec=3
+Environment=NOTIFY_SOCK=/tmp/notify.sock
+
+[Install]
+WantedBy=default.target

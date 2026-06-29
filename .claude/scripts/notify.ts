@@ -1,5 +1,5 @@
-import type { NotifyRequest } from "@ansanloms/wsl-notify/notifier.ts";
-import { SOCK_PATH } from "@ansanloms/wsl-notify/socket.ts";
+import type { NotifyRequest } from "./notify-wire.ts";
+import { SOCK_PATH } from "./notify-wire.ts";
 
 import type { HookInput } from "./types.ts";
 import { getInput } from "./utils/common.ts";
@@ -71,7 +71,7 @@ const notifyWindows = async (input: HookInput, notification: Notification) => {
     await conn.write(new TextEncoder().encode(JSON.stringify(req)));
     await conn.read(new Uint8Array(BUFFER_SIZE));
   } catch (error) {
-    console.error("wsl-notify error:", error);
+    console.error("notify error:", error);
     throw error;
   } finally {
     conn.close();

@@ -83,12 +83,22 @@ apm install <org>/<repo>/<skill>#<commit>
 - `clip-image` - Windows ホストのクリップボード画像（Win+Shift+S 等）を WSL の PNG に保存し絶対パスを stdout へ出力する（WSL 専用）。`powershell.exe` で画像を取得し native NTFS の一時領域へ書き出してから `~/.cache/clip-image/` へコピーする。保存と同時に `~/.cache/clip-image/latest.png` を最新キャプチャへ張り替える（自動実行時の固定参照先）。nvim では `:r !clip-image`、claude code ではシェルから実行してパスを渡す。`--copy-path`（`-c`）で保存先パスを OSC 52 でクリップボードへ載せ、入力欄に Ctrl+V でパスを貼れるようにする（OSC 52 は `/dev/tty` へ直接書き stdout を汚さない）
 - `clip-image-watch` - 上記を自動化する常駐サービス本体（「クリップボード画像の自動取り込み」節を参照）。
 - `clip-image-clip` - devcontainer 内で動くクライアント。ホストの `clip-image-watch` が配信する PNG を unix socket 経由で受け取り、コンテナのクリップボードへ載せる（同節を参照）。
+- `notify` - WSL から Windows のトースト通知を出す常駐サーバ本体（「WSL から Windows への通知」節を参照）。
 
 `scripts/` のソースは「薄いエントリポイント（`scripts/*.ts`）＋ 純粋ロジック / 依存注入した `run()`（`scripts/lib/*.ts`）」に分離している。副作用（subprocess / fs / tty / 対話プロンプト等）を注入することでテスト可能にし、`scripts/lib/*.test.ts` でユニットテストする（`deno task test` / `deno task coverage`）。`scripts/lib/` はサブディレクトリのため `deno task build` の bundle 対象から自然に外れる。
 
+## WSL から Windows への通知（systemd サービス）
+
+WSL 内のアプリ（Claude Code のフック等）から Windows のトースト通知を出す常駐サーバ。UNIX socket を listen し、受信した JSON（`NotifyRequest`）を PowerShell 経由で Windows の Toast Notification API へ渡す（WSL 専用）。元は別リポジトリ `ansanloms/wsl-notify` だったが、外部公開する利点が薄いため dotfiles へ取り込んだ。
+
+- `notify`（`scripts/notify.ts` + `scripts/lib/notify-socket.ts` / `notify-notifier.ts`）- サーバ本体。`notify-socket.ts` が UNIX socket を listen し、`notify-notifier.ts` が PowerShell を起動して Toast を表示する。socket パスはエントリ（`scripts/notify.ts`）で `NOTIFY_SOCK`（既定 `/tmp/notify.sock`）から解決する（lib は ambient な env 読みを持たせない）。
+- `.config/systemd/user/notify.service` - 上記を `Restart=always` で常駐させる systemd ユーザサービス。`NOTIFY_SOCK=/tmp/notify.sock` を渡す。
+- クライアントは `.claude/scripts/notify.ts`（Claude Code のフック）。socket パスと `NotifyRequest` 型だけを `.claude/scripts/notify-wire.ts` に複製して持つ。`.claude/scripts` は `~/.claude` へシンボリックリンクされた別 deno プロジェクトのため、サーバ側 `scripts/lib` を相対 import できない。コードは共有せず、UNIX socket 上の JSON というワイヤ契約だけを両端で一致させる。
+- 有効化: `deno task build` 後に `systemctl --user enable --now notify`。
+
 ## クリップボード画像の自動取り込み（WSL systemd サービス）
 
-Windows のクリップボードに画像が入ったら自動で `clip-image` を実行する常駐サービス。管理を WSL 側に寄せ、`wsl-notify.service` と同じ systemd ユーザサービスとして動かす（WSL 専用）。
+Windows のクリップボードに画像が入ったら自動で `clip-image` を実行する常駐サービス。管理を WSL 側に寄せ、`notify.service` と同じ systemd ユーザサービスとして動かす（WSL 専用）。
 
 Windows のクリップボード変更イベント（`WM_CLIPBOARDUPDATE`）は Linux からは購読できないため、イベント検知だけは Windows 側の powershell に任せ、それを WSL 側のサービスが監督する構成。
 
@@ -100,7 +110,7 @@ Windows のクリップボード変更イベント（`WM_CLIPBOARDUPDATE`）は 
 
 ### devcontainer 内のクリップボードへ届ける（socket ブリッジ）
 
-devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボードも持たないため、ホストの取り込みをそのままでは使えない。`wsl-notify` と同じく unix socket で橋渡しする。inotify はコンテナの bind-mount 越しに発火しないため、ファイル監視ではなく socket ストリームを使う。
+devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボードも持たないため、ホストの取り込みをそのままでは使えない。`notify` と同じく unix socket で橋渡しする。inotify はコンテナの bind-mount 越しに発火しないため、ファイル監視ではなく socket ストリームを使う。
 
 - `clip-image-watch`（ホスト）は capture のたびに、保存した PNG を unix socket（`CLIP_IMAGE_SOCK`、既定 `/tmp/clip-image.sock`）の接続クライアントへ配信する。フレームは 4 byte big-endian 長 + PNG 本体（`scripts/lib/clip-image-frame.ts`）。
 - `clip-image-clip`（`scripts/clip-image-clip.ts`、devcontainer 内で常駐）は socket に接続し、受信した PNG をコンテナのクリップボードへ `image/png` で載せる（`wl-copy` + `xclip`）。切断したら再接続する。これで devcontainer 内の Claude Code / Chrome 等で `Ctrl+V` 貼り付けできる。
