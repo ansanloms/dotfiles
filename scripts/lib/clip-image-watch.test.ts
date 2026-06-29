@@ -24,9 +24,13 @@ Deno.test("LISTENER_PS は EVENT_LINE を出力し here-string を閉じる", ()
 function fakeDeps(lineList: string[], overrides: Partial<WatchDeps> = {}): {
   deps: WatchDeps;
   clips: number;
+  loaded: string[];
+  logs: string[];
   errors: string[];
 } {
   let clips = 0;
+  const loaded: string[] = [];
+  const logs: string[] = [];
   const errors: string[] = [];
 
   async function* lines(): AsyncIterable<string> {
@@ -39,8 +43,13 @@ function fakeDeps(lineList: string[], overrides: Partial<WatchDeps> = {}): {
     lines,
     runClip: () => {
       clips++;
+      return Promise.resolve("/cache/clip-image/clip.png");
+    },
+    loadClipboard: (p) => {
+      loaded.push(p);
       return Promise.resolve();
     },
+    log: (m) => logs.push(m),
     errorLine: (m) => errors.push(m),
     ...overrides,
   };
@@ -50,9 +59,8 @@ function fakeDeps(lineList: string[], overrides: Partial<WatchDeps> = {}): {
     get clips() {
       return clips;
     },
-    set clips(v) {
-      clips = v;
-    },
+    loaded,
+    logs,
     errors,
   };
 }
@@ -62,6 +70,15 @@ Deno.test("run: EVENT_LINE のたびに clip-image を起動し他の行は無�
   const code = await run(f.deps);
   assertEquals(code, 1); // 行ストリーム枯渇で再起動を促す
   assertEquals(f.clips, 2);
+  // 成功のたびに保存先 PNG を Linux クリップボードへ載せる。
+  assertEquals(f.loaded, [
+    "/cache/clip-image/clip.png",
+    "/cache/clip-image/clip.png",
+  ]);
+  // 成功のたびに captured ログを出す。
+  assertEquals(f.logs.length, 2);
+  assertStringIncludes(f.logs[0], "captured");
+  assertStringIncludes(f.logs[0], "/cache/clip-image/clip.png");
   assertEquals(f.errors, ["clip-image-watch: listener exited"]);
 });
 
@@ -73,7 +90,7 @@ Deno.test("run: clip-image の失敗で監視を止めない", async () => {
       if (n === 1) {
         return Promise.reject(new Error("boom"));
       }
-      return Promise.resolve();
+      return Promise.resolve("/cache/clip-image/clip.png");
     },
   });
   const code = await run(f.deps);
@@ -82,4 +99,6 @@ Deno.test("run: clip-image の失敗で監視を止めない", async () => {
   assertEquals(f.errors.length, 2);
   assertStringIncludes(f.errors[0], "clip-image failed");
   assertStringIncludes(f.errors[0], "boom");
+  // 2 回目は成功して captured ログ 1 件。
+  assertEquals(f.logs.length, 1);
 });

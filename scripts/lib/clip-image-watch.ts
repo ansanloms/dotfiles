@@ -37,7 +37,12 @@ $w.add_Updated({
 
 export interface WatchDeps {
   lines(): AsyncIterable<string>;
-  runClip(): Promise<void>;
+  // clip-image を起動し、保存先パス (clip-image の stdout) を返す。
+  runClip(): Promise<string>;
+  // 保存した PNG を Linux (WSLg) のクリップボードへ image/png で載せる。
+  // GUI アプリ (Chrome 等) で Ctrl+V 貼り付けできるようにするため。
+  loadClipboard(pngPath: string): Promise<void>;
+  log(msg: string): void;
   errorLine(msg: string): void;
 }
 
@@ -50,7 +55,17 @@ export async function run(deps: WatchDeps): Promise<number> {
       continue;
     }
     try {
-      await deps.runClip();
+      const path = await deps.runClip();
+      if (path) {
+        // Linux クリップボードへの反映が失敗してもファイル保存は成功扱いにする。
+        try {
+          await deps.loadClipboard(path);
+        } catch (e) {
+          deps.errorLine(`clip-image-watch: clipboard load failed: ${e}`);
+        }
+      }
+      // 成功時もログを出し、journalctl で動作を確認できるようにする。
+      deps.log(`clip-image-watch: captured ${path || "(no output)"}`);
     } catch (e) {
       // 1 回の失敗で監視を止めない。次のイベントを待ち続ける。
       deps.errorLine(`clip-image-watch: clip-image failed: ${e}`);

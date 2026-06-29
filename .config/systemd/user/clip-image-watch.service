@@ -9,6 +9,10 @@ Type=simple
 # (deno を解決できている) に WindowsPowerShell ディレクトリを追記する。
 # $$ は systemd でのリテラル $ (展開は bash 側に任せる)。
 ExecStart=/bin/bash -c 'PATH="$$PATH:/mnt/c/Windows/System32:/mnt/c/Windows/System32/WindowsPowerShell/v1.0"; exec %h/.local/bin/clip-image-watch'
+# wl-copy / xclip が WSLg のコンポジタへ接続するために必要。
+# XDG_RUNTIME_DIR は systemd ユーザインスタンスが既に設定する。
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=DISPLAY=:0
 Restart=always
 RestartSec=3
 
