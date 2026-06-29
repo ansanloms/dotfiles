@@ -45,20 +45,21 @@
     <key name="srchallokuri" value="0" />
     <key name="delcvposcncl" value="1" />
     <key name="delokuricncl" value="0" />
-    <key name="backincenter" value="1" />
+    <key name="backincenter" value="0" />
     <key name="addcandktkn" value="0" />
     <key name="entogglekana" value="1" />
     <key name="setbydirect" value="0" />
     <key name="compmultinum" value="8" />
     <key name="stacompmulti" value="1" />
-    <key name="dynamiccomp" value="1" />
-    <key name="dyncompmulti" value="1" />
+    <key name="dynamiccomp" value="0" />
+    <key name="dyncompmulti" value="0" />
     <key name="compuserdic" value="1" />
-    <key name="compincback" value="1" />
+    <key name="compincback" value="0" />
+    <key name="compwithall" value="0" />
   </section>
   <section name="font">
     <key name="name" value="Yu Gothic UI" />
-    <key name="size" value="12" />
+    <key name="size" value="8" />
     <key name="weight" value="400" />
     <key name="italic" value="0" />
   </section>
