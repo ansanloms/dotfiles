@@ -31,6 +31,7 @@
     "@std/fmt": "jsr:@std/fmt@1.0.10",
     "@std/fs": "jsr:@std/fs@1.0.24",
     "@std/path": "jsr:@std/path@1.1.5",
+    "@std/streams": "jsr:@std/streams@1.0.12",
     "ignore": "npm:ignore@7.0.5"
   },
   "tasks": {

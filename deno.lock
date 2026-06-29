@@ -9,6 +9,7 @@
     "jsr:@gunshi/gunshi@0.35.1": "0.35.1",
     "jsr:@std/assert@1.0.14": "1.0.14",
     "jsr:@std/assert@^1.0.19": "1.0.19",
+    "jsr:@std/bytes@^1.0.6": "1.0.6",
     "jsr:@std/cli@1.0.30": "1.0.30",
     "jsr:@std/encoding@^1.0.10": "1.0.10",
     "jsr:@std/fmt@1.0.10": "1.0.10",
@@ -19,6 +20,7 @@
     "jsr:@std/io@~0.225.3": "0.225.3",
     "jsr:@std/path@1.1.5": "1.1.5",
     "jsr:@std/path@^1.1.5": "1.1.5",
+    "jsr:@std/streams@1.0.12": "1.0.12",
     "jsr:@std/text@^1.0.19": "1.0.19",
     "jsr:@std/yaml@1.1.1": "1.1.1",
     "npm:@cfworker/json-schema@4.1.1": "4.1.1",
@@ -78,6 +80,9 @@
     "@std/assert@1.0.19": {
       "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e"
     },
+    "@std/bytes@1.0.6": {
+      "integrity": "f6ac6adbd8ccd99314045f5703e23af0a68d7f7e58364b47d2c7f408aeb5820a"
+    },
     "@std/cli@1.0.30": {
       "integrity": "769446536522d0417d7127ebcabcafac1ab0ce6766d0eb3fca1d36326fe98d13"
     },
@@ -104,6 +109,12 @@
       "integrity": "ccea00982ea28c36becaf6e62f855406c76a8c32d462f66f415bbb7d83a271bc",
       "dependencies": [
         "jsr:@std/internal@^1.0.14"
+      ]
+    },
+    "@std/streams@1.0.12": {
+      "integrity": "ae925fa1dc459b1abf5cbaa28cc5c7b0485853af3b2a384b0dc22d86e59dfbf4",
+      "dependencies": [
+        "jsr:@std/bytes"
       ]
     },
     "@std/text@1.0.19": {
@@ -206,6 +217,7 @@
       "jsr:@std/fmt@1.0.10",
       "jsr:@std/fs@1.0.24",
       "jsr:@std/path@1.1.5",
+      "jsr:@std/streams@1.0.12",
       "npm:ignore@7.0.5"
     ]
   }

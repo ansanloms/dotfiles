@@ -1,0 +1,12 @@
+[Unit]
+Description=clip-image clipboard watcher
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/clip-image-watch
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target

@@ -84,14 +84,16 @@ apm install <org>/<repo>/<skill>#<commit>
 
 `scripts/` のソースは「薄いエントリポイント（`scripts/*.ts`）＋ 純粋ロジック / 依存注入した `run()`（`scripts/lib/*.ts`）」に分離している。副作用（subprocess / fs / tty / 対話プロンプト等）を注入することでテスト可能にし、`scripts/lib/*.test.ts` でユニットテストする（`deno task test` / `deno task coverage`）。`scripts/lib/` はサブディレクトリのため `deno task build` の bundle 対象から自然に外れる。
 
-## クリップボード画像の自動取り込み（Windows 常駐リスナ）
+## クリップボード画像の自動取り込み（WSL systemd サービス）
 
-Windows のクリップボードに画像が入ったら自動で `clip-image` を実行する常駐リスナ（Windows 専用）。
+Windows のクリップボードに画像が入ったら自動で `clip-image` を実行する常駐サービス。管理を WSL 側に寄せ、`wsl-notify.service` と同じ systemd ユーザサービスとして動かす（WSL 専用）。
 
-- `AppData/Local/clip-image-watch.ps1` - `AddClipboardFormatListener`（`WM_CLIPBOARDUPDATE`）でクリップボード更新をイベント購読し、画像のときだけ `wsl.exe bash -lc '~/.local/bin/clip-image'` を起動する。ポーリングしない。`clip-image`（`--copy-path` なし）は Windows クリップボードを書き換えないためループしない。多重起動は名前付き Mutex で防ぐ。
-- `AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/clip-image-watch.vbs` - ログオン時にコンソールを出さず（hidden）リスナを起動する Startup ランチャ。`%LOCALAPPDATA%\clip-image-watch.ps1` を `powershell -WindowStyle Hidden` で起動する。
+Windows のクリップボード変更イベント（`WM_CLIPBOARDUPDATE`）は Linux からは購読できないため、イベント検知だけは Windows 側の powershell に任せ、それを WSL 側のサービスが監督する構成。
+
+- `clip-image-watch`（`scripts/clip-image-watch.ts`）- `powershell.exe` を 1 個常駐起動し、`AddClipboardFormatListener` でクリップボード更新をイベント購読する（ポーリングしない）。リスナは画像コピーのたびに 1 行を stdout へ吐き、WSL 側はその行を読んで `clip-image` を起動する。リスナ（powershell）が死んだら非 0 で終了し systemd に再起動させる。`clip-image`（`--copy-path` なし）は Windows クリップボードを書き換えないためループしない。
+- `.config/systemd/user/clip-image-watch.service` - 上記を `Restart=always` で常駐させる systemd ユーザサービス。
 - 取り込んだ画像は `~/.cache/clip-image/latest.png` で参照する（nvim / claude code から固定パスで読む）。
-- 反映には Windows 側で `deno task install`（symlink 作成）後、再ログオンするか `.vbs` を一度手動実行する。
+- 有効化: `deno task build` 後に `systemctl --user enable --now clip-image-watch`。ターミナルを閉じても常駐させるなら `loginctl enable-linger $USER`（systemd ユーザインスタンスがログインセッションに依存しないようにする）。
 
 ## 自前 nix パッケージの更新
 

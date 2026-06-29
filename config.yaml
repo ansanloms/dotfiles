@@ -144,14 +144,6 @@ link:
     - src: ./AppData/Local/mpd/mpd.conf
       targets:
         - windows
-  ~/AppData/Local/clip-image-watch.ps1:
-    - src: ./AppData/Local/clip-image-watch.ps1
-      targets:
-        - windows
-  "~/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/clip-image-watch.vbs":
-    - src: "./AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/clip-image-watch.vbs"
-      targets:
-        - windows
   ~/Documents/PowerShell/profile.ps1:
     - src: ./Documents/PowerShell/profile.ps1
       targets:
@@ -199,7 +191,15 @@ link:
     - src: ./.local/bin/clip-image
       targets:
         - linux
+  ~/.local/bin/clip-image-watch:
+    - src: ./.local/bin/clip-image-watch
+      targets:
+        - linux
   ~/.config/systemd/user/wsl-notify.service:
     - src: ./.config/systemd/user/wsl-notify.service
+      targets:
+        - linux
+  ~/.config/systemd/user/clip-image-watch.service:
+    - src: ./.config/systemd/user/clip-image-watch.service
       targets:
         - linux
