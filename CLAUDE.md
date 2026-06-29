@@ -80,7 +80,18 @@ apm install <org>/<repo>/<skill>#<commit>
 導入済みコマンド:
 
 - `git-worktree-select` / `git-worktree-include` - worktree の選択・ローカル設定持ち込み
-- `clip-image` - Windows ホストのクリップボード画像（Win+Shift+S 等）を WSL の PNG に保存し絶対パスを stdout へ出力する（WSL 専用）。`powershell.exe` で画像を取得し native NTFS の一時領域へ書き出してから `~/.cache/clip-image/` へコピーする。nvim では `:r !clip-image`、claude code ではシェルから実行してパスを渡す。`--copy-path`（`-c`）で保存先パスを OSC 52 でクリップボードへ載せ、入力欄に Ctrl+V でパスを貼れるようにする（OSC 52 は `/dev/tty` へ直接書き stdout を汚さない）
+- `clip-image` - Windows ホストのクリップボード画像（Win+Shift+S 等）を WSL の PNG に保存し絶対パスを stdout へ出力する（WSL 専用）。`powershell.exe` で画像を取得し native NTFS の一時領域へ書き出してから `~/.cache/clip-image/` へコピーする。保存と同時に `~/.cache/clip-image/latest.png` を最新キャプチャへ張り替える（自動実行時の固定参照先）。nvim では `:r !clip-image`、claude code ではシェルから実行してパスを渡す。`--copy-path`（`-c`）で保存先パスを OSC 52 でクリップボードへ載せ、入力欄に Ctrl+V でパスを貼れるようにする（OSC 52 は `/dev/tty` へ直接書き stdout を汚さない）
+
+`scripts/` のソースは「薄いエントリポイント（`scripts/*.ts`）＋ 純粋ロジック / 依存注入した `run()`（`scripts/lib/*.ts`）」に分離している。副作用（subprocess / fs / tty / 対話プロンプト等）を注入することでテスト可能にし、`scripts/lib/*.test.ts` でユニットテストする（`deno task test` / `deno task coverage`）。`scripts/lib/` はサブディレクトリのため `deno task build` の bundle 対象から自然に外れる。
+
+## クリップボード画像の自動取り込み（Windows 常駐リスナ）
+
+Windows のクリップボードに画像が入ったら自動で `clip-image` を実行する常駐リスナ（Windows 専用）。
+
+- `AppData/Local/clip-image-watch.ps1` - `AddClipboardFormatListener`（`WM_CLIPBOARDUPDATE`）でクリップボード更新をイベント購読し、画像のときだけ `wsl.exe bash -lc '~/.local/bin/clip-image'` を起動する。ポーリングしない。`clip-image`（`--copy-path` なし）は Windows クリップボードを書き換えないためループしない。多重起動は名前付き Mutex で防ぐ。
+- `AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/clip-image-watch.vbs` - ログオン時にコンソールを出さず（hidden）リスナを起動する Startup ランチャ。`%LOCALAPPDATA%\clip-image-watch.ps1` を `powershell -WindowStyle Hidden` で起動する。
+- 取り込んだ画像は `~/.cache/clip-image/latest.png` で参照する（nvim / claude code から固定パスで読む）。
+- 反映には Windows 側で `deno task install`（symlink 作成）後、再ログオンするか `.vbs` を一度手動実行する。
 
 ## 自前 nix パッケージの更新
 
