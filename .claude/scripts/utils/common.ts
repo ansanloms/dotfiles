@@ -144,7 +144,14 @@ export const buildInlineProgressBar = (
   scheme: Partial<ProgressBarColorScheme> = {},
 ): string => {
   const filled = Math.floor(pct * width / 100);
-  const clipped = label.slice(0, width);
+  // ラベルが width を超える場合は末尾を "..." で省略する。
+  // width が "..." 自体に満たないほど狭いときは省略記号を付けず素朴に切り詰める。
+  const ellipsis = "...";
+  const clipped = label.length > width
+    ? width > ellipsis.length
+      ? label.slice(0, width - ellipsis.length) + ellipsis
+      : label.slice(0, Math.max(0, width))
+    : label;
   const splitAt = Math.min(filled, clipped.length);
 
   const labelFilled = clipped.slice(0, splitAt);

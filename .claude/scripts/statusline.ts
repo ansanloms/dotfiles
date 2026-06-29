@@ -9,6 +9,20 @@ import {
 import * as git from "./utils/git.ts";
 import type { StatusLineInput, StatusLineRateLimitWindow } from "./types.ts";
 
+/**
+ * プログレスバーの横幅を端末幅に合わせて算出する。
+ *
+ * Claude Code はスクリプトの stdout を端末に直結せずキャプチャするため、
+ * `tput cols` や `Deno.consoleSize()` では端末幅を取得できない。
+ * 代わりに Claude Code が実行前に設定する `COLUMNS` 環境変数を読む
+ * (Claude Code v2.1.153 以降)。末尾の折り返しを避けるため 4 桁マージンを取る。
+ * `COLUMNS` が無効・未設定の環境では従来の固定幅 60 にフォールバックする。
+ */
+const getBarWidth = (): number => {
+  const cols = Number(Deno.env.get("COLUMNS"));
+  return Number.isFinite(cols) && cols > 0 ? cols - 4 : 60;
+};
+
 const getDir = async (input: StatusLineInput) => {
   return (await git.managed(input.workspace.current_dir))
     ? (path.relative(
@@ -42,7 +56,7 @@ const buildRateLimitBar = (
   return buildInlineProgressBar(
     pct,
     formatBarLabel(`Limit ${label}`, pct, `~${resetsAt}`),
-    60,
+    getBarWidth(),
     scheme,
   );
 };
@@ -73,7 +87,7 @@ try {
     buildInlineProgressBar(
       pct,
       formatBarLabel("Token", pct, `${formatCompact(tokens)} tokens`),
-      60,
+      getBarWidth(),
     ),
   );
   for (

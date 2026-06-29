@@ -115,10 +115,17 @@ Deno.test("buildInlineProgressBar: ラベルが先頭に埋め込まれ残りは
   );
 });
 
-Deno.test("buildInlineProgressBar: ラベルが width を超える場合は切り詰める", () => {
+Deno.test("buildInlineProgressBar: ラベルが width を超える場合は末尾を ... で省略する", () => {
   assertEquals(
     stripAnsiCode(buildInlineProgressBar(0, "0123456789ABC", 10)),
-    "0123456789",
+    "0123456...",
+  );
+});
+
+Deno.test("buildInlineProgressBar: width が ... に満たないときは省略記号なしで切り詰める", () => {
+  assertEquals(
+    stripAnsiCode(buildInlineProgressBar(0, "0123456789", 3)),
+    "012",
   );
 });
 
