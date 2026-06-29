@@ -65,6 +65,12 @@ function M.send_buffer(submit)
   M.send(lines_text(1, vim.api.nvim_buf_line_count(0)), submit)
 end
 
+-- カーソルがいる現在行のみを送る。ノーマルモードのキーマップから呼ぶ。
+function M.send_line(submit)
+  local l = vim.fn.line(".")
+  M.send(lines_text(l, l), submit)
+end
+
 -- 行範囲 [l1, l2] を送る。順不同で渡してよい。
 function M.send_range(submit, l1, l2)
   if l1 > l2 then
