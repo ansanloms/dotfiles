@@ -10,7 +10,7 @@ import {
 Deno.test("isBuildableSource は build.ts とテストと非 ts を除く", () => {
   assertEquals(isBuildableSource("clip-image.ts"), true);
   assertEquals(isBuildableSource("build.ts"), false);
-  assertEquals(isBuildableSource("clip-image_test.ts"), false);
+  assertEquals(isBuildableSource("clip-image.test.ts"), false);
   assertEquals(isBuildableSource("readme.md"), false);
 });
 
@@ -62,7 +62,7 @@ Deno.test("run: 対象だけ bundle し chmod・log する", async () => {
   const f = fakeDeps([
     { name: "clip-image.ts", isFile: true },
     { name: "build.ts", isFile: true },
-    { name: "clip-image_test.ts", isFile: true },
+    { name: "clip-image.test.ts", isFile: true },
     { name: "lib", isFile: false },
     { name: "readme.md", isFile: true },
   ]);

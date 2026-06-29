@@ -1,14 +1,14 @@
 // build の純粋ロジックとオーケストレーション。
 // 副作用 (ディレクトリ走査 / deno bundle / chmod / 出力) は BuildDeps として注入する。
 //
-// scripts/ 配下の各エントリ (build.ts 自身と *_test.ts を除く *.ts) を
+// scripts/ 配下の各エントリ (build.ts 自身と *.test.ts を除く *.ts) を
 // deno bundle で単一ファイル化し、.local/bin/ 配下に実行可能ファイルとして配置する。
 // サブディレクトリ (lib/) は readDir のファイル判定で自然に除外される。
 
 /** bundle 対象のソースか判定する。build.ts 自身とテストファイルは除く。 */
 export function isBuildableSource(name: string): boolean {
   return name.endsWith(".ts") && name !== "build.ts" &&
-    !name.endsWith("_test.ts");
+    !name.endsWith(".test.ts");
 }
 
 /** ソースファイル名から出力コマンド名を導く (.ts を除去)。 */
