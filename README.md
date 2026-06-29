@@ -94,6 +94,19 @@ systemctl --user enable --now clip-image-watch
 sudo loginctl enable-linger $USER
 ```
 
+動作確認・トラブルシュート（`<service>` は `wsl-notify` / `clip-image-watch` 等）:
+
+```sh
+# 起動しているか（クラッシュループしていないか）
+systemctl --user status <service>
+
+# ログをライブで追う（例: clip-image-watch なら Win+Shift+S しながら見る）
+journalctl --user -u <service> -f
+
+# 直近のログをまとめて見る
+journalctl --user -u <service> -n 50 --no-pager
+```
+
 ## Uninstall
 
 ```sh
