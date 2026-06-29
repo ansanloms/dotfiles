@@ -13,6 +13,9 @@ ExecStart=/bin/bash -c 'PATH="$$PATH:/mnt/c/Windows/System32:/mnt/c/Windows/Syst
 # XDG_RUNTIME_DIR は systemd ユーザインスタンスが既に設定する。
 Environment=WAYLAND_DISPLAY=wayland-0
 Environment=DISPLAY=:0
+# devcontainer へ配信する unix socket のパス。devcontainer 側もこの値を
+# bind-mount して clip-image-clip に CLIP_IMAGE_SOCK で渡す。
+Environment=CLIP_IMAGE_SOCK=/tmp/clip-image.sock
 Restart=always
 RestartSec=3
 
