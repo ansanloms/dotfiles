@@ -187,6 +187,10 @@ link:
     - src: ./.local/bin/git-worktree-include
       targets:
         - linux
+  ~/.local/bin/clip-image:
+    - src: ./.local/bin/clip-image
+      targets:
+        - linux
   ~/.config/systemd/user/wsl-notify.service:
     - src: ./.config/systemd/user/wsl-notify.service
       targets:

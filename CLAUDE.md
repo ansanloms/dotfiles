@@ -77,6 +77,11 @@ apm install <org>/<repo>/<skill>#<commit>
 
 ソースを編集したら `deno task build` で再生成する。
 
+導入済みコマンド:
+
+- `git-worktree-select` / `git-worktree-include` - worktree の選択・ローカル設定持ち込み
+- `clip-image` - Windows ホストのクリップボード画像（Win+Shift+S 等）を WSL の PNG に保存し絶対パスを stdout へ出力する（WSL 専用）。`powershell.exe` で画像を取得し native NTFS の一時領域へ書き出してから `~/.cache/clip-image/` へコピーする。nvim では `:r !clip-image`、claude code ではシェルから実行してパスを渡す
+
 ## 自前 nix パッケージの更新
 
 `.config/nix/` には nixpkgs 未収録のパッケージを自前 derivation で管理している。
