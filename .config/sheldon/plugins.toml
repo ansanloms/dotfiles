@@ -14,11 +14,23 @@ shell = "zsh"
 
 [plugins]
 
+# Initialize the completion system before plugins that register completions
+# via compdef. `-i` skips the insecure-directory prompt (nix fpath dirs are
+# often group-writable).
+[plugins.compinit]
+inline = 'autoload -Uz compinit && compinit -i'
+
 [plugins.zsh-autosuggestions]
 github = "zsh-users/zsh-autosuggestions"
 
 [plugins.fast-syntax-highlighting]
 github = "zdharma/fast-syntax-highlighting"
+
+# just dynamic completion: reads recipes from the justfile in the current
+# directory at completion time. Loaded last so it runs after compinit and
+# fast-syntax-highlighting.
+[plugins.just]
+inline = 'command -v just > /dev/null 2>&1 && eval "$(just --completions zsh)"'
 
 # For example:
 #
