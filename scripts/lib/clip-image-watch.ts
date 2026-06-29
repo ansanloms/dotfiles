@@ -42,6 +42,9 @@ export interface WatchDeps {
   // 保存した PNG を Linux (WSLg) のクリップボードへ image/png で載せる。
   // GUI アプリ (Chrome 等) で Ctrl+V 貼り付けできるようにするため。
   loadClipboard(pngPath: string): Promise<void>;
+  // 保存した PNG を unix socket の接続クライアントへ配信する。
+  // devcontainer 内のクライアントがこれを受けてコンテナ側クリップボードへ載せる。
+  broadcast(pngPath: string): Promise<void>;
   log(msg: string): void;
   errorLine(msg: string): void;
 }
@@ -57,11 +60,17 @@ export async function run(deps: WatchDeps): Promise<number> {
     try {
       const path = await deps.runClip();
       if (path) {
-        // Linux クリップボードへの反映が失敗してもファイル保存は成功扱いにする。
+        // ホストのクリップボード反映と socket 配信は、いずれが失敗しても
+        // ファイル保存は成功扱いにする (best-effort)。
         try {
           await deps.loadClipboard(path);
         } catch (e) {
           deps.errorLine(`clip-image-watch: clipboard load failed: ${e}`);
+        }
+        try {
+          await deps.broadcast(path);
+        } catch (e) {
+          deps.errorLine(`clip-image-watch: broadcast failed: ${e}`);
         }
       }
       // 成功時もログを出し、journalctl で動作を確認できるようにする。

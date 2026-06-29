@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --quiet --allow-env --allow-run --allow-read
+#!/usr/bin/env -S deno run --quiet --allow-env --allow-run --allow-read --allow-write
 
 // Windows のクリップボードに画像が入ったら自動で clip-image を実行する常駐
 // プロセス。WSL の systemd ユーザサービス (clip-image-watch.service) から起動
@@ -13,6 +13,7 @@
 
 import { TextLineStream } from "@std/streams";
 import { LISTENER_PS, run } from "./lib/clip-image-watch.ts";
+import { frame } from "./lib/clip-image-frame.ts";
 
 // クリップボード変更を監視する powershell リスナを常駐起動する。
 // STA でないと Clipboard API が使えないため -STA を付ける。
@@ -63,6 +64,54 @@ async function loadClipboard(pngPath: string): Promise<void> {
   }
 }
 
+// devcontainer 内クライアントへ PNG を配信する unix socket サーバ。
+// capture のたびに接続中の全クライアントへフレーム (4 byte 長 + PNG) を送る。
+const sockPath = Deno.env.get("CLIP_IMAGE_SOCK") ?? "/tmp/clip-image.sock";
+
+// 前回の stale な socket ファイルが残っていると listen が AddrInUse で失敗する。
+try {
+  Deno.removeSync(sockPath);
+} catch {
+  // 無ければそのまま。
+}
+const server = Deno.listen({ path: sockPath, transport: "unix" });
+
+const clients = new Set<Deno.Conn>();
+// 接続を受け付けてクライアント集合に加える (バックグラウンド)。
+(async () => {
+  for await (const conn of server) {
+    clients.add(conn);
+  }
+})();
+
+// conn へ全バイト書き切る (1 回の write では書き切れないことがある)。
+async function writeAllConn(conn: Deno.Conn, data: Uint8Array): Promise<void> {
+  let n = 0;
+  while (n < data.length) {
+    n += await conn.write(data.subarray(n));
+  }
+}
+
+async function broadcast(pngPath: string): Promise<void> {
+  if (clients.size === 0) {
+    return;
+  }
+  const f = frame(await Deno.readFile(pngPath));
+  for (const conn of clients) {
+    try {
+      await writeAllConn(conn, f);
+    } catch {
+      // 切断されたクライアントは集合から外す。
+      clients.delete(conn);
+      try {
+        conn.close();
+      } catch {
+        // close 失敗は無視。
+      }
+    }
+  }
+}
+
 const code = await run({
   lines: () => lines,
   runClip: async () => {
@@ -73,6 +122,7 @@ const code = await run({
     return new TextDecoder().decode(o.stdout).trim();
   },
   loadClipboard,
+  broadcast,
   log: (msg) => console.log(msg),
   errorLine: (msg) => console.error(msg),
 });

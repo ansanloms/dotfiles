@@ -25,11 +25,13 @@ function fakeDeps(lineList: string[], overrides: Partial<WatchDeps> = {}): {
   deps: WatchDeps;
   clips: number;
   loaded: string[];
+  broadcasted: string[];
   logs: string[];
   errors: string[];
 } {
   let clips = 0;
   const loaded: string[] = [];
+  const broadcasted: string[] = [];
   const logs: string[] = [];
   const errors: string[] = [];
 
@@ -49,6 +51,10 @@ function fakeDeps(lineList: string[], overrides: Partial<WatchDeps> = {}): {
       loaded.push(p);
       return Promise.resolve();
     },
+    broadcast: (p) => {
+      broadcasted.push(p);
+      return Promise.resolve();
+    },
     log: (m) => logs.push(m),
     errorLine: (m) => errors.push(m),
     ...overrides,
@@ -60,6 +66,7 @@ function fakeDeps(lineList: string[], overrides: Partial<WatchDeps> = {}): {
       return clips;
     },
     loaded,
+    broadcasted,
     logs,
     errors,
   };
@@ -70,8 +77,12 @@ Deno.test("run: EVENT_LINE のたびに clip-image を起動し他の行は無�
   const code = await run(f.deps);
   assertEquals(code, 1); // 行ストリーム枯渇で再起動を促す
   assertEquals(f.clips, 2);
-  // 成功のたびに保存先 PNG を Linux クリップボードへ載せる。
+  // 成功のたびに保存先 PNG を Linux クリップボードへ載せ、socket へ配信する。
   assertEquals(f.loaded, [
+    "/cache/clip-image/clip.png",
+    "/cache/clip-image/clip.png",
+  ]);
+  assertEquals(f.broadcasted, [
     "/cache/clip-image/clip.png",
     "/cache/clip-image/clip.png",
   ]);

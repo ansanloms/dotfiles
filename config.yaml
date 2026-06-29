@@ -195,6 +195,10 @@ link:
     - src: ./.local/bin/clip-image-watch
       targets:
         - linux
+  ~/.local/bin/clip-image-clip:
+    - src: ./.local/bin/clip-image-clip
+      targets:
+        - linux
   ~/.config/systemd/user/wsl-notify.service:
     - src: ./.config/systemd/user/wsl-notify.service
       targets:

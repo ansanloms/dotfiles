@@ -81,6 +81,8 @@ apm install <org>/<repo>/<skill>#<commit>
 
 - `git-worktree-select` / `git-worktree-include` - worktree の選択・ローカル設定持ち込み
 - `clip-image` - Windows ホストのクリップボード画像（Win+Shift+S 等）を WSL の PNG に保存し絶対パスを stdout へ出力する（WSL 専用）。`powershell.exe` で画像を取得し native NTFS の一時領域へ書き出してから `~/.cache/clip-image/` へコピーする。保存と同時に `~/.cache/clip-image/latest.png` を最新キャプチャへ張り替える（自動実行時の固定参照先）。nvim では `:r !clip-image`、claude code ではシェルから実行してパスを渡す。`--copy-path`（`-c`）で保存先パスを OSC 52 でクリップボードへ載せ、入力欄に Ctrl+V でパスを貼れるようにする（OSC 52 は `/dev/tty` へ直接書き stdout を汚さない）
+- `clip-image-watch` - 上記を自動化する常駐サービス本体（「クリップボード画像の自動取り込み」節を参照）。
+- `clip-image-clip` - devcontainer 内で動くクライアント。ホストの `clip-image-watch` が配信する PNG を unix socket 経由で受け取り、コンテナのクリップボードへ載せる（同節を参照）。
 
 `scripts/` のソースは「薄いエントリポイント（`scripts/*.ts`）＋ 純粋ロジック / 依存注入した `run()`（`scripts/lib/*.ts`）」に分離している。副作用（subprocess / fs / tty / 対話プロンプト等）を注入することでテスト可能にし、`scripts/lib/*.test.ts` でユニットテストする（`deno task test` / `deno task coverage`）。`scripts/lib/` はサブディレクトリのため `deno task build` の bundle 対象から自然に外れる。
 
@@ -95,6 +97,14 @@ Windows のクリップボード変更イベント（`WM_CLIPBOARDUPDATE`）は 
 - 取り込んだ画像は 2 通りで使える。(1) `~/.cache/clip-image/latest.png` に PNG を保存（nvim / claude code から固定パスで読む）。(2) 保存した PNG を Linux クリップボードへ `image/png` で載せる（Wayland=`wl-copy`、X11=`xclip` の両方）。GUI アプリ（Chrome 等）で `Ctrl+V` 貼り付けできるようにするため。Chrome は通常 XWayland(X11) で動くので X11 側が効く。Wayland 側は WSLg が Windows クリップボードを再同期して上書きするため不安定。
 - 成功時は `journalctl --user -u clip-image-watch` に `captured <path>` を出す。
 - 有効化: `deno task build` 後に `systemctl --user enable --now clip-image-watch`。ターミナルを閉じても常駐させるなら `loginctl enable-linger $USER`（systemd ユーザインスタンスがログインセッションに依存しないようにする）。
+
+### devcontainer 内のクリップボードへ届ける（socket ブリッジ）
+
+devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボードも持たないため、ホストの取り込みをそのままでは使えない。`wsl-notify` と同じく unix socket で橋渡しする。inotify はコンテナの bind-mount 越しに発火しないため、ファイル監視ではなく socket ストリームを使う。
+
+- `clip-image-watch`（ホスト）は capture のたびに、保存した PNG を unix socket（`CLIP_IMAGE_SOCK`、既定 `/tmp/clip-image.sock`）の接続クライアントへ配信する。フレームは 4 byte big-endian 長 + PNG 本体（`scripts/lib/clip-image-frame.ts`）。
+- `clip-image-clip`（`scripts/clip-image-clip.ts`、devcontainer 内で常駐）は socket に接続し、受信した PNG をコンテナのクリップボードへ `image/png` で載せる（`wl-copy` + `xclip`）。切断したら再接続する。これで devcontainer 内の Claude Code / Chrome 等で `Ctrl+V` 貼り付けできる。
+- devcontainer 側（このリポジトリの管轄外、利用側で設定）の前提: socket（`/tmp/clip-image.sock`）を bind-mount、`clip-image-clip` を起動時に常駐（`postStartCommand` 等）、コンテナに `wl-copy` / `xclip` と `DISPLAY` / `WAYLAND_DISPLAY`（コンテナの display server）があること。
 
 ## 自前 nix パッケージの更新
 
