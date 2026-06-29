@@ -7,9 +7,15 @@
 //   - nvim:        :r !clip-image  /  :put =system('clip-image')->trim()
 //   - claude code: シェルから実行してパスを得る (Claude にこの画像を見せる等)
 //
+// オプション:
+//   --copy-path, -c  保存先パス文字列を OSC 52 でシステムクリップボードへ載せる。
+//                    キャプチャ後に `clip-image --copy-path` を実行すると、
+//                    claude code 等の入力欄に Ctrl+V でパスを貼れるようになる。
+//
 // 設計:
 //   - stdout には保存先の WSL 絶対パスのみを出す。進捗・エラーは stderr。
 //     これで `:r !` や `$(clip-image)` に混ぜても余計な文字列が紛れない。
+//   - --copy-path の OSC 52 も stdout を汚さないよう制御端末 (/dev/tty) へ直接書く。
 //   - powershell は native NTFS の一時領域へ書き、コピーは WSL 側で行う。
 //     9P 共有を「Windows -> WSL 直書き」ではなく「WSL -> NTFS 読み」の向きで
 //     使うことで、.NET の Image.Save が \\wsl$ パスで稀に転ける問題を避ける。
@@ -38,6 +44,27 @@ function die(message: string): never {
 
 // 2 桁・3 桁ゼロ詰め。
 const pad = (n: number, width = 2) => String(n).padStart(width, "0");
+
+// パス文字列を OSC 52 でシステムクリップボードへ載せる。stdout を汚さないよう
+// 制御端末 (/dev/tty) へ直接書く。tty が開けなければ stderr へフォールバックする
+// (stderr が端末なら届く)。zellij は OSC 52 を素通しし、Windows 側の端末が
+// クリップボードへ反映する。
+function copyPathToClipboard(text: string): void {
+  const b64 = btoa(String.fromCharCode(...new TextEncoder().encode(text)));
+  const bytes = new TextEncoder().encode(`\x1b]52;c;${b64}\x07`);
+  try {
+    const tty = Deno.openSync("/dev/tty", { write: true });
+    try {
+      tty.writeSync(bytes);
+    } finally {
+      tty.close();
+    }
+  } catch {
+    Deno.stderr.writeSync(bytes);
+  }
+}
+
+const copyPath = Deno.args.includes("--copy-path") || Deno.args.includes("-c");
 
 // クリップボード画像を Windows の一時 PNG に書き出す。
 const ps = await new Deno.Command("powershell.exe", {
@@ -92,6 +119,12 @@ try {
   await Deno.remove(tmpWslPath);
 } catch {
   // 一時ファイルの削除失敗は致命的ではないため握りつぶす。
+}
+
+// --copy-path 指定時はパスをクリップボードへ載せる (stdout には出さない)。
+if (copyPath) {
+  copyPathToClipboard(destPath);
+  console.error("clip-image: パスをクリップボードへコピーした");
 }
 
 // 機械可読な出力は保存先パスのみ。
