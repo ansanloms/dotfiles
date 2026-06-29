@@ -4,7 +4,11 @@ After=default.target
 
 [Service]
 Type=simple
-ExecStart=%h/.local/bin/clip-image-watch
+# systemd ユーザサービスの PATH には WSL interop の Windows ディレクトリが
+# 含まれず powershell.exe を解決できない。bash でラップし、既存 PATH
+# (deno を解決できている) に WindowsPowerShell ディレクトリを追記する。
+# $$ は systemd でのリテラル $ (展開は bash 側に任せる)。
+ExecStart=/bin/bash -c 'PATH="$$PATH:/mnt/c/Windows/System32:/mnt/c/Windows/System32/WindowsPowerShell/v1.0"; exec %h/.local/bin/clip-image-watch'
 Restart=always
 RestartSec=3
 
