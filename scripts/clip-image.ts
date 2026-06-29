@@ -66,6 +66,14 @@ const code = await run({
   mkdirp: (dir) => Deno.mkdir(dir, { recursive: true }),
   copyFile: (src, dest) => Deno.copyFile(src, dest),
   removeFile: (path) => Deno.remove(path),
+  linkLatest: async (linkPath, target) => {
+    try {
+      await Deno.remove(linkPath);
+    } catch {
+      // 既存リンクが無ければそのまま新規作成する。
+    }
+    await Deno.symlink(target, linkPath);
+  },
   writeClipboard,
   stdout: (line) => console.log(line),
   stderr: (line) => console.error(line),

@@ -78,6 +78,7 @@ export interface ClipImageDeps {
   mkdirp(dir: string): Promise<void>;
   copyFile(src: string, dest: string): Promise<void>;
   removeFile(path: string): Promise<void>;
+  linkLatest(linkPath: string, target: string): Promise<void>;
   writeClipboard(bytes: Uint8Array): void;
   stdout(line: string): void;
   stderr(line: string): void;
@@ -120,7 +121,8 @@ export async function run(deps: ClipImageDeps): Promise<number> {
   const destDir = resolveCacheDir(deps.env);
   await deps.mkdirp(destDir);
 
-  const destPath = `${destDir}/${destFileName(formatStamp(deps.now()))}`;
+  const fileName = destFileName(formatStamp(deps.now()));
+  const destPath = `${destDir}/${fileName}`;
 
   await deps.copyFile(tmpWslPath, destPath);
   try {
@@ -128,6 +130,10 @@ export async function run(deps: ClipImageDeps): Promise<number> {
   } catch {
     // 一時ファイルの削除失敗は致命的ではないため握りつぶす。
   }
+
+  // 最新キャプチャを指す安定リンク latest.png を張り替える。
+  // 自動実行時の参照先 (cc / nvim から固定パスで読む) に使う。
+  await deps.linkLatest(`${destDir}/latest.png`, fileName);
 
   if (copyPath) {
     deps.writeClipboard(osc52(destPath));

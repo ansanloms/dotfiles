@@ -57,6 +57,7 @@ function fakeDeps(overrides: Partial<ClipImageDeps> = {}): {
   copied: Array<[string, string]>;
   removed: string[];
   mkdirs: string[];
+  latest: Array<[string, string]>;
 } {
   const out: string[] = [];
   const err: string[] = [];
@@ -64,6 +65,7 @@ function fakeDeps(overrides: Partial<ClipImageDeps> = {}): {
   const copied: Array<[string, string]> = [];
   const removed: string[] = [];
   const mkdirs: string[] = [];
+  const latest: Array<[string, string]> = [];
 
   const ok = (stdout: string): CommandResult => ({
     code: 0,
@@ -90,13 +92,17 @@ function fakeDeps(overrides: Partial<ClipImageDeps> = {}): {
       removed.push(path);
       return Promise.resolve();
     },
+    linkLatest: (linkPath, target) => {
+      latest.push([linkPath, target]);
+      return Promise.resolve();
+    },
     writeClipboard: (bytes) => clipboard.push(bytes),
     stdout: (line) => out.push(line),
     stderr: (line) => err.push(line),
     ...overrides,
   };
 
-  return { deps, out, err, clipboard, copied, removed, mkdirs };
+  return { deps, out, err, clipboard, copied, removed, mkdirs, latest };
 }
 
 Deno.test("run: 画像が無ければ exit 1 とエラー出力", async () => {
@@ -148,6 +154,10 @@ Deno.test("run: 成功時は保存・削除しパスを stdout へ (--copy-path 
   assertEquals(f.mkdirs, ["/home/u/.cache/clip-image"]);
   assertEquals(f.copied, [["/mnt/c/Temp/x.png", expected]]);
   assertEquals(f.removed, ["/mnt/c/Temp/x.png"]);
+  assertEquals(f.latest, [[
+    "/home/u/.cache/clip-image/latest.png",
+    "clip-20260629-090705-003.png",
+  ]]);
   assertEquals(f.clipboard.length, 0);
   assertEquals(f.out, [expected]);
 });
