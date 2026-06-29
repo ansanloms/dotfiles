@@ -23,6 +23,7 @@
   "imports": {
     "dot-mori/": "https://cdn.jsdelivr.net/gh/ansanloms/dot-mori@0.1.6/",
     "@cliffy/prompt": "jsr:@cliffy/prompt@1.2.1",
+    "@std/assert": "jsr:@std/assert@1.0.14",
     "@std/cli": "jsr:@std/cli@1.0.30",
     "@std/fmt": "jsr:@std/fmt@1.0.10",
     "@std/fs": "jsr:@std/fs@1.0.24",
@@ -36,7 +37,9 @@
     },
     "lint": "deno lint && deno fmt --check",
     "fix": "deno lint --fix && deno fmt",
-    "check": "deno check ./scripts/* .config/nix/**/*.ts",
+    "check": "deno check ./scripts/**/*.ts .config/nix/**/*.ts",
+    "test": "deno test scripts/",
+    "coverage": "deno test --coverage=coverage scripts/ && deno coverage coverage",
     "build": "deno run --allow-read=scripts --allow-write=.local/bin --allow-run=deno scripts/build.ts",
     "install": "deno task dot-mori --config ./config.yaml",
     "uninstall": "deno task dot-mori --config ./config.yaml --clean",

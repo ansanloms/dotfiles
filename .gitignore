@@ -29,3 +29,6 @@ apm_modules/
 # ディレクトリ自体は .gitkeep で残し、生成物はコミットしない。
 /.local/bin/*
 !/.local/bin/.gitkeep
+
+# deno task coverage の出力
+/coverage/
