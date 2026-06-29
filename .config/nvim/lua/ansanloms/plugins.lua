@@ -447,41 +447,90 @@ require("lazy").setup({
         vim.fn.mkdir(dictDir, "p")
       end
 
+      -- 辞書ファイルの文字コードから iconv の変換元コードへの対応表。
+      -- skkeleton はロード時に euc-jp を pure-JS でデコードするため遅い。
+      -- ビルド時に UTF-8 へ寄せておき、ロードをネイティブデコード経路に乗せる。
+      -- euc-jis-2004 は TextDecoder が非対応で、UTF-8 化しておかないとロードに失敗する。
+      local iconvFrom = {
+        ["euc-jp"] = "EUC-JP",
+        ["euc-jis-2004"] = "EUC-JISX0213",
+        ["utf-8"] = false,
+      }
+
       for _, dict in ipairs(dicts) do
         local filepath = vim.fn.expand(dictDir .. "/" .. dict.name)
+        local from = iconvFrom[dict.encoding]
 
-        vim.system({
-          "curl",
-          "-L",
-          "-f",
-          "--silent",
-          "--show-error",
-          "-o", filepath,
-          dict.url
-        }, { text = true }, function(result)
-          vim.schedule(function()
-            if result.code == 0 then
-              vim.notify(string.format("[skkeleton] dict download succeeded: %s", dict.url), vim.log.levels.INFO)
-            else
-              vim.notify(string.format("[skkeleton] dict download failed: %s", dict.url), vim.log.levels.ERROR)
-            end
+        if not from then
+          -- 既に UTF-8。直接ダウンロードする。
+          vim.system({
+            "curl", "-L", "-f", "--silent", "--show-error",
+            "-o", filepath, dict.url,
+          }, { text = true }, function(result)
+            vim.schedule(function()
+              if result.code == 0 then
+                vim.notify(string.format("[skkeleton] dict download succeeded: %s", dict.url), vim.log.levels.INFO)
+              else
+                vim.notify(string.format("[skkeleton] dict download failed: %s", dict.url), vim.log.levels.ERROR)
+              end
+            end)
           end)
-        end)
+        else
+          -- ダウンロード後、iconv で UTF-8 へ変換する。
+          local tmp = filepath .. ".raw"
+          vim.system({
+            "curl", "-L", "-f", "--silent", "--show-error",
+            "-o", tmp, dict.url,
+          }, { text = true }, function(dl)
+            vim.schedule(function()
+              if dl.code ~= 0 then
+                vim.notify(string.format("[skkeleton] dict download failed: %s", dict.url), vim.log.levels.ERROR)
+                return
+              end
+              vim.system({
+                "iconv", "-f", from, "-t", "UTF-8", "-o", filepath, tmp,
+              }, { text = true }, function(conv)
+                vim.schedule(function()
+                  vim.fn.delete(tmp)
+                  if conv.code == 0 then
+                    vim.notify(string.format("[skkeleton] dict converted to utf-8: %s", dict.name), vim.log.levels.INFO)
+                  else
+                    vim.notify(string.format("[skkeleton] dict iconv failed: %s", dict.name), vim.log.levels.ERROR)
+                  end
+                end)
+              end)
+            end)
+          end)
+        end
       end
     end,
     config = function()
       vim.fn["skkeleton#config"]({
-        globalDictionaries = vim.fs.find(function()
-          return true
+        globalDictionaries = vim.tbl_map(function(path)
+          -- ビルド時に全辞書を UTF-8 化済み。encoding を明示することで
+          -- skkeleton 側の per-file エンコーディング判定 (encoding.detect) を省く。
+          return { path, "utf-8" }
+        end, vim.fs.find(function(name)
+          -- 変換失敗時に残る .raw を辞書として拾わない。
+          return not name:match("%.raw$")
         end, {
           path = vim.fn.expand(vim.fn.stdpath("data") .. "/skkeleton"),
           type = "file",
           limit = math.huge
-        }),
+        })),
         eggLikeNewline = true,
         keepState = true,
         showCandidatesCount = 2,
         registerConvertResult = true,
+      })
+
+      -- 辞書ロードは初回変換時まで遅延される (skkeleton の LazyCell)。
+      -- 初期化完了直後に裏でロードを発火し、初回入力のレイテンシを起動直後へ移す。
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "skkeleton-initialize-post",
+        callback = function()
+          vim.fn["skkeleton#notify_async"]("initialize", {})
+        end,
       })
 
       vim.keymap.set(
