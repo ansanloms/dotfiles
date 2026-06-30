@@ -23,7 +23,7 @@
 }:
 
 let
-  version = "1.1.0.3122";
+  version = "1.2.0.3278";
 in
 stdenv.mkDerivation {
   pname = "sonarqube-cli";
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://binaries.sonarsource.com/Distribution/sonarqube-cli/${version}/linux/sonarqube-cli-${version}-linux-x86-64.bin";
-    hash = "sha256-J3PHH83RVMC9ZQwM/F+LF6J1zWvXv3HONuS1l2EamGQ=";
+    hash = "sha256-UIdR1ldHKTV7pBWjZxVxMLH7T15ZWdbL0WFw042l+Vc=";
   };
 
   # src は単一の ELF バイナリ。展開処理は不要。
