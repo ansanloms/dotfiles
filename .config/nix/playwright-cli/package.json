@@ -1,8 +1,8 @@
 {
   "name": "playwright-cli-env",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "private": true,
   "dependencies": {
-    "@playwright/cli": "0.1.14"
+    "@playwright/cli": "0.1.15"
   }
 }
