@@ -1,46 +1,52 @@
 lockfile_version: '1'
-generated_at: '2026-07-03T02:41:13.561361+00:00'
+generated_at: '2026-07-03T07:29:27.392581+00:00'
 apm_version: 0.21.0
 dependencies:
 - repo_url: ansanloms/skills
   host: github.com
-  resolved_commit: 011fc3425671e458dd7e084505e1ce4c91b9e048
+  resolved_commit: 8118aba8b586a20361bc0b31f6511a611d9591c3
   virtual_path: find-docs
   is_virtual: true
   package_type: claude_skill
   deployed_files:
   - .agents/skills/find-docs
+  - .agents/skills/find-docs/README.md
   - .agents/skills/find-docs/SKILL.md
   deployed_file_hashes:
+    .agents/skills/find-docs/README.md: sha256:9abac44da1547f17c0c7ccfa87485e589b5d858791f26fd136df48ecb2b8d943
     .agents/skills/find-docs/SKILL.md: sha256:f9a1afea99a9f9a880eef532ffd83ae12229ccba67bd6dc9b73464cf31c75e63
-  content_hash: sha256:94445c9a1a37763fa03e4a92a8a6a52ce3ee1e75fd8986df901e53bfbd31352d
+  content_hash: sha256:999e9b5602208f3f859b5483d0d509640c9cff2f5b3fa703b7b1c21d1f6648fb
 - repo_url: ansanloms/skills
   host: github.com
-  resolved_commit: 011fc3425671e458dd7e084505e1ce4c91b9e048
+  resolved_commit: 8118aba8b586a20361bc0b31f6511a611d9591c3
   virtual_path: nvim-remote
   is_virtual: true
   package_type: claude_skill
   deployed_files:
   - .agents/skills/nvim-remote
+  - .agents/skills/nvim-remote/README.md
   - .agents/skills/nvim-remote/SKILL.md
   deployed_file_hashes:
+    .agents/skills/nvim-remote/README.md: sha256:5a549d967962e2145b303b4301259b4536c35178cad9d9cceb4efa3af474c4a1
     .agents/skills/nvim-remote/SKILL.md: sha256:db2a002b07194827b6061352ef55e21bb5e13b020139bdc0553c7babbe5a73f3
-  content_hash: sha256:2a1674147a92f6b92c94c61ef9158322aa2f6c56ebca62f17373dbbc4018e5f4
+  content_hash: sha256:21ec92040caa3709bb7a4539af968ab7fae52f45fad9378de5cfb9058b0ab808
 - repo_url: ansanloms/skills
   host: github.com
-  resolved_commit: 011fc3425671e458dd7e084505e1ce4c91b9e048
+  resolved_commit: 8118aba8b586a20361bc0b31f6511a611d9591c3
   virtual_path: worktree
   is_virtual: true
   package_type: claude_skill
   deployed_files:
   - .agents/skills/worktree
+  - .agents/skills/worktree/README.md
   - .agents/skills/worktree/SKILL.md
   deployed_file_hashes:
+    .agents/skills/worktree/README.md: sha256:50d519e8e71f19f47d3cd96f1d3bc4d98d3bfc57d3aa3fa471d336a54d70170b
     .agents/skills/worktree/SKILL.md: sha256:b949019a52e4e663d3dde244ec0bd9011c5cd12241641aab67d7e7bd3e881693
-  content_hash: sha256:ce606a164ad3e0b0e9af4c6deb4d40bff1d10833119918ec9a08b07d655c48e0
+  content_hash: sha256:19f41262a3380b8c4279620568755fa72833247fc46c6ff269d057af4fdf3211
 - repo_url: mizchi/skills
   host: github.com
-  resolved_commit: d7999453cdb4e0e09df1c7f82fd23752539c546c
+  resolved_commit: 01cd5b12270c6228a8664cc41e975bb846c83c61
   virtual_path: meta/empirical-prompt-tuning
   is_virtual: true
   package_type: claude_skill
@@ -56,7 +62,7 @@ dependencies:
   content_hash: sha256:20e7fba93c7267ba6e3a7b27787ca49191b762dffcfb804b01da9183b1b0c891
 - repo_url: mizchi/skills
   host: github.com
-  resolved_commit: d7999453cdb4e0e09df1c7f82fd23752539c546c
+  resolved_commit: 01cd5b12270c6228a8664cc41e975bb846c83c61
   virtual_path: meta/retrospective-codify
   is_virtual: true
   package_type: claude_skill
