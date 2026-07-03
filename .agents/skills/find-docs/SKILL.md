@@ -31,6 +31,8 @@ description: >-
 deno run --no-lock --allow-env --allow-sys=osRelease,homedir --allow-read --allow-net=context7.com,registry.npmjs.org npm:ctx7@latest library <name> "<user's question>"
 ```
 
+`<name>` が複数語の場合はクォートで囲む (例: `library "Spring Boot" "..."`)。
+
 `query` 引数は必須で、結果のランキングに直接影響する。ユーザの質問全文をクエリに使う。同名のライブラリが複数ある場合の曖昧性解消にも効く。
 
 #### 出力フィールド
@@ -41,23 +43,23 @@ deno run --no-lock --allow-env --allow-sys=osRelease,homedir --allow-read --allo
 - **Name** — ライブラリ・パッケージ名。
 - **Description** — 短い概要。
 - **Code Snippets** — 利用可能なコード例の数。
-- **Source Reputation** — ソースの信頼性 (High / Medium / Low / Unknown)。
+- **Source Reputation** — ソースの信頼性 (High/Medium/Low/Unknown)。
 - **Benchmark Score** — 品質指標 (100 が最高)。
-- **Versions** — バージョン一覧 (存在する場合)。バージョン指定がある場合はここから選ぶ。形式は `/org/project/version`。
+- **Versions** — バージョン一覧 (存在する場合)。バージョン指定がある場合はここから選ぶ。形式は `/org/project/version`。このフィールドが無い候補の扱いは「バージョン指定」の節に従う。
 
 #### 選択基準
 
 最適なライブラリ ID を次の優先順位で決定する。上位で差がつかない場合のみ下位で tie-break する。
 
 1. 正式名称の一致 (完全一致を優先)。
-2. ソースの信頼性 (High / Medium を推奨)。
+2. ソースの信頼性 (High/Medium を推奨)。
 3. ベンチマークスコア (高いほど良い、最高 100)。
-4. Description の関連性。
+4. Description の関連性。全候補が汎用的な説明文で質問への関連度に差が読み取れない場合は同点として次へ進む。
 5. Code Snippets の数 (多いほど良い)。
 
 ID の種別 (公式リポジトリ系 `/org/project`、ドキュメントサイト系 `/websites/...` 等) は判断材料にせず、上記 (1) から (5) で機械的に決める。「公式リポジトリを選びたい」といった直感で順位を覆さないこと。選択基準で上位が複数並ぶ場合は、その旨を述べた上で最上位の 1 つで進める。どの候補も選択基準を満たさない場合は、その旨を伝えてクエリの見直しを提案する。
 
-数値指標 (ベンチマークスコア等) での比較は、差がごく僅か (目安 2 ポイント以内) なら同点とみなし、次の基準で tie-break する。僅差を決定打に昇格させないこと。
+数値指標 (ベンチマークスコア等) での比較は、差がごく僅か (差 2.0 以下、境界を含む) なら同点とみなし、次の基準で tie-break する。この閾値は厳密な分岐条件ではなく「僅差を決定打に昇格させない」ための目安であり、境界ぎりぎりの判定で結論を反転させない (迷ったら同点側に倒して次の基準へ進む)。
 
 (1) の正式名称の一致は、ユーザの意図に照らして判定する。フレームワーク本体の組み込み機能を問うているのか、特定のサードパーティライブラリを名指ししているのかを見る。質問キーワードがサードパーティライブラリに強く一致しても、ユーザがフレームワーク本体の機能を問うているならフレームワーク本体を選ぶ。
 
@@ -71,10 +73,14 @@ ID の種別 (公式リポジトリ系 `/org/project`、ドキュメントサイ
 deno run --no-lock --allow-env --allow-sys=osRelease,homedir --allow-read --allow-net=context7.com,registry.npmjs.org npm:ctx7@latest docs <libraryId> "<user's question>"
 ```
 
-取得結果には 2 種類の内容が含まれる。回答時はこの両方を見る。
+docs のクエリは library と同一文である必要はない。初回から対象の API 名・機能語 (例: `@@unique`) を加えて絞ってよい。
+
+取得結果には 2 種類の内容が含まれうる。両方あれば両方を見る。
 
 - **コードスニペット** — タイトル付きで、言語タグ付きのコードブロック。
 - **info スニペット** — パンくず文脈付きの散文による解説。
+
+クエリによっては片方 (コードスニペットのみ等) しか返らない。その場合はある方だけで判断してよい。
 
 取得したドキュメントに基づいて回答する。
 
@@ -103,7 +109,7 @@ deno run --no-lock --allow-env --allow-sys=osRelease,homedir --allow-read --allo
 
 ## エラー処理
 
-コマンドがクォータエラー (`Monthly quota reached` / `quota exceeded` 等) で失敗した場合は、Context7 のクォータを使い切っており、これ以上はドキュメントを取得できない旨をユーザに伝える。
+コマンドがクォータエラー (`Monthly quota reached`/`quota exceeded` 等) で失敗した場合は、Context7 のクォータを使い切っており、これ以上はドキュメントを取得できない旨をユーザに伝える。
 
 取得できなかった場合に学習データから回答してはならない。Context7 のドキュメントに基づかない API 仕様・設定値の回答は、注記を添えても返さないこと。取得不可の事実だけを伝え、回答は保留する。
 

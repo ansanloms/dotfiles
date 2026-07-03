@@ -1,53 +1,72 @@
 lockfile_version: '1'
-generated_at: '2026-06-25T01:47:38.489808+00:00'
-apm_version: 0.18.0
+generated_at: '2026-07-03T02:41:13.561361+00:00'
+apm_version: 0.21.0
 dependencies:
 - repo_url: ansanloms/skills
   host: github.com
-  resolved_commit: e7638501cc48a6f20f30ee9e7f19692e61d6755d
-  resolved_ref: e7638501cc48a6f20f30ee9e7f19692e61d6755d
+  resolved_commit: 011fc3425671e458dd7e084505e1ce4c91b9e048
   virtual_path: find-docs
   is_virtual: true
   package_type: claude_skill
   deployed_files:
   - .agents/skills/find-docs
-  content_hash: sha256:2dc66974f2c064cb04595c0db3cd9ccd2e67453a2fa2287a64c69ffa539a668a
+  - .agents/skills/find-docs/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/find-docs/SKILL.md: sha256:f9a1afea99a9f9a880eef532ffd83ae12229ccba67bd6dc9b73464cf31c75e63
+  content_hash: sha256:94445c9a1a37763fa03e4a92a8a6a52ce3ee1e75fd8986df901e53bfbd31352d
 - repo_url: ansanloms/skills
   host: github.com
-  resolved_commit: e7638501cc48a6f20f30ee9e7f19692e61d6755d
-  resolved_ref: e7638501cc48a6f20f30ee9e7f19692e61d6755d
+  resolved_commit: 011fc3425671e458dd7e084505e1ce4c91b9e048
   virtual_path: nvim-remote
   is_virtual: true
   package_type: claude_skill
   deployed_files:
   - .agents/skills/nvim-remote
-  content_hash: sha256:45cc68c43ecdeb343013a5ec445b356cbb06d4593cc77047fe18c3412781c5db
+  - .agents/skills/nvim-remote/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/nvim-remote/SKILL.md: sha256:db2a002b07194827b6061352ef55e21bb5e13b020139bdc0553c7babbe5a73f3
+  content_hash: sha256:2a1674147a92f6b92c94c61ef9158322aa2f6c56ebca62f17373dbbc4018e5f4
 - repo_url: ansanloms/skills
   host: github.com
-  resolved_commit: 840c28f9e51aac8390f34880c3154fb0f62ad333
-  resolved_ref: 840c28f9e51aac8390f34880c3154fb0f62ad333
+  resolved_commit: 011fc3425671e458dd7e084505e1ce4c91b9e048
   virtual_path: worktree
   is_virtual: true
   package_type: claude_skill
   deployed_files:
   - .agents/skills/worktree
-  content_hash: sha256:09db68ef9131d39b795d615c2d4456be67ec92ae74ca0f948e364feea0c4c574
+  - .agents/skills/worktree/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/worktree/SKILL.md: sha256:b949019a52e4e663d3dde244ec0bd9011c5cd12241641aab67d7e7bd3e881693
+  content_hash: sha256:ce606a164ad3e0b0e9af4c6deb4d40bff1d10833119918ec9a08b07d655c48e0
 - repo_url: mizchi/skills
   host: github.com
-  resolved_commit: 89c1b34018ba0d85a770c065ba22f83a8d004d34
-  resolved_ref: 89c1b340
+  resolved_commit: d7999453cdb4e0e09df1c7f82fd23752539c546c
   virtual_path: meta/empirical-prompt-tuning
   is_virtual: true
   package_type: claude_skill
   deployed_files:
   - .agents/skills/empirical-prompt-tuning
-  content_hash: sha256:0caa36857ba4e1f7193fa9ee3e22cac38d7e9787eda95e1726d4a39e40fb9479
+  - .agents/skills/empirical-prompt-tuning/README.md
+  - .agents/skills/empirical-prompt-tuning/SKILL-ja.md
+  - .agents/skills/empirical-prompt-tuning/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/empirical-prompt-tuning/README.md: sha256:c7db7d27122bcffe416e5607700a7cd1778cad260d3e104c5bb6da7b7f976b3d
+    .agents/skills/empirical-prompt-tuning/SKILL-ja.md: sha256:0a38d830802c2e08a7faca13928fedf6911e00b896946b4b03910d662de6dea5
+    .agents/skills/empirical-prompt-tuning/SKILL.md: sha256:252418e7ef022981d2dda2e3ec57fa1c786d30af68c50b7e062edf1d7361b0cb
+  content_hash: sha256:20e7fba93c7267ba6e3a7b27787ca49191b762dffcfb804b01da9183b1b0c891
 - repo_url: mizchi/skills
   host: github.com
-  resolved_commit: d85abbf3adac3c00662ac62647efd3accc42dd2f
+  resolved_commit: d7999453cdb4e0e09df1c7f82fd23752539c546c
   virtual_path: meta/retrospective-codify
   is_virtual: true
   package_type: claude_skill
   deployed_files:
   - .agents/skills/retrospective-codify
+  - .agents/skills/retrospective-codify/README.md
+  - .agents/skills/retrospective-codify/SKILL-ja.md
+  - .agents/skills/retrospective-codify/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/retrospective-codify/README.md: sha256:bdef43f257b112d94d047c467653650dd03fdee556fc8c217a2312e8bc758357
+    .agents/skills/retrospective-codify/SKILL-ja.md: sha256:c55610bfe5ac589d43a6f2199d3b9226a46fef41c0e3f6d02958f69da4c240e9
+    .agents/skills/retrospective-codify/SKILL.md: sha256:70bd226087028461f1e208ac5497593cdf6a0dc1e074d80f970addc1e36e5afa
   content_hash: sha256:3ff8c5c61545f778b8731f8d08eccb2bb38c15bc6fa618db509113f48e0ef670
