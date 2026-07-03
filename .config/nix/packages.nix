@@ -3,12 +3,13 @@
 pkgs: with pkgs; [
   apm-cli
   awscli2
-  ssm-session-manager-plugin
   bun
   claude-code
+  curl
   deadnix
   deno
   devcontainer
+  devin-cli
   drawio
   eza
   ffmpeg
@@ -16,31 +17,31 @@ pkgs: with pkgs; [
   git
   go
   google-chrome
+  hadolint
   jq
   just
   moddable-sdk
   neovim
   nixfmt
   nodejs
+  noto-fonts-cjk-sans
+  noto-fonts-cjk-serif
+  percona-toolkit
   platformio-core
   playwright-cli
+  ripgrep
   rustup
   sheldon
   shellcheck
-  sonarqube-cli
   sonar-scanner-cli
+  sonarqube-cli
+  ssm-session-manager-plugin
   starship
   statix
+  tlaplus
   tmux
   tree-sitter
   wsl-open
   zellij
   zsh
-  devin-cli
-  hadolint
-  ripgrep
-  percona-toolkit
-  noto-fonts-cjk-sans
-  noto-fonts-cjk-serif
-  curl
 ]
