@@ -53,8 +53,8 @@ vim.keymap.set("t", "<S-space>", "<space>")
 vim.keymap.set("t", "<C-BS>", "<BS>")
 vim.keymap.set("t", "<C-CR>", "<CR>")
 
--- ai-agent (zellij 経由で AI Agent ペインへ送信)。zellij セッション内でのみ定義。
-if require("zellij").in_session() then
+-- ai-agent (tmux 経由で AI Agent ペインへ送信)。tmux セッション内でのみ定義。
+if require("tmux").in_session() then
   local ai_agent = require("ansanloms.ai-agent")
   vim.keymap.set("n", "<Leader>as", function() ai_agent.send_line(true) end,
     { silent = true, desc = "ai-agent: send line" })

@@ -42,6 +42,5 @@ pkgs: with pkgs; [
   tmux
   tree-sitter
   wsl-open
-  zellij
   zsh
 ]

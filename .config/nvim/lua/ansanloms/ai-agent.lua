@@ -1,17 +1,17 @@
--- zellij 経由で隣の "AI Agent" ペイン (Claude Code 等) へテキストを送り込む API。
+-- tmux 経由で隣の "AI Agent" ペイン (Claude Code 等) へテキストを送り込む API。
 --
--- 横で動かす AI エージェントは固定ではない (layout の $ZELLIJ_AI_AGENT 次第) ため、
--- 特定ツール名ではなくペイン TITLE "AI Agent" を対象とする。
--- フォーカスは動かさず --pane-id でペインを直接指定するため、nvim に居たまま送れる。
--- zellij 低レベル操作は require("zellij") に委譲する。
+-- 横で動かす AI エージェントは固定ではない ($TMUX_AI_AGENT 次第) ため、
+-- 特定ツール名ではなく tmux-workspace が付ける user option @role を対象とする。
+-- フォーカスは動かさずペイン ID で直接指定するため、nvim に居たまま送れる。
+-- tmux 低レベル操作は require("tmux") に委譲する。
 -- キーマップ等のバインドはこのモジュールでは行わない (mapping 側で定義する)。
 
-local zellij = require("zellij")
+local tmux = require("tmux")
 
 local M = {}
 
--- 送信先ペインの TITLE。layout の `name "AI Agent"` に対応。
-local TITLE = "AI Agent"
+-- 送信先ペインの @role。tmux-workspace が AI Agent ペインに設定する値に対応。
+local ROLE = "ai-agent"
 
 -- 指定行範囲のテキストを取得する。
 local function lines_text(l1, l2)
@@ -19,10 +19,10 @@ local function lines_text(l1, l2)
   return table.concat(lines, "\n")
 end
 
--- text を AI Agent ペインへ送る。submit=true なら末尾で Enter (CR) を送って確定する。
+-- text を AI Agent ペインへ送る。submit=true なら末尾で Enter を送って確定する。
 function M.send(text, submit)
-  if not zellij.in_session() then
-    vim.notify("ai-agent: not in a zellij session", vim.log.levels.ERROR)
+  if not tmux.in_session() then
+    vim.notify("ai-agent: not in a tmux session", vim.log.levels.ERROR)
     return
   end
 
@@ -31,22 +31,22 @@ function M.send(text, submit)
     return
   end
 
-  local id, err = zellij.find_pane(TITLE)
+  local id, err = tmux.find_pane(ROLE)
   if not id then
     vim.notify("ai-agent: " .. err, vim.log.levels.ERROR)
     return
   end
 
   -- bracketed paste で一括投入する。途中の改行が誤って送信扱いされるのを防ぐ。
-  local res = zellij.paste(id, text)
+  local res = tmux.paste(id, text)
   if res.code ~= 0 then
     vim.notify("ai-agent: paste failed: " .. (res.stderr or ""), vim.log.levels.ERROR)
     return
   end
 
   if submit then
-    -- 13 = CR。AI エージェント側の送信を発火させる。
-    local r = zellij.write(id, 13)
+    -- Enter で AI エージェント側の送信を発火させる。
+    local r = tmux.send_keys(id, "Enter")
     if r.code ~= 0 then
       vim.notify("ai-agent: enter failed: " .. (r.stderr or ""), vim.log.levels.ERROR)
       return
@@ -55,7 +55,7 @@ function M.send(text, submit)
 
   local lines = select(2, text:gsub("\n", "\n")) + 1
   vim.notify(
-    ("ai-agent: %s %d line(s) to %s"):format(submit and "sent" or "pasted", lines, TITLE),
+    ("ai-agent: %s %d line(s) to %s"):format(submit and "sent" or "pasted", lines, ROLE),
     vim.log.levels.INFO
   )
 end

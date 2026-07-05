@@ -1,6 +1,6 @@
 -- .config/nvim/lua/config/singleton.lua
--- zellij 環境で Neovim を singleton として動作させる
-local zellij = require("zellij")
+-- tmux 環境で Neovim を singleton として動作させる
+local tmux = require("tmux")
 
 local M = {}
 
@@ -54,7 +54,7 @@ local function send_to_server(socket_path, files)
 end
 
 function M.setup()
-  local socket_path = zellij.nvim_socket_path()
+  local socket_path = tmux.nvim_socket_path()
 
   if not socket_path then
     return
