@@ -17,11 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # ローカルと同じ Determinate Nix を使い、nix のバージョン差による挙動ずれを防ぐ。
+      # (flakes / nix-command は Determinate Nix では既定で有効)
       - name: Install Nix
-        uses: cachix/install-nix-action@v30
+        uses: DeterminateSystems/nix-installer-action@v22
         with:
-          extra_nix_config: |
-            experimental-features = nix-command flakes
+          determinate: true
 
       - name: Setup Deno
         uses: denoland/setup-deno@v2
@@ -29,6 +30,9 @@ jobs:
           deno-version: v2.x
 
       - name: Bump self-built packages
+        # bump:sonarqube-cli が gh api で最新タグを引くため GH_TOKEN が必要。
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: deno task bump
 
       - name: Stage and detect changes
