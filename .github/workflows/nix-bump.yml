@@ -56,4 +56,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "chore: 自前 nix パッケージのバージョンを更新"
+          # 並行するワークフローが先に main へ push していると non-fast-forward で
+          # 弾かれるため、remote の進みを取り込んでから push する。
+          git fetch origin main
+          git rebase FETCH_HEAD
           git push origin HEAD:main
