@@ -33,8 +33,6 @@
 	autoSetupRemote = true
 [init]
 	defaultBranch = main
-[worktree]
-	useRelativePaths = true
 [alias]
 	s = status
 	b = branch
