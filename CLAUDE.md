@@ -33,7 +33,7 @@ deno task upgrade
 - `.config/vim/` - Vim 設定（minpac でプラグイン管理）
 - `.config/git/` - Git 設定
 - `.config/wezterm/` - WezTerm 設定
-- `.config/zellij/` - Zellij 設定
+- `.config/tmux/` - tmux 設定
 - `.config/starship.toml` - Starship プロンプト設定
 - `.config/sheldon/` - Sheldon（zsh プラグインマネージャ）設定
 - `.claude/` - Claude Code のグローバル設定（`~/.claude/` にリンク）
@@ -84,6 +84,7 @@ apm install <org>/<repo>/<skill>#<commit>
 - `clip-image-watch` - 上記を自動化する常駐サービス本体（「クリップボード画像の自動取り込み」節を参照）。
 - `clip-image-clip` - devcontainer 内で動くクライアント。ホストの `clip-image-watch` が配信する PNG を unix socket 経由で受け取り、コンテナのクリップボードへ載せる（同節を参照）。
 - `notify` - WSL から Windows のトースト通知を出す常駐サーバ本体（「WSL から Windows への通知」節を参照）。
+- `tmux-workspace` - 作業用 tmux セッション（左: AI Agent ペイン幅 86、右上: Neovim、右下: Terminal 高さ 25%）を作って attach する。既存の同名セッションには attach のみ。AI Agent ペインは `$TMUX_AI_AGENT`（未設定なら `claude agents`）を起動し、Neovim は `/tmp/nvim-<セッション名>.sock` で listen する。
 
 `scripts/` のソースは「薄いエントリポイント（`scripts/*.ts`）＋ 純粋ロジック / 依存注入した `run()`（`scripts/lib/*.ts`）」に分離している。副作用（subprocess / fs / tty / 対話プロンプト等）を注入することでテスト可能にし、`scripts/lib/*.test.ts` でユニットテストする（`deno task test` / `deno task coverage`）。`scripts/lib/` はサブディレクトリのため `deno task build` の bundle 対象から自然に外れる。
 

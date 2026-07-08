@@ -83,20 +83,20 @@ feat: ログイン画面にパスワードリセットリンクを追加
 
 ## nvim 連携
 
-zellij セッション内で起動している nvim は `/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock` で listen している (`.config/zellij/layouts/default.kdl` 参照)。この socket 経由で nvim を遠隔操作し、作業結果を隣ペインの nvim に流し込む。
+tmux セッション内で起動している nvim は `/tmp/nvim-<セッション名>.sock` で listen している (`tmux-workspace` コマンドが起動する。`scripts/tmux-workspace.ts` 参照)。この socket 経由で nvim を遠隔操作し、作業結果を隣ペインの nvim に流し込む。
 
 この節は「いつ nvim で開くべきか」の判断と、socket の解決 (導出 + 発見) と生存確認を定める。これらは呼び出し側 (このルール) の責務とする。解決した socket パスを使った nvim 操作の具体手順は `nvim-remote` skill を参照する。
 
 ### 前提条件
 
 - MUST: **生きている nvim socket が 1 つ以上見つかる** 場合に本ルールを適用する。見つからない場合のみ通常のコンソール出力にフォールバックし、エラーで作業を止めない。
-- MUST: socket の有無は下記「socket の解決手順」を実行した結果で判定する。`ZELLIJ_SESSION_NAME` から導出したパスの存在チェックだけで判定しない。バックグラウンドジョブ等では `ZELLIJ_SESSION_NAME` が実セッションとずれた古い値になり、導出パスが外れても別名の live socket が存在しうる (観測例: env は `exquisite-apricot` だが実体は `/tmp/nvim-wise-viola.sock`)。
+- MUST: socket の有無は下記「socket の解決手順」を実行した結果で判定する。セッション名から導出したパスの存在チェックだけで判定しない。バックグラウンドジョブ等では `$TMUX` が無い・または実セッションとずれた値になり、導出が外れても別名の live socket が存在しうる。
 
 ### socket の解決手順
 
 次の順で socket を解決する。候補は必ず `[ -S "$sock" ]` (socket として存在) と `nvim --server "$sock" --remote-expr 'has("nvim")'` (live な nvim が応答する) の **両方** で確認する。後者は exit 0 かつ標準出力が `1` のときのみ live とみなす。エラー・非 0・出力欠落はすべて live でない扱いにする。`[ -S ]` だけだと crash 後に残った stale な socket ファイルを掴む。
 
-1. 導出: `sock="/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock"`。これが live ならそれを使う。
+1. 導出: `$TMUX` がセットされていれば `sock="/tmp/nvim-$(tmux display-message -p '#S').sock"`。これが live ならそれを使う。`$TMUX` が無ければ導出を飛ばして発見へ進む。
 2. 発見: 導出が外れたら `ls /tmp/nvim-*.sock` で実体を探し、live なものを候補にする。
 3. 候補数で分岐する。
    - 0 個 (live なし): 前提条件を満たさない。コンソール出力へフォールバックする。
