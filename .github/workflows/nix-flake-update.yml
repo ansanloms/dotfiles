@@ -1,6 +1,6 @@
 name: nix flake update
 
-# flake input (nixpkgs / nix-claude-code / deno) を更新し、ビルド検証のうえ
+# flake input (nixpkgs / llm-agents) を更新し、ビルド検証のうえ
 # 直接 main へコミットする。適用 (deno task switch) はローカルで行う。
 
 on:
@@ -17,14 +17,15 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # ローカルと同じ Determinate Nix を使い、nix のバージョン差による挙動ずれを防ぐ。
-      # 旧: cachix/install-nix-action@v30 (Nix 2.24.9) は deno task upgrade の
-      # 相対 path: flake ref (path:.config/nix) を解決できず失敗していた。
-      # (flakes / nix-command は Determinate Nix では既定で有効)
+      # upstream nix を使う (Determinate Nix から移行済み)。flakes / nix-command は
+      # 既定で無効のため extra_nix_config で有効化する。
+      # 注意: deno task upgrade の相対 path: flake ref (path:.config/nix) の解決には
+      # 新しめの nix が必要 (旧 v30 同梱の 2.24.9 は失敗)。v31 は最新安定版を導入する。
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v22
+        uses: cachix/install-nix-action@v31
         with:
-          determinate: true
+          extra_nix_config: |
+            experimental-features = nix-command flakes
 
       - name: Setup Deno
         uses: denoland/setup-deno@v2

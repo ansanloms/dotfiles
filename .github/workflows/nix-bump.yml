@@ -17,12 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # ローカルと同じ Determinate Nix を使い、nix のバージョン差による挙動ずれを防ぐ。
-      # (flakes / nix-command は Determinate Nix では既定で有効)
+      # upstream nix を使う (Determinate Nix から移行済み)。flakes / nix-command は
+      # 既定で無効のため extra_nix_config で有効化する。
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v22
+        uses: cachix/install-nix-action@v31
         with:
-          determinate: true
+          extra_nix_config: |
+            experimental-features = nix-command flakes
 
       - name: Setup Deno
         uses: denoland/setup-deno@v2
