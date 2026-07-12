@@ -58,7 +58,7 @@ nix run nixpkgs#deno -- task install
 
 ```sh
 # 初回: profile に導入
-nix profile install ~/.config/nix#default --impure
+nix profile add ~/.config/nix#default --impure
 ```
 
 以降のパッケージ更新:

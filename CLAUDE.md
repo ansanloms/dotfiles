@@ -16,7 +16,7 @@ deno task install
 deno task uninstall
 
 # パッケージ初回導入
-nix profile install path:.config/nix#default --impure
+nix profile add path:.config/nix#default --impure
 
 # パッケージ適用（packages.nix の変更を反映）
 deno task switch
