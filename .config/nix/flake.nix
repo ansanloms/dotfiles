@@ -20,8 +20,9 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = [
-          # llm-agents の overlay を適用した pkgs を構築する (prebuilt をそのまま使う default)。
-          llm-agents.overlays.default
+          # llm-agents の claude-code (prebuilt) で nixpkgs 版を上書きする。
+          # upstream は overlays 出力を廃止し packages.<system> のみ公開のため、そこから注入する。
+          (final: prev: { inherit (llm-agents.packages.${system}) claude-code; })
 
           # nixpkgs 未収録の playwright-cli を callPackage で注入する。
           (final: prev: { playwright-cli = final.callPackage ./playwright-cli.nix { }; })
