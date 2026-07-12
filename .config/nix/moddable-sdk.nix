@@ -39,8 +39,8 @@
 }:
 
 let
-  version = "8.3.0";
-  rev = "fa3e9cd4be4c443fec62966ec26ecbcb46693b55";
+  version = "8.3.1";
+  rev = "23b4d6b0a65f35209d9118c4c13c6c9b3e68784d";
 
   # ラップする CLI ツール。実体が存在するものだけ $out/bin に出す (install で存在チェック)。
   cliTools = [
@@ -103,7 +103,7 @@ stdenv.mkDerivation {
     owner = "Moddable-OpenSource";
     repo = "moddable";
     inherit rev;
-    hash = "sha256-J+faTVuvuZY5hHWIqoOHQKpAbrBr5/2X5BRqVmW9P5o=";
+    hash = "sha256-nzpPNal/KUrMW4SPQXfPkzPHJcdRCySc+KsDH82b8Hg=";
   };
 
   nativeBuildInputs = [
@@ -140,7 +140,7 @@ stdenv.mkDerivation {
     # (es2024 が最新)。Moddable は将来の TS 6.0 を見込んでいる。現状の tsc で
     # ビルドできるよう es2024 へ下げる。
     substituteInPlace tools/mcmanifest.js \
-      --replace-fail 'lib: ["es2025"]' 'lib: ["es2024"]' \
+      --replace-fail 'lib: ["es2025", "esnext.disposable"]' 'lib: ["es2024", "esnext.disposable"]' \
       --replace-fail 'target: "es2025"' 'target: "es2024"'
   '';
 
