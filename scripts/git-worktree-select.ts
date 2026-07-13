@@ -21,7 +21,7 @@ async function gitStdout(args: string[], allowFail = false): Promise<string> {
 const code = await run({
   args: Deno.args,
   cwd: () => Deno.cwd(),
-  listWorktrees: () => gitStdout(["worktree", "list"]),
+  listWorktrees: () => gitStdout(["worktree", "list", "--porcelain"]),
   getDescription: (branch) =>
     gitStdout(["config", `branch.${branch}.description`], true).then((s) =>
       s.split("\n")[0]
