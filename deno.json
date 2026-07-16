@@ -60,9 +60,10 @@
       "command": "nix profile remove .config/nix"
     },
     "bump": {
-      "description": "Bump self-built nix package versions and hashes (playwright-cli / sonarqube-cli / moddable-sdk).",
+      "description": "Bump self-built nix package versions and hashes (apm-cli / playwright-cli / sonarqube-cli / moddable-sdk).",
       "command": "deno task bump:*"
     },
+    "bump:apm-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=gh,nix .config/nix/apm-cli/upgrade.ts",
     "bump:playwright-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=npm,nix .config/nix/playwright-cli/upgrade.ts",
     "bump:sonarqube-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=gh,nix .config/nix/sonarqube-cli/upgrade.ts",
     "bump:moddable-sdk": "deno run --allow-read=.config/nix,/nix/store --allow-write=.config/nix --allow-run=git,nix .config/nix/moddable-sdk/upgrade.ts"

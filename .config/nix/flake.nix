@@ -32,6 +32,9 @@
 
           # nixpkgs 未収録の Moddable SDK CLI ツール (mcconfig 等) を callPackage で注入する。
           (final: prev: { moddable-sdk = final.callPackage ./moddable-sdk.nix { }; })
+
+          # apm-cli は nixpkgs 収録済みだが upstream リリースから遅れるため、自前 derivation で上書きする。
+          (final: prev: { apm-cli = final.callPackage ./apm-cli.nix { }; })
         ];
         config.allowUnfreePredicate =
           pkg:
