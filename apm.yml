@@ -11,6 +11,6 @@ dependencies:
   - mizchi/skills/meta/retrospective-codify
   mcp: []
 targets:
-- agent-skills
+- claude
 includes: auto
 scripts: {}

@@ -10,7 +10,7 @@
       "AppData/Roaming/CorvusSKK/config.xml",
       "apm.lock.yaml",
       "apm.yml",
-      ".agents/skills/"
+      ".claude/skills/"
     ]
   },
   "lint": {

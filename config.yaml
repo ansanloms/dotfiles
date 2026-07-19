@@ -76,24 +76,6 @@ link:
     - src: ./.config/efm-langserver/config.yaml
       targets:
         - windows
-  ~/.config/devin/config.json:
-    - src: ./.config/devin/config.json
-      targets:
-        - darwin
-        - linux
-  ~/AppData/Roaming/devin/config.json:
-    - src: ./.config/devin/config.json
-      targets:
-        - windows
-  ~/.config/devin/AGENTS.md:
-    - src: ./.agents/AGENTS.md
-      targets:
-        - darwin
-        - linux
-  ~/AppData/Roaming/devin/AGENTS.md:
-    - src: ./.agents/AGENTS.md
-      targets:
-        - windows
   ~/.config/alacritty:
     - src: ./.config/alacritty
       targets:
@@ -161,6 +143,8 @@ link:
     - src: ./.ripgreprc
   ~/.claude/CLAUDE.md:
     - src: ./.claude/CLAUDE.md
+  ~/.claude/AGENTS.md:
+    - src: ./.claude/AGENTS.md
   ~/.claude/settings.json:
     - src: ./.claude/settings.json
   ~/.claude/rules:
@@ -170,13 +154,7 @@ link:
   ~/.claude/scripts:
     - src: ./.claude/scripts
   ~/.claude/skills:
-    - src: ./.agents/skills
-  ~/.agents/AGENTS.md:
-    - src: ./.agents/AGENTS.md
-  ~/.agents/skills:
-    - src: ./.agents/skills
-  ~/.codeium/windsurf/memories/global_rules.md:
-    - src: ./.agents/AGENTS.md
+    - src: ./.claude/skills
   ~/.config/just/justfile:
     - src: ./.config/just/justfile
   ~/.local/bin/git-worktree-select:

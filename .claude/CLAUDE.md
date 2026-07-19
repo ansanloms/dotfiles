@@ -1,4 +1,4 @@
-@../.agents/AGENTS.md
+@AGENTS.md
 @rules/tool-call-stability.md
 @rules/lsp.md
 @rules/worktree.md

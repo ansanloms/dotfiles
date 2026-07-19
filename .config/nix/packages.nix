@@ -9,7 +9,6 @@ pkgs: with pkgs; [
   deadnix
   deno
   devcontainer
-  devin-cli
   drawio
   eza
   ffmpeg

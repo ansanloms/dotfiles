@@ -8,9 +8,6 @@
 **/.claude/worktrees/*
 **/.claude/memories/*
 
-# devin
-**/.devin/config.local.json
-
 # nvim
 **/.nvim
 **/.nvim.lua
