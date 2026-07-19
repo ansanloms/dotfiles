@@ -1,8 +1,9 @@
 // git-worktree-sweep の純粋ロジックとオーケストレーション。
 // 副作用 (git 実行 / 出力) は SweepDeps として注入する。
 //
-// <main>/.claude/worktrees/ 配下の worktree のうち、ブランチがデフォルトブランチへ
-// マージ済みかつ working tree がクリーンなものを削除し、ローカルブランチも消す。
+// メイン以外の全 linked worktree (配置場所は問わない) のうち、ブランチが
+// デフォルトブランチへマージ済みかつ working tree がクリーンなものを削除し、
+// ローカルブランチも消す。
 // マージ判定は forge (GitHub 等) の API に依存せず git のみで行う:
 //   1. merge-base --is-ancestor (通常 merge / fast-forward)
 //   2. ブランチを merge-base に対して仮 squash した commit の patch-id が
@@ -42,11 +43,6 @@ export function parseWorktreeList(output: string): WorktreeList {
   }
   const mainWt = entries.length > 0 ? entries[0].path : "";
   return { mainWt, entries: entries.slice(1) };
-}
-
-/** sweep 対象 (メインの .claude/worktrees/ 配下) か判定する。 */
-export function isSweepTarget(path: string, mainWt: string): boolean {
-  return path.startsWith(`${mainWt}/.claude/worktrees/`);
 }
 
 /** `git cherry <upstream> <head>` の出力から「全 commit が upstream に含まれる」か判定する。 */
@@ -182,8 +178,8 @@ export async function classifyBranch(
 }
 
 /**
- * .claude/worktrees/ 配下のマージ済みクリーン worktree を削除する。終了コードを返す。
- * --dry-run 時は削除せず判定結果のみ出力する。
+ * メイン以外の linked worktree のうちマージ済みクリーンなものを削除する。
+ * 終了コードを返す。--dry-run 時は削除せず判定結果のみ出力する。
  */
 export async function run(deps: SweepDeps): Promise<number> {
   const parsed = parseArgs(deps.args, {
@@ -196,11 +192,10 @@ export async function run(deps: SweepDeps): Promise<number> {
     deps.errorLog(list.stderr);
     return 1;
   }
-  const { mainWt, entries } = parseWorktreeList(list.stdout);
-  const targets = entries.filter((e) => isSweepTarget(e.path, mainWt));
+  const { entries: targets } = parseWorktreeList(list.stdout);
 
   if (targets.length === 0) {
-    deps.log("No worktrees under .claude/worktrees/");
+    deps.log("No linked worktrees.");
     return 0;
   }
 

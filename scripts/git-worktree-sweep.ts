@@ -1,8 +1,9 @@
 #!/usr/bin/env -S deno run --quiet --allow-run
 
-// <main>/.claude/worktrees/ 配下の worktree のうち、ブランチがデフォルトブランチへ
-// マージ済み (squash merge 含む) かつ working tree がクリーンなものを削除し、
-// ローカルブランチも消す。dirty・未マージ・detached は報告のみ。
+// メイン以外の全 linked worktree (配置場所は問わない) のうち、ブランチが
+// デフォルトブランチへマージ済み (squash merge 含む) かつ working tree が
+// クリーンなものを削除し、ローカルブランチも消す。
+// dirty・未マージ・detached・固有コミット無しは報告のみ。
 // マージ判定は git のみで行い、forge (GitHub 等) の API に依存しない。
 // 使い方: git-worktree-sweep [--dry-run]
 //

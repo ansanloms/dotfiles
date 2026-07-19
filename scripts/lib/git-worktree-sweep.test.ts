@@ -3,7 +3,6 @@ import {
   type GitResult,
   isFullyContained,
   isMergedAsParent,
-  isSweepTarget,
   parseWorktreeList,
   run,
   type SweepDeps,
@@ -30,13 +29,6 @@ Deno.test("parseWorktreeList は main と worktree 群を分離しブランチ�
       { path: "/home/u/repo/.claude/worktrees/detached", branch: null },
     ],
   });
-});
-
-Deno.test("isSweepTarget は .claude/worktrees/ 配下のみ対象にする", () => {
-  const main = "/home/u/repo";
-  assertEquals(isSweepTarget(`${main}/.claude/worktrees/x`, main), true);
-  assertEquals(isSweepTarget("/home/u/other-worktree", main), false);
-  assertEquals(isSweepTarget(`${main}/sub/dir`, main), false);
 });
 
 Deno.test("isFullyContained は全行が - のときのみ true", () => {
@@ -207,12 +199,12 @@ Deno.test("run は未マージの worktree を残す", async () => {
   );
 });
 
-Deno.test("run は対象が無ければ何もしない", async () => {
+Deno.test("run は linked worktree が無ければ何もしない", async () => {
   const { deps, calls, logs } = makeDeps({
     "worktree list --porcelain": ok("worktree /repo\nbranch refs/heads/main\n"),
   });
   const code = await run(deps);
   assertEquals(code, 0);
   assertEquals(calls.length, 1);
-  assertEquals(logs, ["No worktrees under .claude/worktrees/"]);
+  assertEquals(logs, ["No linked worktrees."]);
 });
