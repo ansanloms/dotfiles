@@ -12,7 +12,15 @@
   - 読み取りのみでも、別ブランチを対象にする調査。例: 調査用にブランチを新規に切る場合、または既に main から切られた既存ブランチの状態を調べる場合。メインのブランチを切り替えず、その別ブランチを worktree でチェックアウトして調べる。
 - worktree が不要なのは、メインの worktree が現在いるブランチに対する読み取りのみの調査・質問への回答・情報収集 (ブランチを変えないため)。
 - 既に当該タスク専用の worktree 上にいる場合は新規に切らない。その worktree で続行する。
-- 本ルールが縛るのは worktree のセットアップ (用意 + description 設定) まで。その後のコミット・push・PR は本ルールの対象外で、通常の Git 運用 (AGENTS.md のコミット規約等) に従う。
+- 本ルールが縛るのは worktree のセットアップ (用意 + description 設定) と、下記「片付け」まで。その間のコミット・push・PR は本ルールの対象外で、通常の Git 運用 (AGENTS.md のコミット規約等) に従う。
+
+## 片付け
+
+セットアップと同様、片付けもルール + 専用ツールで行う。個別の `git worktree remove` / `git branch -D` を手組みしない。
+
+- MUST: マージ済み worktree の削除は `git-worktree-sweep` (`.local/bin`、`--dry-run` あり) に任せる。PR / ブランチのマージ報告を受けたとき、または残骸に気づいたときに実行する。マージ判定は git のみで行うため forge (GitHub 以外のホスティング) に依存せず、squash merge も検知する。dirty・未マージ・detached の worktree には触れず報告のみ行う。
+- MUST: worktree 上で作業している間、merge 操作のローカル後処理 (デフォルトブランチへの checkout・ローカルブランチ削除) を merge コマンドに任せない。デフォルトブランチはメインの worktree にチェックアウト済みのため必ず失敗する (例: GitHub の `gh pr merge --delete-branch` は `fatal: 'main' is already used by worktree` になる)。GitHub なら `--delete-branch` を付けずに merge し、ブランチ削除は sweep に任せる。
+- squash merge 済みと確認できた worktree を `ExitWorktree` で除去する場合、ローカルコミットは常に「未マージ」に見えるため検知による拒否が必ず作動する。確認済みなら最初から `discard_changes: true` で呼んでよい。
 
 ## worktree 配置先 (base) の供給
 
