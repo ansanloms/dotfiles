@@ -27,7 +27,11 @@ const code = await run({
       s.split("\n")[0]
     ),
   select: (opts: SelectOptions) =>
-    Select.prompt({ ...opts, hideDefault: true }) as Promise<string>,
+    Select.prompt({
+      ...opts,
+      hideDefault: true,
+      search: true,
+    }) as Promise<string>,
   writeSelected: (path) => {
     Deno.stderr.writeSync(new TextEncoder().encode(path));
   },
