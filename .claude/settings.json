@@ -4,7 +4,8 @@
     "DISABLE_AUTOUPDATER": "1",
     "CLAUDE_CODE_SKIP_WINDOWS_PROFILE": "1",
     "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
-    "ENABLE_LSP_TOOL": "1"
+    "ENABLE_LSP_TOOL": "1",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet"
   },
   "permissions": {
     "allow": [
@@ -15,7 +16,9 @@
       "Bash(git log:*)",
       "Bash(git show:*)",
       "Bash(git status:*)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "Bash(systemctl --user:*)",
+      "Bash(journalctl --user:*)"
     ],
     "deny": [],
     "ask": [],
@@ -133,5 +136,11 @@
   "theme": "dark",
   "terminalProgressBarEnabled": true,
   "voiceEnabled": true,
-  "model": "claude-fable-5[1m]"
+  "model": "claude-fable-5[1m]",
+  "sandbox": {
+    "excludedCommands": [
+      "systemctl",
+      "journalctl"
+    ]
+  }
 }
