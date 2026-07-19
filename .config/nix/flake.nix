@@ -42,6 +42,7 @@
             "claude"
             "claude-code"
             "google-chrome"
+            "devin-cli"
           ];
       };
     in

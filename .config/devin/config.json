@@ -1,0 +1,38 @@
+{
+  "agent": {
+    "thinking": {
+      "mode": "stream"
+    },
+    "show_history_on_continue": true,
+    "model": "claude-opus-4-8-xhigh"
+  },
+  "theme_mode": "dark",
+  "permissions": {
+    "allow": [],
+    "deny": [],
+    "ask": []
+  },
+  "mcpServers": {},
+  "show_path": true,
+  "unicode_mode": "auto",
+  "show_hints": true,
+  "include_gitignored_files": true,
+  "respect_gitignore": false,
+  "auto_update": false,
+  "notify": "smart",
+  "proxy": {
+    "mode": "system",
+    "url": null,
+    "no_proxy": null
+  },
+  "sandbox": {
+    "allowed_domains": [],
+    "denied_domains": [],
+    "network_mode": "full"
+  },
+  "read_config_from": {
+    "cursor": false,
+    "windsurf": false,
+    "claude": true
+  }
+}
