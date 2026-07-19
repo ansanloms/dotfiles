@@ -143,8 +143,6 @@ link:
     - src: ./.ripgreprc
   ~/.claude/CLAUDE.md:
     - src: ./.claude/CLAUDE.md
-  ~/.claude/AGENTS.md:
-    - src: ./.claude/AGENTS.md
   ~/.claude/settings.json:
     - src: ./.claude/settings.json
   ~/.claude/rules:
