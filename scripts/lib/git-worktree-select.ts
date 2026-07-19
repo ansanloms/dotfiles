@@ -137,7 +137,9 @@ export function buildLabel(
   let label = `${path}  ${entry.sha.slice(0, 7)} ${branch}`;
   if (widths.maxLockLen > 0) {
     const lock = lockLabel(entry);
-    label += `  ${padVisible(lock ? colors.lock(lock) : "", widths.maxLockLen)}`;
+    label += `  ${
+      padVisible(lock ? colors.lock(lock) : "", widths.maxLockLen)
+    }`;
   }
   if (entry.desc) {
     label += `  ${colors.desc("# " + entry.desc)}`;

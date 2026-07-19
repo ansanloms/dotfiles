@@ -41,11 +41,11 @@ deno task upgrade
 
 ## Agent Skills
 
-Agent Skills は [apm](https://github.com/microsoft/apm)（`packages.nix` で導入）で管理し、skill 本体をリポジトリにコミットしている。`deno task install` で各エージェントへシンボリックリンクされる。
+Agent Skills は [apm](https://github.com/microsoft/apm)（`packages.nix` で導入）で管理し、skill 本体をリポジトリにコミットしている。`deno task install` でシンボリックリンクされる。
 
-skill の実体は `.agents/skills/` の 1 箇所に置く。`~/.agents/skills`（Devin CLI / Devin Desktop が参照する cross-agent ディレクトリ）と `~/.claude/skills`（Claude Code）は、どちらも `.agents/skills/` を指すシンボリックリンク（`config.yaml` で設定）。両エージェントが同一実体を参照し、claude 専用・cross-agent 専用の配置区別は持たない。
+skill の実体は `.claude/skills/` に置く。`~/.claude/skills` は `.claude/skills/` を指すシンボリックリンク（`config.yaml` で設定）。
 
-apm のデプロイ先は `apm.yml` の `targets: [agent-skills]` で `.agents/skills/` に固定している。target の解決順は `--target` > `apm.yml` の `targets:` > auto-detect で、この固定により install 時に `--target` を省略しても `.agents/skills/` へ配置される（省略時の auto-detect は `.claude/` の存在を見て `claude` を選ぶため、固定が無いと `.claude/` 側へ流れる）。
+apm のデプロイ先は `apm.yml` の `targets: [claude]` で `.claude/skills/` に固定している。target の解決順は `--target` > `apm.yml` の `targets:` > auto-detect。省略時の auto-detect も `.claude/` の存在を見て `claude` を選ぶが、意図した配置先であることを明示するため固定を維持している。
 
 導入済み skill:
 
@@ -56,16 +56,16 @@ apm のデプロイ先は `apm.yml` の `targets: [agent-skills]` で `.agents/s
 | nvim-remote             | `ansanloms/skills`（apm） |
 | worktree                | `ansanloms/skills`（apm） |
 
-skill を追加・更新する場合のみ apm を使用する。`apm.yml` の `targets` で配置先（`.agents/skills/`）を固定済みのため、install は `--target` 無しでよい。
+skill を追加・更新する場合のみ apm を使用する。`apm.yml` の `targets` で配置先（`.claude/skills/`）を固定済みのため、install は `--target` 無しでよい。
 
 ```sh
-# skill の追加・更新（apm.yml の targets: agent-skills により .agents/skills/ へ配置）
+# skill の追加・更新（apm.yml の targets: claude により .claude/skills/ へ配置）
 apm install <org>/<repo>/<skill>#<commit>
 ```
 
 更新も同じ install で commit を上げる。`apm update` は使わない。`apm update` は最新の一致 ref へ更新してしまい、commit hash 固定と噛み合わないため。最新 commit は `git ls-remote <repo> HEAD` 等で確認する。
 
-`apm.yml` / `apm.lock.yaml` は commit hash でバージョンを固定している。追加・更新後は、これらと `.agents/skills/` の差分をコミットする。
+`apm.yml` / `apm.lock.yaml` は commit hash でバージョンを固定している。追加・更新後は、これらと `.claude/skills/` の差分をコミットする。
 
 ## Local scripts
 
