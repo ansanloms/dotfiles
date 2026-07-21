@@ -7,6 +7,7 @@ import {
   computeColumnWidths,
   type Entry,
   filterTargets,
+  formatSubject,
   type FzfRequest,
   lockLabel,
   padVisible,
@@ -186,6 +187,38 @@ Deno.test("buildLabel は lock 列を揃えて表示する", () => {
   );
   // 未 lock かつ desc 無しは末尾の空白を落とす。
   assertEquals(buildLabel(base, widths, PLAIN), "wt    abc1234 [main]");
+});
+
+Deno.test("formatSubject は H1 マーカーと markdown リンクを畳む", () => {
+  assertEquals(
+    formatSubject(
+      "# [#11](https://github.com/ansanloms/dotfiles/pull/11) tmux へ移行する",
+    ),
+    "#11 tmux へ移行する",
+  );
+  assertEquals(formatSubject("# チケット無しの作業"), "チケット無しの作業");
+  assertEquals(
+    formatSubject("旧形式の 1 行 description"),
+    "旧形式の 1 行 description",
+  );
+});
+
+Deno.test("buildLabel は subject の markdown を整形して表示する", () => {
+  const widths = { maxPathLen: 4, maxBranchLen: 6, maxLockLen: 0 };
+  const base = entry({
+    path: "/a",
+    sha: "abc1234abc1234abc1234abc1234abc1234abc1",
+    branch: "main",
+    relativePath: "wt",
+  });
+  assertEquals(
+    buildLabel(
+      { ...base, desc: "# [#11](https://example.com/11) 作業中" },
+      widths,
+      PLAIN,
+    ),
+    "wt    abc1234 [main]  # #11 作業中",
+  );
 });
 
 Deno.test("buildFzfLine はパス・ブランチ・ラベルをタブで区切る", () => {
