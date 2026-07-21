@@ -2,7 +2,7 @@
 
 メインの worktree (clone 直下) のブランチを切り替えずに、タスクを別ブランチの worktree へ隔離するためのルール。ファイルを変更する作業だけでなく、別ブランチを対象にする読み取り専用の調査にも適用する。
 
-この節は「いつ worktree へ隔離するか」の判断と、worktree の配置先 (`<base>`) の供給を定める。これらは呼び出し側 (このルール) の責務とする。worktree の作成・ローカル設定の持ち込み・branch description 設定といった具体手順は `worktree` skill に委譲する。
+この節は「いつ worktree へ隔離するか」の判断と、worktree の配置先 (`<base>`) の供給を定める。これらは呼び出し側 (このルール) の責務とする。worktree の作成・ローカル設定の持ち込み・branch description の設定と更新・マージ後の片付けといった具体手順は `worktree` skill に委譲する。
 
 ## 原則
 
@@ -12,14 +12,12 @@
   - 読み取りのみでも、別ブランチを対象にする調査。例: 調査用にブランチを新規に切る場合、または既に main から切られた既存ブランチの状態を調べる場合。メインのブランチを切り替えず、その別ブランチを worktree でチェックアウトして調べる。
 - worktree が不要なのは、メインの worktree が現在いるブランチに対する読み取りのみの調査・質問への回答・情報収集 (ブランチを変えないため)。
 - 既に当該タスク専用の worktree 上にいる場合は新規に切らない。その worktree で続行する。
-- 本ルールが縛るのは worktree のセットアップ (用意 + description 設定) と、下記「片付け」まで。その間のコミット・push・PR は本ルールの対象外で、通常の Git 運用 (CLAUDE.md のコミット規約等) に従う。
+- 本ルールが縛るのは worktree のライフサイクル、すなわちセットアップ (用意 + description 設定)・作業の節目での description 更新・下記「片付け」の 3 段階。その間のコミット・push・PR 自体は本ルールの対象外で、通常の Git 運用 (CLAUDE.md のコミット規約等) に従う。
 
 ## 片付け
 
-セットアップと同様、片付けもルール + 専用ツールで行う。個別の `git worktree remove` / `git branch -D` を手組みしない。
-
-- MUST: マージ済み worktree の削除は `git-worktree-sweep` (`.local/bin`、`--dry-run` あり) に任せる。PR / ブランチのマージ報告を受けたとき、または残骸に気づいたときに実行する。マージ判定は git のみで行うため forge (GitHub 以外のホスティング) に依存せず、squash merge も検知する。dirty・未マージ・detached の worktree には触れず報告のみ行う。
-- MUST: worktree 上で作業している間、merge 操作のローカル後処理 (デフォルトブランチへの checkout・ローカルブランチ削除) を merge コマンドに任せない。デフォルトブランチはメインの worktree にチェックアウト済みのため必ず失敗する (例: GitHub の `gh pr merge --delete-branch` は `fatal: 'main' is already used by worktree` になる)。GitHub なら `--delete-branch` を付けずに merge し、ブランチ削除は sweep に任せる。
+- MUST: 片付けの手順 (sweep への委譲、手組みの `git worktree remove` / `git branch -D` の禁止、merge コマンドにローカル後処理をさせないこと、リモートブランチの扱い) は `worktree` skill の「片付け」節に従う。この環境の `git-worktree-sweep` は `.local/bin` にあり (`--dry-run` あり)、常に利用できる前提でよい。
+- MUST: PR / ブランチのマージ報告を受けたとき、または残骸に気づいたときに sweep を実行する。
 - squash merge 済みと確認できた worktree を `ExitWorktree` で除去する場合、ローカルコミットは常に「未マージ」に見えるため検知による拒否が必ず作動する。確認済みなら最初から `discard_changes: true` で呼んでよい。
 
 ## worktree 配置先 (base) の供給
@@ -34,4 +32,5 @@
 
 - MUST: 上記「原則」で worktree への隔離が必要と判断した場合、worktree の用意 (作成 + ローカル設定の持ち込み + branch description 設定) は `worktree` skill に委譲する。「worktree 配置先 (base) の供給」で定めた `<base>` = `<main>/.claude/worktrees` を絶対パスで渡す。
 - 渡した `<base>` を使った worktree 操作の具体手順 (`git worktree add` の送り方、`git-worktree-include` によるローカル設定持ち込みとその cwd 制約、branch description の書式・確認方法、対話セレクタを使わないこと) は `worktree` skill に従う。skill は配置先の決定・検証・`git status` 非汚染の保証には関与しない。
-- MUST: branch description は worktree の不変条件として常に持つ。先頭 1 行は単独で作業概要として読める subject とし、必要なら空行を挟んで markdown 本文 (関連 PR / issue へのリンク等) を続けてよい。一覧ツールは先頭 1 行のみを表示し、全文はプレビューで読まれる。新規に用意したときは着手前に設定し、既存の worktree で作業を続けるときは未設定ならその場で設定してから着手する。書式・理由・確認方法は skill に従う。
+- MUST: branch description は worktree の不変条件として常に持つ。先頭 1 行は単独で作業概要として読める subject とし、必要なら空行を挟んで markdown 本文 (status / todo) を続ける。一覧ツールは先頭 1 行のみを表示し、全文はプレビューで読まれる。新規に用意したときは着手前に設定し、既存の worktree で作業を続けるときは未設定ならその場で設定してから着手する。書式・理由・確認方法は skill に従う。
+- MUST: 作業の節目 (todo 項目の完了・方針転換・中断・再開・PR 作成) が来たら、その場で branch description の status / todo を更新する。後でまとめて更新しない。手順は skill の「更新」節に従う。
