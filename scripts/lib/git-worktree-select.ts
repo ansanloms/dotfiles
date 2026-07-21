@@ -135,6 +135,18 @@ export function computeColumnWidths(entries: Entry[]): ColumnWidths {
   };
 }
 
+/**
+ * branch description の subject 行 (markdown) を一覧の 1 行表示用に整形する。
+ * markdown をレンダリングするのは preview (mdcat) だけで、リスト行は生テキストの
+ * まま表示されるため、H1 マーカーを除去し、markdown リンクはリンクテキストへ畳む。
+ */
+export function formatSubject(line: string): string {
+  return line
+    .replace(/^#+\s+/, "")
+    .replace(/\[([^\]]*)\]\([^)]+\)/g, "$1")
+    .trim();
+}
+
 /** 1 エントリの表示ラベルを組み立てる。lock された worktree が無ければ lock 列は出さない。 */
 export function buildLabel(
   entry: Entry,
@@ -154,7 +166,7 @@ export function buildLabel(
     }`;
   }
   if (entry.desc) {
-    label += `  ${colors.desc("# " + entry.desc)}`;
+    label += `  ${colors.desc("# " + formatSubject(entry.desc))}`;
   }
   return label.trimEnd();
 }

@@ -26,7 +26,10 @@ async function runFzf(req: FzfRequest) {
     "--delimiter=\t",
     "--with-nth=3..",
     "--layout=reverse",
-    "--height=~50%",
+    // 適応高さ (~) はリストの行数まで UI 全体が縮み、preview ペインも
+    // 一緒に潰れて description の本文が見えなくなるため固定高さにする。
+    "--height=50%",
+    "--min-height=15",
     "--preview",
     req.previewCommand,
     "--preview-window=right,55%,wrap",
