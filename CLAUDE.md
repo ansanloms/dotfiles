@@ -79,7 +79,7 @@ apm install <org>/<repo>/<skill>#<commit>
 
 導入済みコマンド:
 
-- `git-worktree-select` / `git-worktree-include` - worktree の選択・ローカル設定持ち込み
+- `git-worktree-select` / `git-worktree-include` - worktree の選択・ローカル設定持ち込み。選択 UI は fzf（`packages.nix` で導入）で、リストに branch description の先頭 1 行（subject）を表示し、プレビューで全文を mdcat により markdown レンダリングする（mdcat が無い環境では素のテキスト表示にフォールバック）。選択したパスは stdout へ出力する
 - `git-worktree-sweep` - マージ済み worktree の掃除。メイン以外の全 linked worktree (配置場所は問わない) を対象に、マージ判定を git のみで行い (squash merge は merge-base への仮 squash commit + `git cherry` の patch-id 判定で検知)、forge の API に依存しない。マージ済みかつクリーンなものだけを worktree remove + ローカルブランチ削除し、dirty・未マージ・固有コミット無し (作成直後) は報告のみ。`--dry-run` で判定結果だけ確認できる
 - `clip-image` - Windows ホストのクリップボード画像（Win+Shift+S 等）を WSL の PNG に保存し絶対パスを stdout へ出力する（WSL 専用）。`powershell.exe` で画像を取得し native NTFS の一時領域へ書き出してから `~/.cache/clip-image/` へコピーする。保存と同時に `~/.cache/clip-image/latest.png` を最新キャプチャへ張り替える（自動実行時の固定参照先）。nvim では `:r !clip-image`、claude code ではシェルから実行してパスを渡す。`--copy-path`（`-c`）で保存先パスを OSC 52 でクリップボードへ載せ、入力欄に Ctrl+V でパスを貼れるようにする（OSC 52 は `/dev/tty` へ直接書き stdout を汚さない）
 - `clip-image-watch` - 上記を自動化する常駐サービス本体（「クリップボード画像の自動取り込み」節を参照）。
