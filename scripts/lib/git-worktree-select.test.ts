@@ -1,18 +1,21 @@
 import { assertEquals } from "@std/assert";
 import {
   branchLabel,
+  buildFzfLine,
   buildLabel,
   type Colors,
   computeColumnWidths,
   type Entry,
   filterTargets,
+  type FzfRequest,
   lockLabel,
   padVisible,
   parseWorktreePorcelain,
-  pickDefault,
+  pickDefaultIndex,
+  PREVIEW_COMMAND,
   run,
   type SelectDeps,
-  type SelectOptions,
+  selectedPath,
   type Worktree,
 } from "./git-worktree-select.ts";
 
@@ -92,15 +95,18 @@ Deno.test("filterTargets は --exclude-main で先頭を除く", () => {
   ]);
 });
 
-Deno.test("pickDefault は cwd に前方一致した最初の worktree を選ぶ", () => {
+Deno.test("pickDefaultIndex は最長一致の worktree を返す", () => {
   const wts = [
-    wt({ path: "/a/b", sha: "2", branch: "x" }),
     wt({ path: "/a", sha: "1", branch: "main" }),
+    wt({ path: "/a/b", sha: "2", branch: "x" }),
   ];
-  // 先頭から最初に前方一致したものを返す (元コードの挙動)。
-  assertEquals(pickDefault(wts, "/a/b/sub"), "/a/b");
-  assertEquals(pickDefault(wts, "/a/sub"), "/a");
-  assertEquals(pickDefault(wts, "/other"), undefined);
+  // メイン (/a) が先に並んでいても、より深い /a/b を優先する。
+  assertEquals(pickDefaultIndex(wts, "/a/b/sub"), 1);
+  assertEquals(pickDefaultIndex(wts, "/a/b"), 1);
+  assertEquals(pickDefaultIndex(wts, "/a/sub"), 0);
+  assertEquals(pickDefaultIndex(wts, "/other"), -1);
+  // パス境界を見るため /a は /aa に一致しない。
+  assertEquals(pickDefaultIndex(wts, "/aa/sub"), -1);
 });
 
 Deno.test("branchLabel はブランチ無しを (detached) にする", () => {
@@ -182,6 +188,38 @@ Deno.test("buildLabel は lock 列を揃えて表示する", () => {
   assertEquals(buildLabel(base, widths, PLAIN), "wt    abc1234 [main]");
 });
 
+Deno.test("buildFzfLine はパス・ブランチ・ラベルをタブで区切る", () => {
+  const widths = { maxPathLen: 4, maxBranchLen: 6, maxLockLen: 0 };
+  const e = entry({
+    path: "/home/u/repo/.wt/feat",
+    sha: "abc1234abc1234abc1234abc1234abc1234abc1",
+    branch: "feature",
+    relativePath: "wt",
+  });
+  assertEquals(
+    buildFzfLine(e, widths, PLAIN),
+    "/home/u/repo/.wt/feat\tfeature\t" + buildLabel(e, widths, PLAIN),
+  );
+});
+
+Deno.test("buildFzfLine は detached でブランチ欄を空にする", () => {
+  const widths = { maxPathLen: 4, maxBranchLen: 10, maxLockLen: 0 };
+  const e = entry({
+    path: "/home/u/repo/.wt/det",
+    sha: "fedcba9fedcba9fedcba9fedcba9fedcba9fedc",
+    relativePath: "det",
+  });
+  assertEquals(
+    buildFzfLine(e, widths, PLAIN),
+    "/home/u/repo/.wt/det\t\t" + buildLabel(e, widths, PLAIN),
+  );
+});
+
+Deno.test("selectedPath は先頭フィールドを取り出す", () => {
+  assertEquals(selectedPath("/a/b\tfeature\tlabel # desc"), "/a/b");
+  assertEquals(selectedPath("/a/b"), "/a/b");
+});
+
 const PORCELAIN_TWO = [
   "worktree /home/u/repo",
   "HEAD abc1234abc1234abc1234abc1234abc1234abc1",
@@ -197,12 +235,12 @@ function fakeDeps(overrides: Partial<SelectDeps> = {}): {
   deps: SelectDeps;
   errors: string[];
   selected: string[];
-  selectCalls: SelectOptions[];
+  fzfCalls: FzfRequest[];
   descCalls: string[];
 } {
   const errors: string[] = [];
   const selected: string[] = [];
-  const selectCalls: SelectOptions[] = [];
+  const fzfCalls: FzfRequest[] = [];
   const descCalls: string[] = [];
 
   const deps: SelectDeps = {
@@ -213,16 +251,16 @@ function fakeDeps(overrides: Partial<SelectDeps> = {}): {
       descCalls.push(branch);
       return Promise.resolve("");
     },
-    select: (opts) => {
-      selectCalls.push(opts);
-      return Promise.resolve(opts.options[0].value);
+    runFzf: (req) => {
+      fzfCalls.push(req);
+      return Promise.resolve({ code: 0, line: req.lines[0] });
     },
     writeSelected: (p) => selected.push(p),
     errorLine: (m) => errors.push(m),
     ...overrides,
   };
 
-  return { deps, errors, selected, selectCalls, descCalls };
+  return { deps, errors, selected, fzfCalls, descCalls };
 }
 
 Deno.test("run: worktree が無ければ exit 1", async () => {
@@ -255,16 +293,39 @@ Deno.test("run: --exclude-main で対象が空なら exit 1", async () => {
   assertEquals(f.errors, ["No worktrees to select."]);
 });
 
-Deno.test("run: lock された worktree も選択肢に出し stderr へ書く", async () => {
+Deno.test("run: lock された worktree も行に出し選択パスを書く", async () => {
   const f = fakeDeps();
   assertEquals(await run(f.deps), 0);
-  assertEquals(f.selectCalls.length, 1);
-  assertEquals(f.selectCalls[0].options.map((o) => o.value), [
+  assertEquals(f.fzfCalls.length, 1);
+  assertEquals(f.fzfCalls[0].lines.map(selectedPath), [
     "/home/u/repo",
     "/home/u/repo/.wt/feat",
   ]);
-  assertEquals(f.selectCalls[0].default, "/home/u/repo");
+  assertEquals(f.fzfCalls[0].initialIndex, 0);
+  assertEquals(f.fzfCalls[0].previewCommand, PREVIEW_COMMAND);
   assertEquals(f.selected, ["/home/u/repo"]);
+});
+
+Deno.test("run: cwd が 2 番目の worktree 配下なら initialIndex は 1", async () => {
+  const f = fakeDeps({ cwd: () => "/home/u/repo/.wt/feat/sub" });
+  assertEquals(await run(f.deps), 0);
+  assertEquals(f.fzfCalls[0].initialIndex, 1);
+});
+
+Deno.test("run: fzf が中断 (非 0) なら exit 1 で何も書かない", async () => {
+  const f = fakeDeps({
+    runFzf: () => Promise.resolve({ code: 130, line: "" }),
+  });
+  assertEquals(await run(f.deps), 1);
+  assertEquals(f.selected, []);
+});
+
+Deno.test("run: fzf が code 0 でも空行なら exit 1", async () => {
+  const f = fakeDeps({
+    runFzf: () => Promise.resolve({ code: 0, line: "" }),
+  });
+  assertEquals(await run(f.deps), 1);
+  assertEquals(f.selected, []);
 });
 
 Deno.test("run: detached には getDescription を呼ばない", async () => {

@@ -34,4 +34,4 @@
 
 - MUST: 上記「原則」で worktree への隔離が必要と判断した場合、worktree の用意 (作成 + ローカル設定の持ち込み + branch description 設定) は `worktree` skill に委譲する。「worktree 配置先 (base) の供給」で定めた `<base>` = `<main>/.claude/worktrees` を絶対パスで渡す。
 - 渡した `<base>` を使った worktree 操作の具体手順 (`git worktree add` の送り方、`git-worktree-include` によるローカル設定持ち込みとその cwd 制約、branch description の書式・確認方法、対話セレクタを使わないこと) は `worktree` skill に従う。skill は配置先の決定・検証・`git status` 非汚染の保証には関与しない。
-- MUST: branch description は worktree の不変条件として常に 1 行で持つ。新規に用意したときは着手前に設定し、既存の worktree で作業を続けるときは未設定ならその場で設定してから着手する。書式・理由・確認方法は skill に従う。
+- MUST: branch description は worktree の不変条件として常に持つ。先頭 1 行は単独で作業概要として読める subject とし、必要なら空行を挟んで markdown 本文 (関連 PR / issue へのリンク等) を続けてよい。一覧ツールは先頭 1 行のみを表示し、全文はプレビューで読まれる。新規に用意したときは着手前に設定し、既存の worktree で作業を続けるときは未設定ならその場で設定してから着手する。書式・理由・確認方法は skill に従う。
