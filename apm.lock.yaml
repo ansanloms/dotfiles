@@ -31,8 +31,11 @@ dependencies:
     .claude/skills/nvim-remote/SKILL.md: sha256:db2a002b07194827b6061352ef55e21bb5e13b020139bdc0553c7babbe5a73f3
   content_hash: sha256:21ec92040caa3709bb7a4539af968ab7fae52f45fad9378de5cfb9058b0ab808
 - repo_url: ansanloms/skills
+  name: worktree
   host: github.com
-  resolved_commit: 8118aba8b586a20361bc0b31f6511a611d9591c3
+  resolved_commit: de719f4b9032b8f0b716ceed38711b8dda7e1e26
+  resolved_ref: de719f4b9032b8f0b716ceed38711b8dda7e1e26
+  version: unknown
   virtual_path: worktree
   is_virtual: true
   package_type: claude_skill
@@ -40,10 +43,12 @@ dependencies:
   - .claude/skills/worktree
   - .claude/skills/worktree/README.md
   - .claude/skills/worktree/SKILL.md
+  - .claude/skills/worktree/assets/template.md
   deployed_file_hashes:
     .claude/skills/worktree/README.md: sha256:50d519e8e71f19f47d3cd96f1d3bc4d98d3bfc57d3aa3fa471d336a54d70170b
-    .claude/skills/worktree/SKILL.md: sha256:b949019a52e4e663d3dde244ec0bd9011c5cd12241641aab67d7e7bd3e881693
-  content_hash: sha256:19f41262a3380b8c4279620568755fa72833247fc46c6ff269d057af4fdf3211
+    .claude/skills/worktree/SKILL.md: sha256:c1203f4a69f5c9717044a32d78072c954c5775b47206a0553324310e84e511fd
+    .claude/skills/worktree/assets/template.md: sha256:d58676db6f6d8c4b84ff491995556a94d419c704d55ea9b7d21c3637f1ef0bee
+  content_hash: sha256:1c979fee2ec39da463eb9d4d9542c4e2719bc0e4e55c47ec435691d866d35f53
 - repo_url: mizchi/skills
   host: github.com
   resolved_commit: 01cd5b12270c6228a8664cc41e975bb846c83c61
@@ -76,3 +81,166 @@ dependencies:
     .claude/skills/retrospective-codify/SKILL-ja.md: sha256:c55610bfe5ac589d43a6f2199d3b9226a46fef41c0e3f6d02958f69da4c240e9
     .claude/skills/retrospective-codify/SKILL.md: sha256:70bd226087028461f1e208ac5497593cdf6a0dc1e074d80f970addc1e36e5afa
   content_hash: sha256:3ff8c5c61545f778b8731f8d08eccb2bb38c15bc6fa618db509113f48e0ef670
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/empirical-prompt-tuning
+  runtime: null
+  scope: project
+  owners:
+  - mizchi/skills/meta/empirical-prompt-tuning
+  active_owner: mizchi/skills/meta/empirical-prompt-tuning
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/empirical-prompt-tuning/README.md
+  runtime: null
+  scope: project
+  owners:
+  - mizchi/skills/meta/empirical-prompt-tuning
+  active_owner: mizchi/skills/meta/empirical-prompt-tuning
+  content_hash: sha256:c7db7d27122bcffe416e5607700a7cd1778cad260d3e104c5bb6da7b7f976b3d
+- kind: project-relative
+  target: claude
+  value: .claude/skills/empirical-prompt-tuning/SKILL-ja.md
+  runtime: null
+  scope: project
+  owners:
+  - mizchi/skills/meta/empirical-prompt-tuning
+  active_owner: mizchi/skills/meta/empirical-prompt-tuning
+  content_hash: sha256:0a38d830802c2e08a7faca13928fedf6911e00b896946b4b03910d662de6dea5
+- kind: project-relative
+  target: claude
+  value: .claude/skills/empirical-prompt-tuning/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - mizchi/skills/meta/empirical-prompt-tuning
+  active_owner: mizchi/skills/meta/empirical-prompt-tuning
+  content_hash: sha256:252418e7ef022981d2dda2e3ec57fa1c786d30af68c50b7e062edf1d7361b0cb
+- kind: project-relative
+  target: claude
+  value: .claude/skills/find-docs
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/find-docs
+  active_owner: ansanloms/skills/find-docs
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/find-docs/README.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/find-docs
+  active_owner: ansanloms/skills/find-docs
+  content_hash: sha256:9abac44da1547f17c0c7ccfa87485e589b5d858791f26fd136df48ecb2b8d943
+- kind: project-relative
+  target: claude
+  value: .claude/skills/find-docs/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/find-docs
+  active_owner: ansanloms/skills/find-docs
+  content_hash: sha256:f9a1afea99a9f9a880eef532ffd83ae12229ccba67bd6dc9b73464cf31c75e63
+- kind: project-relative
+  target: claude
+  value: .claude/skills/nvim-remote
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/nvim-remote
+  active_owner: ansanloms/skills/nvim-remote
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/nvim-remote/README.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/nvim-remote
+  active_owner: ansanloms/skills/nvim-remote
+  content_hash: sha256:5a549d967962e2145b303b4301259b4536c35178cad9d9cceb4efa3af474c4a1
+- kind: project-relative
+  target: claude
+  value: .claude/skills/nvim-remote/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/nvim-remote
+  active_owner: ansanloms/skills/nvim-remote
+  content_hash: sha256:db2a002b07194827b6061352ef55e21bb5e13b020139bdc0553c7babbe5a73f3
+- kind: project-relative
+  target: claude
+  value: .claude/skills/retrospective-codify
+  runtime: null
+  scope: project
+  owners:
+  - mizchi/skills/meta/retrospective-codify
+  active_owner: mizchi/skills/meta/retrospective-codify
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/retrospective-codify/README.md
+  runtime: null
+  scope: project
+  owners:
+  - mizchi/skills/meta/retrospective-codify
+  active_owner: mizchi/skills/meta/retrospective-codify
+  content_hash: sha256:bdef43f257b112d94d047c467653650dd03fdee556fc8c217a2312e8bc758357
+- kind: project-relative
+  target: claude
+  value: .claude/skills/retrospective-codify/SKILL-ja.md
+  runtime: null
+  scope: project
+  owners:
+  - mizchi/skills/meta/retrospective-codify
+  active_owner: mizchi/skills/meta/retrospective-codify
+  content_hash: sha256:c55610bfe5ac589d43a6f2199d3b9226a46fef41c0e3f6d02958f69da4c240e9
+- kind: project-relative
+  target: claude
+  value: .claude/skills/retrospective-codify/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - mizchi/skills/meta/retrospective-codify
+  active_owner: mizchi/skills/meta/retrospective-codify
+  content_hash: sha256:70bd226087028461f1e208ac5497593cdf6a0dc1e074d80f970addc1e36e5afa
+- kind: project-relative
+  target: claude
+  value: .claude/skills/worktree
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/worktree
+  active_owner: ansanloms/skills/worktree
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/worktree/README.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/worktree
+  active_owner: ansanloms/skills/worktree
+  content_hash: sha256:50d519e8e71f19f47d3cd96f1d3bc4d98d3bfc57d3aa3fa471d336a54d70170b
+- kind: project-relative
+  target: claude
+  value: .claude/skills/worktree/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/worktree
+  active_owner: ansanloms/skills/worktree
+  content_hash: sha256:c1203f4a69f5c9717044a32d78072c954c5775b47206a0553324310e84e511fd
+- kind: project-relative
+  target: claude
+  value: .claude/skills/worktree/assets/template.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/worktree
+  active_owner: ansanloms/skills/worktree
+  content_hash: sha256:d58676db6f6d8c4b84ff491995556a94d419c704d55ea9b7d21c3637f1ef0bee

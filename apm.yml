@@ -4,13 +4,13 @@ description: APM project for dotfiles
 author: ansanloms
 dependencies:
   apm:
-  - ansanloms/skills/nvim-remote
-  - mizchi/skills/meta/empirical-prompt-tuning
-  - ansanloms/skills/find-docs
-  - ansanloms/skills/worktree
-  - mizchi/skills/meta/retrospective-codify
+    - ansanloms/skills/nvim-remote
+    - mizchi/skills/meta/empirical-prompt-tuning
+    - ansanloms/skills/find-docs
+    - ansanloms/skills/worktree#de719f4b9032b8f0b716ceed38711b8dda7e1e26
+    - mizchi/skills/meta/retrospective-codify
   mcp: []
 targets:
-- claude
+  - claude
 includes: auto
 scripts: {}
