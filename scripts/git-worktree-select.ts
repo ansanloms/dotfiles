@@ -25,7 +25,6 @@ async function runFzf(req: FzfRequest) {
     "--ansi",
     "--delimiter=\t",
     "--with-nth=3..",
-    "--nth=3..",
     "--layout=reverse",
     "--height=~50%",
     "--preview",
