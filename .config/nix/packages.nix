@@ -13,6 +13,7 @@ pkgs: with pkgs; [
   drawio
   eza
   ffmpeg
+  fzf
   gh
   git
   git-remote-codecommit
@@ -22,6 +23,7 @@ pkgs: with pkgs; [
   hadolint
   jq
   just
+  mdcat
   moddable-sdk
   neovim
   nix
