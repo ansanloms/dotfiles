@@ -31,7 +31,7 @@ zellij() {
 git() {
   if [[ "$1" == "wt" && "$2" == "ls" ]]; then
     local dir
-    dir=$(command git worktree-select 2>&1 >/dev/tty)
+    dir=$(command git worktree-select)
     [[ -n "$dir" ]] && cd "$dir"
   else
     command git "$@"
