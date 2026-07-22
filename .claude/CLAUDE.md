@@ -127,3 +127,4 @@ zellij セッション内で起動している nvim は `/tmp/nvim-${ZELLIJ_SESS
 @rules/tool-call-stability.md
 @rules/lsp.md
 @rules/worktree.md
+@rules/model-split.md
