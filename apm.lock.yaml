@@ -33,8 +33,8 @@ dependencies:
 - repo_url: ansanloms/skills
   name: worktree
   host: github.com
-  resolved_commit: de719f4b9032b8f0b716ceed38711b8dda7e1e26
-  resolved_ref: de719f4b9032b8f0b716ceed38711b8dda7e1e26
+  resolved_commit: a348ddd588450fe5bfbac65fb8716cce085852e8
+  resolved_ref: a348ddd588450fe5bfbac65fb8716cce085852e8
   version: unknown
   virtual_path: worktree
   is_virtual: true
@@ -45,10 +45,10 @@ dependencies:
   - .claude/skills/worktree/SKILL.md
   - .claude/skills/worktree/assets/template.md
   deployed_file_hashes:
-    .claude/skills/worktree/README.md: sha256:50d519e8e71f19f47d3cd96f1d3bc4d98d3bfc57d3aa3fa471d336a54d70170b
-    .claude/skills/worktree/SKILL.md: sha256:c1203f4a69f5c9717044a32d78072c954c5775b47206a0553324310e84e511fd
+    .claude/skills/worktree/README.md: sha256:a852a307038a264d608a788c3ceadc507977ec2bfd9c48368885f5e469b8b03b
+    .claude/skills/worktree/SKILL.md: sha256:a3c60f2595b9c076f0b2ef5ecfb0774955c4641aee50806b4b59a22daa38e51f
     .claude/skills/worktree/assets/template.md: sha256:d58676db6f6d8c4b84ff491995556a94d419c704d55ea9b7d21c3637f1ef0bee
-  content_hash: sha256:1c979fee2ec39da463eb9d4d9542c4e2719bc0e4e55c47ec435691d866d35f53
+  content_hash: sha256:9b69878047befc8542772b6aba5a76fd448f73e48da65070f66aba210a20fc22
 - repo_url: mizchi/skills
   host: github.com
   resolved_commit: 01cd5b12270c6228a8664cc41e975bb846c83c61
@@ -225,7 +225,7 @@ deployments:
   owners:
   - ansanloms/skills/worktree
   active_owner: ansanloms/skills/worktree
-  content_hash: sha256:50d519e8e71f19f47d3cd96f1d3bc4d98d3bfc57d3aa3fa471d336a54d70170b
+  content_hash: sha256:a852a307038a264d608a788c3ceadc507977ec2bfd9c48368885f5e469b8b03b
 - kind: project-relative
   target: claude
   value: .claude/skills/worktree/SKILL.md
@@ -234,7 +234,7 @@ deployments:
   owners:
   - ansanloms/skills/worktree
   active_owner: ansanloms/skills/worktree
-  content_hash: sha256:c1203f4a69f5c9717044a32d78072c954c5775b47206a0553324310e84e511fd
+  content_hash: sha256:a3c60f2595b9c076f0b2ef5ecfb0774955c4641aee50806b4b59a22daa38e51f
 - kind: project-relative
   target: claude
   value: .claude/skills/worktree/assets/template.md
