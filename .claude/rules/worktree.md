@@ -16,8 +16,10 @@
 
 ## 片付け
 
-- MUST: 片付けの手順 (sweep への委譲、手組みの `git worktree remove` / `git branch -D` の禁止、merge コマンドにローカル後処理をさせないこと、リモートブランチの扱い) は `worktree` skill の「片付け」節に従う。この環境の `git-worktree-sweep` は `.local/bin` にあり (`--dry-run` あり)、常に利用できる前提でよい。
-- MUST: PR / ブランチのマージ報告を受けたとき、または残骸に気づいたときに sweep を実行する。
+skill の「片付け」節は汎用手順 (マージ確認できたものに限る個別の remove) を定めるが、この環境には片付け専用ツールがある。skill が言う「呼び出し側から供給される専用ツール」は本ルールが供給する `git-worktree-sweep` (`.local/bin`、`--dry-run` あり) であり、常に利用できる前提でよい。
+
+- MUST: マージ済み worktree の削除は `git-worktree-sweep` に任せる。PR / ブランチのマージ報告を受けたとき、または残骸に気づいたときに実行する。skill の汎用手順 (個別の `git worktree remove` / `git branch -d`) を手組みしない。sweep はマージ判定を git のみで行うため forge (GitHub 以外のホスティング) に依存せず、squash merge も検知する。dirty・未マージ・detached の worktree には触れず報告のみ行う。
+- MUST: merge 操作のローカル後処理を merge コマンドに任せない (理由と失敗例は skill の「片付け」節)。GitHub なら `--delete-branch` を付けずに merge し、ブランチ削除は sweep に任せる。
 - squash merge 済みと確認できた worktree を `ExitWorktree` で除去する場合、ローカルコミットは常に「未マージ」に見えるため検知による拒否が必ず作動する。確認済みなら最初から `discard_changes: true` で呼んでよい。
 
 ## worktree 配置先 (base) の供給
