@@ -1,5 +1,6 @@
 import { assertEquals, assertRejects, assertStringIncludes } from "@std/assert";
 import {
+  bundleRevision,
   getMermaidBundle,
   type MermaidBundleDeps,
   mermaidEntrySource,
@@ -9,8 +10,15 @@ import {
 Deno.test("mermaidEntrySource は pin 済みの npm:mermaid 指定子を含む", () => {
   const source = mermaidEntrySource("11.16.0");
   assertStringIncludes(source, 'import mermaid from "npm:mermaid@11.16.0";');
-  assertStringIncludes(source, "mermaid.initialize(");
-  assertStringIncludes(source, "mermaid.run(");
+});
+
+Deno.test("mermaidEntrySource は ./mermaid-zoom.js の initMermaidZoom を呼ぶ", () => {
+  const source = mermaidEntrySource("11.16.0");
+  assertStringIncludes(
+    source,
+    'import { initMermaidZoom } from "./mermaid-zoom.js";',
+  );
+  assertStringIncludes(source, "await initMermaidZoom(mermaid);");
 });
 
 Deno.test("resolveCacheDir は XDG_CACHE_HOME を優先する", () => {
@@ -58,8 +66,9 @@ function makeDeps(
 
 Deno.test("getMermaidBundle: キャッシュがあれば bundle を呼ばずそれを返す", async () => {
   const { deps, bundleCalls } = makeDeps();
+  const revision = bundleRevision("11.16.0");
   await deps.writeTextFile(
-    "/home/u/.cache/md2html/mermaid-11.16.0.bundle.js",
+    `/home/u/.cache/md2html/mermaid-11.16.0-${revision}.bundle.js`,
     "/* cached */",
   );
 
@@ -71,14 +80,36 @@ Deno.test("getMermaidBundle: キャッシュがあれば bundle を呼ばずそ�
 
 Deno.test("getMermaidBundle: キャッシュが無ければ bundle して保存する", async () => {
   const { deps, bundleCalls } = makeDeps();
+  const revision = bundleRevision("11.16.0");
 
   const result = await getMermaidBundle(deps, "11.16.0");
 
   assertEquals(result, "/* bundled mermaid */");
   assertEquals(bundleCalls.length, 1);
   const [entryPath, outPath] = bundleCalls[0];
-  assertEquals(outPath, "/home/u/.cache/md2html/mermaid-11.16.0.bundle.js");
+  assertEquals(
+    outPath,
+    `/home/u/.cache/md2html/mermaid-11.16.0-${revision}.bundle.js`,
+  );
   assertStringIncludes(entryPath, "/tmp/md2html-test");
+});
+
+Deno.test("getMermaidBundle: 一時ディレクトリへ mermaid-zoom.js を書き出す (panzoom.js は書かない)", async () => {
+  const { deps } = makeDeps();
+  const files: Record<string, string> = {};
+  const writeTextFile = deps.writeTextFile;
+  deps.writeTextFile = (path, text) => {
+    files[path] = text;
+    return writeTextFile(path, text);
+  };
+
+  await getMermaidBundle(deps, "11.16.0");
+
+  assertStringIncludes(
+    files["/tmp/md2html-test/mermaid-zoom.js"] ?? "",
+    "initMermaidZoom",
+  );
+  assertEquals("/tmp/md2html-test/panzoom.js" in files, false);
 });
 
 Deno.test("getMermaidBundle: bundle の失敗は throw で伝播する", async () => {
