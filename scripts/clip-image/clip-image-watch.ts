@@ -9,11 +9,11 @@
 // powershell を 1 個常駐させ、画像コピーのたびに届く 1 行を受けて clip-image を
 // 起動する。
 //
-// ロジックは lib/clip-image-watch.ts に分離し、副作用はここで組み立てて注入する。
+// ロジックは lib/watch.ts に分離し、副作用はここで組み立てて注入する。
 
 import { TextLineStream } from "@std/streams";
-import { LISTENER_PS, run } from "./lib/clip-image-watch.ts";
-import { frame } from "./lib/clip-image-frame.ts";
+import { LISTENER_PS, run } from "./lib/watch.ts";
+import { frame } from "./lib/frame.ts";
 
 // クリップボード変更を監視する powershell リスナを常駐起動する。
 // STA でないと Clipboard API が使えないため -STA を付ける。

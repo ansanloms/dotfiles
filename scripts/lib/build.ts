@@ -1,11 +1,16 @@
 // build の純粋ロジックとオーケストレーション。
 // 副作用 (ディレクトリ走査 / deno bundle / chmod / 出力) は BuildDeps として注入する。
 //
-// scripts/ 配下の各エントリ (build.ts 自身と *.test.ts を除く *.ts) を
-// deno bundle で単一ファイル化し、.local/bin/ 配下に実行可能ファイルとして配置する。
-// サブディレクトリ (lib/) は readDir のファイル判定で自然に除外される。
+// scripts/ 配下の各 workspace member ディレクトリ (lib/ を除く) を走査し、
+// その直下の各エントリ (*.test.ts を除く *.ts) を deno bundle で単一ファイル化し、
+// .local/bin/ 配下に実行可能ファイルとして配置する。member 内の lib/ サブディレクトリ
+// は走査対象に含めない。
 
-/** bundle 対象のソースか判定する。build.ts 自身とテストファイルは除く。 */
+/**
+ * bundle 対象のソースか判定する。テストファイルは除く。
+ * build.ts の除外は防御的な残置 (scripts/ 直下の build.ts は member ディレクトリ外の
+ * ため走査に乗らず、現行の呼び出し経路ではこの条件に到達しない)。
+ */
 export function isBuildableSource(name: string): boolean {
   return name.endsWith(".ts") && name !== "build.ts" &&
     !name.endsWith(".test.ts");
@@ -19,6 +24,7 @@ export function outName(name: string): string {
 export interface BuildEntry {
   name: string;
   isFile: boolean;
+  isDirectory: boolean;
 }
 
 export interface BundleResult {
@@ -34,28 +40,36 @@ export interface BuildDeps {
   errorLog(msg: string): void;
 }
 
-/** scripts/ の各エントリを bundle して .local/bin/ へ配置する。終了コードを返す。 */
+/** scripts/ 直下の各 member ディレクトリ (lib を除く) を bundle して .local/bin/ へ配置する。終了コードを返す。 */
 export async function run(
   deps: BuildDeps,
   srcDir = "scripts",
   outDir = ".local/bin",
 ): Promise<number> {
-  for await (const entry of deps.readDir(srcDir)) {
-    if (!entry.isFile || !isBuildableSource(entry.name)) {
+  for await (const memberEntry of deps.readDir(srcDir)) {
+    if (!memberEntry.isDirectory || memberEntry.name === "lib") {
       continue;
     }
 
-    const src = `${srcDir}/${entry.name}`;
-    const out = `${outDir}/${outName(entry.name)}`;
+    const memberDir = `${srcDir}/${memberEntry.name}`;
 
-    const result = await deps.bundle(src, out);
-    if (!result.success) {
-      deps.errorLog(result.stderr);
-      return 1;
+    for await (const entry of deps.readDir(memberDir)) {
+      if (!entry.isFile || !isBuildableSource(entry.name)) {
+        continue;
+      }
+
+      const src = `${memberDir}/${entry.name}`;
+      const out = `${outDir}/${outName(entry.name)}`;
+
+      const result = await deps.bundle(src, out);
+      if (!result.success) {
+        deps.errorLog(result.stderr);
+        return 1;
+      }
+
+      await deps.chmod(out, 0o755);
+      deps.log(`Built: ${out}`);
     }
-
-    await deps.chmod(out, 0o755);
-    deps.log(`Built: ${out}`);
   }
 
   return 0;

@@ -1,10 +1,5 @@
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import {
-  EVENT_LINE,
-  LISTENER_PS,
-  run,
-  type WatchDeps,
-} from "./clip-image-watch.ts";
+import { EVENT_LINE, LISTENER_PS, run, type WatchDeps } from "./watch.ts";
 
 Deno.test("LISTENER_PS は EVENT_LINE を出力し here-string を閉じる", () => {
   assertStringIncludes(

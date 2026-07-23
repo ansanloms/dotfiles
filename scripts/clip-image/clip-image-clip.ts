@@ -10,9 +10,9 @@
 //   - コンテナに wl-copy / xclip があり、DISPLAY / WAYLAND_DISPLAY でコンテナの
 //     display server に繋がること (Claude Code / Chrome が読むクリップボードと同じ)。
 //
-// ロジックは lib/clip-image-clip.ts に分離し、副作用はここで組み立てて注入する。
+// ロジックは lib/clip.ts に分離し、副作用はここで組み立てて注入する。
 
-import { run } from "./lib/clip-image-clip.ts";
+import { run } from "./lib/clip.ts";
 
 const sockPath = Deno.env.get("CLIP_IMAGE_SOCK") ?? "/tmp/clip-image.sock";
 

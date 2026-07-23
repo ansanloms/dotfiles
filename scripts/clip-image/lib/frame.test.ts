@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { frame, readFrames } from "./clip-image-frame.ts";
+import { frame, readFrames } from "./frame.ts";
 
 Deno.test("frame は 4 byte big-endian 長 + 本体を前置きする", () => {
   const f = frame(new Uint8Array([0xaa, 0xbb, 0xcc]));

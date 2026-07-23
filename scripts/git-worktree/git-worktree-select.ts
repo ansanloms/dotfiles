@@ -4,9 +4,9 @@
 // fzf は UI を /dev/tty に描くため、stdout はコマンド置換でそのまま受け取れる。
 // リストには branch description の先頭 1 行 (subject) を表示し、
 // preview で全文を mdcat により markdown レンダリングする。
-// ロジックは lib/git-worktree-select.ts に分離し、副作用はここで注入する。
+// ロジックは lib/select.ts に分離し、副作用はここで注入する。
 
-import { type FzfRequest, run } from "./lib/git-worktree-select.ts";
+import { type FzfRequest, run } from "./lib/select.ts";
 
 async function gitStdout(args: string[], allowFail = false): Promise<string> {
   const { stdout, success } = await new Deno.Command("git", {

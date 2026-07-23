@@ -6,8 +6,8 @@ import {
   hashFile,
   isWslPath,
   sanitizeXmlText,
-} from "./notify-notifier.ts";
-import type { NotifyRequest } from "./notify-notifier.ts";
+} from "./notifier.ts";
+import type { NotifyRequest } from "./notifier.ts";
 
 // --- isWslPath ---
 

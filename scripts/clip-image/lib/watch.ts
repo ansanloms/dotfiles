@@ -1,6 +1,6 @@
 // clip-image-watch の純粋ロジックとオーケストレーション。
 // 副作用 (powershell リスナの行ストリーム / clip-image 起動 / 出力) は
-// WatchDeps として注入する。エントリポイント (scripts/clip-image-watch.ts) が
+// WatchDeps として注入する。エントリポイント (scripts/clip-image/clip-image-watch.ts) が
 // 実物を組み立てて run() を呼ぶ。
 //
 // Windows のクリップボード変更イベント (WM_CLIPBOARDUPDATE) は Linux からは

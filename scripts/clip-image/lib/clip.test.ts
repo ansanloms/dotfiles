@@ -1,6 +1,6 @@
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { type ClipDeps, run } from "./clip-image-clip.ts";
-import { frame } from "./clip-image-frame.ts";
+import { type ClipDeps, run } from "./clip.ts";
+import { frame } from "./frame.ts";
 
 function fakeDeps(chunkList: Uint8Array[], overrides: Partial<ClipDeps> = {}): {
   deps: ClipDeps;

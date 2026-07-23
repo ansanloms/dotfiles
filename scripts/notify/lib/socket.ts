@@ -1,4 +1,4 @@
-import type { NotifyRequest, NotifyResponse } from "./notify-notifier.ts";
+import type { NotifyRequest, NotifyResponse } from "./notifier.ts";
 
 /**
  * 1 回の読み込みで使うチャンクバッファのサイズ（バイト）。

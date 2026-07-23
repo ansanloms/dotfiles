@@ -69,10 +69,10 @@ apm install <org>/<repo>/<skill>#<commit>
 
 ## Local scripts
 
-`.local/bin/` 配下のコマンド（`git-worktree-select` / `git-worktree-include` 等）は、`scripts/` 以下の TypeScript を `deno bundle` で単一ファイルにビルドした生成物。依存は `deno.json` の `imports` で一元管理する。
+`.local/bin/` 配下のコマンド（`git-worktree-select` / `git-worktree-include` 等）は、`scripts/` 以下の TypeScript を `deno bundle` で単一ファイルにビルドした生成物。`scripts/` は Deno workspace で、モジュールごとに `clip-image` / `git-worktree` / `md2html` / `notify` のディレクトリ（member）に分かれている。共有依存はルートの `deno.json` の `imports` で、モジュール固有の依存（npm パッケージ等）は各 member（`scripts/<module>/deno.json`）の `imports` で管理する。
 
-- ソース: `scripts/*.ts`（shebang に実行時の権限フラグを記述。`deno bundle` が生成物の先頭へ引き継ぐ）
-- ビルド: `deno task build` で `scripts/*.ts` を `.local/bin/<name>` に bundle し、実行ビットを付与する
+- ソース: `scripts/<module>/*.ts`（shebang に実行時の権限フラグを記述。`deno bundle` が生成物の先頭へ引き継ぐ）
+- ビルド: `deno task build` で `scripts/<module>/*.ts` を `.local/bin/<name>` に bundle し、実行ビットを付与する
 - 生成物は `.gitignore` 済みでコミットしない。`deno task install` でシンボリックリンクするため、**install の前に build しておく**こと
 
 ソースを編集したら `deno task build` で再生成する。
@@ -86,15 +86,15 @@ apm install <org>/<repo>/<skill>#<commit>
 - `clip-image-clip` - devcontainer 内で動くクライアント。ホストの `clip-image-watch` が配信する PNG を unix socket 経由で受け取り、コンテナのクリップボードへ載せる（同節を参照）。
 - `notify` - WSL から Windows のトースト通知を出す常駐サーバ本体（「WSL から Windows への通知」節を参照）。
 
-`scripts/` のソースは「薄いエントリポイント（`scripts/*.ts`）＋ 純粋ロジック / 依存注入した `run()`（`scripts/lib/*.ts`）」に分離している。副作用（subprocess / fs / tty / 対話プロンプト等）を注入することでテスト可能にし、`scripts/lib/*.test.ts` でユニットテストする（`deno task test` / `deno task coverage`）。`scripts/lib/` はサブディレクトリのため `deno task build` の bundle 対象から自然に外れる。
+`scripts/` のソースは「薄いエントリポイント（`scripts/<module>/*.ts`）＋ 純粋ロジック / 依存注入した `run()`（`scripts/<module>/lib/*.ts`）」に分離している。副作用（subprocess / fs / tty / 対話プロンプト等）を注入することでテスト可能にし、`scripts/<module>/lib/*.test.ts` でユニットテストする（`deno task test` / `deno task coverage`）。`deno task build` は各 member 直下のみを bundle 対象とし、`lib/` サブディレクトリは対象から外れる。
 
 ## WSL から Windows への通知（systemd サービス）
 
 WSL 内のアプリ（Claude Code のフック等）から Windows のトースト通知を出す常駐サーバ。UNIX socket を listen し、受信した JSON（`NotifyRequest`）を PowerShell 経由で Windows の Toast Notification API へ渡す（WSL 専用）。元は別リポジトリ `ansanloms/wsl-notify` だったが、外部公開する利点が薄いため dotfiles へ取り込んだ。
 
-- `notify`（`scripts/notify.ts` + `scripts/lib/notify-socket.ts` / `notify-notifier.ts`）- サーバ本体。`notify-socket.ts` が UNIX socket を listen し、`notify-notifier.ts` が PowerShell を起動して Toast を表示する。socket パスはエントリ（`scripts/notify.ts`）で `NOTIFY_SOCK`（既定 `/tmp/notify.sock`）から解決する（lib は ambient な env 読みを持たせない）。
+- `notify`（`scripts/notify/notify.ts` + `scripts/notify/lib/socket.ts` / `notifier.ts`）- サーバ本体。`socket.ts` が UNIX socket を listen し、`notifier.ts` が PowerShell を起動して Toast を表示する。socket パスはエントリ（`scripts/notify/notify.ts`）で `NOTIFY_SOCK`（既定 `/tmp/notify.sock`）から解決する（lib は ambient な env 読みを持たせない）。
 - `.config/systemd/user/notify.service` - 上記を `Restart=always` で常駐させる systemd ユーザサービス。`NOTIFY_SOCK=/tmp/notify.sock` を渡す。
-- クライアントは `.claude/scripts/notify.ts`（Claude Code のフック）。socket パスと `NotifyRequest` 型だけを `.claude/scripts/notify-wire.ts` に複製して持つ。`.claude/scripts` は `~/.claude` へシンボリックリンクされた別 deno プロジェクトのため、サーバ側 `scripts/lib` を相対 import できない。コードは共有せず、UNIX socket 上の JSON というワイヤ契約だけを両端で一致させる。
+- クライアントは `.claude/scripts/notify.ts`（Claude Code のフック）。socket パスと `NotifyRequest` 型だけを `.claude/scripts/notify-wire.ts` に複製して持つ。`.claude/scripts` は `~/.claude` へシンボリックリンクされた別 deno プロジェクトのため、サーバ側 `scripts/notify/lib` を相対 import できない。コードは共有せず、UNIX socket 上の JSON というワイヤ契約だけを両端で一致させる。
 - 有効化: `deno task build` 後に `systemctl --user enable --now notify`。
 
 ## クリップボード画像の自動取り込み（WSL systemd サービス）
@@ -103,7 +103,7 @@ Windows のクリップボードに画像が入ったら自動で `clip-image` �
 
 Windows のクリップボード変更イベント（`WM_CLIPBOARDUPDATE`）は Linux からは購読できないため、イベント検知だけは Windows 側の powershell に任せ、それを WSL 側のサービスが監督する構成。
 
-- `clip-image-watch`（`scripts/clip-image-watch.ts`）- `powershell.exe` を 1 個常駐起動し、`AddClipboardFormatListener` でクリップボード更新をイベント購読する（ポーリングしない）。リスナは画像コピーのたびに 1 行を stdout へ吐き、WSL 側はその行を読んで `clip-image` を起動する。リスナ（powershell）が死んだら非 0 で終了し systemd に再起動させる。`clip-image`（`--copy-path` なし）は Windows クリップボードを書き換えないためループしない。
+- `clip-image-watch`（`scripts/clip-image/clip-image-watch.ts`）- `powershell.exe` を 1 個常駐起動し、`AddClipboardFormatListener` でクリップボード更新をイベント購読する（ポーリングしない）。リスナは画像コピーのたびに 1 行を stdout へ吐き、WSL 側はその行を読んで `clip-image` を起動する。リスナ（powershell）が死んだら非 0 で終了し systemd に再起動させる。`clip-image`（`--copy-path` なし）は Windows クリップボードを書き換えないためループしない。
 - `.config/systemd/user/clip-image-watch.service` - 上記を `Restart=always` で常駐させる systemd ユーザサービス。PATH に WindowsPowerShell ディレクトリを補い（systemd の最小 PATH には無いため）、`wl-copy` / `xclip` が WSLg のコンポジタへ繋がるよう `WAYLAND_DISPLAY` / `DISPLAY` を設定する。
 - 取り込んだ画像は 2 通りで使える。(1) `~/.cache/clip-image/latest.png` に PNG を保存（nvim / claude code から固定パスで読む）。(2) 保存した PNG を Linux クリップボードへ `image/png` で載せる（Wayland=`wl-copy`、X11=`xclip` の両方）。GUI アプリ（Chrome 等）で `Ctrl+V` 貼り付けできるようにするため。Chrome は通常 XWayland(X11) で動くので X11 側が効く。Wayland 側は WSLg が Windows クリップボードを再同期して上書きするため不安定。
 - 成功時は `journalctl --user -u clip-image-watch` に `captured <path>` を出す。
@@ -113,8 +113,8 @@ Windows のクリップボード変更イベント（`WM_CLIPBOARDUPDATE`）は 
 
 devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボードも持たないため、ホストの取り込みをそのままでは使えない。`notify` と同じく unix socket で橋渡しする。inotify はコンテナの bind-mount 越しに発火しないため、ファイル監視ではなく socket ストリームを使う。
 
-- `clip-image-watch`（ホスト）は capture のたびに、保存した PNG を unix socket（`CLIP_IMAGE_SOCK`、既定 `/tmp/clip-image.sock`）の接続クライアントへ配信する。フレームは 4 byte big-endian 長 + PNG 本体（`scripts/lib/clip-image-frame.ts`）。
-- `clip-image-clip`（`scripts/clip-image-clip.ts`、devcontainer 内で常駐）は socket に接続し、受信した PNG をコンテナのクリップボードへ `image/png` で載せる（`wl-copy` + `xclip`）。切断したら再接続する。これで devcontainer 内の Claude Code / Chrome 等で `Ctrl+V` 貼り付けできる。
+- `clip-image-watch`（ホスト）は capture のたびに、保存した PNG を unix socket（`CLIP_IMAGE_SOCK`、既定 `/tmp/clip-image.sock`）の接続クライアントへ配信する。フレームは 4 byte big-endian 長 + PNG 本体（`scripts/clip-image/lib/frame.ts`）。
+- `clip-image-clip`（`scripts/clip-image/clip-image-clip.ts`、devcontainer 内で常駐）は socket に接続し、受信した PNG をコンテナのクリップボードへ `image/png` で載せる（`wl-copy` + `xclip`）。切断したら再接続する。これで devcontainer 内の Claude Code / Chrome 等で `Ctrl+V` 貼り付けできる。
 - devcontainer 側（このリポジトリの管轄外、利用側で設定）の前提: socket（`/tmp/clip-image.sock`）を bind-mount、`clip-image-clip` を起動時に常駐（`postStartCommand` 等）、コンテナに `wl-copy` / `xclip` と `DISPLAY` / `WAYLAND_DISPLAY`（コンテナの display server）があること。
 
 ## 自前 nix パッケージの更新

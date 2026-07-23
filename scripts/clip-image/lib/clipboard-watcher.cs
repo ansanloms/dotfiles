@@ -2,7 +2,7 @@
 // クリップボード変更通知 (WM_CLIPBOARDUPDATE) を受け取る、画面に出ない
 // メッセージ専用ウィンドウ。更新を Updated イベントとして公開する。
 //
-// このファイルは scripts/lib/clip-image-watch.ts から text import され、
+// このファイルは scripts/clip-image/lib/watch.ts から text import され、
 // powershell の単一引用符ヒアストリング (@'...'@) に埋め込まれて Add-Type に
 // 渡される。deno bundle がビルド時にテキストをインライン展開するため、生成物
 // (.local/bin/clip-image-watch) は単一ファイルのまま自己完結する。

@@ -4,11 +4,11 @@
 // サービス (notify.service) から起動する想定。UNIX socket を listen し、
 // 受信した NotifyRequest を Windows の Toast Notification API へ渡す。
 //
-// ロジックは lib/notify-socket.ts (UNIX socket サーバ) と
-// lib/notify-notifier.ts (Windows トースト通知) に分離する。
+// ロジックは lib/socket.ts (UNIX socket サーバ) と
+// lib/notifier.ts (Windows トースト通知) に分離する。
 
-import { startSocketServer } from "./lib/notify-socket.ts";
-import { sendWindowsNotification } from "./lib/notify-notifier.ts";
+import { startSocketServer } from "./lib/socket.ts";
+import { sendWindowsNotification } from "./lib/notifier.ts";
 
 // socket パスはエントリで解決する (lib は ambient な env 読みを持たない)。
 // systemd サービス (notify.service) が NOTIFY_SOCK を渡す。

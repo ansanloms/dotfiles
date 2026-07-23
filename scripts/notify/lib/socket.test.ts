@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert";
-import { startSocketServer } from "./notify-socket.ts";
-import type { NotifyRequest } from "./notify-notifier.ts";
+import { startSocketServer } from "./socket.ts";
+import type { NotifyRequest } from "./notifier.ts";
 
 /**
  * テスト用にサーバを起動し、1 リクエスト送って受信内容と応答を返す。
