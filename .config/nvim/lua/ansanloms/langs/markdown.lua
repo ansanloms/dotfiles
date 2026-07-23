@@ -51,9 +51,11 @@ if vim.fn.executable("pandoc") == 1 then
   vim.g.quickrun_config["markdown/pandoc"] = {
     ["hook/cd/directory"] = "%S:p:h",
     outputter = "browser",
-    exec = "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --css=" .. vim.fn.expand(
-      "~/.config/vim/markdown.css"
-    ) .. " --metadata title=%s",
+    exec = "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --css="
+      .. vim.fn.expand("~/.config/vim/markdown.css")
+      .. " --lua-filter=" .. vim.fn.expand("~/.config/vim/pandoc/mermaid.lua")
+      .. " --include-in-header=" .. vim.fn.expand("~/.config/vim/pandoc/mermaid.html")
+      .. " --metadata title=%s",
   }
 
   -- slidy 出力
