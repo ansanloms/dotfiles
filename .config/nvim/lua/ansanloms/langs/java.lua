@@ -2,14 +2,15 @@
 vim.g.java_highlight_all = 1
 
 -- quickrun - java
-vim.g.quickrun_config = vim.g.quickrun_config or {}
-vim.g.quickrun_config["java"] = {
+local quickrun_config = vim.g.quickrun_config or {}
+quickrun_config["java"] = {
   ["hook/cd/directory"] = "%S:p:h",
   exec = {
     "javac -J-Dfile.encoding=UTF8 %o %s",
     "%c -Dfile.encoding=UTF8 %s:t:r %a",
   },
 }
+vim.g.quickrun_config = quickrun_config
 
 local augroup_java = vim.api.nvim_create_augroup("java-setting", { clear = true })
 

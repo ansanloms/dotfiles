@@ -32,6 +32,7 @@ pkgs: with pkgs; [
   nodejs
   noto-fonts-cjk-sans
   noto-fonts-cjk-serif
+  pandoc
   percona-toolkit
   platformio-core
   playwright-cli
