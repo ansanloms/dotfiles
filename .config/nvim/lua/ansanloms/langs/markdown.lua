@@ -39,22 +39,10 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- quickrun - markdown
-if vim.fn.executable("pandoc") == 1 then
-  -- pandoc 用の取得物 (markdown.css / mermaid.min.js) の置き場。
-  -- リポジトリ管理の設定ではなく、初回のみ手動取得するデータのため data dir に置く。
-  local assets_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "pandoc")
-  local pandoc_dir = vim.fs.joinpath(vim.fn.stdpath("config"), "pandoc")
-
-  -- CSS は取得済みのときだけ適用する。存在しないパスを --css へ渡すと
-  -- pandoc がエラー終了するため。
-  local css = vim.fs.joinpath(assets_dir, "markdown.css")
+do
+  -- ユーザ CSS の置き場。在るときだけ --css を渡す (md2html / pandoc 共通)。
+  local css = vim.fs.joinpath(vim.fn.stdpath("data"), "pandoc", "markdown.css")
   local css_option = vim.fn.filereadable(css) == 1 and (" --css=" .. css) or ""
-
-  -- mermaid.min.js を取得済みならローカル参照の header を使い、
-  -- 無ければ CDN 参照の header にフォールバックする。
-  local mermaid_header = vim.fn.filereadable(vim.fs.joinpath(assets_dir, "mermaid.min.js")) == 1
-      and vim.fs.joinpath(pandoc_dir, "mermaid-local.html")
-    or vim.fs.joinpath(pandoc_dir, "mermaid-cdn.html")
 
   -- 生成した HTML を OS 既定のブラウザで開くコマンド。open-browser.vim には依存しない。
   -- WSL では Windows 側プログラムに Linux パスを直接渡せないため wslpath で変換する。
@@ -72,50 +60,60 @@ if vim.fn.executable("pandoc") == 1 then
 
   local quickrun_config = vim.g.quickrun_config or {}
 
-  quickrun_config["markdown"] = {
-    type = "markdown/pandoc",
-  }
+  if vim.fn.executable("pandoc") == 1 then
+    -- md2html が無い環境向けの素の html 出力フォールバック (mermaid / shiki 無し)
+    quickrun_config["markdown"] = { type = "markdown/pandoc" }
 
-  -- html 出力
-  quickrun_config["markdown/pandoc"] = {
-    ["hook/cd/directory"] = "%S:p:h",
-    outputter = "error",
-    ["outputter/error/success"] = "null",
-    ["outputter/error/error"] = "buffer",
-    exec = "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6"
-      .. css_option
-      .. " --lua-filter=" .. vim.fs.joinpath(pandoc_dir, "mermaid.lua")
-      .. " --include-in-header=" .. mermaid_header
-      .. " --resource-path=.:" .. assets_dir
-      .. " --metadata title=%s --output=%s.html \\&\\& "
-      .. browser_command("%s.html"),
-  }
+    quickrun_config["markdown/pandoc"] = {
+      ["hook/cd/directory"] = "%S:p:h",
+      outputter = "error",
+      ["outputter/error/success"] = "null",
+      ["outputter/error/error"] = "buffer",
+      exec = "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6"
+        .. css_option
+        .. " --metadata title=%s --output=%s.html \\&\\& "
+        .. browser_command("%s.html"),
+    }
 
-  -- slidy 出力
-  quickrun_config["markdown/pandoc-slidy"] = {
-    ["hook/cd/directory"] = "%S:p:h",
-    outputter = "error",
-    ["outputter/error/success"] = "null",
-    ["outputter/error/error"] = "buffer",
-    exec = "pandoc %s --standalone --self-contained --from markdown --to=slidy --toc-depth=6"
-      .. " --metadata title=%s --output=%s.html \\&\\& "
-      .. browser_command("%s.html"),
-  }
+    -- slidy 出力
+    quickrun_config["markdown/pandoc-slidy"] = {
+      ["hook/cd/directory"] = "%S:p:h",
+      outputter = "error",
+      ["outputter/error/success"] = "null",
+      ["outputter/error/error"] = "buffer",
+      exec = "pandoc %s --standalone --self-contained --from markdown --to=slidy --toc-depth=6"
+        .. " --metadata title=%s --output=%s.html \\&\\& "
+        .. browser_command("%s.html"),
+    }
 
-  -- Word docx 出力
-  quickrun_config["markdown/pandoc-docx"] = {
-    ["hook/cd/directory"] = "%S:p:h",
-    outputter = "null",
-    exec = "pandoc %s --standalone --self-contained --from markdown --to=docx --toc-depth=6 --highlight-style=zenburn --output=%s.docx",
-  }
+    -- Word docx 出力
+    quickrun_config["markdown/pandoc-docx"] = {
+      ["hook/cd/directory"] = "%S:p:h",
+      outputter = "null",
+      exec = "pandoc %s --standalone --self-contained --from markdown --to=docx --toc-depth=6 --highlight-style=zenburn --output=%s.docx",
+    }
 
-  -- 単一 markdown 出力
-  quickrun_config["markdown/pandoc-self-contained"] = {
-    ["hook/cd/directory"] = "%S:p:h",
-    ["outputter/buffer/filetype"] = "markdown",
-    exec = "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --no-highlight --metadata title=%s | pandoc --from html --to markdown --wrap none --markdown-headings=atx"
-      .. ' | sed -r -e "s/```\\s*\\{\\.(.*)\\}/```\\1/g"',
-  }
+    -- 単一 markdown 出力
+    quickrun_config["markdown/pandoc-self-contained"] = {
+      ["hook/cd/directory"] = "%S:p:h",
+      ["outputter/buffer/filetype"] = "markdown",
+      exec = "pandoc %s --standalone --self-contained --from markdown --to=html5 --toc-depth=6 --no-highlight --metadata title=%s | pandoc --from html --to markdown --wrap none --markdown-headings=atx"
+        .. ' | sed -r -e "s/```\\s*\\{\\.(.*)\\}/```\\1/g"',
+    }
+  end
+
+  if vim.fn.executable("md2html") == 1 then
+    -- 主経路: deno 製 md2html (shiki + mermaid 内蔵)。pandoc より優先する。
+    quickrun_config["markdown"] = { type = "markdown/md2html" }
+
+    quickrun_config["markdown/md2html"] = {
+      ["hook/cd/directory"] = "%S:p:h",
+      outputter = "error",
+      ["outputter/error/success"] = "null",
+      ["outputter/error/error"] = "buffer",
+      exec = "md2html %s" .. css_option .. " --output %s.html \\&\\& " .. browser_command("%s.html"),
+    }
+  end
 
   vim.g.quickrun_config = quickrun_config
 end
