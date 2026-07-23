@@ -162,6 +162,8 @@ link:
     - src: ./.claude/scripts
   ~/.claude/skills:
     - src: ./.claude/skills
+  ~/.claude/agents:
+    - src: ./.claude/agents
   ~/.config/just/justfile:
     - src: ./.config/just/justfile
   ~/.local/bin/git-worktree-select:
