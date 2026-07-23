@@ -5,7 +5,7 @@ import {
   type MermaidBundleDeps,
   mermaidEntrySource,
   resolveCacheDir,
-} from "./md2html-mermaid.ts";
+} from "./mermaid.ts";
 
 Deno.test("mermaidEntrySource は pin 済みの npm:mermaid 指定子を含む", () => {
   const source = mermaidEntrySource("11.16.0");

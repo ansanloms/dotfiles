@@ -1,7 +1,7 @@
-// notify サーバ (scripts/lib/notify-socket.ts / notify-notifier.ts) との
+// notify サーバ (scripts/notify/lib/socket.ts / notifier.ts) との
 // ワイヤ契約。サーバとは UNIX socket 上の JSON でやり取りするだけで、コードは
 // 共有しない (.claude/scripts は ~/.claude へシンボリックリンクされ、別の deno
-// プロジェクトとして動くため、サーバ側 scripts/lib を相対 import できない)。
+// プロジェクトとして動くため、サーバ側 scripts/notify/lib を相対 import できない)。
 // そのため socket パスと送信する JSON の型だけをここに複製する。
 // サーバ側の定義 (NOTIFY_SOCK / NotifyRequest) と一致させること。
 

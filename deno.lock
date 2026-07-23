@@ -984,20 +984,34 @@
     "dependencies": [
       "jsr:@std/assert@1.0.19",
       "jsr:@std/cli@1.0.32",
-      "jsr:@std/encoding@1.0.11",
-      "jsr:@std/fmt@1.0.10",
-      "jsr:@std/fs@1.0.24",
-      "jsr:@std/path@1.1.6",
-      "jsr:@std/streams@1.1.1",
-      "npm:@shikijs/rehype@4.3.1",
-      "npm:ignore@7.0.6",
-      "npm:rehype-raw@7.0.0",
-      "npm:rehype-stringify@10.0.1",
-      "npm:remark-gfm@4.0.1",
-      "npm:remark-parse@11.0.0",
-      "npm:remark-rehype@11.1.2",
-      "npm:unified@11.0.5",
-      "npm:unist-util-visit@5.1.0"
-    ]
+      "jsr:@std/path@1.1.6"
+    ],
+    "members": {
+      "scripts/clip-image": {
+        "dependencies": [
+          "jsr:@std/streams@1.1.1"
+        ]
+      },
+      "scripts/git-worktree": {
+        "dependencies": [
+          "jsr:@std/fmt@1.0.10",
+          "jsr:@std/fs@1.0.24",
+          "npm:ignore@7.0.6"
+        ]
+      },
+      "scripts/md2html": {
+        "dependencies": [
+          "jsr:@std/encoding@1.0.11",
+          "npm:@shikijs/rehype@4.3.1",
+          "npm:rehype-raw@7.0.0",
+          "npm:rehype-stringify@10.0.1",
+          "npm:remark-gfm@4.0.1",
+          "npm:remark-parse@11.0.0",
+          "npm:remark-rehype@11.1.2",
+          "npm:unified@11.0.5",
+          "npm:unist-util-visit@5.1.0"
+        ]
+      }
+    }
   }
 }

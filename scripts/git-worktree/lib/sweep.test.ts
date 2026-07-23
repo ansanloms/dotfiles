@@ -6,7 +6,7 @@ import {
   parseWorktreeList,
   run,
   type SweepDeps,
-} from "./git-worktree-sweep.ts";
+} from "./sweep.ts";
 
 Deno.test("parseWorktreeList は main と worktree 群を分離しブランチ名を取り出す", () => {
   const out = [

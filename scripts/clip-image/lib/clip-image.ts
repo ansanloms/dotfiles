@@ -1,6 +1,6 @@
 // clip-image の純粋ロジックとオーケストレーション。
 // 副作用 (powershell / wslpath / fs / tty / 時刻 / 環境変数) はすべて
-// ClipImageDeps として注入する。エントリポイント (scripts/clip-image.ts) が
+// ClipImageDeps として注入する。エントリポイント (scripts/clip-image/clip-image.ts) が
 // 実物の副作用を組み立てて run() を呼ぶ。
 
 /**

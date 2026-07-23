@@ -19,10 +19,7 @@
 import { parseArgs } from "@std/cli/parse-args";
 import { basename } from "@std/path";
 import { convert } from "./lib/md2html.ts";
-import {
-  getMermaidBundle,
-  type MermaidBundleDeps,
-} from "./lib/md2html-mermaid.ts";
+import { getMermaidBundle, type MermaidBundleDeps } from "./lib/mermaid.ts";
 
 const IMAGE_MIME_TYPES: Record<string, string> = {
   ".png": "image/png",

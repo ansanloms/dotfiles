@@ -11,7 +11,7 @@ import rehypeStringify from "rehype-stringify";
 import rehypeShiki from "@shikijs/rehype";
 import { visit } from "unist-util-visit";
 import { encodeBase64 } from "@std/encoding/base64";
-import { CODE_COPY_JS, MARKDOWN_THEME_CSS } from "./md2html-assets.ts";
+import { CODE_COPY_JS, MARKDOWN_THEME_CSS } from "./assets.ts";
 
 export interface ResolvedImage {
   mime: string;

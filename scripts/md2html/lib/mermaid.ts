@@ -3,7 +3,7 @@
 // MermaidBundleDeps 経由で呼び出し側から注入する (clip-image.ts の
 // resolveCacheDir(env) の前例に倣う)。
 
-import { MERMAID_ZOOM_JS } from "./md2html-assets.ts";
+import { MERMAID_ZOOM_JS } from "./assets.ts";
 
 /** mermaid のキャッシュ・bundle 対象に使う固定バージョン。 */
 export const MERMAID_VERSION = "11.16.0";

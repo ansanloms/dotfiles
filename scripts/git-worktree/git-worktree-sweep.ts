@@ -7,9 +7,9 @@
 // マージ判定は git のみで行い、forge (GitHub 等) の API に依存しない。
 // 使い方: git-worktree-sweep [--dry-run]
 //
-// ロジックは lib/git-worktree-sweep.ts に分離し、副作用はここで注入する。
+// ロジックは lib/sweep.ts に分離し、副作用はここで注入する。
 
-import { run } from "./lib/git-worktree-sweep.ts";
+import { run } from "./lib/sweep.ts";
 
 const code = await run({
   args: Deno.args,

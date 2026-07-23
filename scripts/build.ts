@@ -1,7 +1,8 @@
 #!/usr/bin/env -S deno run --allow-read=scripts --allow-write=.local/bin --allow-run=deno --allow-env=LD_LIBRARY_PATH
 
-// scripts/ 配下の各エントリ (build.ts 自身と *_test.ts を除く *.ts) を deno bundle で
-// 単一ファイル化し、.local/bin/ 配下に実行可能ファイルとして配置する。
+// scripts/ 配下の各 workspace member ディレクトリ (lib/ を除く) 直下の各エントリ
+// (*.test.ts を除く *.ts) を deno bundle で単一ファイル化し、.local/bin/ 配下に
+// 実行可能ファイルとして配置する。
 //
 // 各エントリの shebang (権限フラグを含む) は deno bundle が出力先の先頭へ
 // そのまま引き継ぐため、ビルド側で権限を管理する必要はない。

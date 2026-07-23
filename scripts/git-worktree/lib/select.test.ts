@@ -18,7 +18,7 @@ import {
   type SelectDeps,
   selectedPath,
   type Worktree,
-} from "./git-worktree-select.ts";
+} from "./select.ts";
 
 const PLAIN: Colors = {
   path: (s) => s,

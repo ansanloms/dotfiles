@@ -5,12 +5,12 @@
 // .worktreeinclude は gitignore 互換の構文 (ignore ライブラリ準拠)。
 // 使い方: git-worktree-include [<options>] <path> [<commit-ish>]
 //
-// ロジックは lib/git-worktree-include.ts に分離し、副作用はここで注入する。
+// ロジックは lib/include.ts に分離し、副作用はここで注入する。
 
 import { expandGlob } from "@std/fs/expand-glob";
 import { ensureDir } from "@std/fs/ensure-dir";
 import { resolve } from "@std/path";
-import { run, type WalkEntry } from "./lib/git-worktree-include.ts";
+import { run, type WalkEntry } from "./lib/include.ts";
 
 async function* walk(
   root: string,

@@ -7,7 +7,7 @@ import {
   resolveDst,
   run,
   type WalkEntry,
-} from "./git-worktree-include.ts";
+} from "./include.ts";
 
 Deno.test("parsePorcelain は main と他 worktree を分離する", () => {
   const out = [
