@@ -22,15 +22,16 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- quickrun - mysql
 if vim.fn.executable("mysql") == 1 then
-  vim.g.quickrun_config = vim.g.quickrun_config or {}
-  vim.g.quickrun_config["sql"] = {
+  local quickrun_config = vim.g.quickrun_config or {}
+  quickrun_config["sql"] = {
     type = "sql/mysql",
   }
 
   -- mysql
-  vim.g.quickrun_config["sql/mysql"] = {
+  quickrun_config["sql/mysql"] = {
     command = "mysql",
     cmdopt = "--defaults-extra-file=" .. vim.fn.expand("~/.mysql/local.conf"),
     exec = { "%c %o < %s" },
   }
+  vim.g.quickrun_config = quickrun_config
 end
