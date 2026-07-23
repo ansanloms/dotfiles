@@ -5,7 +5,6 @@
 !.config/vim/autoload/
 !.config/vim/bitmaps/
 !.config/vim/snippets/
-!.config/vim/pandoc/
 !.config/vim/launcher/000-general.yaml
 !.config/vim/launcher/001-terminal.yaml
 !.config/vim/launcher/002-ai-chat.yaml
