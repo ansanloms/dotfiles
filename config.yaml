@@ -194,6 +194,10 @@ link:
     - src: ./.local/bin/notify
       targets:
         - linux
+  ~/.local/bin/md2html:
+    - src: ./.local/bin/md2html
+      targets:
+        - linux
   ~/.config/systemd/user/notify.service:
     - src: ./.config/systemd/user/notify.service
       targets:
