@@ -24,7 +24,7 @@
     ]
   },
   "imports": {
-    "dot-mori/": "https://cdn.jsdelivr.net/gh/ansanloms/dot-mori@0.1.6/",
+    "dot-mori/": "https://cdn.jsdelivr.net/gh/ansanloms/dot-mori@0.2.0/",
     "@std/assert": "jsr:@std/assert@1.0.19",
     "@std/cli": "jsr:@std/cli@1.0.32",
     "@std/fmt": "jsr:@std/fmt@1.0.10",

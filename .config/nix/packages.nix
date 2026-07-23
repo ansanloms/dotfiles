@@ -16,6 +16,7 @@ pkgs: with pkgs; [
   fzf
   gh
   git
+  git-crypt
   git-remote-codecommit
   go
   google-chrome
