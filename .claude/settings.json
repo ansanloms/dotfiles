@@ -4,8 +4,7 @@
     "DISABLE_AUTOUPDATER": "1",
     "CLAUDE_CODE_SKIP_WINDOWS_PROFILE": "1",
     "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
-    "ENABLE_LSP_TOOL": "1",
-    "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet"
+    "ENABLE_LSP_TOOL": "1"
   },
   "permissions": {
     "allow": [
