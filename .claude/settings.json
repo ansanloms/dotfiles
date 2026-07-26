@@ -89,6 +89,10 @@
     "command": "deno task --cwd ~/.claude/scripts statusline",
     "padding": 0
   },
+  "subagentStatusLine": {
+    "type": "command",
+    "command": "deno task --cwd ~/.claude/scripts subagent-statusline"
+  },
   "enabledPlugins": {
     "denols@lsp": true,
     "lua-ls@lsp": true,

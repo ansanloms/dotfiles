@@ -182,3 +182,104 @@ export interface StatusLineSettings {
   /** Horizontal padding. Set to 0 to let status line go to edge. */
   padding?: number;
 }
+
+/**
+ * Claude Code Subagent Statusline JSON Input Types
+ *
+ * Type definitions for the JSON data passed via stdin to subagentStatusLine
+ * commands. The command is invoked on every refresh tick while the agent
+ * panel (subagent list below the prompt) is visible, once per task row.
+ *
+ * Sources:
+ * - https://code.claude.com/docs/en/statusline.md (Subagent status lines section)
+ *
+ * Note: No official JSON Schema is published by Anthropic.
+ * These types are derived from documentation only.
+ * Fields may be added or changed across Claude Code versions.
+ */
+export interface SubagentStatusLineInput {
+  /** Hook event identifier. */
+  hook_event_name: string;
+
+  /** Unique session ID. */
+  session_id: string;
+
+  /** Path to the conversation transcript file. */
+  transcript_path: string;
+
+  /** Current working directory. */
+  cwd: string;
+
+  /** Available horizontal width, in columns, for each rendered row. */
+  columns: number;
+
+  /** Currently running/visible subagent tasks. */
+  tasks: SubagentTask[];
+}
+
+export interface SubagentTask {
+  /** Unique task identifier. Used to key stdout override lines. */
+  id: string;
+
+  /** Subagent name. */
+  name: string;
+
+  /** Subagent type identifier. */
+  type: string;
+
+  /** Task status (e.g. "running"). */
+  status: string;
+
+  /** Task description as given at invocation. */
+  description: string;
+
+  /** Optional short label. */
+  label?: string;
+
+  /**
+   * Task start time. Documentation does not specify the concrete
+   * representation (epoch ms vs ISO string), so this is kept loose.
+   */
+  startTime?: number | string;
+
+  /**
+   * Resolved model ID (e.g. "claude-sonnet-5"). Omitted when the model
+   * has not been resolved yet. Available since Claude Code v2.1.205.
+   */
+  model?: string;
+
+  /**
+   * Effort level: "low" | "medium" | "high" | "xhigh" | "max", or a
+   * numeric token budget. Omitted when the task inherits the session's
+   * effort value. Available since Claude Code v2.1.214.
+   */
+  effort?: string | number;
+
+  /**
+   * Context window size for the resolved model. Omitted under the same
+   * conditions as `model`. Available since Claude Code v2.1.205.
+   */
+  contextWindowSize?: number;
+
+  /** Cumulative token count consumed by the task. */
+  tokenCount?: number;
+
+  /**
+   * Token usage samples over time. Documentation does not specify the
+   * shape, so this is kept as unknown.
+   */
+  tokenSamples?: unknown;
+
+  /** Task's working directory. */
+  cwd?: string;
+}
+
+/**
+ * Settings configuration for subagentStatusLine in .claude/settings.json.
+ */
+export interface SubagentStatusLineSettings {
+  type: "command";
+
+  /** Shell command or script path to execute. */
+  command: string;
+}
