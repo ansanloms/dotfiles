@@ -5,6 +5,7 @@ pkgs: with pkgs; [
   awscli2
   bun
   claude-code
+  claude-statusline
   curl
   deadnix
   deno
