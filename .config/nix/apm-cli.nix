@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "apm-cli";
-  version = "0.26.0";
+  version = "0.27.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "microsoft";
     repo = "apm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nQ1TPthTUHMEIyThSCPTzIFiWm8YyToOktfcKpN5+T0=";
+    hash = "sha256-H63cJPVHjRKsUlP1ODNzNLx5oS4vBu1byDb4Odt+z+A=";
   };
 
   # llm-github-models は nixpkgs 未収録のため依存から外す (nixpkgs と同じ措置)。
