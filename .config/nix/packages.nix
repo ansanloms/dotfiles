@@ -26,6 +26,7 @@ pkgs: with pkgs; [
   jq
   just
   mdcat
+  mkvtoolnix
   moddable-sdk
   neovim
   nix
