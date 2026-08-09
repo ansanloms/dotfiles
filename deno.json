@@ -61,11 +61,12 @@
       "command": "nix profile remove .config/nix"
     },
     "bump": {
-      "description": "Bump self-built nix package versions and hashes (apm-cli / claude-statusline / playwright-cli / sonarqube-cli / moddable-sdk).",
+      "description": "Bump self-built nix package versions and hashes (apm-cli / claude-statusline / playwright-cli / sonarqube-cli / moddable-sdk / google-health-cli).",
       "command": "deno task bump:*"
     },
     "bump:apm-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=gh,nix .config/nix/apm-cli/upgrade.ts",
     "bump:claude-statusline": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=gh,nix .config/nix/claude-statusline/upgrade.ts",
+    "bump:google-health-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=git,gh,nix .config/nix/google-health-cli/upgrade.ts",
     "bump:playwright-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=npm,nix .config/nix/playwright-cli/upgrade.ts",
     "bump:sonarqube-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=gh,nix .config/nix/sonarqube-cli/upgrade.ts",
     "bump:moddable-sdk": "deno run --allow-read=.config/nix,/nix/store --allow-write=.config/nix --allow-run=git,nix .config/nix/moddable-sdk/upgrade.ts"

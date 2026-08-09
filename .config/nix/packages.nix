@@ -23,6 +23,7 @@ pkgs: with pkgs; [
   go
   google-chrome
   google-cloud-sdk
+  google-health-cli
   hadolint
   jq
   just

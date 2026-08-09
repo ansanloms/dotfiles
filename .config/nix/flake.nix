@@ -38,6 +38,9 @@
 
           # apm-cli は nixpkgs 収録済みだが upstream リリースから遅れるため、自前 derivation で上書きする。
           (final: prev: { apm-cli = final.callPackage ./apm-cli.nix { }; })
+
+          # nixpkgs 未収録の google-health-cli (ghealth コマンド) を callPackage で注入する。
+          (final: prev: { google-health-cli = final.callPackage ./google-health-cli.nix { }; })
         ];
         config.allowUnfreePredicate =
           pkg:
