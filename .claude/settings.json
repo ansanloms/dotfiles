@@ -22,6 +22,7 @@
     "ask": [],
     "defaultMode": "auto"
   },
+  "model": "claude-fable-5[1m]",
   "hooks": {
     "Stop": [
       {
@@ -104,6 +105,12 @@
   "outputStyle": "Explanatory",
   "viewMode": "verbose",
   "language": "japanese",
+  "sandbox": {
+    "excludedCommands": [
+      "systemctl",
+      "journalctl"
+    ]
+  },
   "spinnerTipsEnabled": false,
   "spinnerVerbs": {
     "mode": "replace",
@@ -137,12 +144,5 @@
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
   "terminalProgressBarEnabled": true,
-  "voiceEnabled": true,
-  "model": "claude-fable-5[1m]",
-  "sandbox": {
-    "excludedCommands": [
-      "systemctl",
-      "journalctl"
-    ]
-  }
+  "voiceEnabled": true
 }
