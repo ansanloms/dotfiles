@@ -1,6 +1,12 @@
 export LANG=ja_JP.UTF-8
 export LC_ALL=ja_JP.UTF-8
 
+# nix 製バイナリの glibc はシステムのロケールを参照しないため、
+# nix profile の glibcLocales (packages.nix) を LOCALE_ARCHIVE で指す。
+if [ -f "$HOME/.nix-profile/lib/locale/locale-archive" ]; then
+  export LOCALE_ARCHIVE="$HOME/.nix-profile/lib/locale/locale-archive"
+fi
+
 export LESSCHARSET=utf-8
 export TERM=xterm-256color
 export COLORTERM=truecolor

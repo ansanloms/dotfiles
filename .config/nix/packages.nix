@@ -19,6 +19,7 @@ pkgs: with pkgs; [
   git
   git-crypt
   git-remote-codecommit
+  glibcLocales
   go
   google-chrome
   google-cloud-sdk
