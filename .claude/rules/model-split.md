@@ -1,12 +1,12 @@
 # モデル分担 (設計 = Fable / 実装 = implementer subagent)
 
-方針立案・設計・レビューと、手を動かす実装を別モデルへ分担するルール。メインループは Fable で走らせて設計・判断・レビューを担い、ツール呼び出し密度の高い実装作業は implementer subagent (`.claude/agents/implementer.md`、model: sonnet) へ委譲する。
+方針立案・設計・レビューの裁定と、手を動かす実装を別モデルへ分担するルール。メインループは Fable で走らせて設計・判断・レビューの裁定を担い、ツール呼び出し密度の高い実装作業は implementer subagent (`.claude/agents/implementer.md`、model: sonnet) へ委譲する。実装結果の正当性レビューは Claude Code 組み込みの `/code-review` skill で行う。
 
 ## 背景
 
 - Opus 4.8 には malformed tool-call の既知障害がある ([anthropics/claude-code#62123](https://github.com/anthropics/claude-code/issues/62123) / [#64774](https://github.com/anthropics/claude-code/issues/64774))。発生はモデル固有で、upstream の transcript 調査でも当環境の全数調査 (2026-07、13 件全件 opus-4-8) でも、Sonnet / Fable / opus-4-7 は 0 件。ツール呼び出しが密になる実装工程を Opus 4.8 に載せない。
 - Fable を設計・レビュー側に置くのは判断品質のため。実装の実行自体は計画が確定していれば Sonnet で足りる。
-- レビューを reviewer subagent へ分離するのは、メインループが計画の作者であり、計画自体の欠陥に対して作者バイアスを持つため。独立した文脈のレビューで補完し、あわせてメインセッションのモデルに依らずレビューのモデル品質を固定する。
+- 正当性レビューを `/code-review` skill に任せるのは、fresh-context のレビューエージェント群と指摘の検証パスを持ち、自前 reviewer subagent の上位互換であるため (メンテナンスも Anthropic 側で行われる)。一方「計画どおりに実装されたか」の照合は、計画の作者であるメインループが直接行う。照合には作者知識が有利に働くためで、作者バイアスが問題になるのは計画自体の良否判断だが、計画自体の欠陥も実害があれば /code-review がバグとして検出する。(以前は独立レビューを reviewer subagent (`.claude/agents/reviewer.md`) へ委譲していたが、上記の理由で /code-review へ移行し、reviewer は廃止した。)
 
 ## 運用
 
@@ -15,7 +15,10 @@
 - この委譲 MUST はメインセッション (メインループ) にのみ適用する。本ルールは subagent のコンテキストにも配られるが、subagent として動いている場合 (implementer 自身を含む) は再委譲せず、与えられた作業を直接行う。implementer が Agent 系ツールを持たないのはこの再帰を機械的に防ぐためであり、委譲できないことは異常ではない。
 - MUST: 委譲時は自己完結した計画を渡す。目的・対象ファイル・変更内容・制約 (規約等)・検証コマンドを含め、会話の文脈を前提にしない。
 - MUST: 既存挙動の変更を伴う計画は、委譲前に対象ファイルへ紐づく既存テストの期待値と変更内容を突合する。矛盾がある場合は、既存テストの扱い (更新可否・更新内容) を計画に明記してから委譲する。怠ると implementer は計画外の判断を禁じられているため機械的に差し戻すしかなく、往復コストだけが残る。
-- MUST: implementer の完了報告と diff は reviewer subagent (`.claude/agents/reviewer.md`、model: fable) へ委譲して独立レビューする。委譲時は計画とレビュー対象 (diff の範囲) を自己完結で渡す。メインループは指摘を裁定し、修正が必要なら implementer へ再委譲する。
-- 例外: 数行程度の単純修正 (typo・設定値 1 箇所等) は委譲オーバーヘッドが勝るため、メインループが直接行ってよい (reviewer への委譲も不要)。
+- MUST: implementer の完了報告後、メインループは次の 2 段でレビューする。
+  1. 計画との突合: メインループ自身が diff を読み、計画項目の実装漏れ・計画外の変更が無いかを照合する。
+  2. `/code-review` の実行: diff を対象に code-review skill を実行する。既定は medium、変更が大きい・リスクが高い場合は high。`--fix` は使わない。
+  指摘の裁定はメインループが行い、修正が必要なら implementer へ再委譲する。ドキュメントのみの diff では正当性レビューの効果が薄いため、(1) の突合のみでよい。
+- 例外: 数行程度の単純修正 (typo・設定値 1 箇所等) は委譲オーバーヘッドが勝るため、メインループが直接行ってよい (/code-review も不要)。
 - コミット・push・PR はメインループの管轄とし、通常の Git 運用に従う。
 - メインループ側の委譲義務の強制力は instruction レベルであり機械的な enforcement は無い。メインループはファイル編集の前に、この分担に反していないか確認する。
