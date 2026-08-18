@@ -4,7 +4,6 @@
 
 ## 背景
 
-- Opus 4.8 には malformed tool-call の既知障害がある ([anthropics/claude-code#62123](https://github.com/anthropics/claude-code/issues/62123) / [#64774](https://github.com/anthropics/claude-code/issues/64774))。発生はモデル固有で、upstream の transcript 調査でも当環境の全数調査 (2026-07、13 件全件 opus-4-8) でも、Sonnet / Fable / opus-4-7 は 0 件。ツール呼び出しが密になる実装工程を Opus 4.8 に載せない。
 - Fable を設計・レビュー側に置くのは判断品質のため。実装の実行自体は計画が確定していれば Sonnet で足りる。
 - 正当性レビューを `/code-review` skill に任せるのは、fresh-context のレビューエージェント群と指摘の検証パスを持ち、自前 reviewer subagent の上位互換であるため (メンテナンスも Anthropic 側で行われる)。一方「計画どおりに実装されたか」の照合は、計画の作者であるメインループが直接行う。照合には作者知識が有利に働くためで、作者バイアスが問題になるのは計画自体の良否判断だが、計画自体の欠陥も実害があれば /code-review がバグとして検出する。(以前は独立レビューを reviewer subagent (`.claude/agents/reviewer.md`) へ委譲していたが、上記の理由で /code-review へ移行し、reviewer は廃止した。)
 
