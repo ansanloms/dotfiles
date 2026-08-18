@@ -1,9 +1,10 @@
 # memo
-.memo/
+.memo/**/*
 
 # claude
 **/.claude/settings.local.json
 **/.claude/**/*.local.md
+**/.claude/**/*.local.sh
 **/.claude/plans/*
 **/.claude/worktrees/*
 **/.claude/memories/*
