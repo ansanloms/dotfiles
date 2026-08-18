@@ -1,10 +1,12 @@
 lockfile_version: '1'
-generated_at: '2026-07-03T07:29:27.392581+00:00'
-apm_version: 0.21.0
+generated_at: '2026-08-18T01:10:26.787728+00:00'
+apm_version: 0.28.0
 dependencies:
 - repo_url: ansanloms/skills
+  name: find-docs
   host: github.com
-  resolved_commit: 8118aba8b586a20361bc0b31f6511a611d9591c3
+  resolved_commit: 716a3dba09caee022309dc5984c0101ae2b30f1f
+  version: unknown
   virtual_path: find-docs
   is_virtual: true
   package_type: claude_skill
@@ -14,11 +16,13 @@ dependencies:
   - .claude/skills/find-docs/SKILL.md
   deployed_file_hashes:
     .claude/skills/find-docs/README.md: sha256:9abac44da1547f17c0c7ccfa87485e589b5d858791f26fd136df48ecb2b8d943
-    .claude/skills/find-docs/SKILL.md: sha256:f9a1afea99a9f9a880eef532ffd83ae12229ccba67bd6dc9b73464cf31c75e63
-  content_hash: sha256:999e9b5602208f3f859b5483d0d509640c9cff2f5b3fa703b7b1c21d1f6648fb
+    .claude/skills/find-docs/SKILL.md: sha256:2fa995c605390db080122b4f61a6ee6026babf69c2dfab226b2c7f230b4c065a
+  content_hash: sha256:02ac10fc96d5e738074f5910ad4c99fe1c21f9b0af0924f6321df070b4d2763c
 - repo_url: ansanloms/skills
+  name: nvim-remote
   host: github.com
-  resolved_commit: 8118aba8b586a20361bc0b31f6511a611d9591c3
+  resolved_commit: 716a3dba09caee022309dc5984c0101ae2b30f1f
+  version: unknown
   virtual_path: nvim-remote
   is_virtual: true
   package_type: claude_skill
@@ -33,8 +37,7 @@ dependencies:
 - repo_url: ansanloms/skills
   name: worktree
   host: github.com
-  resolved_commit: a348ddd588450fe5bfbac65fb8716cce085852e8
-  resolved_ref: a348ddd588450fe5bfbac65fb8716cce085852e8
+  resolved_commit: 716a3dba09caee022309dc5984c0101ae2b30f1f
   version: unknown
   virtual_path: worktree
   is_virtual: true
@@ -50,8 +53,10 @@ dependencies:
     .claude/skills/worktree/assets/template.md: sha256:d58676db6f6d8c4b84ff491995556a94d419c704d55ea9b7d21c3637f1ef0bee
   content_hash: sha256:9b69878047befc8542772b6aba5a76fd448f73e48da65070f66aba210a20fc22
 - repo_url: mizchi/skills
+  name: empirical-prompt-tuning
   host: github.com
-  resolved_commit: 01cd5b12270c6228a8664cc41e975bb846c83c61
+  resolved_commit: 7a0d72866a0bb3e9ac3e2768c328b09ba2bc40c4
+  version: unknown
   virtual_path: meta/empirical-prompt-tuning
   is_virtual: true
   package_type: claude_skill
@@ -66,8 +71,10 @@ dependencies:
     .claude/skills/empirical-prompt-tuning/SKILL.md: sha256:252418e7ef022981d2dda2e3ec57fa1c786d30af68c50b7e062edf1d7361b0cb
   content_hash: sha256:20e7fba93c7267ba6e3a7b27787ca49191b762dffcfb804b01da9183b1b0c891
 - repo_url: mizchi/skills
+  name: retrospective-codify
   host: github.com
-  resolved_commit: 01cd5b12270c6228a8664cc41e975bb846c83c61
+  resolved_commit: 7a0d72866a0bb3e9ac3e2768c328b09ba2bc40c4
+  version: unknown
   virtual_path: meta/retrospective-codify
   is_virtual: true
   package_type: claude_skill
@@ -144,7 +151,7 @@ deployments:
   owners:
   - ansanloms/skills/find-docs
   active_owner: ansanloms/skills/find-docs
-  content_hash: sha256:f9a1afea99a9f9a880eef532ffd83ae12229ccba67bd6dc9b73464cf31c75e63
+  content_hash: sha256:2fa995c605390db080122b4f61a6ee6026babf69c2dfab226b2c7f230b4c065a
 - kind: project-relative
   target: claude
   value: .claude/skills/nvim-remote
