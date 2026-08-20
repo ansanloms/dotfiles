@@ -283,3 +283,43 @@ Deno.test("タスクリストは task-list-item / contains-task-list class を�
   assertStringIncludes(html, '<ul class="contains-task-list">');
   assertStringIncludes(html, '<li class="task-list-item">');
 });
+
+Deno.test("convert: 複数言語のコードブロックがそれぞれ shiki 出力になる", async () => {
+  const html = await convert(
+    "```ts\nconst x: number = 1;\n```\n\n```python\nprint(1)\n```\n",
+    baseOptions(),
+  );
+  assertStringIncludes(html, "const");
+  assertStringIncludes(html, "print");
+  const shikiCount = html.split('class="shiki').length - 1;
+  assertEquals(shikiCount, 2);
+  assertStringIncludes(html, "language-ts");
+  assertStringIncludes(html, "language-python");
+});
+
+Deno.test("convert: mermaid と ts の混在では mermaid は pre.mermaid、ts は shiki 出力になる", async () => {
+  const html = await convert(
+    "```mermaid\ngraph TD\n  A --> B\n```\n\n```ts\nconst x = 1;\n```\n",
+    baseOptions(),
+  );
+  assertStringIncludes(html, '<pre class="mermaid">');
+  assertStringIncludes(html, 'class="shiki');
+});
+
+Deno.test("Object.prototype のプロパティ名と同名のフェンス言語でも throw しない", async () => {
+  const html = await convert(
+    "```constructor\nfoo\n```\n",
+    baseOptions(),
+  );
+  assertStringIncludes(html, "foo");
+  assertStringIncludes(html, "language-text");
+});
+
+Deno.test("markdown フェンス (コンテナ grammar) を含む文書も throw せず変換できる", async () => {
+  const html = await convert(
+    "````markdown\n# inner\n\n```python\nprint(1)\n```\n````\n",
+    baseOptions(),
+  );
+  assertStringIncludes(html, "print");
+  assertStringIncludes(html, 'class="shiki');
+});
