@@ -12,18 +12,18 @@ zellij セッション内で起動している nvim は `/tmp/nvim-<セッショ
 
 ## socket の解決手順
 
-候補は必ず `[ -S "$sock" ]` (socket として存在) と `nvim --server "$sock" --remote-expr 'has("nvim")'` (live な nvim が応答する) の **両方** で確認する。後者は exit 0 かつ標準出力が `1` のときのみ live とみなす。エラー・非 0・出力欠落はすべて live でない扱いにする。`[ -S ]` だけだと crash 後に残った stale な socket ファイルを掴む。
+候補は必ず `[ -S "$sock" ]` (socket として存在) と `nvim --server "$sock" --remote-expr 'has("nvim")'` (live な nvim が応答する) の **両方** で確認する。後者は exit 0 かつ標準出力が `1` のときのみ live とみなす。エラー・非 0・出力欠落はすべて live でない扱いにする。`[ -S ]` だけだと crash 後に残った stale な socket ファイルを掴む。解決手順中の `nvim --server` / `zellij action` 呼び出しにはすべて `timeout 5` を付け、判定コマンドはリトライしない (1 回の結果で確定する)。失敗の扱いはコマンド系統で逆になる: `nvim --server` 呼び出し (生存確認・cwd 取得) の失敗はその候補を落とし (応答しない nvim は送信先に使えない)、`zellij action` (attach 判定) の失敗は判定不能として候補に残す。解決手順が参照する環境変数は `CLAUDE_JOB_DIR` (手順 1) と `ZELLIJ_SESSION_NAME` (手順 2) のみで、`ZELLIJ` 等その他の変数は判定に使わない。
 
 1. 環境判定: `CLAUDE_JOB_DIR` が設定されている (バックグラウンドジョブ) 場合は手順 2 をスキップして手順 3 へ進む。前提条件に記した env 固定のため、導出結果が live でも信用できない。
-2. 導出 (フォアグラウンドのみ): `sock="/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock"`。これが live ならそれを使う。
-3. 発見: `ls /tmp/nvim-*.sock` で実体を探し、live なものを候補にする。
+2. 導出 (フォアグラウンドのみ): `sock="/tmp/nvim-${ZELLIJ_SESSION_NAME}.sock"`。これが冒頭の 2 条件で live ならそれを使う。
+3. 発見: `ls /tmp/nvim-*.sock` で実体を探し、冒頭の 2 条件 (`[ -S ]` + `has("nvim")`) をこの段で各実体に適用し、live なものを候補にする。
 4. 候補数で分岐する。
    - 0 個 (live なし): 前提条件を満たさない。コンソール出力へフォールバックする。
    - 1 個: それを使う。
    - 2 個以上: 次の順で絞り込む。
      1. attach 判定: socket 名からセッション名を取り (`/tmp/nvim-<セッション名>.sock`)、`env -u ZELLIJ ZELLIJ_SESSION_NAME=<セッション名> timeout 5 zellij action list-clients` を実行する。出力にヘッダ行しか無い (client が 1 つも attach されていない = ユーザから見えていない) セッションは候補から外す。コマンドが失敗した候補は判定不能として残す。この絞り込みで 0 個になったら、ユーザはどの nvim も見ていないためコンソール出力へフォールバックする。1 個になったらそれを使う。
-     2. cwd 絞り込み: まだ複数なら、各 socket の cwd を `nvim --server "$sock" --remote-expr 'getcwd()'` で引き、現在の cwd / プロジェクトルートに対応する socket を優先する。
-     3. ユーザ確認: 対応が一意に定まらない (どの socket も一致しない、複数が一致する、のいずれも含む) 場合は、起動時刻や socket 名等の弱い基準でエージェントが勝手に選ばず、どのセッションを使うかユーザに確認する。禁止対象はエージェント自身による自動選択であり、候補の識別のため socket 名・cwd・attach 判定で得た focused pane のコマンド (`RUNNING_COMMAND` 列) を提示するのは構わない。
+     2. cwd 絞り込み: まだ複数なら、各 socket の cwd を `nvim --server "$sock" --remote-expr 'getcwd()'` で引き、照合基準に対応する socket だけを残す。照合基準は現在作業中のプロジェクトのメイン worktree (clone 直下) のルートのみとし、`git worktree list --porcelain` の先頭 `worktree` 行で取得する (隔離 worktree 内で作業中も同じ)。「対応する」とは、socket の cwd が照合基準と同一、または一方が他方の配下にあることを指す。配下の判定はパス区切り境界で行う (`<parent>/` で始まるかで比較する。例: `/home/u/proj-backup` は `/home/u/proj` の配下ではない)。1 個に絞れたらそれを使う。
+     3. ユーザ確認: 対応が一意に定まらない (どの socket も一致しない、複数が一致する、のいずれも含む) 場合は、起動時刻や socket 名等の弱い基準でエージェントが勝手に選ばず、どのセッションを使うかユーザに確認する。同一プロジェクトを複数セッションで開いていて cwd が並ぶのは想定内の状態で、そこでユーザ確認になるのが期待挙動 (独自の追加基準で絞らない)。禁止対象はエージェント自身による自動選択であり、候補の識別のため socket 名・cwd・attach 判定で得た focused pane のコマンド (`RUNNING_COMMAND` 列。client 行が複数あるセッションは全行) を提示するのは構わない。提示には手順 4-1 で得た出力をそのまま再利用し、再実行しない。
 
 ## いつ nvim で開くか
 
