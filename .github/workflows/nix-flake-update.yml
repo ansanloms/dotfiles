@@ -5,7 +5,7 @@ name: nix flake update
 
 on:
   schedule:
-    - cron: "0 6 * * 1" # 毎週月曜 06:00 UTC (15:00 JST)
+    - cron: "0 6 * * *" # 毎日 06:00 UTC (15:00 JST)
   workflow_dispatch:
 
 permissions:

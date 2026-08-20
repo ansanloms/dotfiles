@@ -5,7 +5,7 @@ name: nix bump
 
 on:
   schedule:
-    - cron: "0 7 * * 1" # 毎週月曜 07:00 UTC (16:00 JST)
+    - cron: "0 7 * * *" # 毎日 07:00 UTC (16:00 JST)
   workflow_dispatch:
 
 permissions:
