@@ -69,7 +69,7 @@ apm install <org>/<repo>/<skill>#<commit>
 
 ## Local scripts
 
-`.local/bin/` 配下のコマンド（`git-worktree-select` / `git-worktree-include` 等）は、`scripts/` 以下の TypeScript を `deno bundle` で単一ファイルにビルドした生成物。`scripts/` は Deno workspace で、モジュールごとに `clip-image` / `git-worktree` / `md2html` / `notify` のディレクトリ（member）に分かれている。共有依存はルートの `deno.json` の `imports` で、モジュール固有の依存（npm パッケージ等）は各 member（`scripts/<module>/deno.json`）の `imports` で管理する。
+`.local/bin/` 配下のコマンド（`git-worktree-select` / `git-worktree-include` 等）は、`scripts/` 以下の TypeScript を `deno bundle` で単一ファイルにビルドした生成物。`scripts/` は Deno workspace で、モジュールごとに `clip-image` / `git-worktree` / `notify` のディレクトリ（member）に分かれている。共有依存はルートの `deno.json` の `imports` で、モジュール固有の依存（npm パッケージ等）は各 member（`scripts/<module>/deno.json`）の `imports` で管理する。
 
 - ソース: `scripts/<module>/*.ts`（shebang に実行時の権限フラグを記述。`deno bundle` が生成物の先頭へ引き継ぐ）
 - ビルド: `deno task build` で `scripts/<module>/*.ts` を `.local/bin/<name>` に bundle し、実行ビットを付与する
@@ -123,6 +123,7 @@ devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボー
 
 - `apm-cli.nix`（[apm](https://github.com/microsoft/apm)、コマンド名 `apm`。nixpkgs 収録済みだが upstream リリースから数週間遅れるため、nixpkgs の derivation をベースに自前で最新へ追従する。Python ソースビルド（buildPythonApplication）。`llm-github-models` は nixpkgs 未収録のため postPatch で pyproject.toml から除去する。`dependencies` は upstream の pyproject.toml と手動同期）
 - `claude-statusline.nix`（[claude-statusline](https://github.com/ansanloms/claude-statusline)、Claude Code の statusLine / subagentStatusLine レンダラ。nixpkgs 収録対象外の自前ツール。GitHub Release に添付した deno bundle 済み単一 JS を fetchurl で取得し raw のまま導入する。shebang（`env -S deno run ...`）は stdenv の patchShebangs で nix の deno に固定する。`.claude/settings.json` の `statusLine` / `subagentStatusLine` から `claude-statusline main` / `claude-statusline sub` で呼ばれる）
+- `md2html.nix`（[md2html](https://github.com/ansanloms/md2html)、markdown をシンタックスハイライト（shiki）・mermaid・目次内蔵の自己完結 HTML へ変換する CLI。nvim の quickrun からのプレビューが主用途。nixpkgs 収録対象外の自前ツール。元は `scripts/md2html` の workspace member だったが独立リポジトリへ移管した。GitHub Release（タグは `0.1.0` 形式で v プレフィックス無し）に添付した deno bundle 済み単一 JS を fetchurl で取得して導入する。shebang（`env -S deno run ...`）は stdenv の patchShebangs で nix の deno に固定し、実行時の mermaid バンドル生成が PATH の `deno` を spawn するため wrapProgram で nix の deno を PATH へ前置・LD_LIBRARY_PATH を除去する）
 - `playwright-cli.nix`（`@playwright/cli`、npm パッケージ / buildNpmPackage、wrapper で nixpkgs `google-chrome` を駆動）
 - `sonarqube-cli.nix`（SonarQube CLI、コマンド名 `sonar`。SonarSource 配布のプリビルド ELF を fetchurl で取得し raw のまま導入する。配布物は Bun standalone 実行ファイルで、末尾 trailer に埋め込みアプリを持つ。patchelf / strip で ELF を書き換えると trailer が壊れ素の Bun CLI にフォールバックするため fixup を一切かけない。代わりにシステムの glibc / ローダに依存する＝FHS 環境専用。nixpkgs 収録の `sonar-scanner-cli` は別物の旧スキャナ）
 - `moddable-sdk.nix`（Moddable SDK の CLI ツール `mcconfig` / `mcrun` / `mcpack` 等。Linux 専用。GTK ベースの GUI（xsbug / mcsim）はビルドしない。fetchFromGitHub で public ブランチの特定コミットを取得し、sub-makefile（xsc/xsid/xsl/serial2xsbug/tools）だけをビルドする。CLI ツールは単一マルチコールバイナリ `tools` への bash ラッパで、実行時に環境変数 `MODDABLE` が SDK ツリーを指す必要があるため、SDK ツリー一式を `$out/share/moddable` へ展開し各ツールを `MODDABLE` 付きで wrap する。SDK ツリーは read-only（store）のため、アプリビルド時は `mcconfig -o <書き込み可能なディレクトリ>` で出力先を明示する。nixpkgs 未収録。タグは 2022 年止まりなので tag ではなく public のコミットに pin する）
@@ -133,6 +134,7 @@ devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボー
 
 - `.config/nix/apm-cli/upgrade.ts`（最新は GitHub releases の latest tag、hash は `nix flake prefetch`。引数でバージョン指定も可）
 - `.config/nix/claude-statusline/upgrade.ts`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。引数でバージョン指定も可）
+- `.config/nix/md2html/upgrade.ts`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。タグは v プレフィックス無し。引数でバージョン指定も可）
 - `.config/nix/playwright-cli/upgrade.ts`（最新は npm レジストリ、FOD は prefetch-npm-deps）
 - `.config/nix/sonarqube-cli/upgrade.ts`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。配布リリース番号は `1.1.0.3122` 形式）
 - `.config/nix/moddable-sdk/upgrade.ts`（最新は `git ls-remote ... public` の HEAD、hash と取得ツリーの storePath は `nix flake prefetch`、version は storePath の `tools/VERSION`。引数でコミット指定も可）
@@ -147,6 +149,7 @@ bump が更新するのは version 文字列と FOD ハッシュという、機�
 
 - **apm-cli**: upstream が pyproject.toml の dependencies を増減すると、`apm-cli.nix` の `dependencies` 列挙とずれてビルドまたは実行時 import が落ちる。upstream の pyproject.toml と突き合わせて手動同期する。postPatch の `grep -q 'llm-github-models'` が失敗する場合は upstream がこの依存を落とした合図で、postPatch ごと削除してよい。
 - **claude-statusline**: 資産名や shebang の権限フラグ構成が変わると `claude-statusline.nix` が合わなくなる。bump 後は `echo '{"hook_event_name":"Status","...":"..."}' | claude-statusline main` のようなスモークで動作確認する。
+- **md2html**: 資産名や shebang の権限フラグ構成が変わると `md2html.nix` が合わなくなる。bump 後は適当な markdown を変換して出力が `<!doctype html>` で始まることをスモーク確認する（例: `printf '# t\n' > /tmp/t.md && md2html /tmp/t.md | head -c 20`）。
 - **playwright-cli**: 新版で bin のパスや名前が変わると、`playwright-cli.nix` の wrapper（`--add-flags` のパス）が合わなくなる。`find` で実 bin を確認して修正する。
 - **sonarqube-cli**: bump 後は `sonar -h` で本物の SonarQube CLI help が出ることを必ず確認する。Bun の help（`bun <command>` の usage）や `--version` が Bun のバージョンを返す場合、配布物の埋め込み構造が変わって raw 導入では動かなくなったサイン。`dontFixup` のままラップ方式（buildFHSEnv 等）への切り替えを検討する。
 - **moddable-sdk**: 新版で release ターゲットの sub-makefile 構成（`xsc.mk` / `tools.mk` 等のパスや並び）や CLI ツールの一覧が変わると、`buildPhase` の make 呼び出しや `cliTools` のラップ対象がずれる。bump 後は `nix build` が通ること、`mcconfig` が実行できることを確認する。アプリビルドの C コンパイル段（`x-cli-lin` は `gio-2.0` 依存）が動くかは wrapper の `runtimeInputs` / `PKG_CONFIG_PATH` に依存するため、依存が増えた場合はそこを手当てする。

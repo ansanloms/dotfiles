@@ -27,6 +27,9 @@
           # 自前配布の claude-statusline (Claude Code の statusline レンダラ) を callPackage で注入する。
           (final: prev: { claude-statusline = final.callPackage ./claude-statusline.nix { }; })
 
+          # 自前配布の md2html (markdown → 自己完結 HTML 変換 CLI) を callPackage で注入する。
+          (final: prev: { md2html = final.callPackage ./md2html.nix { }; })
+
           # nixpkgs 未収録の playwright-cli を callPackage で注入する。
           (final: prev: { playwright-cli = final.callPackage ./playwright-cli.nix { }; })
 
