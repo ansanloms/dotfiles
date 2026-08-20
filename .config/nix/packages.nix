@@ -39,6 +39,7 @@ pkgs: with pkgs; [
   percona-toolkit
   platformio-core
   playwright-cli
+  postgresql
   pueue
   ripgrep
   rustup
