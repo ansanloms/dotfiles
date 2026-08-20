@@ -395,6 +395,19 @@ export async function convert(
     .use(rehypeMermaid, mermaidUsed)
     .use(rehypeShiki, {
       themes: { light: "github-light", dark: "github-dark" },
+      // langs 未指定だと初回適用時に bundled 全 grammar (alias 込み 332 キー)
+      // が eager load され、コードブロックが無い文書でも変換に数秒かかる。
+      // langs を空にして lazy を有効にすると、実際に現れた言語だけがオンデマンド
+      // でロードされ、ロードできない言語 (未知言語等) は fallbackLanguage へ
+      // 落ちる (fallbackLanguage が設定されている限り onError には到達しない)。
+      // 注意: langs: [] で eager load を避けられるのは、upstream が
+      // `options.langs || 全言語` で判定し空配列が truthy に評価されるため。
+      // 既知の制約: コンテナ grammar の埋め込み言語 (例: markdown フェンス内の
+      // さらに内側のコードブロック) は grammar がロードされず、内側のハイライト
+      // が浅くなる。フェンス言語の事前スキャンや shiki の guessEmbeddedLanguages
+      // による先読みで回復はできるが、複雑さに見合わないため受容する。
+      langs: [],
+      lazy: true,
       defaultLanguage: "text",
       fallbackLanguage: "text",
       addLanguageClass: true,
