@@ -32,7 +32,12 @@ layout {
           name "Neovim"
           focus true
           command "bash"
-          args "-c" "nvim --listen /tmp/nvim-${ZELLIJ_SESSION_NAME}.sock"
+          // Workaround for https://github.com/ansanloms/dotfiles/issues/47:
+          // zellij types terminal query replies arriving later than ~1s into
+          // the focused pane as keystrokes. Before starting nvim, wait up to
+          // 2.5s for the first stray byte; if one arrives, keep draining the
+          // pty input queue until 0.5s of silence.
+          args "-c" "if IFS= read -rs -t 2.5 -n 1 _; then while IFS= read -rs -t 0.5 -n 1 _; do :; done; fi; exec nvim --listen /tmp/nvim-${ZELLIJ_SESSION_NAME}.sock"
         }
 
         pane size="25%" {
