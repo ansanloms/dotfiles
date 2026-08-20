@@ -9,6 +9,7 @@ import remarkRehype from "remark-rehype";
 import rehypeRaw from "rehype-raw";
 import rehypeStringify from "rehype-stringify";
 import rehypeShiki from "@shikijs/rehype";
+import { rehypeGithubAlerts } from "rehype-github-alerts";
 import { visit } from "unist-util-visit";
 import { encodeBase64 } from "@std/encoding/base64";
 import { CODE_COPY_JS, MARKDOWN_THEME_CSS } from "./assets.ts";
@@ -392,6 +393,7 @@ export async function convert(
     .use(remarkGfm)
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRaw)
+    .use(rehypeGithubAlerts, {})
     .use(rehypeMermaid, mermaidUsed)
     .use(rehypeShiki, {
       themes: { light: "github-light", dark: "github-dark" },
@@ -437,8 +439,7 @@ export async function convert(
         }</a></li>`
       )
       .join("");
-    tocAside =
-      `<aside class="toc" aria-label="目次"><p class="toc-title">目次</p><ul>${items}</ul></aside>`;
+    tocAside = `<aside class="toc" aria-label="目次"><ul>${items}</ul></aside>`;
   } else {
     layoutStyle = ' style="grid-template-columns: minmax(0, 1fr)"';
   }

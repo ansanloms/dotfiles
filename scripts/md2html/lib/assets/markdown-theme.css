@@ -18,6 +18,11 @@
   --accent-soft: #e7ecfb;
   --quote-bar: #d0d7de;
   --mark: #fff3bf;
+  --alert-note: #0969da;
+  --alert-tip: #1a7f37;
+  --alert-important: #8250df;
+  --alert-warning: #9a6700;
+  --alert-caution: #cf222e;
   --font-body: "Helvetica Neue", "Segoe UI", "Hiragino Kaku Gothic ProN",
                "Hiragino Sans", Meiryo, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", "Cascadia Mono",
@@ -40,6 +45,11 @@
     --accent-soft: #232a44;
     --quote-bar: #343a45;
     --mark: #4a3f12;
+    --alert-note: #4493f8;
+    --alert-tip: #3fb950;
+    --alert-important: #ab7df8;
+    --alert-warning: #d29922;
+    --alert-caution: #f85149;
   }
 }
 
@@ -140,14 +150,6 @@ button {
   font-size: 13px;
   border-left: 1px solid var(--border-subtle);
   padding-left: 18px;
-}
-.toc-title {
-  text-transform: uppercase;
-  letter-spacing: .09em;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--fg-faint);
-  margin: 0 0 12px;
 }
 /* scroll-linked active state, CSS-only (ics.media/entry/260130):
    the group tracks scroll position and flags each anchor's target as
@@ -337,6 +339,47 @@ button {
 }
 .md blockquote p:last-child {
   margin-bottom: 0;
+}
+
+/* GitHub-style alerts (rehype-github-alerts) */
+.md .markdown-alert {
+  margin: 1.4em 0;
+  padding: .2em 1.1em;
+  border-left: 3px solid var(--alert-accent, var(--quote-bar));
+}
+.md .markdown-alert > :last-child {
+  margin-bottom: 0;
+}
+/* .md > *:first-child (0,2,0) と同点で後勝ちになるため、先頭に来た場合の
+   margin-top リセットを詳細度を上げて明示する。 */
+.md > .markdown-alert:first-child {
+  margin-top: 0;
+}
+.md .markdown-alert .markdown-alert-title {
+  display: flex;
+  align-items: center;
+  gap: .5em;
+  margin: 0 0 .35em;
+  font-weight: 600;
+  color: var(--alert-accent);
+}
+.md .markdown-alert .octicon {
+  fill: currentColor;
+}
+.md .markdown-alert-note {
+  --alert-accent: var(--alert-note);
+}
+.md .markdown-alert-tip {
+  --alert-accent: var(--alert-tip);
+}
+.md .markdown-alert-important {
+  --alert-accent: var(--alert-important);
+}
+.md .markdown-alert-warning {
+  --alert-accent: var(--alert-warning);
+}
+.md .markdown-alert-caution {
+  --alert-accent: var(--alert-caution);
 }
 
 .md mark {
