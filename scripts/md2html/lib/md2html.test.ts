@@ -323,3 +323,31 @@ Deno.test("markdown フェンス (コンテナ grammar) を含む文書も throw
   assertStringIncludes(html, "print");
   assertStringIncludes(html, 'class="shiki');
 });
+
+Deno.test("アラート記法は markdown-alert へ変換される", async () => {
+  for (const marker of ["NOTE", "TIP", "IMPORTANT", "WARNING", "CAUTION"]) {
+    const html = await convert(
+      `> [!${marker}]\n> 本文テキスト\n`,
+      baseOptions(),
+    );
+    const type = marker.toLowerCase();
+    assertStringIncludes(
+      html,
+      `class="markdown-alert markdown-alert-${type}"`,
+    );
+    assertStringIncludes(html, 'class="markdown-alert-title"');
+    assertStringIncludes(html, "本文テキスト");
+  }
+});
+
+Deno.test("マーカーの無い blockquote はアラートにならない", async () => {
+  const html = await convert("> ただの引用\n", baseOptions());
+  assertEquals(html.includes('class="markdown-alert'), false);
+  assertStringIncludes(html, "<blockquote>");
+});
+
+Deno.test("TOC に可視ラベルが出ない", async () => {
+  const html = await convert("## 見出し\n", baseOptions());
+  assertEquals(html.includes("toc-title"), false);
+  assertStringIncludes(html, '<aside class="toc" aria-label="目次">');
+});
