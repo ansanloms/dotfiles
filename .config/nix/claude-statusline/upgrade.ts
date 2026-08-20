@@ -6,7 +6,7 @@
 //   2. 配布 JS の hash を nix store prefetch-file で取得
 //   3. claude-statusline.nix の version / hash を反映
 //
-// git add / deno task switch は行わない。完了後に git diff で確認し、手動で反映すること。
+// git add / nix profile upgrade は行わない。完了後に git diff で確認し、手動で反映すること。
 //
 // 使い方:
 //   deno task bump:claude-statusline          # 最新へ
@@ -68,4 +68,4 @@ await Deno.writeTextFile(nixPath, nix);
 
 console.log("\n更新完了。git diff で確認し、問題なければ反映:");
 console.log("  git add .config/nix/claude-statusline.nix");
-console.log("  deno task switch");
+console.log("  nix profile upgrade --all --impure");

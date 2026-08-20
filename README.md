@@ -65,10 +65,13 @@ nix profile add ~/.config/nix#default --impure
 
 ```sh
 # パッケージ定義の変更を反映
-deno task switch
+nix profile upgrade --all --impure
 
-# 依存を更新して反映
-deno task upgrade
+# 依存（flake input）を更新
+nix flake update --flake path:.config/nix
+
+# プロファイルから削除
+nix profile remove .config/nix
 ```
 
 ### 6. Enable systemd user services (WSL)

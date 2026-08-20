@@ -7,7 +7,7 @@
 //   3. npmDepsHash を取得
 //   4. playwright-cli.nix の version / npmDepsHash を反映
 //
-// git add / deno task switch は行わない。完了後に git diff で確認し、手動で反映すること。
+// git add / nix profile upgrade は行わない。完了後に git diff で確認し、手動で反映すること。
 //
 // 使い方:
 //   deno task bump:playwright-cli            # 最新へ
@@ -86,4 +86,4 @@ console.log("\n更新完了。git diff で確認し、問題なければ反映:"
 console.log(
   "  git add .config/nix/playwright-cli.nix .config/nix/playwright-cli/",
 );
-console.log("  deno task switch");
+console.log("  nix profile upgrade --all --impure");
