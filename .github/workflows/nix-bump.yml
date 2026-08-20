@@ -1,7 +1,7 @@
 name: nix bump
 
-# 自前 derivation (playwright-cli) の version・ハッシュ・lockfile を更新し、
-# ビルド検証のうえ直接 main へコミットする。適用 (deno task switch) はローカルで行う。
+# 自前 derivation の version・ハッシュ・lockfile を更新し、
+# ビルド検証のうえ直接 main へコミットする。適用 (nix profile upgrade --all --impure) はローカルで行う。
 
 on:
   schedule:

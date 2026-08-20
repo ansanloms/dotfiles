@@ -18,11 +18,11 @@ deno task uninstall
 # パッケージ初回導入
 nix profile add path:.config/nix#default --impure
 
-# パッケージ適用（packages.nix の変更を反映）
-deno task switch
+# パッケージ適用（packages.nix / *.nix / flake.lock の変更を反映）
+nix profile upgrade --all --impure
 
-# パッケージ更新（nixpkgs / llm-agents を更新して反映）
-deno task upgrade
+# flake input（nixpkgs / llm-agents）を更新
+nix flake update --flake path:.config/nix
 ```
 
 ## 構成
@@ -137,13 +137,13 @@ devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボー
 - `.config/nix/sonarqube-cli/upgrade.ts`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。配布リリース番号は `1.1.0.3122` 形式）
 - `.config/nix/moddable-sdk/upgrade.ts`（最新は `git ls-remote ... public` の HEAD、hash と取得ツリーの storePath は `nix flake prefetch`、version は storePath の `tools/VERSION`。引数でコミット指定も可）
 
-bump はファイルを書き換えるだけで反映はしない。完了後に `git diff` で確認してから `deno task switch` で反映する。`switch` = `nix profile upgrade --all --impure` はプロファイルが `path:.config/nix#default` で登録されている前提。この `path:` はリポジトリ内にあるため nix はリポジトリの git tree を flake ソースとして使う。git tree flake は **tracked ファイルしか** store にコピーしない（追跡済みファイルの変更は作業ツリーの内容がそのまま反映されるが、未追跡の新規ファイルは除外され `path ... does not exist` でビルドが落ちる）。
+bump はファイルを書き換えるだけで反映はしない。完了後に `git diff` で確認してから `nix profile upgrade --all --impure` で反映する。これはプロファイルが `path:.config/nix#default` で登録されている前提。この `path:` はリポジトリ内にあるため nix はリポジトリの git tree を flake ソースとして使う。git tree flake は **tracked ファイルしか** store にコピーしない（追跡済みファイルの変更は作業ツリーの内容がそのまま反映されるが、未追跡の新規ファイルは除外され `path ... does not exist` でビルドが落ちる）。
 
-このため、bump で既存ファイルの version / hash を書き換えただけなら `git add` 不要で `switch` が反映する。一方、新規 `.nix` ファイル等を追加したときは `switch` の前に `git add` して tracked にしておく必要がある。
+このため、bump で既存ファイルの version / hash を書き換えただけなら `git add` 不要で `nix profile upgrade` が反映する。一方、新規 `.nix` ファイル等を追加したときは `nix profile upgrade` の前に `git add` して tracked にしておく必要がある。
 
 ### bump で拾えない変更
 
-bump が更新するのは version 文字列と FOD ハッシュという、機械的に再計算できる値だけ。新版が次を変えた場合は bump 後の `switch` がビルドエラーになるので、エラーを読んで derivation を手当てする:
+bump が更新するのは version 文字列と FOD ハッシュという、機械的に再計算できる値だけ。新版が次を変えた場合は bump 後の `nix profile upgrade` がビルドエラーになるので、エラーを読んで derivation を手当てする:
 
 - **apm-cli**: upstream が pyproject.toml の dependencies を増減すると、`apm-cli.nix` の `dependencies` 列挙とずれてビルドまたは実行時 import が落ちる。upstream の pyproject.toml と突き合わせて手動同期する。postPatch の `grep -q 'llm-github-models'` が失敗する場合は upstream がこの依存を落とした合図で、postPatch ごと削除してよい。
 - **claude-statusline**: 資産名や shebang の権限フラグ構成が変わると `claude-statusline.nix` が合わなくなる。bump 後は `echo '{"hook_event_name":"Status","...":"..."}' | claude-statusline main` のようなスモークで動作確認する。
@@ -151,7 +151,7 @@ bump が更新するのは version 文字列と FOD ハッシュという、機�
 - **sonarqube-cli**: bump 後は `sonar -h` で本物の SonarQube CLI help が出ることを必ず確認する。Bun の help（`bun <command>` の usage）や `--version` が Bun のバージョンを返す場合、配布物の埋め込み構造が変わって raw 導入では動かなくなったサイン。`dontFixup` のままラップ方式（buildFHSEnv 等）への切り替えを検討する。
 - **moddable-sdk**: 新版で release ターゲットの sub-makefile 構成（`xsc.mk` / `tools.mk` 等のパスや並び）や CLI ツールの一覧が変わると、`buildPhase` の make 呼び出しや `cliTools` のラップ対象がずれる。bump 後は `nix build` が通ること、`mcconfig` が実行できることを確認する。アプリビルドの C コンパイル段（`x-cli-lin` は `gio-2.0` 依存）が動くかは wrapper の `runtimeInputs` / `PKG_CONFIG_PATH` に依存するため、依存が増えた場合はそこを手当てする。
 
-このため bump 後は必ず `deno task switch` までやってビルドが通ることを確認すること。
+このため bump 後は必ず `nix profile upgrade --all --impure` までやってビルドが通ることを確認すること。
 
 ### nixpkgs 収録されたら
 

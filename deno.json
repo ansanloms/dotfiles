@@ -48,18 +48,6 @@
     "build": "deno run --allow-read=scripts --allow-write=.local/bin --allow-run=deno --allow-env=LD_LIBRARY_PATH scripts/build.ts",
     "install": "deno task dot-mori --config ./config.yaml",
     "uninstall": "deno task dot-mori --config ./config.yaml --clean",
-    "switch": {
-      "description": "Apply package changes to the profile (packages.nix / *.nix / flake.lock).",
-      "command": "nix profile upgrade --all --impure"
-    },
-    "upgrade": {
-      "description": "Update flake inputs (nixpkgs / llm-agents).",
-      "command": "nix flake update --flake path:.config/nix"
-    },
-    "remove": {
-      "description": "Remove flake inputs.",
-      "command": "nix profile remove .config/nix"
-    },
     "bump": {
       "description": "Bump self-built nix package versions and hashes (apm-cli / claude-statusline / playwright-cli / sonarqube-cli / moddable-sdk).",
       "command": "deno task bump:*"

@@ -6,7 +6,7 @@
 //   2. ソースツリーの hash を nix flake prefetch で取得
 //   3. apm-cli.nix の version / hash を反映
 //
-// git add / deno task switch は行わない。完了後に git diff で確認し、手動で反映すること。
+// git add / nix profile upgrade は行わない。完了後に git diff で確認し、手動で反映すること。
 //
 // 使い方:
 //   deno task bump:apm-cli          # 最新へ
@@ -71,4 +71,4 @@ await Deno.writeTextFile(nixPath, nix);
 
 console.log("\n更新完了。git diff で確認し、問題なければ反映:");
 console.log("  git add .config/nix/apm-cli.nix");
-console.log("  deno task switch");
+console.log("  nix profile upgrade --all --impure");

@@ -10,7 +10,7 @@
 //   3. storePath の tools/VERSION を version 文字列に反映
 //   4. moddable-sdk.nix の rev / hash / version を反映
 //
-// git add / deno task switch は行わない。完了後に git diff で確認し、手動で反映すること。
+// git add / nix profile upgrade は行わない。完了後に git diff で確認し、手動で反映すること。
 //
 // 使い方:
 //   deno task bump:moddable-sdk            # public HEAD へ
@@ -82,4 +82,4 @@ await Deno.writeTextFile(nixPath, nix);
 
 console.log("\n更新完了。git diff で確認し、問題なければ反映:");
 console.log("  git add .config/nix/moddable-sdk.nix");
-console.log("  deno task switch");
+console.log("  nix profile upgrade --all --impure");
