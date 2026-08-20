@@ -26,6 +26,7 @@ pkgs: with pkgs; [
   hadolint
   jq
   just
+  md2html
   mdcat
   mkvtoolnix
   moddable-sdk

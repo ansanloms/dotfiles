@@ -3,7 +3,6 @@
   "workspace": [
     "./scripts/clip-image",
     "./scripts/git-worktree",
-    "./scripts/md2html",
     "./scripts/notify"
   ],
   "exclude": [
@@ -43,17 +42,18 @@
     "lint": "deno lint && deno fmt --check",
     "fix": "deno lint --fix && deno fmt",
     "check": "deno check ./scripts/**/*.ts .config/nix/**/*.ts",
-    "test": "deno test --allow-read --allow-write --allow-net --allow-env=VSCODE_TEXTMATE_DEBUG scripts/",
-    "coverage": "deno test --allow-read --allow-write --allow-net --allow-env=VSCODE_TEXTMATE_DEBUG --coverage=coverage scripts/ && deno coverage coverage",
+    "test": "deno test --allow-read --allow-write --allow-net scripts/",
+    "coverage": "deno test --allow-read --allow-write --allow-net --coverage=coverage scripts/ && deno coverage coverage",
     "build": "deno run --allow-read=scripts --allow-write=.local/bin --allow-run=deno --allow-env=LD_LIBRARY_PATH scripts/build.ts",
     "install": "deno task dot-mori --config ./config.yaml",
     "uninstall": "deno task dot-mori --config ./config.yaml --clean",
     "bump": {
-      "description": "Bump self-built nix package versions and hashes (apm-cli / claude-statusline / playwright-cli / sonarqube-cli / moddable-sdk).",
+      "description": "Bump self-built nix package versions and hashes (apm-cli / claude-statusline / md2html / playwright-cli / sonarqube-cli / moddable-sdk).",
       "command": "deno task bump:*"
     },
     "bump:apm-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=gh,nix .config/nix/apm-cli/upgrade.ts",
     "bump:claude-statusline": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=gh,nix .config/nix/claude-statusline/upgrade.ts",
+    "bump:md2html": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=gh,nix .config/nix/md2html/upgrade.ts",
     "bump:playwright-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=npm,nix .config/nix/playwright-cli/upgrade.ts",
     "bump:sonarqube-cli": "deno run --allow-read=.config/nix --allow-write=.config/nix --allow-run=gh,nix .config/nix/sonarqube-cli/upgrade.ts",
     "bump:moddable-sdk": "deno run --allow-read=.config/nix,/nix/store --allow-write=.config/nix --allow-run=git,nix .config/nix/moddable-sdk/upgrade.ts"
