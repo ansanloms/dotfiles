@@ -1,0 +1,21 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="t">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="vpc" value="VPC" style="container=1;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc;strokeColor=#248814;fillColor=none;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="240" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="ec2" value="EC2" style="sketch=0;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="80" y="280" width="78" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="rds" value="RDS" style="sketch=0;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.rds;fillColor=#2E73B8;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="480" y="40" width="78" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" edge="1" source="ec2" target="rds" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

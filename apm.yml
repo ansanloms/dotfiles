@@ -5,9 +5,10 @@ author: ansanloms
 dependencies:
   apm:
     - ansanloms/skills/nvim-remote
-    - mizchi/skills/meta/empirical-prompt-tuning
     - ansanloms/skills/find-docs
     - ansanloms/skills/worktree
+    - ansanloms/skills/cloud-architecture
+    - mizchi/skills/meta/empirical-prompt-tuning
     - mizchi/skills/meta/retrospective-codify
   mcp: []
 targets:

@@ -1,7 +1,53 @@
 lockfile_version: '1'
-generated_at: '2026-08-18T01:10:26.787728+00:00'
+generated_at: '2026-08-23T03:30:11.022815+00:00'
 apm_version: 0.28.0
 dependencies:
+- repo_url: ansanloms/skills
+  name: cloud-architecture
+  host: github.com
+  resolved_commit: 716a3dba09caee022309dc5984c0101ae2b30f1f
+  version: unknown
+  virtual_path: cloud-architecture
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .claude/skills/cloud-architecture
+  - .claude/skills/cloud-architecture/README.md
+  - .claude/skills/cloud-architecture/SKILL.md
+  - .claude/skills/cloud-architecture/references/aws-architecture.md
+  - .claude/skills/cloud-architecture/references/export.md
+  - .claude/skills/cloud-architecture/references/layout-best-practices.md
+  - .claude/skills/cloud-architecture/references/readability-checks.md
+  - .claude/skills/cloud-architecture/references/troubleshooting.md
+  - .claude/skills/cloud-architecture/references/xml-format.md
+  - .claude/skills/cloud-architecture/scripts/.gitignore
+  - .claude/skills/cloud-architecture/scripts/check-readability.test.ts
+  - .claude/skills/cloud-architecture/scripts/check-readability.ts
+  - .claude/skills/cloud-architecture/scripts/deno.json
+  - .claude/skills/cloud-architecture/scripts/deno.lock
+  - .claude/skills/cloud-architecture/scripts/testdata/bad.drawio
+  - .claude/skills/cloud-architecture/scripts/testdata/bad.svg
+  - .claude/skills/cloud-architecture/scripts/testdata/clean.drawio
+  - .claude/skills/cloud-architecture/scripts/testdata/clean.svg
+  deployed_file_hashes:
+    .claude/skills/cloud-architecture/README.md: sha256:2757d861fb95725fdf5f0b4705a7ed65c192aee0299c324fa3a320bb8b9b9168
+    .claude/skills/cloud-architecture/SKILL.md: sha256:7f1fd030967ce819ffeb67a04c37cfc74d4ed6cd7db7217bd7d3c0fddbbb095c
+    .claude/skills/cloud-architecture/references/aws-architecture.md: sha256:470bab31bfd232c428a4399afda8587f64b15f94dc24a044076bb1809e911ae6
+    .claude/skills/cloud-architecture/references/export.md: sha256:ce788cc9f48ef74f68044f4624f71760b81e9c3c3db61091981e1ff556bcd710
+    .claude/skills/cloud-architecture/references/layout-best-practices.md: sha256:aec7b5bf583cfbd67cb1e7a3cc1e6d74588a3883351c8458f2e228253c0f4da4
+    .claude/skills/cloud-architecture/references/readability-checks.md: sha256:d32823d0cf8c54a3e675bd61edf0bc6454c4f36ebc5001283adcbccfa022d7ca
+    .claude/skills/cloud-architecture/references/troubleshooting.md: sha256:0b8974c57c6f1c2f260d69b05779b32a5b15c7e421d359f6ace0bb10167520c7
+    .claude/skills/cloud-architecture/references/xml-format.md: sha256:165a19871877834d3d2ad943c60edc9c1536a4cb01d97e0c39aa70e7472021db
+    .claude/skills/cloud-architecture/scripts/.gitignore: sha256:5c5daf48fdf4db42e16c29b5b3de54984bafe0c2ff367a186ca97f1d4ed48290
+    .claude/skills/cloud-architecture/scripts/check-readability.test.ts: sha256:379523cabfba8a4f078de34710f8a3c885ded08ef0522d11ec119a57f5e66009
+    .claude/skills/cloud-architecture/scripts/check-readability.ts: sha256:0570387b7fc2f8b5f7d89d052f1193dc496d05c8d20cc7d0fad31e74973fbcfa
+    .claude/skills/cloud-architecture/scripts/deno.json: sha256:3c1f5be1da88ee72e55f0f3ec9f812dcd96141520fbf91a91c8be3a4000b46c6
+    .claude/skills/cloud-architecture/scripts/deno.lock: sha256:2535d5eae5abb105055327c35e8964e662cbe24f9a1d2a8fbaa1245cb87b3d75
+    .claude/skills/cloud-architecture/scripts/testdata/bad.drawio: sha256:e1da56eed2af4c084e8c2d161d9f3181896faedab7d0246851974c0d1c809b2d
+    .claude/skills/cloud-architecture/scripts/testdata/bad.svg: sha256:08cd2fdad1ca19dc2ce5216b9daf34d6ccb0d44b4aa9b68c27007edb3977c1c2
+    .claude/skills/cloud-architecture/scripts/testdata/clean.drawio: sha256:5a819f2dd8e7ec27f28e44a5285ab05e6cbd14f08115af02306270871dc59e1a
+    .claude/skills/cloud-architecture/scripts/testdata/clean.svg: sha256:f647e45d4848860d7130c56b3856cc062f6ae8b597a7e6ad6f7924399d532cfe
+  content_hash: sha256:d1523ed8b05384db511f765e1e7cc5a4573542fd911ec3b0c865e0ddea4206e8
 - repo_url: ansanloms/skills
   name: find-docs
   host: github.com
@@ -89,6 +135,168 @@ dependencies:
     .claude/skills/retrospective-codify/SKILL.md: sha256:70bd226087028461f1e208ac5497593cdf6a0dc1e074d80f970addc1e36e5afa
   content_hash: sha256:3ff8c5c61545f778b8731f8d08eccb2bb38c15bc6fa618db509113f48e0ef670
 deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/README.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:2757d861fb95725fdf5f0b4705a7ed65c192aee0299c324fa3a320bb8b9b9168
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:7f1fd030967ce819ffeb67a04c37cfc74d4ed6cd7db7217bd7d3c0fddbbb095c
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/references/aws-architecture.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:470bab31bfd232c428a4399afda8587f64b15f94dc24a044076bb1809e911ae6
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/references/export.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:ce788cc9f48ef74f68044f4624f71760b81e9c3c3db61091981e1ff556bcd710
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/references/layout-best-practices.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:aec7b5bf583cfbd67cb1e7a3cc1e6d74588a3883351c8458f2e228253c0f4da4
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/references/readability-checks.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:d32823d0cf8c54a3e675bd61edf0bc6454c4f36ebc5001283adcbccfa022d7ca
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/references/troubleshooting.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:0b8974c57c6f1c2f260d69b05779b32a5b15c7e421d359f6ace0bb10167520c7
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/references/xml-format.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:165a19871877834d3d2ad943c60edc9c1536a4cb01d97e0c39aa70e7472021db
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/scripts/.gitignore
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:5c5daf48fdf4db42e16c29b5b3de54984bafe0c2ff367a186ca97f1d4ed48290
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/scripts/check-readability.test.ts
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:379523cabfba8a4f078de34710f8a3c885ded08ef0522d11ec119a57f5e66009
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/scripts/check-readability.ts
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:0570387b7fc2f8b5f7d89d052f1193dc496d05c8d20cc7d0fad31e74973fbcfa
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/scripts/deno.json
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:3c1f5be1da88ee72e55f0f3ec9f812dcd96141520fbf91a91c8be3a4000b46c6
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/scripts/deno.lock
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:2535d5eae5abb105055327c35e8964e662cbe24f9a1d2a8fbaa1245cb87b3d75
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/scripts/testdata/bad.drawio
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:e1da56eed2af4c084e8c2d161d9f3181896faedab7d0246851974c0d1c809b2d
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/scripts/testdata/bad.svg
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:08cd2fdad1ca19dc2ce5216b9daf34d6ccb0d44b4aa9b68c27007edb3977c1c2
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/scripts/testdata/clean.drawio
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:5a819f2dd8e7ec27f28e44a5285ab05e6cbd14f08115af02306270871dc59e1a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cloud-architecture/scripts/testdata/clean.svg
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/cloud-architecture
+  active_owner: ansanloms/skills/cloud-architecture
+  content_hash: sha256:f647e45d4848860d7130c56b3856cc062f6ae8b597a7e6ad6f7924399d532cfe
 - kind: project-relative
   target: claude
   value: .claude/skills/empirical-prompt-tuning

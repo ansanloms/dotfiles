@@ -1,0 +1,24 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="bad">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="a" value="A" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="40" y="100" width="80" height="40" as="geometry"/></mxCell>
+        <mxCell id="mid" value="MID" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="300" y="100" width="80" height="40" as="geometry"/></mxCell>
+        <mxCell id="b" value="B" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="600" y="100" width="80" height="40" as="geometry"/></mxCell>
+        <mxCell id="e_ab1" style="edgeStyle=none;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="a" target="b" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_ab2" style="edgeStyle=none;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="a" target="b" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="c" value="C" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="40" y="300" width="80" height="40" as="geometry"/></mxCell>
+        <mxCell id="d" value="D" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="600" y="300" width="80" height="40" as="geometry"/></mxCell>
+        <mxCell id="legend" value="凡例" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1"><mxGeometry x="300" y="300" width="120" height="60" as="geometry"/></mxCell>
+        <mxCell id="e_cd" style="edgeStyle=none;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="c" target="d" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="e" value="E" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="40" y="460" width="80" height="40" as="geometry"/></mxCell>
+        <mxCell id="f" value="F" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="600" y="460" width="80" height="40" as="geometry"/></mxCell>
+        <mxCell id="vpc" value="VPC" style="container=1;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc;fillColor=none;verticalAlign=top;" vertex="1" parent="1"><mxGeometry x="250" y="420" width="200" height="120" as="geometry"/></mxCell>
+        <mxCell id="e_ef" style="edgeStyle=none;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="e" target="f" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
