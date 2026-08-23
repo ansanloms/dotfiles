@@ -153,3 +153,75 @@ Deno.test("pinnedAgentName: name: の値の前後空白は trim される", () =
   ].join("\n");
   assertEquals(pinnedAgentName(markdown, "fallback-name"), "implementer");
 });
+
+Deno.test("pinnedAgentName: 先頭 BOM 付きでも name: / model: を読める", () => {
+  const markdown = "﻿" + [
+    "---",
+    "name: implementer",
+    "model: sonnet",
+    "---",
+    "",
+    "本文",
+  ].join("\n");
+  assertEquals(pinnedAgentName(markdown, "fallback-name"), "implementer");
+});
+
+Deno.test("pinnedAgentName: 開始行が --- の末尾に空白があっても frontmatter として扱う", () => {
+  const markdown = [
+    "--- ",
+    "name: implementer",
+    "model: sonnet",
+    "---",
+    "",
+    "本文",
+  ].join("\n");
+  assertEquals(pinnedAgentName(markdown, "fallback-name"), "implementer");
+});
+
+Deno.test("pinnedAgentName: 終端が ... でも frontmatter として扱う", () => {
+  const markdown = [
+    "---",
+    "name: implementer",
+    "model: sonnet",
+    "...",
+    "",
+    "本文",
+  ].join("\n");
+  assertEquals(pinnedAgentName(markdown, "fallback-name"), "implementer");
+});
+
+Deno.test("pinnedAgentName: name: の値が二重引用符で囲まれていれば引用符を外す", () => {
+  const markdown = [
+    "---",
+    'name: "implementer"',
+    "model: sonnet",
+    "---",
+    "",
+    "本文",
+  ].join("\n");
+  assertEquals(pinnedAgentName(markdown, "fallback-name"), "implementer");
+});
+
+Deno.test("pinnedAgentName: name: の値が単一引用符で囲まれていれば引用符を外す", () => {
+  const markdown = [
+    "---",
+    "name: 'implementer'",
+    "model: sonnet",
+    "---",
+    "",
+    "本文",
+  ].join("\n");
+  assertEquals(pinnedAgentName(markdown, "fallback-name"), "implementer");
+});
+
+Deno.test("pinnedAgentName: name: の値の行末コメントは無視する", () => {
+  const markdown = [
+    "---",
+    "name: implementer # 説明",
+    "model: sonnet",
+    "---",
+    "",
+    "本文",
+  ].join("\n");
+  assertEquals(pinnedAgentName(markdown, "fallback-name"), "implementer");
+});

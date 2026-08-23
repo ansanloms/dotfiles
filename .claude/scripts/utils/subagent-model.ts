@@ -55,21 +55,24 @@ export const decide = (
 
 /**
  * agent 定義 markdown の frontmatter を読み、`model:` を持つ場合にその agent 名を返す。
- * 名前は frontmatter の `name:` の値 (前後の空白を除去) を使い、無ければ fallbackName を使う。
+ * 名前は frontmatter の `name:` の値 (行末コメント除去・前後空白 trim・引用符除去) を使い、無ければ fallbackName を使う。
  * frontmatter が無い、または `model:` が無い場合は null。
- * frontmatter = 先頭行が `---` で始まり、次の `---` 行までの範囲。行頭の `name:` / `model:` のみを見る。
+ * frontmatter = 先頭行が `---` で始まり、次の `---` または `...` 行までの範囲。行頭の `name:` / `model:` のみを見る。
  */
 export const pinnedAgentName = (
   markdown: string,
   fallbackName: string,
 ): string | null => {
-  const lines = markdown.split(/\r?\n/);
+  const lines = markdown.replace(/^﻿/, "").split(/\r?\n/);
 
-  if (lines[0] !== "---") {
+  if (lines[0]?.trim() !== "---") {
     return null;
   }
 
-  const endIndex = lines.indexOf("---", 1);
+  const endIndex = lines.findIndex(
+    (line, index) =>
+      index >= 1 && (line.trim() === "---" || line.trim() === "..."),
+  );
   if (endIndex === -1) {
     return null;
   }
@@ -85,6 +88,9 @@ export const pinnedAgentName = (
     return fallbackName;
   }
 
-  const name = nameLine.slice("name:".length).trim();
+  const rawValue = nameLine.slice("name:".length).split("#")[0].trim();
+  const quoted = rawValue.match(/^(["'])(.*)\1$/);
+  const name = quoted ? quoted[2].trim() : rawValue;
+
   return name === "" ? fallbackName : name;
 };

@@ -18,11 +18,20 @@ const collectPinnedTypes = async (dir: string): Promise<Set<string>> => {
   }
 
   for (const entry of entries) {
-    if (!entry.isFile || !entry.name.endsWith(".md")) {
+    if (
+      !(entry.isFile || entry.isSymlink) || !entry.name.endsWith(".md")
+    ) {
       continue;
     }
 
-    const content = await Deno.readTextFile(`${dir}/${entry.name}`);
+    let content: string;
+    try {
+      content = await Deno.readTextFile(`${dir}/${entry.name}`);
+    } catch (error) {
+      console.error(`subagent-model: failed to read ${entry.name}:`, error);
+      continue;
+    }
+
     const name = pinnedAgentName(content, entry.name.replace(/\.md$/, ""));
     if (name !== null) {
       pinned.add(name);
@@ -42,6 +51,8 @@ try {
   ]);
   const pinned = new Set([...homePinned, ...cwdPinned]);
 
+  // `updatedInput` は `permissionDecision` を省略したときだけ適用される (Claude Code 2.1.240 の実装で確認)。
+  // `permissionDecision: "allow"` を付けると書き換えが無効になるので付けない。
   const result = decide(input, pinned);
   if (result) {
     console.log(JSON.stringify(result));
