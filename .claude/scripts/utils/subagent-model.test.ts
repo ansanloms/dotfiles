@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert";
 import type { PreToolUseHookInput } from "@anthropic-ai/claude-agent-sdk";
-import { decide, hasPinnedModel } from "./subagent-model.ts";
+import { decide, pinnedAgentName } from "./subagent-model.ts";
 
 /**
  * テスト用の最小 PreToolUseHookInput を作る。
@@ -89,9 +89,9 @@ Deno.test("decide: subagent_type 未指定でも model を補って返す", () =
   assertEquals(result?.hookSpecificOutput.updatedInput?.model, "opus");
 });
 
-// --- hasPinnedModel ---
+// --- pinnedAgentName ---
 
-Deno.test("hasPinnedModel: frontmatter に model: があれば true を返す", () => {
+Deno.test("pinnedAgentName: frontmatter に name: と model: があれば name: の値を返す", () => {
   const markdown = [
     "---",
     "name: implementer",
@@ -100,26 +100,26 @@ Deno.test("hasPinnedModel: frontmatter に model: があれば true を返す", 
     "",
     "本文",
   ].join("\n");
-  assertEquals(hasPinnedModel(markdown), true);
+  assertEquals(pinnedAgentName(markdown, "impl"), "implementer");
 });
 
-Deno.test("hasPinnedModel: frontmatter が無ければ false を返す", () => {
-  const markdown = "# タイトル\n\nmodel: sonnet\n";
-  assertEquals(hasPinnedModel(markdown), false);
-});
-
-Deno.test("hasPinnedModel: frontmatter 外の model: は無視して false を返す", () => {
+Deno.test("pinnedAgentName: name: が無ければ fallback 名を返す", () => {
   const markdown = [
     "---",
-    "name: research-worker",
+    "model: sonnet",
     "---",
     "",
-    "本文中に model: sonnet と書いてある",
+    "本文",
   ].join("\n");
-  assertEquals(hasPinnedModel(markdown), false);
+  assertEquals(pinnedAgentName(markdown, "fallback-name"), "fallback-name");
 });
 
-Deno.test("hasPinnedModel: frontmatter に model: が無ければ false を返す", () => {
+Deno.test("pinnedAgentName: frontmatter が無ければ null を返す", () => {
+  const markdown = "# タイトル\n\nmodel: sonnet\n";
+  assertEquals(pinnedAgentName(markdown, "fallback-name"), null);
+});
+
+Deno.test("pinnedAgentName: frontmatter に model: が無ければ null を返す", () => {
   const markdown = [
     "---",
     "name: research-worker",
@@ -128,5 +128,28 @@ Deno.test("hasPinnedModel: frontmatter に model: が無ければ false を返�
     "",
     "本文",
   ].join("\n");
-  assertEquals(hasPinnedModel(markdown), false);
+  assertEquals(pinnedAgentName(markdown, "fallback-name"), null);
+});
+
+Deno.test("pinnedAgentName: 本文 (frontmatter 外) の model: / name: は無視して null を返す", () => {
+  const markdown = [
+    "---",
+    "description: 調査用",
+    "---",
+    "",
+    "本文中に name: research-worker と model: sonnet と書いてある",
+  ].join("\n");
+  assertEquals(pinnedAgentName(markdown, "fallback-name"), null);
+});
+
+Deno.test("pinnedAgentName: name: の値の前後空白は trim される", () => {
+  const markdown = [
+    "---",
+    "name:   implementer  ",
+    "model: sonnet",
+    "---",
+    "",
+    "本文",
+  ].join("\n");
+  assertEquals(pinnedAgentName(markdown, "fallback-name"), "implementer");
 });

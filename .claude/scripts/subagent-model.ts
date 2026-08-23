@@ -1,10 +1,10 @@
 import type { PreToolUseHookInput } from "@anthropic-ai/claude-agent-sdk";
 import { getInput } from "./utils/common.ts";
-import { decide, hasPinnedModel } from "./utils/subagent-model.ts";
+import { decide, pinnedAgentName } from "./utils/subagent-model.ts";
 
 /**
  * 指定ディレクトリの直下にある agent 定義 (*.md) のうち、
- * frontmatter に `model:` を持つものの名前 (拡張子除く) を集める。
+ * frontmatter に `model:` を持つものの名前 (frontmatter の `name:`。無ければファイル名から拡張子を除いたもの) を集める。
  * ディレクトリが無ければ空集合を返す。
  */
 const collectPinnedTypes = async (dir: string): Promise<Set<string>> => {
@@ -23,8 +23,9 @@ const collectPinnedTypes = async (dir: string): Promise<Set<string>> => {
     }
 
     const content = await Deno.readTextFile(`${dir}/${entry.name}`);
-    if (hasPinnedModel(content)) {
-      pinned.add(entry.name.replace(/\.md$/, ""));
+    const name = pinnedAgentName(content, entry.name.replace(/\.md$/, ""));
+    if (name !== null) {
+      pinned.add(name);
     }
   }
 

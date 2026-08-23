@@ -54,21 +54,37 @@ export const decide = (
 };
 
 /**
- * agent 定義 markdown の frontmatter に `model:` 行があるかを判定する。
- * frontmatter = 先頭行が `---` で始まり、次の `---` 行までの範囲。その範囲内の行頭 `model:` のみを見る。
+ * agent 定義 markdown の frontmatter を読み、`model:` を持つ場合にその agent 名を返す。
+ * 名前は frontmatter の `name:` の値 (前後の空白を除去) を使い、無ければ fallbackName を使う。
+ * frontmatter が無い、または `model:` が無い場合は null。
+ * frontmatter = 先頭行が `---` で始まり、次の `---` 行までの範囲。行頭の `name:` / `model:` のみを見る。
  */
-export const hasPinnedModel = (markdown: string): boolean => {
+export const pinnedAgentName = (
+  markdown: string,
+  fallbackName: string,
+): string | null => {
   const lines = markdown.split(/\r?\n/);
 
   if (lines[0] !== "---") {
-    return false;
+    return null;
   }
 
   const endIndex = lines.indexOf("---", 1);
   if (endIndex === -1) {
-    return false;
+    return null;
   }
 
   const frontmatter = lines.slice(1, endIndex);
-  return frontmatter.some((line) => line.startsWith("model:"));
+
+  if (!frontmatter.some((line) => line.startsWith("model:"))) {
+    return null;
+  }
+
+  const nameLine = frontmatter.find((line) => line.startsWith("name:"));
+  if (nameLine === undefined) {
+    return fallbackName;
+  }
+
+  const name = nameLine.slice("name:".length).trim();
+  return name === "" ? fallbackName : name;
 };
