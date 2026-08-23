@@ -14,6 +14,7 @@
     "check": "deno check",
     "lint": "deno lint && deno fmt --check",
     "fix": "deno lint --fix && deno fmt",
-    "notify": "deno run --env-file=.env -A ./notify.ts"
+    "notify": "deno run --env-file=.env -A ./notify.ts",
+    "subagent-model": "deno run --allow-read --allow-env=HOME ./subagent-model.ts"
   }
 }

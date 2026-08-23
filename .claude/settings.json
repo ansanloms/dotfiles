@@ -83,6 +83,18 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "deno task --cwd ~/.claude/scripts subagent-model",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
