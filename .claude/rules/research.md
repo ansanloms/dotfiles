@@ -16,5 +16,5 @@
   - ライブラリ名と、英語で書いた具体的な質問文 (クエリ)。skill の手順は library と docs の 2 段で、クエリは段ごとに分けてよい (docs 用は API 名等で絞る)。分けない場合は 1 本を両段に使う。
   - 返却物: 取得したドキュメントの要点、各要点の Source URL、選択したライブラリ ID とその理由 1 行、実行したコマンド回数。取得結果にバージョン・unstable・pre-release 由来の注記があればそれも含める (無ければ「注記なし」と返させる)。取得結果に無い内容を補わせない (コード例が無ければ「無い」と返させる)。
   - 取得できなかった場合は、取得不可の事実とその理由 (エラーメッセージ) だけを返すこと。学習データで埋めない。`research-worker` は WebSearch / WebFetch を持つが、ctx7 の代替として使わせない。
-- 既定は `research-worker` への委譲とする (dev-workflow ルールの「調査は research-worker へ委譲する」に従う)。メインループ自身が `find-docs` を起動してよいのは、1 回のコマンド実行で済むと分かっている場合 (ライブラリ ID が既知で docs 1 発で取れる等) に限る。`find-docs` の実行は library → docs の複数コマンドになりがちで、メインループが打つとそのたびに育ったコンテキスト全量が再送されるため。`research-worker` のモデルは agent 定義の frontmatter (sonnet) に従い、呼び出し側で `model` を指定しない。
+- `find-docs` の実行は `research-worker` へ委譲する (dev-workflow ルールの「調査は research-worker へ委譲する」に従う)。メインループ自身は起動しない。skill の手順は library → docs の 2 段で必ず複数コマンドになり、メインループが打つとそのたびに育ったコンテキスト全量が再送される。また「ID は既知だから docs だけ打つ」という省略は skill に存在せず、学習データ由来の ID を持ち込む抜け穴になる。同じ会話で取得済みの結果の再利用 (原則の最終項) はこの限りでなく、再取得自体が不要。`research-worker` のモデルは agent 定義の frontmatter (sonnet) に従い、呼び出し側で `model` を指定しない。
 - `implementer` へ渡す実装計画にライブラリ仕様が関わる場合、その仕様は委譲前に確定して計画に書き下す (取得は上記のとおり `research-worker` 経由を既定とし、メインループは返却された要点を計画に転記する)。implementer に取得させない。
