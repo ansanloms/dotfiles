@@ -28,7 +28,7 @@
 }:
 
 let
-  version = "0.1.0";
+  version = "0.1.1";
 in
 stdenv.mkDerivation {
   pname = "md2html";
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/ansanloms/md2html/releases/download/${version}/md2html";
-    hash = "sha256-m1cVqyAeebPZX5N8W1AvYJ+54L7NVGYZykS+HxefsQg=";
+    hash = "sha256-FxouQJoBGjG7efXYqfxHktrUHCqeXlJ1i+7MORENjUs=";
   };
 
   # src は deno bundle 済みの単一 JS ファイル。展開処理は不要。
