@@ -48,6 +48,7 @@ pkgs: with pkgs; [
   shellcheck
   sonar-scanner-cli
   sonarqube-cli
+  sshpass
   ssm-session-manager-plugin
   starship
   statix
