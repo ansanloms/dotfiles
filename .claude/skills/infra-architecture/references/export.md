@@ -4,6 +4,7 @@
 >
 > `--no-sandbox --disable-gpu` を付ければ、ディスプレイの無いヘッドレス環境（Docker / WSL2 など）でも多くの場合そのままレンダリングできる。実行中に標準エラーへ出る GPU / EGL / Vulkan 系の警告は無害な雑音であり、失敗ではない。成否は出力ファイルが生成されたかで判断する。
 > `Missing X server or $DISPLAY` エラーで失敗する環境に限り、コマンド先頭に `xvfb-run -a` を付けて仮想ディスプレイで実行する。例: `xvfb-run -a drawio -x -f png ... --disable-gpu --no-sandbox`
+> `HOME` が書き込み不可の環境では `HOME` を書き込み可能な一時ディレクトリに向けて実行する。
 
 > [!NOTE]
 >
@@ -78,11 +79,12 @@ head -c 2000 diagram.drawio.svg | grep -q 'content="&lt;mxfile' && echo embedded
 
 - `-x`: XML モード（非対話的）
 - `-e`: drawio XML を SVG/PNG に埋め込む（成果物 SVG では必須。`.drawio.svg` 単体で再編集可能になる）
-- `-f png|svg`: 出力形式
+- `-f png|svg`: 出力形式（PDF も `-e` 付きで埋め込み出力できる。`-f pdf`）
 - `--scale 2.5`: 拡大率（PNG のみ）
 - `--transparent`: 透過背景
 - `--border 10`: ボーダー幅（ピクセル）
 - `-p 0`: ページインデックス（0 から始まる）
+- `--layout <name|json>`: エクスポート前に自動レイアウトを適用する。詳細は [drawio-cli.md](./drawio-cli.md)
 
 ## PNG と SVG の使い分け
 
@@ -98,3 +100,9 @@ head -c 2000 diagram.drawio.svg | grep -q 'content="&lt;mxfile' && echo embedded
 - テキストがそのまま残る
 - ドキュメントに埋め込むのに最適
 - `-e` 付きで出力すれば drawio XML が埋め込まれ、`.drawio.svg` 単体で drawio.com 等から再編集できる
+
+## drawio CLI のその他の機能
+
+Mermaid から `.drawio` への変換、ELK による自動レイアウト（`--layout`）、ブラウザ URL 出力は [drawio-cli.md](./drawio-cli.md) を参照。
+
+公式の drawio skill はエクスポート後に `.drawio` を削除する運用だが、本 skill では `.drawio`（編集用ソース）を残す。上記「出力ファイルの規則」を参照。

@@ -7,7 +7,7 @@ dependencies:
     - ansanloms/skills/nvim-remote
     - ansanloms/skills/find-docs
     - ansanloms/skills/worktree
-    - ansanloms/skills/cloud-architecture
+    - ansanloms/skills/infra-architecture
     - mizchi/skills/meta/empirical-prompt-tuning
     - mizchi/skills/meta/retrospective-codify
   mcp: []
