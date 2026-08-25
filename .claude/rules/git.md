@@ -15,8 +15,8 @@
 ```
 
 - `type` は英語小文字: `feat` / `fix` / `refactor` / `docs` / `test` / `chore` / `build` / `ci` 等。
-- `subject` は日本語で簡潔に。
-- `body` は必要に応じて日本語で補足する。
+- `subject` は簡潔に。
+- `body` は必要に応じて補足する。
 
 ### 例
 
