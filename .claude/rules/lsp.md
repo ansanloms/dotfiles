@@ -1,5 +1,7 @@
 # LSP
 
+適用主体は LSP ツールを持つ subagent (research-worker / implementer)。
+
 ## コード検索・ナビゲーション
 
 - MUST: コードの定義元、参照元、型情報の確認には LSP ツールを第一手段として使用すること。grep / ripgrep によるテキスト検索は LSP で解決できない場合の補助手段とする。
@@ -7,8 +9,6 @@
 - MUST: リファクタリング前に `findReferences` で影響範囲を確認すること。
 
 ## TypeScript / JavaScript の LSP 使い分け
-
-プロジェクトに応じて使用する LSP サーバを切り替えること。
 
 - `package.json` が存在する → **vtsls** を優先して使用する。
 - `deno.json` または `deno.jsonc` が存在する → **denols** を優先して使用する。`package.json` より優先する。
