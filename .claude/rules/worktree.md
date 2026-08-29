@@ -10,6 +10,14 @@
 - メインの worktree が現在いるブランチに対する読み取りのみの調査・質問への回答・情報収集には worktree は不要。
 - 既に当該タスク専用の worktree 上にいる場合は新規に切らず、その worktree で続行する。
 
+## ハーネスの bg 隔離との関係
+
+Claude Code のバックグラウンドジョブは、既定 (`worktree.bgIsolation: "worktree"`) ではメイン checkout への Edit / Write が「Call EnterWorktree first」で拒否され、セッション自身が `EnterWorktree` で隔離してから編集する。隔離したセッション (`claude --worktree` や `isolation: worktree` の subagent も同じ) では、メイン checkout 宛ての Edit / Write、cwd がメイン checkout に解決する Bash、git をメイン checkout へ向けるリダイレクト (`git -C` / `GIT_DIR` / 事前の `cd`)、worktree 内に留まると静的検証できない形の Bash (パイプ・`;`・heredoc・`$(...)`・サブシェル・`eval`。git を含まないコマンドも対象) が `This session is isolated in the worktree <path>` で拒否される。この隔離後のガードは設定では切れない。
+
+- MUST: `bgIsolation` はグローバル `.claude/settings.json` で `"none"` にし、バックグラウンドジョブでも `EnterWorktree` を使わず本ルールの手順で隔離する。理由: 隔離の責務は本ルールが持ち、配置先も同じ `<base>` のため、`EnterWorktree` を挟むと二重隔離になる。しかも隔離後は `worktree` skill の `git-worktree-include` (cwd = メイン worktree 必須) が cwd ガードに、description 設定 (`git config ... "$(cat ...)"`) が形状ガードに当たり、skill の手順自体が実行できない。`"none"` が外すのは「Call EnterWorktree first」の拒否だけだが、それで `EnterWorktree` を呼ぶ動機が消え、隔離後のガードに入らなくなる (2026-08-15〜29 の tool エラー 792 件中 490 件が隔離後ガードによるもので、全件が `.claude/worktrees/` 配下を cwd にした bg ジョブで発生)。
+- 代償: バックグラウンドジョブが工程 1 (隔離) を飛ばすと、誰も見ていない状態でメイン checkout へ直接書く。設定はグローバルで全リポジトリに及ぶ。防波堤は「原則」の MUST だけになる。
+- `EnterWorktree` / `claude --worktree` で明示的に隔離したセッションでは、本ルールの手順 (skill の include・description 設定) は上記ガードで実行できない。ハーネスが用意した worktree でそのまま作業し、本ルールの worktree を重ねて切らない。Bash は 1 コマンド 1 呼び出しの単純形に分ける (形状ガードの回避。cwd ガードはこれでは回避できない)。
+
 ## 片付け
 
 - MUST: マージ済み worktree の削除は `git-worktree-sweep` (`.local/bin`、`--dry-run` あり。skill が言う「呼び出し側から供給される専用ツール」がこれ) に任せる。PR / ブランチのマージ報告を受けたとき、または残骸に気づいたときに、メイン worktree の cwd で実行する (`--dry-run` は任意)。skill の汎用手順 (個別の `git worktree remove` / `git branch -d`) を手組みしない。sweep は squash merge も検知し、dirty・未マージ・detached の worktree には触れず報告のみ行う。

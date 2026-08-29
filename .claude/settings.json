@@ -156,5 +156,8 @@
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
   "terminalProgressBarEnabled": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "worktree": {
+    "bgIsolation": "none"
+  }
 }
