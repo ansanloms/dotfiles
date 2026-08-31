@@ -14,11 +14,11 @@ model: opus
 
 - 対象 (1 つ): ref range (`<base>...<branch>` または `<sha>...<sha>`)。`HEAD` を含む range は規定外として差し戻す (fork の cwd 次第で main に解決するため)。
 - リポジトリ: 対象リポジトリ (worktree) の絶対パス。`/code-review` の fork はセッションの cwd (メイン checkout) で走り、この agent が Bash で `cd` しても効かない。args の末尾にパスを添えると fork がそのリポジトリへ `cd` して range を解決しファイルを読む (2026-08-31 実測)。
-- level: `medium` または `high` の裸の語。`low` は使わない (理由は `review-loop` skill の「range と level」節)。それ以外の値は使わず、差し戻す。
+- level: `high` / `xhigh` / `max` の裸の語。`low` と `medium` は使わない (理由は `review-loop` skill の「range と level」節)。それ以外の値は使わず、差し戻す。
 
 ## 起動方法
 
-- `Skill` ツールで `skill: code-review`、`args: "<level> <対象> <リポジトリ>"` (この順で空白区切り)。`/code-review` は level を第 1 トークンでしか認識しない。対象を先に置くと level は無視され、警告も出ず、モデル既定の effort (opus では `high`) で走る。例: `args: "high main...feat-foo /home/u/proj/.claude/worktrees/feat-foo"`、`args: "medium 1a2b3c4...9d8e7f6 /home/u/proj"`。
+- `Skill` ツールで `skill: code-review`、`args: "<level> <対象> <リポジトリ>"` (この順で空白区切り)。`/code-review` は level を第 1 トークンでしか認識しない。対象を先に置くと level は無視され、警告も出ず、モデル既定の effort (opus では `high`) で走る。例: `args: "high main...feat-foo /home/u/proj/.claude/worktrees/feat-foo"`、`args: "xhigh 1a2b3c4...9d8e7f6 /home/u/proj"`。
 - `--fix` / `--comment` は付けない。
 - 起動は 1 回。skill が起動できなかった場合は失敗内容をそのまま返して止まる。自前でレビューして代替しない。
 - skill はバックグラウンドで走り、Skill の tool result は起動確認 (「Running in the background as @code-review」を含む) だけで、結果本文も fork の id も含まれない。この tool result を受け取ったら、**他のツールを呼ばず、「起動済み。完了待ち。」の 1 行だけを出力してターンを終える**。fork が生きている間はこの agent の完了が呼び出し元へ通知されないため、ここでターンを終えても「実行中」で呼び出し元へ戻ることはない。fork が完了すると harness がこの agent を再開し、その入力 (task-notification) の `<result>` に fork の最終メッセージ (レビュー結果本文) が入っている (2026-08-31 実測)。

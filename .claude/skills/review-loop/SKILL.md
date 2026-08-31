@@ -74,15 +74,15 @@ store='git -C /path/to/worktree config branch.feature/x.review "$(cat {file})"'
 | round   | range                          | level              |
 | ------- | ------------------------------ | ------------------ |
 | r1      | `<base>...<branch>`            | 計画に書いた level |
-| r2 以降 | `<last-reviewed>...<HEAD SHA>` | `medium` 固定      |
+| r2 以降 | `<last-reviewed>...<HEAD SHA>` | `high` 固定        |
 
-r1 で網羅性を取り、r2 以降は確信の高い指摘だけを増分に対して取る。r2 以降を `high` にしない (r1 が `high` でも同じ)。runner のモデル (opus) では `medium` と `high` は同一プロンプトに解決され、区別は名目上のもの (2026-08-31 実測)。
+r1 で網羅性を取り、r2 以降は確信の高い指摘だけを増分に対して取る。r2 以降を `xhigh` / `max` にしない (r1 がそうでも同じ)。level は `high` / `xhigh` / `max` から選ぶ。`medium` は runner のモデル (opus) で `high` と同一プロンプトに解決され区別が無い (2026-08-31 実測) ため使わない。
 
 計画に書く level と天井の既定:
 
-- level は既定 `medium`。変更がセキュリティ・認証・並行制御 (ロック・タイマー・並列 I/O)・削除や上書きに関わるか、複数モジュール (パッケージ境界。無ければトップレベルディレクトリ。ルート直下のファイルはまとめて 1 モジュール) に広がる diff は `high`。迷ったら `high`。
+- level は既定 `high`。変更がセキュリティ・認証・並行制御 (ロック・タイマー・並列 I/O)・削除や上書きに関わるか、複数モジュール (パッケージ境界。無ければトップレベルディレクトリ。ルート直下のファイルはまとめて 1 モジュール) に広がる diff は `xhigh` とし、計画にその理由を書く。`max` はユーザ指示があるときだけ。`xhigh` / `max` は指摘が広く不確かなものも含み (skill の description)、所要時間・指摘数・誤検知率は未計測。昇格した回は報告に所要時間と指摘数を残し、基準の見直しに使う。
 - `low` は使わない。`/code-review` の `low` は 1 pass・verify 無し・上限 4 件で、テストファイルの hunk を見ない。実クラッシュを含む diff に対して 0 件を返した (2026-08-31 実測)。5 行以内の修正は dev-workflow ルールの例外経路でレビュー自体を省くため、`low` が効く帯域は無い。
-- 天井は単一モジュールで `medium` 相当なら 3、複数モジュールか `high` 相当なら 4。計画に明示した値があればそれ。
+- 天井は `high` なら 3、`xhigh` / `max` なら 4。計画に明示した値があればそれ。
 
 `HEAD SHA` は `git -C "$repo" rev-parse --short HEAD`。runner への委譲文と台帳の rounds には解決済み SHA を書く (r1 は `<base>...<branch>`、台帳では `@ <HEAD SHA>` を添える。r2 以降は `<last-reviewed>...<HEAD SHA>`)。突合用の `git diff` は `git -C "$repo"` で解決するので `HEAD` でよい。委譲文に `HEAD` を書かない: `/code-review` の fork はセッションの cwd (メイン checkout) で走り、`HEAD` が main に解決して r1 と同じ範囲を再レビューする (2026-08-31 実測。runner はこれを差し戻す)。
 
@@ -96,7 +96,7 @@ code-review-runner を Agent で起動する。`description` は `code-review rN
 
 ### 4. 返却の判別
 
-生と判定する条件: 指摘ごとに 場所 (ファイルと行または関数)・要約・失敗シナリオ が付いて列挙されている。runner のモデル (opus) では `medium` / `high` は severity 付きの `file:line — 本文` の散文列挙で返り、冒頭に ReportFindings ツールが無い旨の断りが付くことがある (2026-08-31 実測)。`file` / `line` / `summary` / `failure_scenario` の JSON 配列で返るのは `xhigh` / `max` のみ。0 件の表現は `(none)`・空配列・指摘なしの散文のいずれもありうる。severity が付いていても裁定はそれに依存せず、新規 / 既知の欄は返却形に無いので要求しない。判定は形式検査のみで、値の妥当性 (行番号のずれ等) は裁定側で扱う。
+生と判定する条件: 指摘ごとに 場所 (ファイルと行または関数)・要約・失敗シナリオ が付いて列挙されている。runner のモデル (opus) では `high` は severity 付きの `file:line — 本文` の散文列挙で返り、冒頭に ReportFindings ツールが無い旨の断りが付くことがある (2026-08-31 実測)。`file` / `line` / `summary` / `failure_scenario` の JSON 配列で返るのは `xhigh` / `max` のみ。0 件の表現は `(none)`・空配列・指摘なしの散文のいずれもありうる。severity が付いていても裁定はそれに依存せず、新規 / 既知の欄は返却形に無いので要求しない。判定は形式検査のみで、値の妥当性 (行番号のずれ等) は裁定側で扱う。
 
 加工と判定する条件のいずれか: 総評の散文だけ、採用 / 不採用 / 既知等の裁定語付き。加工なら同じ委譲文で 1 回だけ取り直す。取り直しても加工なら「加工済み」と明記してユーザへ判断を仰ぐ。
 
