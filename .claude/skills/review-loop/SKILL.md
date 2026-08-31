@@ -71,10 +71,10 @@ store='git -C /path/to/worktree config branch.feature/x.review "$(cat {file})"'
 
 ### 1. range と level
 
-| round   | range                    | level              |
-| ------- | ------------------------ | ------------------ |
-| r1      | `<base>...<branch>`      | 計画に書いた level |
-| r2 以降 | `<last-reviewed>...HEAD` | `medium` 固定      |
+| round   | range                          | level              |
+| ------- | ------------------------------ | ------------------ |
+| r1      | `<base>...<branch>`            | 計画に書いた level |
+| r2 以降 | `<last-reviewed>...<HEAD SHA>` | `medium` 固定      |
 
 r1 で網羅性を取り、r2 以降は確信の高い指摘だけを増分に対して取る。r2 以降を `high` にしない (r1 が `high` でも同じ)。runner のモデル (opus) では `medium` と `high` は同一プロンプトに解決され、区別は名目上のもの (2026-08-31 実測)。
 
@@ -84,7 +84,7 @@ r1 で網羅性を取り、r2 以降は確信の高い指摘だけを増分に�
 - `low` は使わない。`/code-review` の `low` は 1 pass・verify 無し・上限 4 件で、テストファイルの hunk を見ない。実クラッシュを含む diff に対して 0 件を返した (2026-08-31 実測)。5 行以内の修正は dev-workflow ルールの例外経路でレビュー自体を省くため、`low` が効く帯域は無い。
 - 天井は単一モジュールで `medium` 相当なら 3、複数モジュールか `high` 相当なら 4。計画に明示した値があればそれ。
 
-`HEAD SHA` は `git -C "$repo" rev-parse --short HEAD`。range は用途で表記が違う: runner への委譲文と `git diff` には実行時解決形 (`<last-reviewed>...HEAD`)、台帳の rounds には解決済み SHA (r1 は `<base>...<branch> @ <HEAD SHA>`、r2 以降は `<last-reviewed>...<HEAD SHA>`) を書く。
+`HEAD SHA` は `git -C "$repo" rev-parse --short HEAD`。runner への委譲文と台帳の rounds には解決済み SHA を書く (r1 は `<base>...<branch>`、台帳では `@ <HEAD SHA>` を添える。r2 以降は `<last-reviewed>...<HEAD SHA>`)。突合用の `git diff` は `git -C "$repo"` で解決するので `HEAD` でよい。委譲文に `HEAD` を書かない: `/code-review` の fork はセッションの cwd (メイン checkout) で走り、`HEAD` が main に解決して r1 と同じ範囲を再レビューする (2026-08-31 実測。runner はこれを差し戻す)。
 
 ### 2. 突合
 
