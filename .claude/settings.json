@@ -159,5 +159,7 @@
   "voiceEnabled": true,
   "worktree": {
     "bgIsolation": "none"
-  }
+  },
+  "agentPushNotifEnabled": true,
+  "inputNeededNotifEnabled": true
 }
