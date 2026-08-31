@@ -76,11 +76,12 @@ store='git -C /path/to/worktree config branch.feature/x.review "$(cat {file})"'
 | r1      | `<base>...<branch>`      | 計画に書いた level |
 | r2 以降 | `<last-reviewed>...HEAD` | `medium` 固定      |
 
-r1 で網羅性を取り、r2 以降は確信の高い指摘だけを増分に対して取る。r2 以降を `high` にしない (r1 が `high` でも同じ)。
+r1 で網羅性を取り、r2 以降は確信の高い指摘だけを増分に対して取る。r2 以降を `high` にしない (r1 が `high` でも同じ)。runner のモデル (opus) では `medium` と `high` は同一プロンプトに解決され、区別は名目上のもの (2026-08-31 実測)。
 
 計画に書く level と天井の既定:
 
 - level は既定 `medium`。変更がセキュリティ・認証・並行制御 (ロック・タイマー・並列 I/O)・削除や上書きに関わるか、複数モジュール (パッケージ境界。無ければトップレベルディレクトリ。ルート直下のファイルはまとめて 1 モジュール) に広がる diff は `high`。迷ったら `high`。
+- `low` は使わない。`/code-review` の `low` は 1 pass・verify 無し・上限 4 件で、テストファイルの hunk を見ない。実クラッシュを含む diff に対して 0 件を返した (2026-08-31 実測)。5 行以内の修正は dev-workflow ルールの例外経路でレビュー自体を省くため、`low` が効く帯域は無い。
 - 天井は単一モジュールで `medium` 相当なら 3、複数モジュールか `high` 相当なら 4。計画に明示した値があればそれ。
 
 `HEAD SHA` は `git -C "$repo" rev-parse --short HEAD`。range は用途で表記が違う: runner への委譲文と `git diff` には実行時解決形 (`<last-reviewed>...HEAD`)、台帳の rounds には解決済み SHA (r1 は `<base>...<branch> @ <HEAD SHA>`、r2 以降は `<last-reviewed>...<HEAD SHA>`) を書く。
@@ -95,7 +96,7 @@ code-review-runner を Agent で起動する。`description` は `code-review rN
 
 ### 4. 返却の判別
 
-生と判定する条件: 指摘ごとに 場所 (ファイルと行または関数)・要約・失敗シナリオ が付いて列挙されている (`medium` 以上は `file` / `line` / `summary` / `failure_scenario` の JSON 配列で返る。0 件は空配列または `(none)`)。重さ・新規 / 既知の欄は `/code-review` の返却形に無いので要求しない。判定は形式検査のみで、値の妥当性 (行番号のずれ等) は裁定側で扱う。
+生と判定する条件: 指摘ごとに 場所 (ファイルと行または関数)・要約・失敗シナリオ が付いて列挙されている。runner のモデル (opus) では `medium` / `high` は severity 付きの `file:line — 本文` の散文列挙で返り、冒頭に ReportFindings ツールが無い旨の断りが付くことがある (2026-08-31 実測)。`file` / `line` / `summary` / `failure_scenario` の JSON 配列で返るのは `xhigh` / `max` のみ。0 件の表現は `(none)`・空配列・指摘なしの散文のいずれもありうる。severity が付いていても裁定はそれに依存せず、新規 / 既知の欄は返却形に無いので要求しない。判定は形式検査のみで、値の妥当性 (行番号のずれ等) は裁定側で扱う。
 
 加工と判定する条件のいずれか: 総評の散文だけ、採用 / 不採用 / 既知等の裁定語付き。加工なら同じ委譲文で 1 回だけ取り直す。取り直しても加工なら「加工済み」と明記してユーザへ判断を仰ぐ。
 
