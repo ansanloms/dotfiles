@@ -4,7 +4,7 @@
 
 - Conventional Commits に従う。
 - メッセージは日本語で記述する。
-- 4 バイト文字(絵文字等)は使用しない。git ホスティングサービス側の制約による。
+- 4 バイト文字(絵文字等)は使用しない。理由: git ホスティングサービス側の制約による。
 
 ## フォーマット
 
@@ -14,7 +14,7 @@
 <body>
 ```
 
-- `type` は英語小文字: `feat` / `fix` / `refactor` / `docs` / `test` / `chore` / `build` / `ci` 等。
+- `type` は英語小文字: `feat`/`fix`/`refactor`/`docs`/`test`/`chore`/`build`/`ci` 等。
 - `subject` は簡潔に。
 - `body` は必要に応じて補足する。
 

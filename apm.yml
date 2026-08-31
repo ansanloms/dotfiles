@@ -10,6 +10,7 @@ dependencies:
     - ansanloms/skills/infra-architecture
     - mizchi/skills/meta/empirical-prompt-tuning
     - mizchi/skills/meta/retrospective-codify
+    - ansanloms/skills/ja-tech-proofread
   mcp: []
 targets:
   - claude

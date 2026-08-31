@@ -1,0 +1,16 @@
+{
+  "imports": {
+    "textlint": "npm:textlint@15.8.0",
+    "@ansanloms/textlint-rule-preset-ansanloms": "https://cdn.jsdelivr.net/gh/ansanloms/textlint-rule-preset-ansanloms@0.0.2/index.ts"
+  },
+  "tasks": {
+    "textlint": "deno --quiet run --allow-env --allow-read --allow-sys --allow-write --allow-net textlint --config \"$PWD/.textlintrc.js\" --rules-base-directory \"$PWD/textlint\"",
+    "fmt": "deno fmt --config \"$PWD/deno.json\"",
+    "fmt:check": "deno fmt --check --config \"$PWD/deno.json\"",
+    "lint": "deno lint && deno fmt --check",
+    "fix": "deno lint --fix && deno fmt"
+  },
+  "fmt": {
+    "proseWrap": "preserve"
+  }
+}
