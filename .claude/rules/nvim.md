@@ -8,7 +8,7 @@ zellij セッション内で起動している nvim は `/tmp/nvim-<セッショ
 
 - MUST: 生きている nvim socket が 1 つ以上見つかる場合に本ルールを適用する。見つからない場合のみ通常のコンソール出力にフォールバックし、エラーで作業を止めない。
 - MUST: socket の有無は下記「socket の解決手順」を実行した結果で判定する。
-- MUST: バックグラウンドジョブでは `ZELLIJ_SESSION_NAME` を信用しない。ジョブの shell は常駐の claude daemon 配下で動き、env は daemon が起動した時点のセッション名で固定される。
+- MUST: バックグラウンドジョブでは `ZELLIJ_SESSION_NAME` を信用しない。ジョブの shell は常駐の claude daemon 配下で動き、env のセッション名が現在ユーザの見ているセッションを指す保証が無い。
 
 ## nvim で開く場面
 

@@ -6,11 +6,11 @@ model: opus
 
 ## 前提となる事実
 
-`/code-review` の fork には skill 本文と args (level と対象) しか渡らず、この agent の会話・agent 定義・呼び出し元が添えた文章は reviewer に届かない。既知の指摘の分類や不採用事項の反映は呼び出し元の裁定で行い、この agent はそれらを受け取らない。
+`/code-review` の fork には skill 本文と args (level と対象) しか渡らず、この agent の会話・agent 定義・呼び出し元が添えた文章は reviewer に届かない (2026-08-31 実測)。既知の指摘の分類や不採用事項の反映は呼び出し元の裁定で行い、この agent はそれらを受け取らない。
 
 ## 受け取るもの
 
-呼び出し元は次を渡す。不足または規定外の値があれば起動せず、その内容を返して止まる。規定に無い項目 (台帳・前提等) は差し戻し理由にも返却にも使わず無視する。値は markdown 装飾 (バッククォート等) を除いた素の文字列として検証する。検証は項目の有無と値の形式に限り、実在 (ref やパスの存在) は確認しない。
+呼び出し元は次を渡す。不足または規定外の値があれば起動せず、差し戻す。規定に無い項目 (台帳・前提等) は差し戻し理由にも返却にも使わず無視する。値は markdown 装飾 (バッククォート等) を除いた素の文字列として検証する。検証は項目の有無と値の形式に限り、実在 (ref やパスの存在) は確認しない。
 
 - 対象: ref range (`<base>...<branch>` または `<sha>...<sha>`)。渡すのは 1 つ。`HEAD` を含む range は規定外として差し戻す (fork の cwd 次第で main に解決するため)。
 - リポジトリ: 対象リポジトリ (worktree) の絶対パス。args の末尾に添える。理由: `/code-review` の fork はセッションの cwd (メイン checkout) で走り、この agent が Bash で `cd` しても効かない。args 末尾のパスで fork がそのリポジトリへ `cd` して range を解決しファイルを読む (2026-08-31 実測)。
@@ -18,7 +18,7 @@ model: opus
 
 ## 起動方法
 
-- `Skill` ツールで `skill: code-review`、`args: "<level> <対象> <リポジトリ>"` (この順で空白区切り)。理由: `/code-review` は level を第 1 トークンでしか認識しない。対象を先に置くと level は無視され、警告も出ず、モデル既定の effort (opus では `high`) で走る。
+- `Skill` ツールで `skill: code-review`、`args: "<level> <対象> <リポジトリ>"` (この順で空白区切り)。理由: `/code-review` は level を第 1 トークンでしか認識しない。対象を先に置くと level は無視され、警告も出ず、モデル既定の effort (opus では `high`) で走る (2026-08-31 実測)。
   - 例: `args: "high main...feat-foo /home/u/proj/.claude/worktrees/feat-foo"`
   - 例: `args: "xhigh 1a2b3c4...9d8e7f6 /home/u/proj"`
 - `--fix`/`--comment` は付けない。

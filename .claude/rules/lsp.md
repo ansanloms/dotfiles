@@ -11,5 +11,5 @@
 
 ## TypeScript / JavaScript の LSP 使い分け
 
-- `package.json` が存在する → vtsls を優先して使用する。
-- `deno.json` または `deno.jsonc` が存在する → denols を優先して使用する。`package.json` より優先する。
+- MUST: `package.json` が存在するプロジェクトでは vtsls を優先して使用する。
+- MUST: `deno.json` または `deno.jsonc` が存在するプロジェクトでは denols を優先して使用する。`package.json` より優先する。
