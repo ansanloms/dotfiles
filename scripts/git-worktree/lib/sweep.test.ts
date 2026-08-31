@@ -21,12 +21,30 @@ Deno.test("parseWorktreeList は main と worktree 群を分離しブランチ�
     "worktree /home/u/repo/.claude/worktrees/detached",
     "HEAD ghi",
     "detached",
+    "",
+    "worktree /home/u/repo/.claude/worktrees/gone",
+    "HEAD jkl",
+    "branch refs/heads/feat/gone",
+    "prunable gitdir file points to non-existent location",
   ].join("\n");
   assertEquals(parseWorktreeList(out), {
     mainWt: "/home/u/repo",
     entries: [
-      { path: "/home/u/repo/.claude/worktrees/feat-a", branch: "feat/a" },
-      { path: "/home/u/repo/.claude/worktrees/detached", branch: null },
+      {
+        path: "/home/u/repo/.claude/worktrees/feat-a",
+        branch: "feat/a",
+        prunable: false,
+      },
+      {
+        path: "/home/u/repo/.claude/worktrees/detached",
+        branch: null,
+        prunable: false,
+      },
+      {
+        path: "/home/u/repo/.claude/worktrees/gone",
+        branch: "feat/gone",
+        prunable: true,
+      },
     ],
   });
 });
@@ -88,9 +106,9 @@ const squashMergedResponses: Record<string, GitResult> = {
   "worktree list --porcelain": ok(porcelain),
   "symbolic-ref --short refs/remotes/origin/HEAD": ok("origin/main\n"),
   "-C /repo/.claude/worktrees/done status --porcelain": ok(""),
-  "rev-list --count origin/main..feat/done": ok("1\n"),
-  "merge-base origin/main feat/done": ok("base00\n"),
-  "rev-parse feat/done^{tree}": ok("tree00\n"),
+  "rev-list --count origin/main..refs/heads/feat/done": ok("1\n"),
+  "merge-base origin/main refs/heads/feat/done": ok("base00\n"),
+  "rev-parse refs/heads/feat/done^{tree}": ok("tree00\n"),
   "commit-tree tree00 -p base00 -m git-worktree-sweep: squash merge check": ok(
     "tmp000\n",
   ),
@@ -133,9 +151,11 @@ Deno.test("run は --dry-run では削除しない", async () => {
 Deno.test("run は merge commit でマージ済み (固有コミット無し) も削除する", async () => {
   const { deps, calls } = makeDeps({
     ...squashMergedResponses,
-    "rev-list --count origin/main..feat/done": ok("0\n"),
-    "rev-parse feat/done": ok("tip00\n"),
-    "log --format=%P origin/main ^feat/done": ok("aaa tip00\nbbb\n"),
+    "rev-list --count origin/main..refs/heads/feat/done": ok("0\n"),
+    "rev-parse refs/heads/feat/done": ok("tip00\n"),
+    "log --format=%P origin/main ^refs/heads/feat/done --": ok(
+      "aaa tip00\nbbb\n",
+    ),
   });
   const code = await run(deps);
   assertEquals(code, 0);
@@ -148,10 +168,10 @@ Deno.test("run は merge commit でマージ済み (固有コミット無し) �
 Deno.test("run はコミット未着手の worktree を残す", async () => {
   const { deps, calls, logs } = makeDeps({
     ...squashMergedResponses,
-    "rev-list --count origin/main..feat/done": ok("0\n"),
-    "rev-parse feat/done": ok("tip00\n"),
+    "rev-list --count origin/main..refs/heads/feat/done": ok("0\n"),
+    "rev-parse refs/heads/feat/done": ok("tip00\n"),
     // tip は第 1 親としてしか現れない (= main の履歴上の通常 commit)
-    "log --format=%P origin/main ^feat/done": ok("tip00\nbbb\n"),
+    "log --format=%P origin/main ^refs/heads/feat/done --": ok("tip00\nbbb\n"),
   });
   const code = await run(deps);
   assertEquals(code, 0);
@@ -182,6 +202,27 @@ Deno.test("run は dirty な worktree を残す", async () => {
   );
 });
 
+Deno.test("run は status の失敗を dirty に丸めず判定不能として残す", async () => {
+  const { deps, calls, errors } = makeDeps({
+    ...squashMergedResponses,
+    "-C /repo/.claude/worktrees/done status --porcelain": {
+      success: false,
+      stdout: "",
+      stderr: "fatal: this operation must be run in a work tree\n",
+    },
+  });
+  const code = await run(deps);
+  assertEquals(code, 1);
+  assertEquals(
+    calls.some((c) => c.startsWith("worktree remove")),
+    false,
+  );
+  assertEquals(
+    errors.some((l) => l.startsWith("Kept (status failed:")),
+    true,
+  );
+});
+
 Deno.test("run は未マージの worktree を残す", async () => {
   const { deps, calls, logs } = makeDeps({
     ...squashMergedResponses,
@@ -195,6 +236,100 @@ Deno.test("run は未マージの worktree を残す", async () => {
   );
   assertEquals(
     logs.some((l) => l.startsWith("Kept (not merged")),
+    true,
+  );
+});
+
+Deno.test("run は log の失敗を not-merged に丸めず判定不能として残す", async () => {
+  const { deps, calls, errors } = makeDeps({
+    ...squashMergedResponses,
+    "rev-list --count origin/main..refs/heads/feat/done": ok("0\n"),
+    "rev-parse refs/heads/feat/done": ok("tip00\n"),
+    "log --format=%P origin/main ^refs/heads/feat/done --": {
+      success: false,
+      stdout: "",
+      stderr: "fatal: bad revision 'refs/heads/feat/done'\n",
+    },
+  });
+  const code = await run(deps);
+  assertEquals(code, 1);
+  assertEquals(
+    calls.some((c) => c.startsWith("worktree remove")),
+    false,
+  );
+  assertEquals(
+    errors.some((l) => l.startsWith("Kept (classification failed:")),
+    true,
+  );
+});
+
+Deno.test("run は merge-base の失敗も判定不能として残す", async () => {
+  const { deps, calls, errors } = makeDeps({
+    ...squashMergedResponses,
+    "merge-base origin/main refs/heads/feat/done": {
+      success: false,
+      stdout: "",
+      stderr: "fatal: not a valid object name origin/main\n",
+    },
+  });
+  const code = await run(deps);
+  assertEquals(code, 1);
+  assertEquals(
+    calls.some((c) => c.startsWith("worktree remove")),
+    false,
+  );
+  assertEquals(
+    errors.some((l) => l.startsWith("Kept (classification failed:")),
+    true,
+  );
+});
+
+Deno.test("run は merge-base の共通祖先無し (stderr 空) を not-merged として残す", async () => {
+  const { deps, calls, logs } = makeDeps({
+    ...squashMergedResponses,
+    "merge-base origin/main refs/heads/feat/done": {
+      success: false,
+      stdout: "",
+      stderr: "",
+    },
+  });
+  const code = await run(deps);
+  assertEquals(code, 0);
+  assertEquals(
+    calls.some((c) => c.startsWith("worktree remove")),
+    false,
+  );
+  assertEquals(
+    logs.some((l) => l.startsWith("Kept (not merged into origin/main):")),
+    true,
+  );
+});
+
+Deno.test("run は prunable な worktree を分類せず Skipped として報告する", async () => {
+  const porcelainWithPrunable = [
+    "worktree /repo",
+    "branch refs/heads/main",
+    "",
+    "worktree /repo/.claude/worktrees/gone",
+    "branch refs/heads/feat/gone",
+    "prunable gitdir file points to non-existent location",
+  ].join("\n");
+  const { deps, calls, logs } = makeDeps({
+    "worktree list --porcelain": ok(porcelainWithPrunable),
+    "symbolic-ref --short refs/remotes/origin/HEAD": ok("origin/main\n"),
+  });
+  const code = await run(deps);
+  assertEquals(code, 0);
+  assertEquals(
+    calls.some((c) => c.startsWith("-C /repo/.claude/worktrees/gone status")),
+    false,
+  );
+  assertEquals(
+    calls.some((c) => c.startsWith("worktree remove")),
+    false,
+  );
+  assertEquals(
+    logs.some((l) => l === "Skipped (prunable): /repo/.claude/worktrees/gone"),
     true,
   );
 });

@@ -25,7 +25,7 @@ Claude Code のバックグラウンドジョブは、既定 (`worktree.bgIsolat
 
 ## 片付け
 
-- MUST: マージ済み worktree の削除は `git-worktree-sweep` (`.local/bin`、`--dry-run` あり。skill が言う「呼び出し側から供給される専用ツール」がこれ) に任せる。PR / ブランチのマージ報告を受けたとき、または残骸に気づいたときに、メイン worktree の cwd で実行する (`--dry-run` は任意)。skill の汎用手順 (個別の `git worktree remove` / `git branch -d`) を手組みしない。sweep は squash merge も検知し、dirty・未マージ・detached の worktree には触れず報告のみ行う。
+- MUST: マージ済み worktree の削除は `git-worktree-sweep` (`.local/bin`、`--dry-run` あり。skill が言う「呼び出し側から供給される専用ツール」がこれ) に任せる。PR / ブランチのマージ報告を受けたとき、または残骸に気づいたときに、メイン worktree の cwd で実行する (`--dry-run` は任意)。skill の汎用手順 (個別の `git worktree remove` / `git branch -d`) を手組みしない。sweep は squash merge も検知し、dirty・未マージ・detached の worktree には触れず報告のみ行う。判定不能 (git コマンドの失敗) の worktree にも触れないが、こちらはエラーとして報告し非 0 で終了する。git が prunable と判定した worktree (管理情報の破損・実体ディレクトリの消失等) は分類せず Skipped として報告し、(非 dry-run では) 末尾の `git worktree prune` が整理する。
 - MUST: merge 操作のローカル後処理を merge コマンドに任せない (理由と失敗例は skill の「片付け」節)。GitHub なら `--delete-branch` を付けずに merge し、ブランチ削除は sweep に任せる。
 - `EnterWorktree` で入った worktree を `ExitWorktree` で除去する場合 (それ以外の除去は sweep に任せる)、squash merge 済みならローカルコミットは常に「未マージ」に見えるため検知による拒否が必ず作動する。確認済みなら最初から `discard_changes: true` で呼んでよい。
 

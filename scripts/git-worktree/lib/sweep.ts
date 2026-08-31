@@ -8,7 +8,10 @@
 //   1. merge-base --is-ancestor (通常 merge / fast-forward)
 //   2. ブランチを merge-base に対して仮 squash した commit の patch-id が
 //      デフォルトブランチに含まれるか (git cherry) — squash merge 検知
-// dirty・未マージ・detached はスキップして報告のみ行う。
+// dirty・未マージ・detached はスキップして報告のみ行う。判定不能 (git コマンドの失敗) も
+// worktree には触れないが、エラーとして報告し非 0 で終了する。git が prunable と
+// 判定した worktree (管理情報の破損・実体ディレクトリの消失等) は分類せず
+// Skipped として報告し、(非 dry-run では) 末尾の `git worktree prune` が整理する。
 
 import { parseArgs } from "@std/cli/parse-args";
 
@@ -16,6 +19,8 @@ export interface WorktreeEntry {
   path: string;
   /** checkout 中のブランチ名。detached の場合は null。 */
   branch: string | null;
+  /** git が prunable と判定し `git worktree prune` の対象になっているか。 */
+  prunable: boolean;
 }
 
 export interface WorktreeList {
@@ -30,15 +35,18 @@ export function parseWorktreeList(output: string): WorktreeList {
   for (const block of blocks) {
     let path = "";
     let branch: string | null = null;
+    let prunable = false;
     for (const line of block.split("\n")) {
       if (line.startsWith("worktree ")) {
         path = line.slice("worktree ".length);
       } else if (line.startsWith("branch ")) {
         branch = line.slice("branch ".length).replace(/^refs\/heads\//, "");
+      } else if (line.startsWith("prunable ")) {
+        prunable = true;
       }
     }
     if (path !== "") {
-      entries.push({ path, branch });
+      entries.push({ path, branch, prunable });
     }
   }
   const mainWt = entries.length > 0 ? entries[0].path : "";
@@ -104,7 +112,23 @@ export function isMergedAsParent(logOutput: string, tip: string): boolean {
     .some((parents) => parents.length >= 2 && parents.slice(1).includes(tip));
 }
 
-export type BranchVerdict = "merged" | "not-merged" | "no-own-commits";
+export type BranchVerdict =
+  | "merged"
+  | "not-merged"
+  | "no-own-commits"
+  | { kind: "classification-failed"; detail: string };
+
+/** 落ちた git サブコマンドと stderr の先頭行から classification-failed の detail を作る。 */
+function classificationFailed(
+  subcommand: string,
+  result: GitResult,
+): { kind: "classification-failed"; detail: string } {
+  const firstLine = result.stderr.trim().split("\n")[0] ?? "";
+  return {
+    kind: "classification-failed",
+    detail: `${subcommand}: ${firstLine}`,
+  };
+}
 
 /**
  * ブランチのマージ状態を分類する。
@@ -113,6 +137,11 @@ export type BranchVerdict = "merged" | "not-merged" | "no-own-commits";
  *   no-own-commits (作成直後の worktree 等) として削除対象にしない。
  * - 固有コミットがある場合: ブランチを merge-base に対して仮 squash した commit の
  *   patch-id がデフォルトブランチに含まれれば merged (squash merge 検知)。
+ *
+ * ブランチ側の revision 引数は同名パス・同名タグとの曖昧解釈 (ambiguous argument)
+ * を避けるため refs/heads/ で修飾する。defaultRef (origin/main 等) 側の曖昧解釈は
+ * log の argv 末尾の `--` (path 解釈の遮断) が防いでおり、これを消すと
+ * ambiguous argument が再発する。
  */
 export async function classifyBranch(
   deps: SweepDeps,
@@ -122,38 +151,53 @@ export async function classifyBranch(
   const unique = await deps.runGit([
     "rev-list",
     "--count",
-    `${defaultRef}..${branch}`,
+    `${defaultRef}..refs/heads/${branch}`,
   ]);
   if (!unique.success) {
-    return "not-merged";
+    return classificationFailed("rev-list", unique);
   }
 
   if (unique.stdout.trim() === "0") {
-    const tip = await deps.runGit(["rev-parse", branch]);
+    const tip = await deps.runGit(["rev-parse", `refs/heads/${branch}`]);
     if (!tip.success) {
-      return "not-merged";
+      return classificationFailed("rev-parse", tip);
     }
     const log = await deps.runGit([
       "log",
       "--format=%P",
       defaultRef,
-      `^${branch}`,
+      `^refs/heads/${branch}`,
+      "--",
     ]);
     if (!log.success) {
-      return "not-merged";
+      return classificationFailed("log", log);
     }
     return isMergedAsParent(log.stdout, tip.stdout.trim())
       ? "merged"
       : "no-own-commits";
   }
 
-  const base = await deps.runGit(["merge-base", defaultRef, branch]);
+  const base = await deps.runGit([
+    "merge-base",
+    defaultRef,
+    `refs/heads/${branch}`,
+  ]);
   if (!base.success) {
-    return "not-merged";
+    // merge-base は共通祖先が無い場合、stderr を出さずに exit 1 する
+    // (エラーではなく「merge base 無し」という正常な結果)。stderr が
+    // 空ならこのケースとみなし not-merged にする。stderr があれば
+    // 従来どおり判定不能として扱う。
+    if (base.stderr.trim() === "") {
+      return "not-merged";
+    }
+    return classificationFailed("merge-base", base);
   }
-  const tree = await deps.runGit(["rev-parse", `${branch}^{tree}`]);
+  const tree = await deps.runGit([
+    "rev-parse",
+    `refs/heads/${branch}^{tree}`,
+  ]);
   if (!tree.success) {
-    return "not-merged";
+    return classificationFailed("rev-parse", tree);
   }
   const tmpCommit = await deps.runGit([
     "commit-tree",
@@ -164,7 +208,7 @@ export async function classifyBranch(
     "git-worktree-sweep: squash merge check",
   ]);
   if (!tmpCommit.success) {
-    return "not-merged";
+    return classificationFailed("commit-tree", tmpCommit);
   }
   const cherry = await deps.runGit([
     "cherry",
@@ -172,7 +216,7 @@ export async function classifyBranch(
     tmpCommit.stdout.trim(),
   ]);
   if (!cherry.success) {
-    return "not-merged";
+    return classificationFailed("cherry", cherry);
   }
   return isFullyContained(cherry.stdout) ? "merged" : "not-merged";
 }
@@ -215,6 +259,11 @@ export async function run(deps: SweepDeps): Promise<number> {
 
   let failed = false;
   for (const target of targets) {
+    if (target.prunable) {
+      deps.log(`Skipped (prunable): ${target.path}`);
+      continue;
+    }
+
     if (target.branch === null) {
       deps.log(`Kept (detached HEAD): ${target.path}`);
       continue;
@@ -226,17 +275,36 @@ export async function run(deps: SweepDeps): Promise<number> {
       "status",
       "--porcelain",
     ]);
-    const dirty = !status.success || status.stdout.trim() !== "";
+    if (!status.success) {
+      const firstLine = status.stderr.trim().split("\n")[0] ?? "";
+      deps.errorLog(`Kept (status failed: ${firstLine}): ${target.path}`);
+      failed = true;
+      continue;
+    }
+    const dirty = status.stdout.trim() !== "";
 
     const verdict = await classifyBranch(deps, target.branch, defaultRef);
 
-    if (verdict === "no-own-commits") {
-      deps.log(`Kept (no commits on branch yet): ${target.path}`);
+    if (typeof verdict === "object") {
+      deps.errorLog(
+        `Kept (classification failed: ${verdict.detail}): ${target.path}`,
+      );
+      failed = true;
       continue;
     }
-    if (verdict === "not-merged") {
-      deps.log(`Kept (not merged into ${defaultRef}): ${target.path}`);
-      continue;
+    switch (verdict) {
+      case "no-own-commits":
+        deps.log(`Kept (no commits on branch yet): ${target.path}`);
+        continue;
+      case "not-merged":
+        deps.log(`Kept (not merged into ${defaultRef}): ${target.path}`);
+        continue;
+      case "merged":
+        break;
+      default: {
+        const _exhaustive: never = verdict;
+        throw new Error(`Unexpected verdict: ${_exhaustive}`);
+      }
     }
     if (dirty) {
       deps.log(`Kept (merged but dirty): ${target.path}`);
