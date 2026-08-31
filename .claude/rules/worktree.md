@@ -21,7 +21,7 @@ Claude Code のバックグラウンドジョブは、既定 (`worktree.bgIsolat
   - 未着手 (変更もコミットも無い): `action: "remove"` で抜け、本ルールの手順で worktree を切り直す。
   - 作業済み (変更またはコミットがある): `action: "keep"` で抜け、その worktree を本ルールの worktree として引き取る。配置先は `<base>` と同じ `.claude/worktrees/<name>` なので切り直さず、メイン checkout の cwd から skill の include・description 設定を施して続行する。
   - 抜けた後は、複数の worktree に `git -C <path>` と subagent の並列起動で同時に触れられる (#72 で実測)。
-- `claude --worktree` で隔離したセッションを `ExitWorktree` で抜けられるかは未検証。抜けられれば `EnterWorktree` と同じ扱いにする。抜けられない場合に限り、ハーネスが用意した worktree でそのまま作業し、本ルールの worktree を重ねて切らず、Bash は 1 コマンド 1 呼び出しの単純形に分ける (形状ガードの回避。cwd ガードはこれでは回避できない)。
+- `claude --worktree` で隔離したセッションも `ExitWorktree` (`action: "keep"`) で抜けられ、cwd がメイン checkout、HEAD が main に戻る (2026-08-31 に `claude --worktree exit-probe -p` で実測。`--worktree <name>` が作る worktree は `.claude/worktrees/<name>`、ブランチ名は `worktree-<name>`)。扱いは `EnterWorktree` と同じで、上の MUST に従う。
 
 ## 片付け
 
