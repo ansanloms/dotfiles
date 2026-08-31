@@ -12,12 +12,12 @@
 
 ## ハーネスの bg 隔離との関係
 
-Claude Code のバックグラウンドジョブは、既定 (`worktree.bgIsolation: "worktree"`) ではメイン checkout への Edit・Write が「Call EnterWorktree first」で拒否され、セッション自身が `EnterWorktree` で隔離してから編集する。
+Claude Code のバックグラウンドジョブは、既定 (`worktree.bgIsolation: "worktree"`) ではメイン checkout (= メインの worktree) への Edit・Write が「Call EnterWorktree first」で拒否され、セッション自身が `EnterWorktree` で隔離してから編集する。
 
 隔離したセッション (`claude --worktree` や `isolation: worktree` の subagent も同じ) では、メイン checkout 宛ての Edit・Write と、cwd がメイン checkout に解決する Bash が `This session is isolated in the worktree <path>` で拒否される。git をメイン checkout へ向けるリダイレクト (`git -C`・`GIT_DIR`・事前の `cd`) も拒否される。worktree 内に留まると静的検証できない形の Bash (パイプ・`;`・heredoc・`$(...)`・サブシェル・`eval`。git を含まないコマンドも対象) も同じく拒否される。この隔離後のガードは設定では切れない。
 
 - MUST: `bgIsolation` はグローバル `.claude/settings.json` で `"none"` にし、バックグラウンドジョブでも `EnterWorktree` を使わず本ルールの手順で隔離する。
-  - 理由: 隔離の責務は本ルールが持ち、配置先も同じ `<base>` のため、`EnterWorktree` を挟むと二重隔離になる。しかも隔離後は `worktree` skill の `git-worktree-include` (cwd = メイン worktree 必須) が cwd ガードに当たる。description 設定 (`git config ... "$(cat ...)"`) は形状ガードに当たる。どちらに当たっても skill の手順自体が実行できない。
+  - 理由: 隔離の責務は本ルールが持ち、配置先も同じ `<base>` のため、`EnterWorktree` を挟むと二重隔離になる。しかも隔離後は `worktree` skill の `git-worktree-include` (cwd = メインの worktree 必須) が cwd ガードに当たる。description 設定 (`git config ... "$(cat ...)"`) は形状ガードに当たる。どちらに当たっても skill の手順自体が実行できない。
   - `"none"` が外すのは「Call EnterWorktree first」の拒否だけだが、それで `EnterWorktree` を呼ぶ動機が消え、隔離後のガードに入らなくなる (2026-08-15〜29 の tool エラー 792 件中 490 件が隔離後ガードによるもので、全件が `.claude/worktrees/` 配下を cwd にした bg ジョブで発生)。
 - 代償: バックグラウンドジョブが工程 1 (隔離) を飛ばすと、誰も見ていない状態でメイン checkout へ直接書く。設定はグローバルで全リポジトリに及ぶ。防波堤は「原則」の MUST だけになる。
 - 隔離後のガードはセッションの属性であり、そのセッションが起動する subagent (implementer・code-review-runner 等) にも及ぶ。subagent に別 worktree の絶対パスを渡しても、入っている worktree 以外への git 操作は拒否される。そのため複数 worktree の並列作業が成立せず、`EnterWorktree` の `path` で切り替える直列作業になる (#72 の事例。片方の worktree で reviewer が動いている間、もう片方に触れなかった)。
@@ -30,7 +30,7 @@ Claude Code のバックグラウンドジョブは、既定 (`worktree.bgIsolat
 ## 片付け
 
 - MUST: マージ済み worktree の削除は `git-worktree-sweep` (`.local/bin`、`--dry-run` あり。skill が言う「呼び出し側から供給される専用ツール」がこれ) に任せる。
-  - PR/ブランチのマージ報告を受けたとき、または残骸に気づいたときに、メイン worktree の cwd で実行する (`--dry-run` は任意)。
+  - PR/ブランチのマージ報告を受けたとき、または残骸に気づいたときに、メインの worktree の cwd で実行する (`--dry-run` は任意)。
   - skill の汎用手順 (個別の `git worktree remove`・`git branch -d`) を手組みしない。
   - sweep は squash merge も検知し、dirty・未マージ・detached の worktree には触れず報告のみ行う。
   - 判定不能 (git コマンドの失敗) の worktree にも触れないが、こちらはエラーとして報告し非 0 で終了する。
