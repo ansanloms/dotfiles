@@ -3,7 +3,10 @@
 // メイン以外の全 linked worktree (配置場所は問わない) のうち、ブランチが
 // デフォルトブランチへマージ済み (squash merge 含む) かつ working tree が
 // クリーンなものを削除し、ローカルブランチも消す。
-// dirty・未マージ・detached・固有コミット無しは報告のみ。
+// dirty・未マージ・detached・固有コミット無しは報告のみ。判定不能 (git コマンドの失敗) も
+// worktree には触れないが、エラーとして報告し非 0 で終了する。git が prunable と
+// 判定した worktree (管理情報の破損・実体ディレクトリの消失等) は分類せず
+// Skipped として報告し、(非 dry-run では) 末尾の `git worktree prune` が整理する。
 // マージ判定は git のみで行い、forge (GitHub 等) の API に依存しない。
 // 使い方: git-worktree-sweep [--dry-run]
 //
