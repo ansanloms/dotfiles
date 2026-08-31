@@ -17,11 +17,11 @@ model: opus
 呼び出し元は次を渡す。不足または規定外の値があれば起動せず、その内容を返して止まる。規定に無い項目 (台帳・前提等) は差し戻し理由にせず無視する。検証は項目の有無と値の形式に限り、実在 (ref やパスの存在) は確認しない。
 
 - 対象 (1 つ): ref range (`<base>...<branch>` または `<sha>...HEAD`)。range はこの agent の cwd のリポジトリで解決されるため、cwd が対象リポジトリの外なら呼び出し元がリポジトリ (worktree) の絶対パスを添える (その場合、この agent は起動前に Bash でそこへ `cd` する。Bash の cwd は呼び出し間で持続し、skill の fork はそれを継承する)。
-- level: `medium` または `high` の裸の語。それ以外の値は使わず、差し戻す。
+- level: `medium` または `high` の裸の語。`low` は使わない (理由は `review-loop` skill の「range と level」節)。それ以外の値は使わず、差し戻す。
 
 ## 起動方法
 
-- `Skill` ツールで `skill: code-review`、`args: "<対象> <level>"` (対象・level の順で空白区切り)。例: `args: "main...feat-foo high"`、`args: "1a2b3c4...HEAD medium"`。
+- `Skill` ツールで `skill: code-review`、`args: "<level> <対象>"` (level・対象の順で空白区切り)。`/code-review` は level を第 1 トークンでしか認識しない。対象を先に置くと level は無視され、警告も出ず、モデル既定の effort (opus では `high`) で走る。例: `args: "high main...feat-foo"`、`args: "medium 1a2b3c4...HEAD"`。
 - `--fix` / `--comment` は付けない。
 - 起動は 1 回。skill が起動できなかった場合は失敗内容をそのまま返して止まる。自前でレビューして代替しない。
 - skill はバックグラウンドで走る。完了通知が届くまで `timeout 600 tail -f /dev/null` で待ち、満了しても通知が無ければ同じ待機を繰り返す (`sleep` は使わない)。「実行中」だけを返して終わらない。
