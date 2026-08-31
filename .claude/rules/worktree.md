@@ -14,7 +14,7 @@
 
 Claude Code のバックグラウンドジョブは、既定 (`worktree.bgIsolation: "worktree"`) ではメイン checkout (= メインの worktree) への Edit・Write が「Call EnterWorktree first」で拒否され、セッション自身が `EnterWorktree` で隔離してから編集する。
 
-隔離したセッション (`claude --worktree` や `isolation: worktree` の subagent も同じ) では、メイン checkout 宛ての Edit・Write と、cwd がメイン checkout に解決する Bash が `This session is isolated in the worktree <path>` で拒否される。git をメイン checkout へ向けるリダイレクト (`git -C`・`GIT_DIR`・事前の `cd`) も拒否される。worktree 内に留まると静的検証できない形の Bash (パイプ・`;`・heredoc・`$(...)`・サブシェル・`eval`。git を含まないコマンドも対象) も同じく拒否される。この隔離後のガードは設定では切れない (#62・#72 の調査で確認)。
+隔離したセッション (`claude --worktree` や `isolation: worktree` の subagent も同じ) では、メイン checkout 宛ての Edit・Write と、cwd がメイン checkout に解決する Bash が `This session is isolated in the worktree <path>` で拒否される。git をメイン checkout へ向けるリダイレクト (`git -C`・`GIT_DIR`・事前の `cd`) も拒否される。worktree 内に留まると静的検証できない形の Bash (パイプ・`;`・heredoc・`$(...)`・サブシェル・`eval`。git を含まないコマンドも対象) も同じく拒否される。この隔離後のガードは設定では切れない。
 
 - MUST: `bgIsolation` はグローバル `.claude/settings.json` で `"none"` にし、バックグラウンドジョブでも `EnterWorktree` を使わず本ルールの手順で隔離する。
   - 理由: 隔離の責務は本ルールが持ち、配置先も同じ `<base>` のため、`EnterWorktree` を挟むと二重隔離になる。しかも隔離後は `worktree` skill の `git-worktree-include` (cwd = メインの worktree 必須) が cwd ガードに当たる。description 設定 (`git config ... "$(cat ...)"`) は形状ガードに当たる。どちらに当たっても skill の手順自体が実行できない。

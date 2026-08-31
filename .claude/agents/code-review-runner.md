@@ -6,7 +6,7 @@ model: opus
 
 ## 前提となる事実
 
-`/code-review` の fork には skill 本文と args (level と対象) しか渡らず、この agent の会話・agent 定義・呼び出し元が添えた文章は reviewer に届かない (2026-08-31 実測)。既知の指摘の分類や不採用事項の反映は呼び出し元の裁定で行い、この agent はそれらを受け取らない。
+`/code-review` の fork には skill 本文と args (level と対象) しか渡らず、この agent の会話・agent 定義・呼び出し元が添えた文章は reviewer に届かない。既知の指摘の分類や不採用事項の反映は呼び出し元の裁定で行い、この agent はそれらを受け取らない。
 
 ## 受け取るもの
 
@@ -18,7 +18,7 @@ model: opus
 
 ## 起動方法
 
-- `Skill` ツールで `skill: code-review`、`args: "<level> <対象> <リポジトリ>"` (この順で空白区切り)。理由: `/code-review` は level を第 1 トークンでしか認識しない。対象を先に置くと level は無視され、警告も出ず、モデル既定の effort (opus では `high`) で走る (2026-08-31 実測)。
+- `Skill` ツールで `skill: code-review`、`args: "<level> <対象> <リポジトリ>"` (この順で空白区切り)。理由: `/code-review` は level を第 1 トークンでしか認識しない。対象を先に置くと level は無視され、警告も出ず、モデル既定の effort (opus では `high`) で走る。
   - 例: `args: "high main...feat-foo /home/u/proj/.claude/worktrees/feat-foo"`
   - 例: `args: "xhigh 1a2b3c4...9d8e7f6 /home/u/proj"`
 - `--fix`/`--comment` は付けない。
