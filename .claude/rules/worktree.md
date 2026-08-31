@@ -16,7 +16,12 @@ Claude Code のバックグラウンドジョブは、既定 (`worktree.bgIsolat
 
 - MUST: `bgIsolation` はグローバル `.claude/settings.json` で `"none"` にし、バックグラウンドジョブでも `EnterWorktree` を使わず本ルールの手順で隔離する。理由: 隔離の責務は本ルールが持ち、配置先も同じ `<base>` のため、`EnterWorktree` を挟むと二重隔離になる。しかも隔離後は `worktree` skill の `git-worktree-include` (cwd = メイン worktree 必須) が cwd ガードに、description 設定 (`git config ... "$(cat ...)"`) が形状ガードに当たり、skill の手順自体が実行できない。`"none"` が外すのは「Call EnterWorktree first」の拒否だけだが、それで `EnterWorktree` を呼ぶ動機が消え、隔離後のガードに入らなくなる (2026-08-15〜29 の tool エラー 792 件中 490 件が隔離後ガードによるもので、全件が `.claude/worktrees/` 配下を cwd にした bg ジョブで発生)。
 - 代償: バックグラウンドジョブが工程 1 (隔離) を飛ばすと、誰も見ていない状態でメイン checkout へ直接書く。設定はグローバルで全リポジトリに及ぶ。防波堤は「原則」の MUST だけになる。
-- `EnterWorktree` / `claude --worktree` で明示的に隔離したセッションでは、本ルールの手順 (skill の include・description 設定) は上記ガードで実行できない。ハーネスが用意した worktree でそのまま作業し、本ルールの worktree を重ねて切らない。Bash は 1 コマンド 1 呼び出しの単純形に分ける (形状ガードの回避。cwd ガードはこれでは回避できない)。
+- 隔離後のガードはセッションの属性であり、そのセッションが起動する subagent (implementer / code-review-runner 等) にも及ぶ。subagent に別 worktree の絶対パスを渡しても、入っている worktree 以外への git 操作は拒否される。そのため複数 worktree の並列作業が成立せず、`EnterWorktree` の `path` で切り替える直列作業になる (#72 の事例。片方の worktree で reviewer が動いている間、もう片方に触れなかった)。
+- MUST: セッション開始時または作業中に、自分が `EnterWorktree` の隔離下にある (cwd が `.claude/worktrees/` 配下で、上記 `This session is isolated` の拒否が出る) と分かったら、作業を続ける前に `ExitWorktree` で抜けてメイン checkout に戻る。抜け方はその worktree の状態で分ける。
+  - 未着手 (変更もコミットも無い): `action: "remove"` で抜け、本ルールの手順で worktree を切り直す。
+  - 作業済み (変更またはコミットがある): `action: "keep"` で抜け、その worktree を本ルールの worktree として引き取る。配置先は `<base>` と同じ `.claude/worktrees/<name>` なので切り直さず、メイン checkout の cwd から skill の include・description 設定を施して続行する。
+  - 抜けた後は、複数の worktree に `git -C <path>` と subagent の並列起動で同時に触れられる (#72 で実測)。
+- `claude --worktree` で隔離したセッションも `ExitWorktree` (`action: "keep"`) で抜けられ、cwd がメイン checkout、HEAD が main に戻る (2026-08-31 に `claude --worktree exit-probe -p` で実測。`--worktree <name>` が作る worktree は `.claude/worktrees/<name>`、ブランチ名は `worktree-<name>`)。扱いは `EnterWorktree` と同じで、上の MUST に従う。
 
 ## 片付け
 
