@@ -55,6 +55,9 @@ apm のデプロイ先は `apm.yml` の `targets: [claude]` で `.claude/skills/
 | empirical-prompt-tuning | `mizchi/skills`（apm）    |
 | nvim-remote             | `ansanloms/skills`（apm） |
 | worktree                | `ansanloms/skills`（apm） |
+| ja-tech-proofread       | `ansanloms/skills`（apm） |
+| infra-architecture      | `ansanloms/skills`（apm） |
+| retrospective-codify    | `mizchi/skills`（apm）    |
 
 skill を追加・更新する場合のみ apm を使用する。`apm.yml` の `targets` で配置先（`.claude/skills/`）を固定済みのため、install は `--target` 無しでよい。
 

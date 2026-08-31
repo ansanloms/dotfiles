@@ -8,7 +8,7 @@
 - ライブラリ固有のデバッグ・セットアップ手順の確認
 - CLI ツールの使用方法の確認
 
-React/Next.js/Prisma/Express/Tailwind/Django/Spring Boot 等の著名なものを含む。ライブラリのドキュメントに関しては Web 検索よりこちらを優先する。
+React・Next.js・Prisma・Express・Tailwind・Django・Spring Boot 等の著名なものを含む。ライブラリのドキュメントに関しては Web 検索よりこちらを優先する。
 
 ## 対象外
 
