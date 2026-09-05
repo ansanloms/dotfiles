@@ -39,8 +39,8 @@
 }:
 
 let
-  version = "9.0.0";
-  rev = "b1f42a2e148f0fc2cd91d7ed1cee56bd361656b2";
+  version = "9.5.0";
+  rev = "b6e06ba70506a7381ffb28e09e3175bf4e99f305";
 
   # ラップする CLI ツール。実体が存在するものだけ $out/bin に出す (install で存在チェック)。
   cliTools = [
@@ -103,7 +103,7 @@ stdenv.mkDerivation {
     owner = "Moddable-OpenSource";
     repo = "moddable";
     inherit rev;
-    hash = "sha256-VmffzsBj3CnBB2SvTFyrIzC24JO2p1GVN4hi9unev98=";
+    hash = "sha256-X3xynqAVDa3oqGd2aVbSp8kfYy01aOHhkCBWR0cB+Vc=";
   };
 
   nativeBuildInputs = [
