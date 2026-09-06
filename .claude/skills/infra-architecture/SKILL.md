@@ -35,6 +35,7 @@ PNG/SVG エクスポートが必要な場合は draw.io CLI が必要。
 4. 手順 2・3 で問題があれば `.drawio` の XML を修正して戻る
 5. 完成したら `-e` (`--embed-diagram`) 付きで SVG にエクスポートする。これが成果物の `diagram.drawio.svg` になる
 6. 成果物は編集用ソースの `diagram.drawio` と配布用の `diagram.drawio.svg` の両方を残す
+7. 成果物に対して検証チェックリスト (下記「検証」) を実行し、結果を報告に含める
 
 手順 2 の PNG 目視と手順 3 の幾何チェックは別物として両方走らせる。PNG 目視は「描画が成立しているか」を見る工程で、見やすさそのものは検証しない。理由: 線の重なりやノード貫通のような幾何的な見づらさは、ラスタ画像の目視では精度・再現性が出ない。そのため、SVG 座標から決定論的に検査する。
 
@@ -102,6 +103,27 @@ PNG/SVG の出力コマンド、オプション、使い分けの詳細は [expo
 
 線の重なり・凡例被り・無関係ノードの貫通・枠の貫通といった見やすさの欠陥は、PNG 目視ではなく `.drawio` と SVG の座標から幾何的に検査する。チェッカ `scripts/check-readability.ts` の実行方法、4 観点の定義、正当な交差のポリシー、限界は [readability-checks.md](./references/readability-checks.md) を参照。
 
+## 検証
+
+完成した成果物 (`diagram.drawio` と `diagram.drawio.svg`) に対して、成果物とする直前に検査する。作業中の確認 (推奨ワークフロー手順 2・3) と観点は同じだが、本節は最終成果物への実行と結果の記録を義務にする。
+
+判定・報告は checklist skill に従う。checklist skill が導入されていない環境では、本節の項目を ○/×/対象外で自己点検し、× の該当箇所と根拠、対象外の理由とともに報告へ含める。
+
+### 形式
+
+1. `[critical]` 配布用の `diagram.drawio.svg` が、最終版の `.drawio` から `-e` (`--embed-diagram`) 付きでエクスポートされている。埋め込みの有無は `.drawio.svg` の `content` 属性に mxfile が含まれるかを grep で確認する (Read で全文を読まない)。
+2. `[critical]` 編集用ソースの `.drawio` と配布用の `.drawio.svg` の両方が成果物として残っている。
+3. 幾何チェックが error を出さない。判定: `deno run --allow-read <skill の絶対パス>/scripts/check-readability.ts --drawio <対象.drawio> --svg <対象.drawio.svg>` の終了コード 0 で ○、1 で ×。コマンドと入力の詳細は [readability-checks.md](./references/readability-checks.md)。見ないもの: ラベル文字の幅、回転・拡大を含む図 (目視 3・4 が担当)。× のとき error。
+
+### 目視 (PNG)
+
+PNG を一時ディレクトリへ出力して確認する。draw.io CLI が使えず PNG を出力できない環境では、本観点の項目を環境要因の対象外とし、未検証である旨を報告に書く。
+
+1. `[critical]` アイコンが空表示になっていない (resIcon 名の誤り等)。
+2. `[critical]` 日本語が豆腐になっていない (fontFamily 未指定)。
+3. テキストが途切れていない。× のとき error。
+4. エッジがノードラベル・エッジラベルの文字を横切っていない。× のとき error。
+
 ## トラブルシューティング
 
 詳細は [troubleshooting.md](./references/troubleshooting.md) を参照。
@@ -121,4 +143,4 @@ PNG/SVG の出力コマンド、オプション、使い分けの詳細は [expo
 
 ## 謝辞
 
-`references/` の一部 (drawio-cli・xml-format・troubleshooting・layout-best-practices) は jgraph/drawio-mcp の drawio skill を Apache License 2.0 で翻訳・改変して取り込んでいる。
+`references/` の一部 (drawio-cli・xml-format・troubleshooting・layout-best-practices) は jgraph/drawio-mcp の drawio skill (Apache License 2.0) を翻訳・改変して取り込んでいる。

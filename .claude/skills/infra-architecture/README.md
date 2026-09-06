@@ -7,6 +7,7 @@
 - AWS・Google Cloud・Azure のサービスアイコン、オンプレミス (汎用ネットワーク機器・Cisco・ラック)・Kubernetes のアイコンを用いた単一クラウド・マルチクラウド・ハイブリッド構成図の XML 生成
 - PNG (確認用) へのエクスポート
 - drawio XML を埋め込んだ編集可能な SVG (`.drawio.svg`, 成果物) へのエクスポート
+- 成果物の検証チェックリスト (幾何チェック + PNG 目視。判定・報告は checklist skill に従い、未導入環境では自己点検へ縮退)
 
 ## 対象外
 
@@ -26,4 +27,4 @@ apm install ansanloms/skills/infra-architecture --target claude
 
 ## 謝辞・ライセンス
 
-`references/` の一部 (drawio-cli・xml-format・troubleshooting・layout-best-practices) は [jgraph/drawio-mcp](https://github.com/jgraph/drawio-mcp) の drawio skill を Apache License 2.0 で翻訳・改変して取り込んでいる。
+`references/` の一部 (drawio-cli・xml-format・troubleshooting・layout-best-practices) は [jgraph/drawio-mcp](https://github.com/jgraph/drawio-mcp) の drawio skill (Apache License 2.0) を翻訳・改変して取り込んでいる。

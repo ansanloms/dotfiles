@@ -45,12 +45,12 @@ description による自動発動で `args` が無い場合は、mode を `fix`�
 機械層は `scripts/` の textlint で実行する。実行のたびに次のループを 1 回だけ走らせて絶対パスを解決し、以後は結果をリテラルで書き下す。理由: エージェントのシェルは呼び出しごとに cwd と変数を失う。
 
 ```sh
-for d in "$(git rev-parse --show-toplevel 2>/dev/null)/ja-tech-proofread" "$PWD/.claude/skills/ja-tech-proofread" "$HOME/.claude/skills/ja-tech-proofread"; do
+for d in "$(git rev-parse --show-toplevel 2>/dev/null)/ja-tech-proofread" "$(git rev-parse --show-toplevel 2>/dev/null)/.claude/skills/ja-tech-proofread" "$PWD/.claude/skills/ja-tech-proofread" "$HOME/.claude/skills/ja-tech-proofread"; do
   if [ -d "$d/scripts" ]; then echo "$d/scripts"; break; fi
 done
 ```
 
-候補の順は、作業中のリポジトリ内 (`git rev-parse --show-toplevel` 基準、source of truth)、配布先、ユーザ共通。最初に見つかった 1 件を使う。理由: 配布先の複製はインストール時点のスナップショットで、開発中のリポジトリでは古くなり得る。0 件なら推測せず、機械層を「実行不可 (scripts 未検出)」として手順 1 へ進む。内部動作は `scripts/README.md` を参照。
+候補の順は、作業中のリポジトリ内 (`git rev-parse --show-toplevel` 基準、source of truth)、そのリポジトリへの vendoring 先 (`<toplevel>/.claude/skills/`。cwd がリポジトリルート以外でも当たる)、cwd 直下の配布先、ユーザ共通の 4 つ。最初に見つかった 1 件を使う。理由: 配布先の複製はインストール時点のスナップショットで、開発中のリポジトリでは古くなり得る。0 件なら推測せず、機械層を「実行不可 (scripts 未検出)」として手順 1 へ進む。内部動作は `scripts/README.md` を参照。
 
 ## 手順
 
@@ -61,7 +61,7 @@ done
    - コマンドの記録: 実行したコマンドは実行順にすべて (`lint` は 2 本、`fix` は 3 本) 報告ヘッダに列挙する。
    - `lint` モード: (a) `deno task -q --cwd "<scripts>" textlint <path>` を実行して出力 O と終了コードを得て、(b) `deno task -q --cwd "<scripts>" fmt:check <path>` を実行して整形差分の有無を得る。自動修正の件数 M は 0。
    - `fix` モード:
-     - (a) `--fix` 付きの textlint を実行して出力 O1 から M を取る (`✔ Fixed N problem` の行があれば N、無ければ 0。実物の例: `✔ Fixed 1 problem`。取得コマンド `deno task -q --cwd "<scripts>" textlint --fix <probe>`、取得日 2026-08-31)。O1 に該当行が無くても O1 はそのまま報告に貼り、末尾に「自動修正 0 件」と書く。
+     - (a) `--fix` 付きの textlint を実行して出力 O1 から M を取る (`✔ Fixed N problem` または `✔ Fixed N problems` の行があれば N、無ければ 0。1 件のときは単数形で出る。実物の例: `✔ Fixed 1 problem`。取得コマンド `deno task -q --cwd "<scripts>" textlint --fix <probe>`、取得日 2026-08-31)。O1 に該当行が無くても O1 はそのまま報告に貼り、末尾に「自動修正 0 件」と書く。
      - (b) 対象のハッシュ (`md5sum`) を取ってから `deno task -q --cwd "<scripts>" fmt <path>` を実行し、直後にもう 1 度ハッシュを取って整形の有無を決める。
      - (c) `deno task -q --cwd "<scripts>" textlint <path>` (`--fix` 無し) を実行して出力 O2 を得る。
    - O1 の扱い: O1 は実行可否の判定にだけ使い、`No rules found` を含めば実行不可として (b) (c) は行わない。指摘件数の分類は O または O2 (それぞれ `lint`、`fix`) にだけ当てる。解釈・要約・再判定はしない。
@@ -70,10 +70,10 @@ done
    - 0 件:
      - 終了コードが 0。warning や info の行だけが出ていても 0 件とする。K は 0。
      - 報告には出力をそのまま貼った上で「指摘 0 件 (終了コード 0)」と書く。
-   - 整形: `fmt`・`fmt:check` は skill 自身の設定 (`scripts/deno.json`、`proseWrap: preserve`) で動き、対象が属するプロジェクトの fmt 設定と除外は見ない。`fmt` が 0 以外、`fmt:check` が 0 と 1 以外の終了コードで終わった場合 (対象が見つからない等) は、整形は実行不可とし「整形: 実行不可 (理由)」と書き、textlint の結果はそのまま扱う。
+   - 整形: `fmt`・`fmt:check` は skill 自身の設定 (`scripts/deno.json`、`proseWrap: preserve`) で動き、対象が属するプロジェクトの fmt 設定と除外は見ない。`fmt` が 0 以外で終わった場合、`fmt:check` が 0 と 1 以外の終了コードで終わった場合、または `fmt:check` が終了コード 1 でも出力が整形差分ではなく `error:` で始まる行だった場合 (対象が見つからない等。実物の例: `error: No target files found.`。取得コマンド `deno task -q --cwd "<scripts>" fmt:check <存在しないパス>`、取得日 2026-09-01) は、整形は実行不可とし「整形: 実行不可 (理由)」と書き、textlint の結果はそのまま扱う。
    - 集計:
      - 集計の機械層は「自動修正 M 件、整形あり、残り K 件」または「自動修正 M 件、整形なし、残り K 件」と書く。
-     - 整形の有無は `fix` モードでは (b) の前後のハッシュが異なれば「整形あり」とする。理由: `deno fmt` は変更の有無を出力しない。`lint` モードでは `fmt:check` の終了コードが 1 なら「整形あり」、0 なら「整形なし」。
+     - 整形の有無は `fix` モードでは (b) の前後のハッシュが異なれば「整形あり」とする。理由: `deno fmt` は変更の有無を出力しない。`lint` モードでは、上の実行不可に当たらない場合に限り、`fmt:check` の終了コードが 1 なら「整形あり」、0 なら「整形なし」。
      - 実行不可のときは「機械層 (実行不可)」と書く。整形の語はこの 2 値だけを使い、「整形差分あり」等の別表現は使わない。
      - 機械層の実行はこの手順 0 の 1 回だけで、報告の値はこの時点のもの。手順 4 の適用後に textlint を再実行してもよいが、その結果は報告に載せず、新たな指摘が出た場合は該当する適用を戻す。
 1. 節の分割と種別判定。

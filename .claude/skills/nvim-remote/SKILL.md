@@ -80,6 +80,6 @@ nvim --server "$sock" --remote-tab "$tmp"
   - nvim 側で開いている間に消えると参照できなくなる。
   - この禁止はタスク終了時にも適用する (ユーザが後で開き直す可能性がある)。
   - 後始末は OS の tmp cleaner またはユーザに委ねる。
-- MUST: nvim に渡すファイルパスは絶対パスにする。`--remote-tab`/`diffsplit` のパス解決基準は受け取る nvim 側の cwd であり、エージェント側の cwd と一致する保証がない。相対パスで来たら `realpath <path>` 等で絶対パスへ解決してから渡す。理由: `mktemp` が返すパスは元から絶対なのでそのままでよい。
+- MUST: nvim に渡すファイルパスは絶対パスにする。`--remote-tab`/`diffsplit` のパス解決基準は受け取る nvim 側の cwd であり、エージェント側の cwd と一致する保証がない。相対パスで来たら `realpath <path>` 等で絶対パスへ解決してから渡す。なお `mktemp` が返すパスは元から絶対なのでそのままでよい。
 - `--remote-send` で送るキーシーケンスは nvim 記法 (`<Esc>`/`<CR>` 等) を使用する。
 - nvim が insert mode 等にいる可能性を考慮し、Ex コマンド送信前には `<Esc>` を前置する。
