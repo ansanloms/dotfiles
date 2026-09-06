@@ -22,7 +22,7 @@
     "ask": [],
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5[1m]",
+  "model": "sonnet",
   "hooks": {
     "Stop": [
       {
@@ -97,6 +97,9 @@
       }
     ]
   },
+  "worktree": {
+    "bgIsolation": "none"
+  },
   "statusLine": {
     "type": "command",
     "command": "claude-statusline main",
@@ -156,10 +159,8 @@
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
   "terminalProgressBarEnabled": true,
-  "voiceEnabled": true,
-  "worktree": {
-    "bgIsolation": "none"
-  },
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
-  "inputNeededNotifEnabled": true
+  "voiceEnabled": true,
+  "editorMode": "vim"
 }
