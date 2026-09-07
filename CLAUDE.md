@@ -168,3 +168,9 @@ bump が更新するのは version 文字列と FOD ハッシュという、機�
 `moddable-sdk` も nixpkgs に収録されたら（`nix search nixpkgs moddable` で確認）、`moddable-sdk.nix` と flake.nix の overlay を削除して `packages.nix` の 1 行に乗り換える。
 
 `apm-cli` は nixpkgs 収録済みで遅れているだけなので、nixpkgs 側の version が自前 derivation の version に追いついたら（`nix eval --raw nixpkgs#apm-cli.version` で確認）、`apm-cli.nix` と flake.nix の overlay を削除して nixpkgs 版へ戻す。ただし戻すと再び nixpkgs の更新頻度に律速される。最新追従を続けるなら自前 derivation のまま bump 運用を続ける。
+
+### nixpkgs パッケージの一時的な上書き
+
+nixpkgs 収録パッケージが壊れているときは、自前 derivation を書かず `flake.nix` の overlay で該当箇所だけ差し替える。恒久化しないよう、適用条件と削除条件を overlay のコメントとここに書く。
+
+- `percona-toolkit`: src (`fetchFromGitHub`、`leaveDotGit = true`) の固定ハッシュが取得結果と食い違いビルドできない (取得コミットはタグ `v3.7.1` と一致し、差は `.git` のパックデータ。git のバージョンに依存する)。`perlPackages.PerconaToolkit` の `fetchFromGitHub` を差し替え、この環境の実測ハッシュで取得する。upstream の src のハッシュが nixpkgs の食い違う値 (overlay の `brokenHash`) と一致するときだけ適用し、upstream が version・ハッシュ・`leaveDotGit` のいずれかを変えれば自動で外れる。再びハッシュ不一致になったら、エラーの `specified:` で場合を分ける。overlay の `hash` と同じなら overlay は効いたまま (git-minimal の変更等でパック生成が変わった) なので、`got:` を `hash` に取り直し `brokenHash` は触らない。`brokenHash` と違うなら upstream がハッシュを変えて overlay は自動で外れているので、それでも直っていなければ `specified:` を `brokenHash` に、`got:` を `hash` に取り直す。削除の判断は「overlay を消しても `nix build` が通るか」で行い、通るなら削除する。
