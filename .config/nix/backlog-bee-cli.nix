@@ -36,16 +36,22 @@ buildNpmPackage {
   nativeBuildInputs = [ makeWrapper ];
 
   # npmConfigHook が node_modules を $PWD/node_modules へ展開した後、
-  # それを $out/lib/node_modules にコピーし、実バイナリを wrapper で公開する。
+  # それを $out/lib/$pname/node_modules にコピーし、実バイナリを wrapper で公開する。
+  # 自前 installPhase を書く derivation 同士では $out/lib/node_modules への平坦展開が
+  # buildEnv で衝突するため、パッケージ名付きディレクトリに分離する（詳細は CLAUDE.md）。
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib $out/bin
-    cp -r node_modules $out/lib/node_modules
+    # パッケージ名を 3 箇所に持つと片方だけ直したときにビルドが通ったまま実行時に
+    # module 解決へ失敗するため、$pname (stdenv.mkDerivation が渡す) で連動させる。
+    mkdir -p $out/lib/$pname $out/bin
+    cp -r node_modules $out/lib/$pname/node_modules
+    # npm の管理ファイルで実行時に読まれず、buildEnv の衝突の直接原因だったため出力へ持ち込まない。
+    rm -f $out/lib/$pname/node_modules/.package-lock.json
 
     # git は `bee repo clone` が spawn するため PATH に加える。
     makeWrapper ${nodejs}/bin/node $out/bin/bee \
-      --add-flags $out/lib/node_modules/@nulab/bee/bin/cli.mjs \
+      --add-flags $out/lib/$pname/node_modules/@nulab/bee/bin/cli.mjs \
       --prefix PATH : ${
         lib.makeBinPath [
           nodejs

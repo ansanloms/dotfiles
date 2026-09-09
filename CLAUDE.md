@@ -132,6 +132,10 @@ devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボー
 - `moddable-sdk.nix`（Moddable SDK の CLI ツール `mcconfig` / `mcrun` / `mcpack` 等。Linux 専用。GTK ベースの GUI（xsbug / mcsim）はビルドしない。fetchFromGitHub で public ブランチの特定コミットを取得し、sub-makefile（xsc/xsid/xsl/serial2xsbug/tools）だけをビルドする。CLI ツールは単一マルチコールバイナリ `tools` への bash ラッパで、実行時に環境変数 `MODDABLE` が SDK ツリーを指す必要があるため、SDK ツリー一式を `$out/share/moddable` へ展開し各ツールを `MODDABLE` 付きで wrap する。SDK ツリーは read-only（store）のため、アプリビルド時は `mcconfig -o <書き込み可能なディレクトリ>` で出力先を明示する。nixpkgs 未収録。タグは 2022 年止まりなので tag ではなく public のコミットに pin する）
 - `backlog-bee-cli.nix`（Backlog（Nulab）の CLI `bee`。npm でのみ配布（`@nulab/bee`）されるため buildNpmPackage で導入する。nixpkgs の `bee` は別物（ethersphere/bee = Ethereum Swarm ノード）なので attribute 名を分けている。コマンド名は `bee`）
 
+`buildNpmPackage` で自前の `installPhase` を書く derivation（`playwright-cli` / `backlog-bee-cli`）は、`node_modules` を `$out/lib/<pname>/node_modules` へ置く。`$out/lib/node_modules` へ平坦に展開すると、npm が `node_modules` 直下に書く `.package-lock.json` が derivation 間で同一の相対パスになり、`packages.nix` の `buildEnv` が file collision で落ちる（実際に発生した）。依存パッケージ名が被った場合も同じ理由で衝突する。nixpkgs 標準の `npmInstallHook` はパッケージ本体を `$out/lib/node_modules/<name>/` へ置き、依存をその配下へ入れ子にするため衝突しない（nixpkgs が `buildNpmPackage` で提供する npm パッケージはこちら）。この規約は hook を使わず `installPhase` を自前で書く場合にのみ当てはまる。
+
+この衝突は個々の derivation を単体で `nix build` しても検出できない。`buildEnv` が複数パッケージを同一 prefix へ束ねたときにだけ現れる。そのため npm 系の derivation を追加・変更したら、`nix profile upgrade --all --impure`（または当該パッケージを含む `buildEnv`）まで通してから反映すること。
+
 ### バージョンを上げる
 
 `deno task bump`（全パッケージ）/ `deno task bump:<name> [version]`（version 省略で最新）で、version・ハッシュ（playwright-cli / backlog-bee-cli は lockfile も）を更新する。具体的な処理は各スクリプトを参照:
