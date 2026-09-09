@@ -1,0 +1,91 @@
+#!/usr/bin/env -S deno run -A
+// backlog-bee-cli を指定バージョン（省略時は npm レジストリの最新）へ更新する。
+//
+// 処理内容:
+//   1. package.json の依存バージョンを反映
+//   2. package-lock.json を再生成
+//   3. npmDepsHash を取得
+//   4. backlog-bee-cli.nix の version / npmDepsHash を反映
+//
+// git add / nix profile upgrade は行わない。完了後に git diff で確認し、手動で反映すること。
+//
+// 使い方:
+//   deno task bump:backlog-bee-cli            # 最新へ
+//   deno task bump:backlog-bee-cli 1.1.0      # 指定バージョンへ
+
+const PKG = "@nulab/bee";
+const scriptDir = import.meta.dirname!;
+const pkgJsonPath = `${scriptDir}/package.json`;
+const lockPath = `${scriptDir}/package-lock.json`;
+const nixPath = `${scriptDir}/../backlog-bee-cli.nix`;
+
+/** 外部コマンドを実行し、標準出力（trim 済み）を返す。非ゼロ終了で例外。 */
+async function run(cmd: string, args: string[]): Promise<string> {
+  const { code, stdout, stderr } = await new Deno.Command(cmd, {
+    args,
+    stdout: "piped",
+    stderr: "piped",
+  }).output();
+  if (code !== 0) {
+    console.error(new TextDecoder().decode(stderr));
+    throw new Error(`コマンド失敗: ${cmd} ${args.join(" ")}`);
+  }
+  return new TextDecoder().decode(stdout).trim();
+}
+
+/** nix ファイル内の `<key> = "...";` の値を置換する（最初の 1 件）。 */
+function replaceNixString(src: string, key: string, value: string): string {
+  const re = new RegExp(`(\\b${key} = ")[^"]*(";)`);
+  if (!re.test(src)) {
+    throw new Error(`${nixPath} に ${key} の定義が見つからない`);
+  }
+  return src.replace(re, `$1${value}$2`);
+}
+
+const version = Deno.args[0] ?? await run("npm", ["view", PKG, "version"]);
+// 範囲指定 (^1.1.0 等) や latest を渡すと nix の version にそのまま書き込まれ bee --version と食い違うため、
+// 具体的なバージョン文字列であることを検証する。
+if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(version)) {
+  throw new Error(
+    `バージョンの形式が不正: "${version}"（期待する形式: 1.1.1 や 1.0.0-rc.3 のような具体的なバージョン文字列）`,
+  );
+}
+console.log(`対象バージョン: ${version}`);
+
+// 1. package.json の依存バージョンを反映
+const pkg = JSON.parse(await Deno.readTextFile(pkgJsonPath));
+pkg.version = version;
+pkg.dependencies[PKG] = version;
+await Deno.writeTextFile(pkgJsonPath, JSON.stringify(pkg, null, 2) + "\n");
+
+// 2. lockfile を再生成（nix の npm を使う）
+console.log("lockfile を再生成中...");
+await run("npm", [
+  "install",
+  "--prefix",
+  scriptDir,
+  "--package-lock-only",
+  "--omit=dev",
+]);
+
+// 3. npmDepsHash を取得
+console.log("npmDepsHash を取得中...");
+const hash = await run("nix", [
+  "run",
+  "nixpkgs#prefetch-npm-deps",
+  "--",
+  lockPath,
+]);
+console.log(`npmDepsHash: ${hash}`);
+
+// 4. backlog-bee-cli.nix へ反映
+let nix = await Deno.readTextFile(nixPath);
+nix = replaceNixString(nix, "version", version);
+nix = replaceNixString(nix, "npmDepsHash", hash);
+await Deno.writeTextFile(nixPath, nix);
+
+console.log("\n更新完了。git diff で確認し、問題なければ反映:");
+console.log(
+  "  git add .config/nix/backlog-bee-cli.nix .config/nix/backlog-bee-cli/",
+);
+console.log("  nix profile upgrade --all --impure");
