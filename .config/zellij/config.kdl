@@ -6,6 +6,7 @@ default_shell "zsh"
 scrollback_editor "nvim"
 pane_frames true
 mouse_mode true
+osc8_hyperlinks true
 
 ui {
   pane_frames {

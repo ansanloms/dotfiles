@@ -6,7 +6,9 @@ shell = { program = "C:\\WINDOWS\\system32\\wsl.exe", args = [
   "~",
 ] }
 
-[hints]
-enabled = [
-  { command = { program = "cmd", args = ["/c", "start", ""] }, mouse = { enabled = true, mods = "Shift" }, hyperlinks = true, post_processing = true, regex = "(https?://[^\\s]+)" },
-]
+[[hints.enabled]]
+regex = "(https?://[^\\s]+)"
+command = { program = "cmd", args = ["/c", "start", ""] }
+mouse = { enabled = true, mods = "Shift" }
+hyperlinks = true
+post_processing = true
