@@ -74,29 +74,100 @@ store='git -C /path/to/worktree config branch.feature/x.review "$(cat {file})"'
 | round   | range                          | level              |
 | ------- | ------------------------------ | ------------------ |
 | r1      | `<base>...<branch>`            | 計画に書いた level |
-| r2 以降 | `<last-reviewed>...<HEAD SHA>` | `high` 固定        |
+| r2 以降 | `<last-reviewed>...<HEAD SHA>` | `medium` 固定      |
 
-r1 で網羅性を取り、r2 以降は確信の高い指摘だけを増分に対して取る。r2 以降を `xhigh` / `max` にしない (r1 がそうでも同じ)。level は `high` / `xhigh` / `max` から選ぶ。`medium` は runner のモデル (opus) で `high` と同一プロンプトに解決され区別が無い (2026-08-31 実測) ため使わない。
+r1 で網羅性を取り、r2 以降は確信の高い指摘だけを増分に対して取る。r2 以降を `high` 以上にしない (r1 がそうでも同じ)。
 
-計画に書く level と天井の既定:
+#### level はモデルと組で決まる
 
-- level は既定 `high`。変更がセキュリティ・認証・並行制御 (ロック・タイマー・並列 I/O)・削除や上書きに関わるか、複数モジュール (パッケージ境界。無ければトップレベルディレクトリ。ルート直下のファイルはまとめて 1 モジュール) に広がる diff は `xhigh` とし、計画にその理由を書く。`max` はユーザ指示があるときだけ。`xhigh` / `max` は指摘が広く不確かなものも含み (skill の description)、所要時間・指摘数・誤検知率は未計測。昇格した回は報告に所要時間と指摘数を残し、基準の見直しに使う。
-- `low` は使わない。`/code-review` の `low` は 1 pass・verify 無し・上限 4 件で、テストファイルの hunk を見ない。実クラッシュを含む diff に対して 0 件を返した (2026-08-31 実測)。5 行以内の修正は dev-workflow ルールの例外経路でレビュー自体を省くため、`low` が効く帯域は無い。
-- 天井は `high` なら 3、`xhigh` / `max` なら 4。計画に明示した値があればそれ。
+`/code-review` は level 単独ではプロンプトを決めない。`(model, level)` の組でプロンプトセルを引く。同じ level でもモデルが違えば別のプロンプトが走る。
+
+| level    | claude-sonnet-5 | claude-opus-5  |
+| -------- | --------------- | -------------- |
+| `low`    | `low-sonnet5`   | `low`          |
+| `medium` | `medium`        | `o5-bmin`      |
+| `high`   | `high`          | `o5-bmin`      |
+| `xhigh`  | `xhigh`         | `o48-xhigh-v1` |
+| `max`    | `max`           | `max`          |
+
+opus-5 では `medium` と `high` が同一セル `o5-bmin` に潰れる。`o5-bmin` は角度分割も verify も無い単一パスのプロンプトで、correctness だけを見る (cleanup / altitude / conventions の角度を持たない)。一方 sonnet-5 の `medium` / `high` は 8 角度 (correctness 3 + cleanup 3 + altitude 1 + conventions 1) を回す。
+
+つまり opus-5 では level を下げてコストを落とす経路が存在しない。
+
+#### 既定と昇格
+
+- 既定は **sonnet-5 + `medium`**。
+- 次のいずれかに当たる diff は **opus-5 + `high`** に昇格し、計画にその理由を書く。
+  - セキュリティ・認証
+  - 並行制御 (ロック・タイマー・並列 I/O)
+  - 削除や上書き
+  - 複数モジュールに広がる (パッケージ境界。無ければトップレベルディレクトリ。ルート直下のファイルはまとめて 1 モジュール)
+- `xhigh` / `max` はユーザ指示があるときだけ。
+- `low` は使わない。
+
+opus-5 + `high` は level の上位互換ではない。`o5-bmin` が角度予算を持たない薄いプロンプトのため、モデルが自分の判断で diff の外まで調査を広げる。README・設定ファイル・呼び出し側スクリプトを横断する指摘はこの経路でしか出なかった。逆に cleanup 系の網羅は sonnet-5 の角度構成のほうが安定する。別種の枠として使い分ける。
+
+#### 天井
+
+- `medium` / `high` は 2。
+- `xhigh` / `max` は 3。
+- 計画に明示した値があればそれ。
+
+この値には測定根拠が無い。単発ラウンドのコストは測ったが、ラウンドをまたいだ収束は測っていない。1 ラウンドが 120〜400 秒かかること、および終了判定 f の cut-off が「収束しなかった」を安全に扱える (未レビューの修正を明示してユーザへ投げる) ことからの判断。
+
+#### 測定条件 (2026-09-09)
+
+上の既定値は次の条件下の 9 run に基づく。条件が変われば結論も変わるので、参照するときは条件ごと確認する。
+
+- 環境: リモートコンテナ (Anthropic 実行環境)。ローカルの nix 環境ではない
+- `CLAUDE_CODE_REPORT_FINDINGS` 未設定。ReportFindings 経路は使われずテキスト出力に落ちる
+- フォークに Agent ツールが無い。全 level で subagent ファンアウトと 1-vote verify は走らず、角度は inline 単一パスで回る
+- 対象 3 diff のうち 2 つは履歴上のコミットで、作業ツリーに修正版が存在するため検出率が楽観側に汚染されている。実際に 2 run が「後の版を見て裏を取った」と自ら述べた
+
+| diff       | model    | level  | 秒  | 指摘 | 誤検知 |
+| ---------- | -------- | ------ | --- | ---- | ------ |
+| 555 行     | opus-5   | high   | 317 | 7    | 0      |
+| 555 行     | sonnet-5 | high   | 333 | 3    | 0      |
+| 555 行     | sonnet-5 | medium | 119 | 2    | 0      |
+| 325 行     | opus-5   | high   | 405 | 8    | 0      |
+| 325 行     | sonnet-5 | high   | 308 | 5    | 1      |
+| 325 行     | sonnet-5 | medium | 123 | 2    | 0      |
+| 16 行 (種) | opus-5   | high   | 118 | 3    | 0      |
+| 16 行 (種) | sonnet-5 | high   | 103 | 4    | 0      |
+| 16 行 (種) | sonnet-5 | medium | 69  | 3    | 0      |
+
+読み: `medium` は `high` より速い。比は diff の規模で変わり、325〜555 行で 2.5〜2.8 倍 (308/123 = 2.50、333/119 = 2.80)、16 行で 1.5 倍 (103/69 = 1.49)。誤検知は `high` が 1 件出しただけで `medium` は 0。同一 level で model を opus-5 から sonnet-5 に落とした場合、所要時間の変化は一定しない (325 行 -97 秒、16 行 -15 秒、555 行 +16 秒)。一方で大きい 2 つの diff では指摘数が減る (7 → 3、8 → 5)。level を下げたときのような安定したコスト削減は model の変更からは得られない。
+
+`low` を使わない根拠は opus-5 での実測 (1 pass・verify 無し・上限 4 件、実クラッシュを含む diff に 0 件、2026-08-31)。sonnet-5 の `low` は別セル `low-sonnet5` に解決され modelEffort を `medium` へ引き上げるため、この実測は転移しない。sonnet-5 の `low` は未計測。
 
 `HEAD SHA` は `git -C "$repo" rev-parse --short HEAD`。runner への委譲文と台帳の rounds には解決済み SHA を書く (r1 は `<base>...<branch>`、台帳では `@ <HEAD SHA>` を添える。r2 以降は `<last-reviewed>...<HEAD SHA>`)。突合用の `git diff` は `git -C "$repo"` で解決するので `HEAD` でよい。委譲文に `HEAD` を書かない: `/code-review` の fork はセッションの cwd (メイン checkout) で走り、`HEAD` が main に解決して r1 と同じ範囲を再レビューする (2026-08-31 実測。runner はこれを差し戻す)。
 
 ### 2. 突合
 
-`git -C "$repo" diff <range>` を読み、計画との差 (実装漏れ・計画外の変更) と implementer の検証結果を確認する。
+diff 全文をメインループのコンテキストに載せない。research-worker へ委譲し、結果だけ受け取る。
+
+委譲文に含めるもの:
+
+- `repo` と range
+- 計画本文 (目的・対象ファイル・変更内容・制約)
+- implementer が報告した検証結果
+
+返させるもの:
+
+- 計画に無い変更 (ファイルと要点)
+- 計画にあって未実装の項目
+- implementer の検証結果と diff の内容が食い違う箇所
+- 上のいずれも無ければ「差分なし」
+
+裁定で個別の hunk が要るときは、指摘の `file:line` を指定して該当箇所だけ取る。diff 全文を取り直さない。
 
 ### 3. runner への委譲
 
-code-review-runner を Agent で起動する。`description` は `code-review rN` (取り直しは `code-review rN retry`)。委譲文は `assets/runner-prompt.md` を埋めて使う。項目を足さない (返却の形は runner の agent 定義が縛る)。台帳・不採用事項・検証結果・意図した設計を添えても reviewer には届かない (fork は skill 本文と target 文字列しか受け取らない)。
+code-review-runner を Agent で起動する。`description` は `code-review rN` (取り直しは `code-review rN retry`)。Agent ツールの `model` には計画で決めたモデルを渡す (既定 `sonnet`、昇格時 `opus`)。委譲文は `assets/runner-prompt.md` を埋めて使う。項目を足さない (返却の形は runner の agent 定義が縛る)。台帳・不採用事項・検証結果・意図した設計を添えても reviewer には届かない (fork は skill 本文と target 文字列しか受け取らない)。
 
 ### 4. 返却の判別
 
-生と判定する条件: 指摘ごとに 場所 (ファイルと行または関数)・要約・失敗シナリオ が付いて列挙されている。runner のモデル (opus) では `high` は severity 付きの `file:line — 本文` の散文列挙で返り、冒頭に ReportFindings ツールが無い旨の断りが付くことがある (2026-08-31 実測)。`file` / `line` / `summary` / `failure_scenario` の JSON 配列で返るのは `xhigh` / `max` のみ。0 件の表現は `(none)`・空配列・指摘なしの散文のいずれもありうる。severity が付いていても裁定はそれに依存せず、新規 / 既知の欄は返却形に無いので要求しない。判定は形式検査のみで、値の妥当性 (行番号のずれ等) は裁定側で扱う。
+生と判定する条件: 指摘ごとに 場所 (ファイルと行または関数)・要約・失敗シナリオ が付いて列挙されている。返却の形はモデルと level で変わる。opus-5 の `high` は severity 付きの `file:line — 本文` の散文列挙で返った (2026-08-31 / 2026-09-09 実測)。sonnet-5 の `medium` / `high` は `file` / `line` / `summary` / `failure_scenario` の JSON 配列で返った (2026-09-09 実測、6 run とも)。どちらの経路でも冒頭や末尾に ReportFindings ツールが無い旨・単一パスである旨の断りが付くことがある。形は保証されないので、判定は「場所・要約・失敗シナリオが指摘ごとに揃っているか」だけで行う。0 件の表現は `(none)`・空配列・指摘なしの散文のいずれもありうる。severity が付いていても裁定はそれに依存せず、新規 / 既知の欄は返却形に無いので要求しない。判定は形式検査のみで、値の妥当性 (行番号のずれ等) は裁定側で扱う。
 
 加工と判定する条件のいずれか: 総評の散文だけ、採用 / 不採用 / 既知等の裁定語付き。加工なら同じ委譲文で 1 回だけ取り直す。取り直しても加工なら「加工済み」と明記してユーザへ判断を仰ぐ。
 

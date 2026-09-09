@@ -4,11 +4,11 @@
 
 メインループは判断 (設計・計画・承認取得・レビューの裁定・コミット/PR 文面の決定) だけを担い、読み取り・探索・実行・編集は subagent へ外出しする。Claude Code の呼び出しはステートレスな API 上で動き、ツール呼び出しごとにその時点の全コンテキストが再送されるため、コンテキストが育ったメインループが自分で手を動かすほど 1 リクエストの再送量が膨らむ。
 
-| 役割                  | 担当                                                                       |
-| --------------------- | -------------------------------------------------------------------------- |
-| 実装                  | implementer subagent (`.claude/agents/implementer.md`、sonnet)             |
-| 調査                  | research-worker subagent (`.claude/agents/research-worker.md`、sonnet)     |
-| `/code-review` の実行 | code-review-runner subagent (`.claude/agents/code-review-runner.md`、opus) |
+| 役割                  | 担当                                                                                            |
+| --------------------- | ----------------------------------------------------------------------------------------------- |
+| 実装                  | implementer subagent (`.claude/agents/implementer.md`、sonnet)                                  |
+| 調査                  | research-worker subagent (`.claude/agents/research-worker.md`、sonnet)                          |
+| `/code-review` の実行 | code-review-runner subagent (`.claude/agents/code-review-runner.md`、既定 sonnet / 昇格時 opus) |
 
 ## 工程
 
@@ -33,7 +33,7 @@
   - 深い読み取り・検証 = `opus`、機械的な探索・実行 = `sonnet`。`fable` は指定しない。
   - `fork` は使わない。理由: 親モデルを継承する。
   - PreToolUse hook (`.claude/scripts/subagent-model.ts`) が未指定に `opus` を補うが、安全網であって明示義務の代わりではない。
-- MUST: メインループの直接のツール呼び出しは (a) 委譲とその受け取り、(b) ユーザへの提示 (手段は nvim ルール)、(c) 1 コマンドで済む単発の事実確認、に限る。Bash・Read・Edit・Write・LSP を 2 回以上続けて打つ状態になったら、その作業を subagent へ切り出す。下記「例外」と、他のルール・skill がメインループの責務と定める手順 (nvim の socket 解決、worktree の用意と branch description、`review-loop` の突合用 diff 取得と台帳の読み書き) は対象外。
+- MUST: メインループの直接のツール呼び出しは (a) 委譲とその受け取り、(b) ユーザへの提示 (手段は nvim ルール)、(c) 1 コマンドで済む単発の事実確認、に限る。Bash・Read・Edit・Write・LSP を 2 回以上続けて打つ状態になったら、その作業を subagent へ切り出す。下記「例外」と、他のルール・skill がメインループの責務と定める手順 (nvim の socket 解決、worktree の用意と branch description、`review-loop` の台帳の読み書き) は対象外。
 - MUST: ファイル変更を伴う実装はメインループが直接行わず implementer へ委譲する。この委譲義務はメインループにのみ課す。subagent として動いている場合 (implementer 自身を含む) は再委譲せず直接行う。
 - WIP コミットはレビュー中に implementer が行う唯一のコミットで、工程 7 の畳み込み前に push しない。
 - MUST: メインループはツールを打つ前にこの分担に反していないか確認する。
