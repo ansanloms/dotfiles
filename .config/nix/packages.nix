@@ -3,6 +3,7 @@
 pkgs: with pkgs; [
   apm-cli
   awscli2
+  backlog-bee-cli
   bun
   claude-code
   claude-statusline
