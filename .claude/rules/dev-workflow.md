@@ -33,7 +33,7 @@
   - 深い読み取り・検証 = `opus`、機械的な探索・実行 = `sonnet`。`fable` は指定しない。
   - `fork` は使わない。理由: 親モデルを継承する。
   - PreToolUse hook (`.claude/scripts/subagent-model.ts`) が未指定に `opus` を補うが、安全網であって明示義務の代わりではない。
-- MUST: メインループの直接のツール呼び出しは (a) 委譲とその受け取り、(b) ユーザへの提示 (手段は nvim ルール)、(c) 1 コマンドで済む単発の事実確認、に限る。Bash・Read・Edit・Write・LSP を 2 回以上続けて打つ状態になったら、その作業を subagent へ切り出す。下記「例外」と、他のルール・skill がメインループの責務と定める手順 (nvim の socket 解決、worktree の用意と branch description、`review-loop` の台帳の読み書き) は対象外。
+- MUST: メインループの直接のツール呼び出しは (a) 委譲とその受け取り、(b) ユーザへの提示 (手段は nvim ルール)、(c) 1 コマンドで済む単発の事実確認、に限る。Bash・Read・Edit・Write・LSP を 2 回以上続けて打つ状態になったら、その作業を subagent へ切り出す。下記「例外」と、他のルール・skill がメインループの責務と定める手順 (nvim の socket 解決、worktree の用意と branch description、`review-loop` の台帳の読み書きと r2 以降の突合) は対象外。
 - MUST: ファイル変更を伴う実装はメインループが直接行わず implementer へ委譲する。この委譲義務はメインループにのみ課す。subagent として動いている場合 (implementer 自身を含む) は再委譲せず直接行う。
 - WIP コミットはレビュー中に implementer が行う唯一のコミットで、工程 7 の畳み込み前に push しない。
 - MUST: メインループはツールを打つ前にこの分担に反していないか確認する。
