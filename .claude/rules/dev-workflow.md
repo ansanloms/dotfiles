@@ -4,11 +4,12 @@
 
 メインループは判断 (設計・計画・承認取得・レビューの裁定・コミット/PR 文面の決定) だけを担い、読み取り・探索・実行・編集は subagent へ外出しする。Claude Code の呼び出しはステートレスな API 上で動き、ツール呼び出しごとにその時点の全コンテキストが再送されるため、コンテキストが育ったメインループが自分で手を動かすほど 1 リクエストの再送量が膨らむ。
 
-| 役割                  | 担当                                                                                            |
-| --------------------- | ----------------------------------------------------------------------------------------------- |
-| 実装                  | implementer subagent (`.claude/agents/implementer.md`、sonnet)                                  |
-| 調査                  | research-worker subagent (`.claude/agents/research-worker.md`、sonnet)                          |
-| `/code-review` の実行 | code-review-runner subagent (`.claude/agents/code-review-runner.md`、既定 sonnet / 昇格時 opus) |
+| 役割                                                            | 担当                                                                                            |
+| --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| 実装                                                            | implementer subagent (`.claude/agents/implementer.md`、sonnet)                                  |
+| 調査                                                            | research-worker subagent (`.claude/agents/research-worker.md`、sonnet)                          |
+| `/code-review` の実行                                           | code-review-runner subagent (`.claude/agents/code-review-runner.md`、既定 sonnet / 昇格時 opus) |
+| 公開 (畳み込み・commit・push・PR 作成・branch description 更新) | pr-publisher subagent (`.claude/agents/pr-publisher.md`、haiku)                                 |
 
 ## 工程
 
@@ -22,20 +23,22 @@
 6. **レビュー**: 下記「レビュー」に従う。
 7. **コミット / PR**: 既定はコミット・push・PR 作成まで。コミットのみで止めるのはユーザ指示がある場合に限る。
    - WIP コミットは push 前に 1 つに畳む (手順は `review-loop` skill)。
-   - コミットメッセージと PR 本文はメインループが決める (コミット規約は git ルール)。実行 (畳み込み・commit・push・PR 作成) は文面を添えて implementer へ委譲する。
-   - PR URL を受け取ったら branch description を更新する (worktree ルール)。
+   - コミットメッセージ・PR 本文・branch description の文面はメインループが決める (コミット規約は git ルール)。実行 (畳み込み・commit・push・PR 作成・branch description 更新) は文面を添えて pr-publisher へ 1 回で委譲する。branch description は PR URL の位置だけプレースホルダにした全文を渡し、pr-publisher が PR 作成の戻り値で置換して設定する (書式は worktree ルール)。理由: URL を受け取ってから再委譲する往復を省く。置換は判断を伴わない。
+   - pr-publisher に渡すのは内容が変わらない作業だけ。main への rebase やレビュー指摘の反映で内容が変わる作業は implementer に任せ、検証と WIP コミットまで持たせてから pr-publisher へ渡す。委譲文でこの境界を明示する。
+   - pr-publisher が失敗 (push の拒否・衝突・`gh` の失敗) を報告したら、メインループが原因を判断して implementer への再委譲かユーザへの確認に振り分ける。pr-publisher に直させない。
 8. **片付け**: マージ報告を受けたら worktree ルールの片付け手順に従う。
 
 ## 運用
 
 - 前提: メインセッションは Fable で走らせる。
-- MUST: subagent のモデルは呼び出し側が決める。frontmatter に `model:` を持つ agent (implementer・research-worker・code-review-runner) はそれに従い、それ以外 (general-purpose・Explore・Plan 等) を起動するときは `model` を必ず渡す。
+- MUST: subagent のモデルは呼び出し側が決める。frontmatter に `model:` を持つ agent (implementer・research-worker・code-review-runner・pr-publisher) はそれに従い、それ以外 (general-purpose・Explore・Plan 等) を起動するときは `model` を必ず渡す。
   - 深い読み取り・検証 = `opus`、機械的な探索・実行 = `sonnet`。`fable` は指定しない。
   - `fork` は使わない。理由: 親モデルを継承する。
   - PreToolUse hook (`.claude/scripts/subagent-model.ts`) が未指定に `opus` を補うが、安全網であって明示義務の代わりではない。
 - MUST: メインループの直接のツール呼び出しは (a) 委譲とその受け取り、(b) ユーザへの提示 (手段は nvim ルール)、(c) 1 コマンドで済む単発の事実確認、に限る。Bash・Read・Edit・Write・LSP を 2 回以上続けて打つ状態になったら、その作業を subagent へ切り出す。下記「例外」と、他のルール・skill がメインループの責務と定める手順 (nvim の socket 解決、worktree の用意と branch description、`review-loop` の台帳の読み書き) は対象外。
 - MUST: ファイル変更を伴う実装はメインループが直接行わず implementer へ委譲する。この委譲義務はメインループにのみ課す。subagent として動いている場合 (implementer 自身を含む) は再委譲せず直接行う。
 - WIP コミットはレビュー中に implementer が行う唯一のコミットで、工程 7 の畳み込み前に push しない。
+- MUST: 検証 (lint・test・build・型検査等) は内容が最後に変わった後に 1 回行う。内容が変わらない公開作業 (畳み込み・push・PR 作成・branch description 更新) では再実行しない。理由: 畳み込みは既に検証済みのツリーをそのまま指し直すだけで、CI が同じ検証を重ねる。レビュー指摘の反映や main への rebase で内容が変わったときは implementer が検証と WIP コミットまで持つ。委譲文に「検証を通す」を書くのは内容を変える委譲に限る。
 - MUST: メインループはツールを打つ前にこの分担に反していないか確認する。
 
 ## レビュー
@@ -62,4 +65,4 @@ diff 全体 (変更するファイルすべて) が次のいずれかに該当�
   - 散文以外のファイル (ソース・設定・データ) を 1 ファイルでも含めば該当しない。散文中のコマンド例・コードフェンスは散文の一部。
   - 文書のみでも計画と本文が分離できるもの (既定値の一括差し替え等) は除く。
 
-例外経路でも工程 1〜4 と 7〜8 は踏む。工程 7 の実行は例外経路でも implementer へ委譲する。コミット前に diff は提示しない。変更したファイルと変更の要点を報告に書き、これを通常フローの「レビュー」1 の突合に代える。報告と工程 7 の委譲は同じターンで続けて発行してよい。`/code-review` を実行しなかった事実とその根拠 (この例外) は報告に含める。
+例外経路でも工程 1〜4 と 7〜8 は踏む。工程 7 の実行は例外経路でも pr-publisher へ委譲する。コミット前に diff は提示しない。変更したファイルと変更の要点を報告に書き、これを通常フローの「レビュー」1 の突合に代える。報告と工程 7 の委譲は同じターンで続けて発行してよい。`/code-review` を実行しなかった事実とその根拠 (この例外) は報告に含める。
