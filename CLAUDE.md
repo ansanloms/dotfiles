@@ -124,7 +124,7 @@ devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボー
 
 `.config/nix/` には nixpkgs 未収録、または nixpkgs の追従が upstream から遅れるパッケージを自前 derivation で管理している。
 
-- `apm-cli.nix`（[apm](https://github.com/microsoft/apm)、コマンド名 `apm`。nixpkgs 収録済みだが upstream リリースから数週間遅れるため、nixpkgs の derivation をベースに自前で最新へ追従する。Python ソースビルド（buildPythonApplication）。`llm-github-models` は nixpkgs 未収録のため postPatch で pyproject.toml から除去する。`dependencies` は upstream の pyproject.toml と手動同期）
+- `apm-cli.nix`（[apm](https://github.com/microsoft/apm)、コマンド名 `apm`。nixpkgs 収録済みだが upstream リリースから数週間遅れるため、nixpkgs の derivation をベースに自前で最新へ追従する。Python ソースビルド（buildPythonApplication）。`llm-github-models` は nixpkgs 未収録のため postPatch で pyproject.toml から除去する。`dependencies` は upstream の pyproject.toml と手動同期。現在は上流の退行（microsoft/apm#2888、issue #89）を避けるため 0.28.0 に固定している。`deno task bump`（全パッケージ）は apm-cli も最新へ上げてしまうので、修正 microsoft/apm#2891 を含むリリースが出るまで apm-cli は bump しない）
 - `claude-statusline.nix`（[claude-statusline](https://github.com/ansanloms/claude-statusline)、Claude Code の statusLine / subagentStatusLine レンダラ。nixpkgs 収録対象外の自前ツール。GitHub Release に添付した deno bundle 済み単一 JS を fetchurl で取得し raw のまま導入する。shebang（`env -S deno run ...`）は stdenv の patchShebangs で nix の deno に固定する。`.claude/settings.json` の `statusLine` / `subagentStatusLine` から `claude-statusline main` / `claude-statusline sub` で呼ばれる）
 - `md2html.nix`（[md2html](https://github.com/ansanloms/md2html)、markdown をシンタックスハイライト（shiki）・mermaid・目次内蔵の自己完結 HTML へ変換する CLI。nvim の quickrun からのプレビューが主用途。nixpkgs 収録対象外の自前ツール。元は `scripts/md2html` の workspace member だったが独立リポジトリへ移管した。GitHub Release（タグは `0.1.0` 形式で v プレフィックス無し）に添付した deno bundle 済み単一 JS を fetchurl で取得して導入する。shebang（`env -S deno run ...`）は stdenv の patchShebangs で nix の deno に固定し、実行時の mermaid バンドル生成が PATH の `deno` を spawn するため wrapProgram で nix の deno を PATH へ前置・LD_LIBRARY_PATH を除去する）
 - `playwright-cli.nix`（`@playwright/cli`、npm パッケージ / buildNpmPackage、wrapper で nixpkgs `google-chrome` を駆動）
@@ -176,7 +176,7 @@ bump が更新するのは version 文字列と FOD ハッシュという、機�
 
 `@nulab/bee`（Backlog CLI）が nixpkgs に収録されたら、`backlog-bee-cli.nix` と flake.nix の overlay を削除して `packages.nix` の 1 行に乗り換える。ただし nixpkgs の `bee` は別物（ethersphere/bee）のため、収録される場合の attribute 名はこの自前 derivation と同じ `backlog-bee-cli` にはならず、別名になる前提で `nix search nixpkgs bee` 等で該当パッケージを探すこと。
 
-`apm-cli` は nixpkgs 収録済みで遅れているだけなので、nixpkgs 側の version が自前 derivation の version に追いついたら（`nix eval --raw nixpkgs#apm-cli.version` で確認）、`apm-cli.nix` と flake.nix の overlay を削除して nixpkgs 版へ戻す。ただし戻すと再び nixpkgs の更新頻度に律速される。最新追従を続けるなら自前 derivation のまま bump 運用を続ける。
+`apm-cli` は nixpkgs 収録済みで遅れているだけなので、nixpkgs 側の version が自前 derivation の version に追いついたら（`nix eval --raw nixpkgs#apm-cli.version` で確認）、`apm-cli.nix` と flake.nix の overlay を削除して nixpkgs 版へ戻す。ただし issue #89 の 0.28.0 固定中はこの判定を保留する（nixpkgs の 0.29.0 以降も同じ退行を含むため、追いついたように見えても戻さない）。ただし戻すと再び nixpkgs の更新頻度に律速される。最新追従を続けるなら自前 derivation のまま bump 運用を続ける。
 
 ### nixpkgs パッケージの一時的な上書き
 
