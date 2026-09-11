@@ -144,9 +144,13 @@ opus-5 + `high` は level の上位互換ではない。`o5-bmin` が角度予�
 
 ### 2. 突合
 
-diff 全文をメインループのコンテキストに載せない。research-worker へ委譲し、結果だけ受け取る。
+r1 (base からの全 diff) は research-worker へ委譲し、diff 全文をメインループのコンテキストに載せない。r2 以降の増分と「突合のみ」はメインループが直接読んでよい。
 
-委譲文に含めるもの:
+根拠は行数ではなく情報の非対称性にある。r1 は他人が書いた変更全体を初めて見るので、読む量が多く要点抽出の利得が大きい。r2 以降の増分は自分が指示した修正の増分で、対象と期待値をメインループが既に持っているため、委譲すると検証内容より委譲コストのほうが大きくなる。
+
+ただし増分が計画の範囲を超えていると分かったら (指示していないファイルが含まれる、規模が想定を大きく上回る)、その回は委譲に切り替える。
+
+委譲する場合、委譲文に含めるもの:
 
 - `repo` と range
 - 計画本文 (目的・対象ファイル・変更内容・制約)
@@ -230,14 +234,39 @@ code-review-runner を Agent で起動する。`description` は `code-review rN
 implementer への委譲文に含める手順:
 
 ```sh
-git -C "$repo" status -sb   # upstream が無いことを確認。あれば push 済みなので畳まず報告して止まる
-git -C "$repo" reset --soft "$(git -C "$repo" merge-base "$base" HEAD)"
+# 畳み込みの起点は merge-base と @{upstream} のうち新しい方を採る。
+# 理由: push 済みのコミットを畳まないため。作業ブランチに無関係の push 済み
+# コミットが載っていると、merge-base まで戻したときにそれも畳み、公開済みの
+# 履歴を書き換えてしまう。
+#
+# 条件が 2 つ要る。
+# - @{upstream} が HEAD の祖先であること。そうでないと HEAD の祖先でない
+#   コミットへ reset して壊れる。git checkout -B <branch> origin/main で
+#   upstream が origin/main になっている場合に起きる。
+# - @{upstream} が merge-base の子孫であること。これが本来の目的。
+base_sha=$(git -C "$repo" merge-base "$base" HEAD)
+if up=$(git -C "$repo" rev-parse --verify --quiet '@{upstream}') \
+   && git -C "$repo" merge-base --is-ancestor "$up" HEAD \
+   && git -C "$repo" merge-base --is-ancestor "$base_sha" "$up"; then
+  base_sha=$up
+fi
+
+# 畳む対象が無い場合は止める。WIP を push 済みという想定外の状態。
+if [ "$base_sha" = "$(git -C "$repo" rev-parse HEAD)" ]; then
+  echo "畳む対象が無い。WIP が push 済みの可能性。報告して止まる" >&2
+  exit 1
+fi
+
+git -C "$repo" reset --soft "$base_sha"
 git -C "$repo" commit -F <メインループが決めたメッセージのファイル>
 ```
 
-push 済みの報告を受けたら畳まずユーザへ判断を仰ぐ (force push はしない)。
+この起点の計算は 5 パターン (upstream 無し / upstream が merge-base の子孫 / upstream = origin/main が HEAD の祖先 / upstream = origin/main が HEAD の祖先でない / WIP まで push 済み) をスクラッチリポジトリで実行検証した (2026-09-09)。
+
+畳む対象が無いという報告を受けたら、畳まずユーザへ判断を仰ぐ (force push はしない)。
 
 ## 注意
 
 - range 指定時に `/code-review` が未コミット変更を含めるかはプロンプト上未定義 (モデル任せ)。レビュー前に必ず WIP コミットし、未コミットを残さない。
 - `deno fmt` が無い環境では整形を飛ばし、その旨を報告する (台帳は崩れるが機能する)。
+- Claude Code on the web (リモートコンテナ) では、コンテナ側の Stop hook (`~/.claude/stop-hook-git-check.sh`。`~/.claude/launcher-settings.json` が登録する) が未コミット・未 push を毎ターン警告する。WIP を push しないこの skill の運用と衝突するが、この hook はリポジトリの管理下に無く (`config.yaml` に記述なし、シンボリックリンクでもない)、下位の設定から上位の hook を無効化する仕組みも無いため、リポジトリ側の変更では止められない。工程 7 まで警告が出続けるのは想定内として無視してよい。ローカル環境にこの hook は無い。なおこの hook は追跡ブランチではなくブランチ名から引いた `origin/<branch>` と比較するため、マージ後もリモートに残った同名ブランチがあると、実在しない未 push を報告する。
