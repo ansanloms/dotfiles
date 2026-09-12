@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # `apm install` が "no apm.yml or SKILL.md" で失敗する退行がある
   # (microsoft/apm#2888、本リポジトリの issue #89)。修正 (microsoft/apm#2891) を含む
   # リリースが出るまで、退行前の 0.28.0 に固定する。出たら通常の bump で戻す。
-  version = "0.28.0";
+  version = "0.30.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "microsoft";
     repo = "apm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dQrbDvewO7rL1oFR2bWaxA1DjcLJqdn483tHPv4Lod4=";
+    hash = "sha256-RbrqY7JampXAe3tfPnjx4FXSEi0K4b5fQ00yGeov5k8=";
   };
 
   # llm-github-models は nixpkgs 未収録のため依存から外す (nixpkgs と同じ措置)。
