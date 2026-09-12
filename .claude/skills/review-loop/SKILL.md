@@ -16,7 +16,7 @@ dev-workflow ルールの「レビュー」節を実行するための手順。�
 | `ledger` | 必須 | 台帳ファイルの絶対パス。空白や記号を含まないパスを渡すこと      |
 | `load`   | 任意 | 標準出力に台帳を吐くコマンド。ラウンド開始時に `sh -c` で実行し、出力を `ledger` に書く                        |
 | `store`  | 任意 | 台帳を永続化するコマンド。`{file}` を `ledger` のパスに置換して `sh -c` で実行。台帳を書き換えるたびに実行する |
-| `repo`   | 必須 | 対象リポジトリ (隔離 worktree) の絶対パス。range の算出と implementer / runner への委譲に使う                  |
+| `repo`   | 必須 | 対象リポジトリ (隔離 worktree) の絶対パス。range の算出と implementer / runner / pr-publisher への委譲に使う                  |
 | `base`   | 必須 | 比較元ブランチ (通常 `main`)                                                                                   |
 | `branch` | 必須 | 作業ブランチ名                                                                                                 |
 
@@ -231,7 +231,7 @@ code-review-runner を Agent で起動する。`description` は `code-review rN
 
 ## 工程 7 での畳み込み
 
-implementer への委譲文に含める手順:
+pr-publisher への委譲文に含める手順:
 
 ```sh
 # 畳み込みの起点は merge-base と @{upstream} のうち新しい方を採る。
@@ -264,6 +264,8 @@ git -C "$repo" commit -F <メインループが決めたメッセージのファ
 この起点の計算は 5 パターン (upstream 無し / upstream が merge-base の子孫 / upstream = origin/main が HEAD の祖先 / upstream = origin/main が HEAD の祖先でない / WIP まで push 済み) をスクラッチリポジトリで実行検証した (2026-09-09)。
 
 畳む対象が無いという報告を受けたら、畳まずユーザへ判断を仰ぐ (force push はしない)。
+
+畳み込みは検証済みのツリーをそのまま指し直すだけなので、委譲文に検証 (lint・test 等) の実行を書かない。畳み込みの前に main への rebase が要る場合は、その rebase と検証と WIP コミットを implementer へ先に委譲し、内容が確定してから pr-publisher へ渡す (dev-workflow ルールの検証の原則)。
 
 ## 注意
 
