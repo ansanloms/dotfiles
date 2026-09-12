@@ -1,4 +1,30 @@
+# WSL 2 の全ディストリビューション共通の設定。
+# 反映には Windows 側で `wsl --shutdown` を実行して WSL を再起動する必要がある。
+# @see https://learn.microsoft.com/windows/wsl/wsl-config
+
 [wsl2]
+# Linux カーネルへ渡す起動オプション。既存の設定をそのまま維持している。
+# @see https://learn.microsoft.com/windows/wsl/wsl-config
 kernelCommandLine = vsyscall=emulate
+
+# スワップ領域のサイズ。0 でスワップを持たない。
+# 省略時の既定値は RAM の 25%。
+# @see https://learn.microsoft.com/windows/wsl/wsl-config
 swap=0
+
+# WSL 2 の VM に割り当てるメモリの上限。
+# 省略時の既定値はホスト物理メモリの 50%。Windows は WSL のホスト用途に留めるため、
+# ホスト 32GB のうち 24GB を WSL に割り当てている。
+# Linux 側のページキャッシュもこの上限まで膨らむが、下の autoMemoryReclaim で Windows へ返す。
+# @see https://learn.microsoft.com/windows/wsl/wsl-config
 memory=24GB
+
+# 将来既定になる可能性のある opt-in のプレビュー機能。[wsl2] には書けない。
+# @see https://learn.microsoft.com/windows/wsl/wsl-config
+[experimental]
+# Linux 側で使われていないページキャッシュを Windows へ自動で返す。
+# 値は disabled / gradual (緩やかに回収) / dropCache (即時回収)。公式 docs の省略時の既定値は dropCache。
+# ただしこの環境では未設定のままページキャッシュが 15GB 溜まり、手動の drop_caches まで Windows へ戻らなかった。
+# 回収を確実に効かせ、かつ急激な drop を避けるため gradual を明示している。
+# @see https://learn.microsoft.com/windows/wsl/wsl-config
+autoMemoryReclaim=gradual
