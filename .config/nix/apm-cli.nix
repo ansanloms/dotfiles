@@ -3,8 +3,8 @@
 # nixpkgs の derivation をベースに自前で最新へ追従する。
 # nixpkgs の version がこの derivation 以上へ追いついたら、このファイルと
 # flake.nix の overlay を削除して nixpkgs 版へ戻す。
-# ただし下記の 0.28.0 固定中はこの撤去条件を保留する (nixpkgs の 0.29.0 以降も
-# 同じ退行を含むため、追いついたように見えても戻さない)。
+# ただし下記の固定マーカー（`# bump: pinned`）がある間はこの撤去条件を保留する
+# （理由は下記のコメントブロックを参照）。
 {
   lib,
   python3Packages,
@@ -16,8 +16,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # 0.29.0 以降には、ルートに apm.yml / SKILL.md を持たない skill 集リポジトリの
   # `apm install` が "no apm.yml or SKILL.md" で失敗する退行がある
   # (microsoft/apm#2888、本リポジトリの issue #89)。修正 (microsoft/apm#2891) を含む
-  # リリースが出るまで、退行前の 0.28.0 に固定する。出たら通常の bump で戻す。
-  version = "0.30.0";
+  # リリースが出るまで、退行前の 0.28.0 に固定する。この固定中は、ファイル冒頭の
+  # nixpkgs 版へ戻す撤去条件の判定を保留する (nixpkgs の 0.29.0 以降も同じ退行を
+  # 含むため、追いついたように見えても戻さない)。
+  # 固定を解除するときはこのコメントブロックとマーカー行をまとめて消し、
+  # `deno task bump:apm-cli` で通常の bump に戻す。
+  # bump: pinned 0.28.0
+  version = "0.28.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -26,7 +31,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "microsoft";
     repo = "apm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RbrqY7JampXAe3tfPnjx4FXSEi0K4b5fQ00yGeov5k8=";
+    hash = "sha256-dQrbDvewO7rL1oFR2bWaxA1DjcLJqdn483tHPv4Lod4=";
   };
 
   # llm-github-models は nixpkgs 未収録のため依存から外す (nixpkgs と同じ措置)。
