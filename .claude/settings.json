@@ -117,8 +117,8 @@
     "vue-ls@lsp": true,
     "discord@claude-plugins-official": true
   },
-  "outputStyle": "Explanatory",
-  "viewMode": "verbose",
+  "outputStyle": "Concise",
+  "viewMode": "default",
   "language": "japanese",
   "sandbox": {
     "excludedCommands": [
@@ -155,7 +155,7 @@
   "plansDirectory": ".claude/plans",
   "tui": "fullscreen",
   "autoMemoryDirectory": ".claude/memories",
-  "showThinkingSummaries": true,
+  "showThinkingSummaries": false,
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
   "terminalProgressBarEnabled": true,
