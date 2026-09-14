@@ -184,9 +184,13 @@ vim.lsp.enable({
   "vtsls",
   "vue_ls",
   "eslint",
+  "docker_compose_language_service",
   "docker_language_server",
   "intelephense",
   "lua_ls",
   "efm",
   "tombi",
+  "actionlint",
+  "jsonls",
+  "rust_analyzer",
 })
