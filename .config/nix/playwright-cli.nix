@@ -15,13 +15,13 @@
 
 buildNpmPackage {
   pname = "playwright-cli";
-  version = "0.1.20";
+  version = "0.1.21";
 
   src = ./playwright-cli;
 
   # package-lock.json から得た npm 依存 FOD のハッシュ。
   # lockfile を更新したら nix run nixpkgs#prefetch-npm-deps で再取得すること。
-  npmDepsHash = "sha256-xXe34IIW/VkNcH6m8Kwvo3iF+6FaI78EueKi8zEBitw=";
+  npmDepsHash = "sha256-jstlbIO44Pf7//HyeKNKHFvkZnmgnxGUC6dkqZ/t5bI=";
 
   # 本体は純 JS でビルドスクリプトを持たない。build phase を無効化する
   # (省略すると npmBuildHook が build script 不在でハードエラーになる)。
