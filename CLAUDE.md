@@ -124,7 +124,7 @@ devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボー
 
 `.config/nix/` には nixpkgs 未収録、または nixpkgs の追従が upstream から遅れるパッケージを自前 derivation で管理している。
 
-- `apm-cli.nix`（[apm](https://github.com/microsoft/apm)、コマンド名 `apm`。nixpkgs 収録済みだが upstream リリースから数週間遅れるため、nixpkgs の derivation をベースに自前で最新へ追従する。Python ソースビルド（buildPythonApplication）。`llm-github-models` は nixpkgs 未収録のため postPatch で pyproject.toml から除去する。`dependencies` は upstream の pyproject.toml と手動同期。現在は上流の退行（microsoft/apm#2888、issue #89）を避けるため 0.28.0 に固定している。固定中は `apm-cli.nix` の `# bump: pinned <version>` 行により、引数無しの `deno task bump` / `bump:apm-cli`（GitHub Actions の日次 bump を含む）は apm-cli を書き換えない。マーカーのバージョンと `version` の値が食い違っている場合は非ゼロ終了する（GitHub Actions の日次 bump が失敗して気づける）。この失敗は `deno task bump` 全体を非ゼロにするため、日次 bump ではその日の他パッケージの更新もコミットされない。マーカーを直すまで全パッケージの自動更新が止まる（意図した強制）。修正 microsoft/apm#2891 を含むリリースが出たら `apm-cli.nix` の固定コメントブロック（マーカー行を含む）を消して `deno task bump:apm-cli` で上げる。バージョン明示（`deno task bump:apm-cli <version>`）は固定中でも bump を実行するが固定は解除されない（マーカーは書き換えないため、実行後に固定ブロックを消すかマーカーを更新しないと翌日の日次 bump が非ゼロ終了する））
+- `apm-cli.nix`（[apm](https://github.com/microsoft/apm)、コマンド名 `apm`。nixpkgs 収録済みだが upstream リリースから数週間遅れるため、nixpkgs の derivation をベースに自前で最新へ追従する。Python ソースビルド（buildPythonApplication）。`llm-github-models` は nixpkgs 未収録のため postPatch で pyproject.toml から除去する。`dependencies` は upstream の pyproject.toml と手動同期。）
 - `claude-statusline.nix`（[claude-statusline](https://github.com/ansanloms/claude-statusline)、Claude Code の statusLine / subagentStatusLine レンダラ。nixpkgs 収録対象外の自前ツール。GitHub Release に添付した deno bundle 済み単一 JS を fetchurl で取得し raw のまま導入する。shebang（`env -S deno run ...`）は stdenv の patchShebangs で nix の deno に固定する。`.claude/settings.json` の `statusLine` / `subagentStatusLine` から `claude-statusline main` / `claude-statusline sub` で呼ばれる）
 - `md2html.nix`（[md2html](https://github.com/ansanloms/md2html)、markdown をシンタックスハイライト（shiki）・mermaid・目次内蔵の自己完結 HTML へ変換する CLI。nvim の quickrun からのプレビューが主用途。nixpkgs 収録対象外の自前ツール。元は `scripts/md2html` の workspace member だったが独立リポジトリへ移管した。GitHub Release（タグは `0.1.0` 形式で v プレフィックス無し）に添付した deno bundle 済み単一 JS を fetchurl で取得して導入する。shebang（`env -S deno run ...`）は stdenv の patchShebangs で nix の deno に固定し、実行時の mermaid バンドル生成が PATH の `deno` を spawn するため wrapProgram で nix の deno を PATH へ前置・LD_LIBRARY_PATH を除去する）
 - `playwright-cli.nix`（`@playwright/cli`、npm パッケージ / buildNpmPackage、wrapper で nixpkgs `google-chrome` を駆動）
@@ -140,7 +140,7 @@ devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボー
 
 `deno task bump`（全パッケージ）/ `deno task bump:<name> [version]`（version 省略で最新）で、version・ハッシュ（playwright-cli / backlog-bee-cli は lockfile も）を更新する。具体的な処理は各スクリプトを参照:
 
-- `.config/nix/apm-cli/upgrade.ts`（最新は GitHub releases の latest tag、hash は `nix flake prefetch`。引数でバージョン指定も可。`apm-cli.nix` に `# bump: pinned <version>` 行があれば引数無しでは何もしない。マーカーのバージョンと `version` の値が食い違っていれば非ゼロ終了する（GitHub Actions の日次 bump が失敗して気づける）。この失敗は `deno task bump` 全体を非ゼロにするため、日次 bump ではその日の他パッケージの更新もコミットされない。マーカーを直すまで全パッケージの自動更新が止まる（意図した強制））
+- `.config/nix/apm-cli/upgrade.ts`（最新は GitHub releases の latest tag、hash は `nix flake prefetch`。引数でバージョン指定も可。`apm-cli.nix` に `# bump: pinned <version>` 行を置くと引数無しの bump を止められる（マーカーのバージョンと `version` が食い違うと非ゼロ終了する。現在は未使用））
 - `.config/nix/claude-statusline/upgrade.ts`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。引数でバージョン指定も可）
 - `.config/nix/md2html/upgrade.ts`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。タグは v プレフィックス無し。引数でバージョン指定も可）
 - `.config/nix/playwright-cli/upgrade.ts`（最新は npm レジストリ、FOD は prefetch-npm-deps）
@@ -176,10 +176,8 @@ bump が更新するのは version 文字列と FOD ハッシュという、機�
 
 `@nulab/bee`（Backlog CLI）が nixpkgs に収録されたら、`backlog-bee-cli.nix` と flake.nix の overlay を削除して `packages.nix` の 1 行に乗り換える。ただし nixpkgs の `bee` は別物（ethersphere/bee）のため、収録される場合の attribute 名はこの自前 derivation と同じ `backlog-bee-cli` にはならず、別名になる前提で `nix search nixpkgs bee` 等で該当パッケージを探すこと。
 
-`apm-cli` は nixpkgs 収録済みで遅れているだけなので、nixpkgs 側の version が自前 derivation の version に追いついたら（`nix eval --raw nixpkgs#apm-cli.version` で確認）、`apm-cli.nix` と flake.nix の overlay を削除して nixpkgs 版へ戻す。ただし `apm-cli.nix` に固定コメントブロック（`# bump: pinned`、issue #89 対応）がある間はこの判定を保留する（nixpkgs 側が同じ退行を含む可能性があるため、追いついたように見えても戻さない）。ただし戻すと再び nixpkgs の更新頻度に律速される。最新追従を続けるなら自前 derivation のまま bump 運用を続ける。
+`apm-cli` は nixpkgs 収録済みで遅れているだけなので、nixpkgs 側の version が自前 derivation の version に追いついたら（`nix eval --raw nixpkgs#apm-cli.version` で確認）、`apm-cli.nix` と flake.nix の overlay を削除して nixpkgs 版へ戻す。ただし戻すと再び nixpkgs の更新頻度に律速される。最新追従を続けるなら自前 derivation のまま bump 運用を続ける。
 
 ### nixpkgs パッケージの一時的な上書き
 
 nixpkgs 収録パッケージが壊れているときは、自前 derivation を書かず `flake.nix` の overlay で該当箇所だけ差し替える。恒久化しないよう、適用条件と削除条件を overlay のコメントとここに書く。
-
-- `percona-toolkit`: src (`fetchFromGitHub`、`leaveDotGit = true`) の固定ハッシュが取得結果と食い違いビルドできない (取得コミットはタグ `v3.7.1` と一致し、差は `.git` のパックデータ。git のバージョンに依存する)。`perlPackages.PerconaToolkit` の `fetchFromGitHub` を差し替え、この環境の実測ハッシュで取得する。upstream の src のハッシュが nixpkgs の食い違う値 (overlay の `brokenHash`) と一致するときだけ適用し、upstream が version・ハッシュ・`leaveDotGit` のいずれかを変えれば自動で外れる。再びハッシュ不一致になったら、エラーの `specified:` で場合を分ける。overlay の `hash` と同じなら overlay は効いたまま (git-minimal の変更等でパック生成が変わった) なので、`got:` を `hash` に取り直し `brokenHash` は触らない。`brokenHash` と違うなら upstream がハッシュを変えて overlay は自動で外れているので、それでも直っていなければ `specified:` を `brokenHash` に、`got:` を `hash` に取り直す。削除の判断は「overlay を消しても `nix build` が通るか」で行い、通るなら削除する。
