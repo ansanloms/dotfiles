@@ -33,6 +33,7 @@ nix flake update --flake path:.config/nix
 - `.config/vim/` - Vim 設定（minpac でプラグイン管理）
 - `.config/git/` - Git 設定
 - `.config/wezterm/` - WezTerm 設定
+- `.config/ghostty/` - Ghostty 設定（Windows では Ghostty フォークの noctty が読む。`config.ghostty` が共通、`windows.ghostty` が Windows 固有）
 - `.config/zellij/` - Zellij 設定
 - `.config/starship.toml` - Starship プロンプト設定
 - `.config/sheldon/` - Sheldon（zsh プラグインマネージャ）設定
@@ -123,9 +124,8 @@ devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボー
 
 ## 自前 nix パッケージの更新
 
-`.config/nix/` には nixpkgs 未収録、または nixpkgs の追従が upstream から遅れるパッケージを自前 derivation で管理している。
+`.config/nix/` には nixpkgs 未収録のパッケージを自前 derivation で管理している。
 
-- `apm-cli.nix`（[apm](https://github.com/microsoft/apm)、コマンド名 `apm`。nixpkgs 収録済みだが upstream リリースから数週間遅れるため、nixpkgs の derivation をベースに自前で最新へ追従する。Python ソースビルド（buildPythonApplication）。`llm-github-models` は nixpkgs 未収録のため postPatch で pyproject.toml から除去する。`dependencies` は upstream の pyproject.toml と手動同期。）
 - `claude-statusline.nix`（[claude-statusline](https://github.com/ansanloms/claude-statusline)、Claude Code の statusLine / subagentStatusLine レンダラ。nixpkgs 収録対象外の自前ツール。GitHub Release に添付した deno bundle 済み単一 JS を fetchurl で取得し raw のまま導入する。shebang（`env -S deno run ...`）は stdenv の patchShebangs で nix の deno に固定する。`.claude/settings.json` の `statusLine` / `subagentStatusLine` から `claude-statusline main` / `claude-statusline sub` で呼ばれる）
 - `md2html.nix`（[md2html](https://github.com/ansanloms/md2html)、markdown をシンタックスハイライト（shiki）・mermaid・目次内蔵の自己完結 HTML へ変換する CLI。nvim の quickrun からのプレビューが主用途。nixpkgs 収録対象外の自前ツール。元は `scripts/md2html` の workspace member だったが独立リポジトリへ移管した。GitHub Release（タグは `0.1.0` 形式で v プレフィックス無し）に添付した deno bundle 済み単一 JS を fetchurl で取得して導入する。shebang（`env -S deno run ...`）は stdenv の patchShebangs で nix の deno に固定し、実行時の mermaid バンドル生成が PATH の `deno` を spawn するため wrapProgram で nix の deno を PATH へ前置・LD_LIBRARY_PATH を除去する）
 - `playwright-cli.nix`（`@playwright/cli`、npm パッケージ / buildNpmPackage、wrapper で nixpkgs `google-chrome` を駆動）
@@ -141,7 +141,6 @@ devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボー
 
 `deno task bump`（全パッケージ）/ `deno task bump:<name> [version]`（version 省略で最新）で、version・ハッシュ（playwright-cli / backlog-bee-cli は lockfile も）を更新する。具体的な処理は各スクリプトを参照:
 
-- `.config/nix/apm-cli/upgrade.ts`（最新は GitHub releases の latest tag、hash は `nix flake prefetch`。引数でバージョン指定も可。`apm-cli.nix` に `# bump: pinned <version>` 行を置くと引数無しの bump を止められる（マーカーのバージョンと `version` が食い違うと非ゼロ終了する。現在は未使用））
 - `.config/nix/claude-statusline/upgrade.ts`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。引数でバージョン指定も可）
 - `.config/nix/md2html/upgrade.ts`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。タグは v プレフィックス無し。引数でバージョン指定も可）
 - `.config/nix/playwright-cli/upgrade.ts`（最新は npm レジストリ、FOD は prefetch-npm-deps）
@@ -157,7 +156,6 @@ bump はファイルを書き換えるだけで反映はしない。完了後に
 
 bump が更新するのは version 文字列と FOD ハッシュという、機械的に再計算できる値だけ。新版が次を変えた場合は bump 後の `nix profile upgrade` がビルドエラーになるので、エラーを読んで derivation を手当てする:
 
-- **apm-cli**: upstream が pyproject.toml の dependencies を増減すると、`apm-cli.nix` の `dependencies` 列挙とずれてビルドまたは実行時 import が落ちる。upstream の pyproject.toml と突き合わせて手動同期する。postPatch の `grep -q 'llm-github-models'` が失敗する場合は upstream がこの依存を落とした合図で、postPatch ごと削除してよい。
 - **claude-statusline**: 資産名や shebang の権限フラグ構成が変わると `claude-statusline.nix` が合わなくなる。bump 後は `echo '{"hook_event_name":"Status","...":"..."}' | claude-statusline main` のようなスモークで動作確認する。
 - **md2html**: 資産名や shebang の権限フラグ構成が変わると `md2html.nix` が合わなくなる。bump 後は適当な markdown を変換して出力が `<!doctype html>` で始まることをスモーク確認する（例: `printf '# t\n' > /tmp/t.md && md2html /tmp/t.md | head -c 20`）。
 - **playwright-cli**: 新版で bin のパスや名前が変わると、`playwright-cli.nix` の wrapper（`--add-flags` のパス）が合わなくなる。`find` で実 bin を確認して修正する。
@@ -176,8 +174,6 @@ bump が更新するのは version 文字列と FOD ハッシュという、機�
 `moddable-sdk` も nixpkgs に収録されたら（`nix search nixpkgs moddable` で確認）、`moddable-sdk.nix` と flake.nix の overlay を削除して `packages.nix` の 1 行に乗り換える。
 
 `@nulab/bee`（Backlog CLI）が nixpkgs に収録されたら、`backlog-bee-cli.nix` と flake.nix の overlay を削除して `packages.nix` の 1 行に乗り換える。ただし nixpkgs の `bee` は別物（ethersphere/bee）のため、収録される場合の attribute 名はこの自前 derivation と同じ `backlog-bee-cli` にはならず、別名になる前提で `nix search nixpkgs bee` 等で該当パッケージを探すこと。
-
-`apm-cli` は nixpkgs 収録済みで遅れているだけなので、nixpkgs 側の version が自前 derivation の version に追いついたら（`nix eval --raw nixpkgs#apm-cli.version` で確認）、`apm-cli.nix` と flake.nix の overlay を削除して nixpkgs 版へ戻す。ただし戻すと再び nixpkgs の更新頻度に律速される。最新追従を続けるなら自前 derivation のまま bump 運用を続ける。
 
 ### nixpkgs パッケージの一時的な上書き
 
