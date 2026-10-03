@@ -77,9 +77,6 @@ link:
     - src: ./.agents/rules
   ~/.devin/rules:
     - src: ./.agents/rules
-      targets:
-        - darwin
-        - linux
   ~/.claude/lsp:
     - src: ./.claude/lsp
   ~/.claude/skills:
