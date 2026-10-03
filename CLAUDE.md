@@ -1,6 +1,6 @@
-# AGENTS.md
+# CLAUDE.md
 
-このリポジトリで作業する AI コーディングエージェント (Claude Code・Devin 等) 向けの指示。
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## リポジトリ概要
 

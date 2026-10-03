@@ -117,13 +117,6 @@
     "vue-ls@lsp": true,
     "discord@claude-plugins-official": true
   },
-  "pluginConfigs": {
-    "agents-md@builtin": {
-      "options": {
-        "instructionFiles": "claude-md-and-agents-md"
-      }
-    }
-  },
   "outputStyle": "Concise",
   "viewMode": "default",
   "language": "japanese",
