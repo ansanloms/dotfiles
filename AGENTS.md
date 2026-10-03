@@ -36,6 +36,7 @@ nix flake update --flake path:.config/nix
 - `.config/zellij/` - Zellij 設定
 - `.config/starship.toml` - Starship プロンプト設定
 - `.config/sheldon/` - Sheldon（zsh プラグインマネージャ）設定
+- `.agents/rules/` - エージェント向けルールの実体（`~/.claude/rules` と `~/.devin/rules` にリンク。Claude Code と Devin CLI が読む）
 - `.claude/` - Claude Code のグローバル設定（`~/.claude/` にリンク）
 - `.local/bin/` - ユーザースクリプト（`scripts/` から `deno bundle` で生成）
 
