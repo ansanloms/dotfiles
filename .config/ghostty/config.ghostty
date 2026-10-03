@@ -1,0 +1,69 @@
+# テーマ
+theme = Terafox
+# nightfox の拡張色 (alacritty の indexed_colors 相当)
+palette = 16=#ff8349
+palette = 17=#cb7985
+# 同梱 Terafox のカーソル色を alacritty 側の値に揃える
+cursor-color = #cbd9d8
+cursor-text = #e6eaea
+
+# フォント
+font-family = Moralerspace Krypton HWJPDOC
+font-size = 9.5
+
+# ウィンドウ
+background-opacity = 0.8
+maximize = true
+
+# クリップボード
+clipboard-read = allow
+clipboard-write = allow
+copy-on-select = clipboard
+right-click-action = paste
+
+# タブ・分割は使わない
+window-show-tab-bar = never
+
+# タブ・分割の既定キーバインドを解除し、端末内の zellij / nvim にキーを渡す
+keybind = ctrl+shift+t=unbind
+keybind = ctrl+shift+w=unbind
+keybind = ctrl+tab=unbind
+keybind = ctrl+shift+tab=unbind
+keybind = ctrl+shift+arrow_left=unbind
+keybind = ctrl+shift+arrow_right=unbind
+keybind = ctrl+page_up=unbind
+keybind = ctrl+page_down=unbind
+keybind = alt+digit_1=unbind
+keybind = alt+digit_2=unbind
+keybind = alt+digit_3=unbind
+keybind = alt+digit_4=unbind
+keybind = alt+digit_5=unbind
+keybind = alt+digit_6=unbind
+keybind = alt+digit_7=unbind
+keybind = alt+digit_8=unbind
+keybind = alt+1=unbind
+keybind = alt+2=unbind
+keybind = alt+3=unbind
+keybind = alt+4=unbind
+keybind = alt+5=unbind
+keybind = alt+6=unbind
+keybind = alt+7=unbind
+keybind = alt+8=unbind
+keybind = alt+9=unbind
+keybind = ctrl+shift+o=unbind
+keybind = ctrl+shift+backslash=unbind
+keybind = ctrl+shift+e=unbind
+keybind = super+ctrl+[=unbind
+keybind = super+ctrl+]=unbind
+keybind = alt+arrow_up=unbind
+keybind = alt+arrow_down=unbind
+keybind = alt+arrow_left=unbind
+keybind = alt+arrow_right=unbind
+keybind = super+ctrl+shift+arrow_up=unbind
+keybind = super+ctrl+shift+arrow_down=unbind
+keybind = super+ctrl+shift+arrow_left=unbind
+keybind = super+ctrl+shift+arrow_right=unbind
+keybind = ctrl+shift+enter=unbind
+
+# OS 固有設定の読み込み (? はファイルが無ければ無視、相対パスはこのファイルからの相対)
+config-file = ?os.ghostty
