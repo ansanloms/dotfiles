@@ -33,6 +33,7 @@
   "read_config_from": {
     "cursor": false,
     "windsurf": false,
-    "claude": true
+    "claude": true,
+    "agents_standard": true
   }
 }

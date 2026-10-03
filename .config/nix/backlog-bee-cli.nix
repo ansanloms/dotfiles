@@ -38,7 +38,7 @@ buildNpmPackage {
   # npmConfigHook が node_modules を $PWD/node_modules へ展開した後、
   # それを $out/lib/$pname/node_modules にコピーし、実バイナリを wrapper で公開する。
   # 自前 installPhase を書く derivation 同士では $out/lib/node_modules への平坦展開が
-  # buildEnv で衝突するため、パッケージ名付きディレクトリに分離する（詳細は CLAUDE.md）。
+  # buildEnv で衝突するため、パッケージ名付きディレクトリに分離する（詳細は AGENTS.md）。
   installPhase = ''
     runHook preInstall
 
