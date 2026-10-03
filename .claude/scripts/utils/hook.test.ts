@@ -6,6 +6,7 @@ import type {
 } from "@anthropic-ai/claude-agent-sdk";
 import {
   buildNotification,
+  buildTerminalSequence,
   formatToolInput,
   getEventDescriptor,
   getLastAssistantMessage,
@@ -327,4 +328,71 @@ Deno.test("buildNotification: 本文はメッセージをそのまま渡す", as
   };
   const notification = await buildNotification(input);
   assertEquals(notification.body, "x".repeat(200));
+});
+
+// --- buildTerminalSequence ---
+
+const sample = (title: string, body: string) => ({
+  title,
+  body,
+  tag: "white_check_mark",
+  emoji: "✅",
+});
+
+Deno.test("buildTerminalSequence: OSC 777 の形式になる", () => {
+  assertEquals(
+    buildTerminalSequence(sample("完了 | dotfiles", "作業完了")),
+    "\x1b]777;notify;✅ 完了 | dotfiles;作業完了\x07",
+  );
+});
+
+Deno.test("buildTerminalSequence: body の改行は空白に畳まれる", () => {
+  assertEquals(
+    buildTerminalSequence(sample("t", "a\nb\r\nc\rd\te")),
+    "\x1b]777;notify;✅ t;a b c d e\x07",
+  );
+});
+
+Deno.test("buildTerminalSequence: 制御文字は除去され ESC は先頭・BEL は末尾のみ", () => {
+  const seq = buildTerminalSequence(
+    sample("t\x1b\x07", "a\x1b[31mb\x07c\x9cd\x85e\x7ff"),
+  );
+  assertEquals(seq, "\x1b]777;notify;✅ t;a[31mbcdef\x07");
+  assertEquals(seq.split("\x1b").length - 1, 1);
+  assertEquals(seq.split("\x07").length - 1, 1);
+});
+
+Deno.test("buildTerminalSequence: title の ; は , になり body の ; は残る", () => {
+  assertEquals(
+    buildTerminalSequence(sample("a;b", "c;d")),
+    "\x1b]777;notify;✅ a,b;c;d\x07",
+  );
+});
+
+Deno.test("buildTerminalSequence: 長さ超過は … で切り詰められる", () => {
+  const body = buildTerminalSequence(sample("t", "x".repeat(300))).split(";")[3]
+    .replace("\x07", "");
+  assertEquals(Array.from(body).length, 200);
+  assertEquals(body.endsWith("…"), true);
+
+  const title = buildTerminalSequence(sample("y".repeat(300), "b")).split(
+    ";",
+  )[2];
+  assertEquals(Array.from(title).length, 100);
+  assertEquals(title.endsWith("…"), true);
+});
+
+Deno.test("buildTerminalSequence: サロゲートペアを割らずに切り詰める", () => {
+  const body = buildTerminalSequence(sample("t", "😀".repeat(300))).split(
+    ";",
+  )[3]
+    .replace("\x07", "");
+  assertEquals(body, "😀".repeat(199) + "…");
+});
+
+Deno.test("buildTerminalSequence: body が空でも形式は崩れない", () => {
+  assertEquals(
+    buildTerminalSequence(sample("t", "\x1b\n ")),
+    "\x1b]777;notify;✅ t;\x07",
+  );
 });
