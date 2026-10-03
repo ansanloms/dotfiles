@@ -45,6 +45,7 @@ nix flake update --flake path:.config/nix
 - `dot_config/zsh/` - zsh のプロンプト設定（prompt.zsh）。chezmoi 管理
 - `dot_config/sheldon/` - Sheldon（zsh プラグインマネージャ）設定
 - `dot_bashrc` / `dot_bash_profile` / `dot_bash_aliases` / `dot_zshenv` / `dot_zshrc` / `dot_zprofile` / `dot_inputrc` - shell の rc ファイル。chezmoi 管理
+- `.agents/rules/` - エージェント向けルールの実体（`~/.claude/rules` と `~/.devin/rules` にリンク。Claude Code と Devin CLI が読む）
 - `.claude/` - Claude Code のグローバル設定（`~/.claude/` にリンク）
 - `.local/bin/` - ユーザースクリプト（`scripts/` から `deno bundle` で生成）
 
