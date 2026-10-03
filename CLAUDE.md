@@ -33,6 +33,7 @@ nix flake update --flake path:.config/nix
 - `.config/vim/` - Vim 設定（minpac でプラグイン管理）
 - `.config/git/` - Git 設定
 - `.config/wezterm/` - WezTerm 設定
+- `.config/ghostty/` - Ghostty 設定（Windows では Ghostty フォークの noctty が読む。`config.ghostty` が共通、`windows.ghostty` が Windows 固有）
 - `.config/zellij/` - Zellij 設定
 - `.config/starship.toml` - Starship プロンプト設定
 - `.config/sheldon/` - Sheldon（zsh プラグインマネージャ）設定

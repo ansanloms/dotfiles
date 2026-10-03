@@ -101,6 +101,14 @@ link:
     - src: ./.config/alacritty/windows.toml
       targets:
         - windows
+  ~/AppData/Local/noctty/config.ghostty:
+    - src: ./.config/ghostty/config.ghostty
+      targets:
+        - windows
+  ~/AppData/Local/noctty/os.ghostty:
+    - src: ./.config/ghostty/windows.ghostty
+      targets:
+        - windows
   ~/.config/zellij:
     - src: ./.config/zellij
   ~/.config/nix:
