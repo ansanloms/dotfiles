@@ -12,7 +12,7 @@ font-family = Moralerspace Krypton HWJPDOC
 font-size = 9.5
 
 # ウィンドウ
-background-opacity = 0.8
+background-opacity = 0.9
 maximize = true
 
 # クリップボード
