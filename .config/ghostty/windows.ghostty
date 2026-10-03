@@ -1,0 +1,3 @@
+# direct: はシェルを介さず直接起動する指定。
+# ~ は wsl.exe 自身が解釈する (WSL 側のホームへ移動)。
+command = direct:wsl.exe --distribution Ubuntu --cd ~
