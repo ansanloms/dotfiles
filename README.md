@@ -80,7 +80,6 @@ WSL の常駐サービスを有効化する。前提として WSL で systemd �
 
 導入済みのユーザサービス:
 
-- `notify` - WSL からの通知を Windows 側へ中継する
 - `clip-image-watch` - Windows のクリップボードに入った画像を自動で `clip-image` に取り込む
 
 ```sh
@@ -88,7 +87,6 @@ WSL の常駐サービスを有効化する。前提として WSL で systemd �
 systemctl --user daemon-reload
 
 # 有効化 + 起動
-systemctl --user enable --now notify
 systemctl --user enable --now clip-image-watch
 ```
 
@@ -98,7 +96,7 @@ systemctl --user enable --now clip-image-watch
 sudo loginctl enable-linger $USER
 ```
 
-動作確認・トラブルシュート（`<service>` は `notify` / `clip-image-watch` 等）:
+動作確認・トラブルシュート（`<service>` は `clip-image-watch` 等）:
 
 ```sh
 # 起動しているか（クラッシュループしていないか）

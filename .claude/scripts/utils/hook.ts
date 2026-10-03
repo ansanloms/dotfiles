@@ -131,7 +131,7 @@ export const getMessage = async (input: HookInput) => {
 
 /**
  * hook イベント種別ごとの表示属性。
- * 「どのラベル・どの絵文字・どの音か」をこの 1 箇所で定義する。
+ * 「どのラベル・どの絵文字か」をこの 1 箇所で定義する。
  */
 export interface EventDescriptor {
   /** 通知タイトルの先頭に出す、一目で種別が分かるラベル。 */
@@ -141,43 +141,36 @@ export interface EventDescriptor {
   tag: string;
 
   /**
-   * 絵文字リテラル。Windows トーストは Tags のようなキーワード変換を持たないため、
+   * 絵文字リテラル。OSC 777 通知は Tags のようなキーワード変換を持たないため、
    * タイトル先頭へ直接前置するのに使う。`tag` と同じ意味の絵文字を指す。
    */
   emoji: string;
-
-  /** Windows トーストの通知音（ms-winsoundevent URI）。 */
-  sound: string;
 }
 
 /**
  * イベント種別 → 表示属性の対応表。
- * 新しいイベントを通知対象に加える場合や、ラベル・音を変える場合はここを編集する。
+ * 新しいイベントを通知対象に加える場合や、ラベルを変える場合はここを編集する。
  */
 const eventDescriptors: Record<string, EventDescriptor> = {
   Stop: {
     label: "完了",
     tag: "white_check_mark",
     emoji: "✅",
-    sound: "ms-winsoundevent:Notification.Looping.Alarm8",
   },
   StopFailure: {
     label: "失敗",
     tag: "rotating_light",
     emoji: "🚨",
-    sound: "ms-winsoundevent:Notification.Looping.Alarm2",
   },
   Notification: {
     label: "確認待ち",
     tag: "bell",
     emoji: "🔔",
-    sound: "ms-winsoundevent:Notification.Looping.Call7",
   },
   PermissionRequest: {
     label: "許可待ち",
     tag: "warning",
     emoji: "⚠️",
-    sound: "ms-winsoundevent:Notification.Looping.Call6",
   },
 };
 
@@ -186,7 +179,6 @@ const defaultDescriptor: EventDescriptor = {
   label: "通知",
   tag: "speech_balloon",
   emoji: "💬",
-  sound: "ms-winsoundevent:Notification.Looping.Call6",
 };
 
 /**
@@ -211,7 +203,7 @@ export const getStopFailureMessage = (input: HookInput): string => {
 
 /**
  * 送信経路に依存しない通知 1 件分の構成要素。
- * 各経路（ntfy / Windows トースト）はこれを自分の形式へ流し込む。
+ * 各経路（ntfy / OSC 777）はこれを自分の形式へ流し込む。
  */
 export interface Notification {
   /** タイトル。「ラベル | プロジェクト名」形式（絵文字は含まない）。 */
@@ -223,11 +215,8 @@ export interface Notification {
   /** ntfy の Tags に渡す絵文字キーワード。 */
   tag: string;
 
-  /** タイトル先頭へ前置する絵文字リテラル（Windows トースト用）。 */
+  /** タイトル先頭へ前置する絵文字リテラル（OSC 777 通知用）。 */
   emoji: string;
-
-  /** Windows トーストの通知音。 */
-  sound: string;
 }
 
 /**
@@ -249,6 +238,51 @@ export const buildNotification = async (
     body: message,
     tag: descriptor.tag,
     emoji: descriptor.emoji,
-    sound: descriptor.sound,
   };
+};
+
+/** OSC 777 通知のタイトルの最大文字数（コードポイント単位）。 */
+const TERMINAL_TITLE_MAX = 100;
+
+/** OSC 777 通知の本文の最大文字数（コードポイント単位）。 */
+const TERMINAL_BODY_MAX = 200;
+
+/**
+ * OSC 777 のフィールドへ載せられる形にする。
+ * 改行とタブは空白へ畳み、残りの制御文字（C0・DEL・C1。ESC・BEL・ST を含む）は除去する。
+ */
+const sanitizeTerminalText = (text: string): string =>
+  text
+    .replace(/\r\n|[\n\r\t]/g, " ")
+    // deno-lint-ignore no-control-regex
+    .replace(/[\u0000-\u001f\u007f-\u009f]/g, "")
+    .replace(/ +/g, " ")
+    .trim();
+
+/**
+ * コードポイント単位で max 文字以内へ切り詰める。超えたら末尾に `…` を付ける。
+ */
+const truncate = (text: string, max: number): string => {
+  const chars = Array.from(text);
+  return chars.length > max ? chars.slice(0, max - 1).join("") + "…" : text;
+};
+
+/**
+ * 通知 1 件から OSC 777 のデスクトップ通知シーケンスを組み立てる。
+ * 形式は `ESC ] 777 ; notify ; <title> ; <body> BEL`。
+ * hook の `terminalSequence` は許可リスト外のシーケンスを含むとフィールドごと無視されるため、
+ * title・body から制御文字を除去し長さを制限する。title の `;` はフィールド区切りと
+ * 衝突するため `,` に置換する。
+ */
+export const buildTerminalSequence = (notification: Notification): string => {
+  const title = truncate(
+    sanitizeTerminalText(`${notification.emoji} ${notification.title}`)
+      .replaceAll(";", ","),
+    TERMINAL_TITLE_MAX,
+  );
+  const body = truncate(
+    sanitizeTerminalText(notification.body),
+    TERMINAL_BODY_MAX,
+  );
+  return `\x1b]777;notify;${title};${body}\x07`;
 };

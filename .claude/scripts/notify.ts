@@ -1,12 +1,9 @@
-import type { NotifyRequest } from "./notify-wire.ts";
-import { SOCK_PATH } from "./notify-wire.ts";
-
-import type { HookInput } from "./types.ts";
 import { getInput } from "./utils/common.ts";
-import { buildNotification, type Notification } from "./utils/hook.ts";
-
-const BUFFER_SIZE = 16384; // 16KB
-const __dirname = new URL(".", import.meta.url).pathname;
+import {
+  buildNotification,
+  buildTerminalSequence,
+  type Notification,
+} from "./utils/hook.ts";
 
 /**
  * 非 ASCII を含む文字列を HTTP ヘッダ値へ載せられる形にする。
@@ -22,6 +19,9 @@ const encodeHeader = (text: string): string => {
   return out;
 };
 
+// hook の timeout (10 秒) より短くし、応答が無くても terminalSequence を出せるようにする。
+const NTFY_TIMEOUT_MS = 5000;
+
 const notifyNtfy = async (notification: Notification) => {
   const url = Deno.env.get("NTFW_URL");
   const token = Deno.env.get("NTFW_TOKEN");
@@ -31,8 +31,9 @@ const notifyNtfy = async (notification: Notification) => {
   }
 
   try {
-    await fetch(url, {
+    const response = await fetch(url, {
       method: "POST",
+      signal: AbortSignal.timeout(NTFY_TIMEOUT_MS),
       body: notification.body,
       headers: {
         Authorization: `Bearer ${token}`,
@@ -41,47 +42,21 @@ const notifyNtfy = async (notification: Notification) => {
         Tags: notification.tag,
       },
     });
+    if (!response.ok) {
+      console.error("ntfy error:", response.status, response.statusText);
+    }
+    await response.body?.cancel();
   } catch (error) {
     console.error("ntfy error:", error);
-  }
-};
-
-const notifyWindows = async (input: HookInput, notification: Notification) => {
-  const conn = await Deno.connect({
-    path: SOCK_PATH,
-    transport: "unix",
-  });
-
-  try {
-    const req: NotifyRequest = {
-      title: `${notification.emoji} ${notification.title}`,
-      message: notification.body,
-      attribution: input.cwd,
-      image: {
-        placement: "appLogoOverride",
-        hintCrop: "circle",
-        src: `${__dirname}/clawd.jpg`,
-      },
-      audio: {
-        src: notification.sound,
-      },
-      duration: "long",
-    };
-
-    await conn.write(new TextEncoder().encode(JSON.stringify(req)));
-    await conn.read(new Uint8Array(BUFFER_SIZE));
-  } catch (error) {
-    console.error("notify error:", error);
-    throw error;
-  } finally {
-    conn.close();
   }
 };
 
 const input = await getInput();
 const notification = await buildNotification(input);
 
-await Promise.all([
-  notifyNtfy(notification),
-  notifyWindows(input, notification),
-]);
+await notifyNtfy(notification);
+
+// hook の stdout は JSON オブジェクト 1 つだけにする（ログは stderr へ）。
+console.log(
+  JSON.stringify({ terminalSequence: buildTerminalSequence(notification) }),
+);
