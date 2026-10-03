@@ -155,7 +155,9 @@ link:
   ~/.claude/settings.json:
     - src: ./.claude/settings.json
   ~/.claude/rules:
-    - src: ./.claude/rules
+    - src: ./.agents/rules
+  ~/.devin/rules:
+    - src: ./.agents/rules
   ~/.claude/lsp:
     - src: ./.claude/lsp
   ~/.claude/scripts:
