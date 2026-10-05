@@ -166,8 +166,6 @@ link:
     - src: ./.claude/rules
   ~/.claude/lsp:
     - src: ./.claude/lsp
-  ~/.claude/scripts:
-    - src: ./.claude/scripts
   ~/.claude/skills:
     - src: ./.claude/skills
   ~/.claude/agents:
