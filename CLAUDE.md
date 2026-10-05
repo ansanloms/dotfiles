@@ -91,14 +91,13 @@ apm install <org>/<repo>/<skill>#<commit>
 
 `scripts/` のソースは「薄いエントリポイント（`scripts/<module>/*.ts`）＋ 純粋ロジック / 依存注入した `run()`（`scripts/<module>/lib/*.ts`）」に分離している。副作用（subprocess / fs / tty / 対話プロンプト等）を注入することでテスト可能にし、`scripts/<module>/lib/*.test.ts` でユニットテストする（`deno task test` / `deno task coverage`）。`deno task build` は各 member 直下のみを bundle 対象とし、`lib/` サブディレクトリは対象から外れる。
 
-## Claude Code の通知（OSC 777）
+## Claude Code の通知（組み込み通知）
 
-- `.claude/scripts/notify.ts` は Claude Code の hook（Stop / StopFailure / Notification / PermissionRequest）から呼ばれ、ntfy への送信と、hook の JSON 出力の `terminalSequence` による OSC 777（`ESC ] 777 ; notify ; <title> ; <body> BEL`）の返却を行う。
-- シーケンスを端末へ書くのは Claude Code 本体。hook プロセスは制御端末を持たず `/dev/tty` に書けないため、この方式を使う。
-- `terminalSequence` に通るのは OSC 0/1/2/9/99/777 と BEL だけで、それ以外が混じるとフィールドごと無視される。そのため title・body から制御文字を除去し、改行を畳み、長さを切り詰めている（`utils/hook.ts` の `buildTerminalSequence`）。
+- `.claude/settings.json` の `preferredNotifChannel` を `"ghostty"` にし、Claude Code 自身の通知（OSC 777）を端末へ出す。通知用の hook は使わない。
+- 既定の `"auto"` は、端末を iTerm2・Ghostty・Kitty と検出したときだけデスクトップ通知を出す。zellij 越しの noctty で検出されるかに依存しないよう、チャネルを明示している。
 - トーストを表示するのは端末側。noctty（Ghostty の Windows フォーク）は `desktop-notifications`（既定 true）で OSC 777 をトースト表示する。zellij は 0.45.0 以降、ペイン内の通知シーケンスをホスト端末へ転送する。alacritty は OSC 通知を実装していないため表示されない。
-- 出るのは対話セッションで画面が表示されている間だけ。`-p` や画面を持たないセッションでは無視されるため、その場合の通知は ntfy だけになる。
-- 元は unix socket 経由で WSL 常駐サーバ（`scripts/notify` + `notify.service`）から Windows の Toast Notification API を叩いていたが、OSC 777 へ切り替えて削除した。
+- 通知が出る場面は Claude Code が決める。Claude Code 2.1.286 の実装では、バックグラウンドジョブが入力待ち・完了になったとき（`claude agents` の画面側が出す）と、対話セッションで応答後のアイドルが続いたとき（`messageIdleNotifThresholdMs`、既定 60 秒）に出る。ターン完了の直後に出す経路は、同じ版の実装からは確認できていない。
+- 元は hook（`.claude/scripts/notify.ts`）が ntfy への送信と、hook の JSON 出力の `terminalSequence` による OSC 777 の返却を行っていた。バックグラウンドジョブの Stop で通知が欠ける回があり、原因が Claude Code 内部の書き込み経路で hook 側から直せないため、組み込み通知へ寄せて `.claude/scripts` ごと削除した。さらに前は unix socket 経由で WSL 常駐サーバ（`scripts/notify` + `notify.service`）から Windows の Toast Notification API を叩いていた。
 
 ## クリップボード画像の自動取り込み（WSL systemd サービス）
 
