@@ -158,6 +158,7 @@
   "showThinkingSummaries": false,
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
+  "preferredNotifChannel": "ghostty",
   "terminalProgressBarEnabled": true,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
