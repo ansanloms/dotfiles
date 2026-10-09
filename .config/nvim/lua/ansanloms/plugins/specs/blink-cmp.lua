@@ -25,23 +25,20 @@ return {
         ["<C-l>"] = { "show", "fallback" },
         ["<C-e>"] = { "hide", "fallback" },
         ["<CR>"] = { "accept", "fallback" },
-        ["<Space>"] = {} -- Required: Let skkeleton handle Space
+        ["<Space>"] = {} -- Required: skkelua に Space を渡す
       },
 
       -- 補完ソース
       sources = {
         default = function()
-          if require("blink-cmp-skkeleton").is_enabled() then
-            return { "skkeleton" }
-          else
-            return { "lsp", "path", "snippets" }
+          -- skkelua 有効中は blink を黙らせ、skkelua 組み込みの補完メニューに任せる。
+          local ok, skkelua = pcall(require, "skkelua")
+          if ok and skkelua.is_enabled() then
+            return {}
           end
+          return { "lsp", "path", "snippets" }
         end,
         providers = {
-          skkeleton = {
-            name = "skkeleton",
-            module = "blink-cmp-skkeleton",
-          },
           path = {
             opts = {
               get_cwd = function(context)
