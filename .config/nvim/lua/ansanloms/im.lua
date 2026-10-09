@@ -1,4 +1,4 @@
--- skkeleton を遣うので一旦コメントアウト。
+-- skkelua を遣うので一旦コメントアウト。
 --local augroupIm = vim.api.nvim_create_augroup("im-settings", { clear = true })
 --local uname = vim.uv.os_uname()
 --

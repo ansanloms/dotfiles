@@ -1,12 +1,12 @@
--- skk (skkeleton 一式)。
+-- skk (skkelua.nvim)。
 
----@class SkkeletonDict
+---@class SkkDict
 ---@field url string ダウンロード元 URL
 ---@field name string 保存先ファイル名
 ---@field encoding "euc-jp"|"euc-jis-2004"|"utf-8" 配布物の文字コード
 
 -- ダウンロード対象の辞書定義。build 時に取得し、必要なら UTF-8 へ変換する。
----@type SkkeletonDict[]
+---@type SkkDict[]
 local dicts = {
   {
     url = "https://github.com/skk-dev/dict/raw/refs/heads/master/SKK-JISYO.L",
@@ -91,156 +91,111 @@ local dicts = {
 }
 
 -- 辞書ファイルの文字コードから iconv の変換元コードへの対応表。
--- skkeleton はロード時に euc-jp を pure-JS でデコードするため遅い。
--- ビルド時に UTF-8 へ寄せておき、ロードをネイティブデコード経路に乗せる。
--- euc-jis-2004 は TextDecoder が非対応で、UTF-8 化しておかないとロードに失敗する。
+-- skkelua はエンコーディングを自動判定できるが、euc-jis-2004 の対応は未確認のため、
+-- ビルド時に UTF-8 へ正規化して渡す。
 local iconvFrom = {
   ["euc-jp"] = "EUC-JP",
   ["euc-jis-2004"] = "EUC-JISX0213",
   ["utf-8"] = false,
 }
 
+-- 辞書の保存先。skkelua の既定ユーザ辞書 stdpath("data")/skkelua/jisyo と
+-- 同じ階層に置くと vim.fs.find が拾うため、サブディレクトリに分ける。
+local function dictDirPath()
+  return vim.fn.expand(vim.fn.stdpath("data") .. "/skkelua/dict")
+end
+
 return {
-  {
-    "vim-skk/skkeleton",
-    dependencies = { "vim-denops/denops.vim" },
-    build = function()
-      local dictDir = vim.fn.expand(vim.fn.stdpath("data") .. "/skkeleton")
-      if vim.fn.isdirectory(dictDir) == 0 then
-        vim.fn.mkdir(dictDir, "p")
-      end
+  "kjuq/skkelua.nvim",
+  build = function()
+    local dictDir = dictDirPath()
+    if vim.fn.isdirectory(dictDir) == 0 then
+      vim.fn.mkdir(dictDir, "p")
+    end
 
-      for _, dict in ipairs(dicts) do
-        local filepath = vim.fn.expand(dictDir .. "/" .. dict.name)
-        local from = iconvFrom[dict.encoding]
+    for _, dict in ipairs(dicts) do
+      local filepath = vim.fn.expand(dictDir .. "/" .. dict.name)
+      local from = iconvFrom[dict.encoding]
 
-        if not from then
-          -- 既に UTF-8。直接ダウンロードする。
-          vim.system({
-            "curl", "-L", "-f", "--silent", "--show-error",
-            "-o", filepath, dict.url,
-          }, { text = true }, function(result)
-            vim.schedule(function()
-              if result.code == 0 then
-                vim.notify(string.format("[skkeleton] dict download succeeded: %s", dict.url), vim.log.levels.INFO)
-              else
-                vim.notify(string.format("[skkeleton] dict download failed: %s", dict.url), vim.log.levels.ERROR)
-              end
-            end)
+      if not from then
+        -- 既に UTF-8。直接ダウンロードする。
+        vim.system({
+          "curl", "-L", "-f", "--silent", "--show-error",
+          "-o", filepath, dict.url,
+        }, { text = true }, function(result)
+          vim.schedule(function()
+            if result.code == 0 then
+              vim.notify(string.format("[skkelua] dict download succeeded: %s", dict.url), vim.log.levels.INFO)
+            else
+              vim.notify(string.format("[skkelua] dict download failed: %s", dict.url), vim.log.levels.ERROR)
+            end
           end)
-        else
-          -- ダウンロード後、iconv で UTF-8 へ変換する。
-          local tmp = filepath .. ".raw"
-          vim.system({
-            "curl", "-L", "-f", "--silent", "--show-error",
-            "-o", tmp, dict.url,
-          }, { text = true }, function(dl)
-            vim.schedule(function()
-              if dl.code ~= 0 then
-                vim.notify(string.format("[skkeleton] dict download failed: %s", dict.url), vim.log.levels.ERROR)
-                return
-              end
-              vim.system({
-                "iconv", "-f", from, "-t", "UTF-8", "-o", filepath, tmp,
-              }, { text = true }, function(conv)
-                vim.schedule(function()
-                  vim.fn.delete(tmp)
-                  if conv.code == 0 then
-                    vim.notify(string.format("[skkeleton] dict converted to utf-8: %s", dict.name), vim.log.levels.INFO)
-                  else
-                    vim.notify(string.format("[skkeleton] dict iconv failed: %s", dict.name), vim.log.levels.ERROR)
-                  end
-                end)
+        end)
+      else
+        -- ダウンロード後、iconv で UTF-8 へ変換する。
+        local tmp = filepath .. ".raw"
+        vim.system({
+          "curl", "-L", "-f", "--silent", "--show-error",
+          "-o", tmp, dict.url,
+        }, { text = true }, function(dl)
+          vim.schedule(function()
+            if dl.code ~= 0 then
+              vim.notify(string.format("[skkelua] dict download failed: %s", dict.url), vim.log.levels.ERROR)
+              return
+            end
+            vim.system({
+              "iconv", "-f", from, "-t", "UTF-8", "-o", filepath, tmp,
+            }, { text = true }, function(conv)
+              vim.schedule(function()
+                vim.fn.delete(tmp)
+                if conv.code == 0 then
+                  vim.notify(string.format("[skkelua] dict converted to utf-8: %s", dict.name), vim.log.levels.INFO)
+                else
+                  vim.notify(string.format("[skkelua] dict iconv failed: %s", dict.name), vim.log.levels.ERROR)
+                end
               end)
             end)
           end)
-        end
+        end)
       end
-    end,
-    config = function()
-      vim.fn["skkeleton#config"]({
-        globalDictionaries = vim.tbl_map(function(path)
-          -- ビルド時に全辞書を UTF-8 化済み。encoding を明示することで
-          -- skkeleton 側の per-file エンコーディング判定 (encoding.detect) を省く。
-          return { path, "utf-8" }
-        end, vim.fs.find(function(name)
-          -- 変換失敗時に残る .raw を辞書として拾わない。
-          return not name:match("%.raw$")
-        end, {
-          path = vim.fn.expand(vim.fn.stdpath("data") .. "/skkeleton"),
-          type = "file",
-          limit = math.huge
-        })),
-        eggLikeNewline = true,
-        keepState = true,
-        showCandidatesCount = 2,
-        registerConvertResult = true,
-      })
+    end
+  end,
+  config = function()
+    local skkelua = require("skkelua")
+    skkelua.config({
+      globalDictionaries = vim.tbl_map(function(path)
+        return { path, "utf-8" }
+      end, vim.fs.find(function(name)
+        -- 変換失敗時に残る .raw を辞書として拾わない。
+        return not name:match("%.raw$")
+      end, {
+        path = dictDirPath(),
+        type = "file",
+        limit = math.huge,
+      })),
+      eggLikeNewline = true,
+      keepState = true,
+      showCandidatesCount = 2,
+      registerConvertResult = true,
+      completion = { enabled = true },
+      indicator = {
+        enabled = true,
+        alwaysShown = true,
+        fadeOutMs = 0,
+        eijiText = "_A",
+        hiraText = "かな",
+        kataText = "カナ",
+        hankataText = "ｶﾅ",
+        zenkakuText = "Ａ",
+        abbrevText = "ab",
+      },
+    })
 
-      -- 辞書ロードは初回変換時まで遅延される (skkeleton の LazyCell)。
-      -- 初期化完了直後に裏でロードを発火し、初回入力のレイテンシを起動直後へ移す。
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "skkeleton-initialize-post",
-        callback = function()
-          vim.fn["skkeleton#notify_async"]("initialize", {})
-        end,
-      })
-
-      vim.keymap.set(
-        { "i", "c", "t" },
-        [[<C-j>]],
-        [[<Plug>(skkeleton-toggle)]],
-        { noremap = true, desc = "skkeleton toggle" }
-      )
-    end,
-  },
-  {
-    "NI57721/skkeleton-state-popup",
-    config = function()
-      vim.fn["skkeleton_state_popup#config"]({
-        labels = {
-          input = {
-            hira = "かな",
-            kata = "カナ",
-            hankata = "ｶﾅ",
-            zenkaku = "Ａ"
-          },
-          ["input:okurinasi"] = {
-            hira = "▽",
-            kata = "▽",
-            hankata = "▽",
-            abbrev = "ab"
-          },
-          ["input:okuriari"] = {
-            hira = "▽",
-            kata = "▽",
-            hankata = "▽"
-          },
-          henkan = {
-            hira = "▼",
-            kata = "▼",
-            hankata = "▼",
-            abbrev = "ab"
-          },
-          latin = "_A",
-        },
-        opts = {
-          relative = "cursor",
-          col = 0,
-          row = 1,
-          anchor = "NW",
-          zindex = 100,
-          style = "minimal",
-        },
-      })
-      vim.fn["skkeleton_state_popup#enable"]()
-    end,
-  },
-  {
-    "NI57721/skkeleton-henkan-highlight",
-    config = function()
-      vim.cmd("highlight SkkeletonHenkan gui=underline term=underline cterm=reverse")
-    end,
-  },
-  { "Xantibody/blink-cmp-skkeleton" },
+    vim.keymap.set(
+      { "i", "c", "t" },
+      [[<C-j>]],
+      [[<Plug>(skkelua-toggle)]],
+      { noremap = true, desc = "skkelua toggle" }
+    )
+  end,
 }
