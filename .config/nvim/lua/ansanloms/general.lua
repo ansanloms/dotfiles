@@ -97,7 +97,7 @@ vim.opt.tagbsearch = true
 
 -- 補完設定。
 vim.opt.wildmode = "list:longest"
-vim.opt.completeopt = "menuone"
+vim.opt.completeopt = "menuone,noinsert,noselect"
 vim.opt.timeoutlen = 1000
 vim.opt.ttimeoutlen = 0
 
