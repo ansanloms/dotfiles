@@ -1,49 +1,68 @@
-# claude-statusline (Claude Code の statusLine / subagentStatusLine レンダラ)。
-# nixpkgs 未収録の自前ツール (https://github.com/ansanloms/claude-statusline)。
+# claude-statusline (Claude Code の statusLine レンダラ)。
+# nixpkgs 収録対象外の自前ツール (https://github.com/ansanloms/claude-statusline)。
 #
-# 配布物は GitHub Release に添付された deno bundle 済みの単一 JS ファイルで、
-# 展開処理は不要 (dontUnpack)。先頭に以下の shebang を持つ:
-#   #!/usr/bin/env -S deno run --allow-env --allow-read --allow-run=git
-# `env -S` はシステムの deno を PATH から探す前提の shebang なので、そのまま
-# 導入すると nix の外の deno に依存してしまう。stdenv の fixupPhase が
-# patchShebangs を実行し、`env -S` 形式の shebang も含めて buildInputs の deno を
-# 絶対パスへ書き換えるため、ここでは buildInputs に deno を渡すだけでよい。
-# ビルド後は `head -1 $out/bin/claude-statusline` で
-#   #!/nix/store/...-coreutils-*/bin/env -S /nix/store/...-deno-*/bin/deno run --allow-env --allow-read --allow-run=git
-# 形式 (env -S は残り、env と deno の両方が store の絶対パスに書き換わる) に
-# なっていることを確認すること。
+# 配布物は GitHub Release に添付された Bun の standalone 実行ファイル
+# (claude-statusline-<target>)。Bun ランタイムとアプリを 1 つのバイナリに埋め込んでおり、
+# 実行に deno / bun は不要。system と Release 資産 target の対応は下記 targets を参照
+# (x86_64 / aarch64 の linux のみ)。darwin は未検証。dontFixup で ad-hoc 署名も
+# 止まるため、署名の扱いを確認してから足す。
 #
-# サブコマンド: `claude-statusline main` (メイン statusline) / `claude-statusline sub` (agent panel)。
+# Bun は起動時に /proc/self/exe で自分自身を読み、ファイル末尾の trailer から
+# 埋め込みペイロードの位置を得る。patchelf や strip で書き換えると trailer の
+# 位置がずれ、Bun がアプリを見つけられず素の Bun CLI にフォールバックする。
+# そのため fixup を一切かけず raw バイナリのまま導入する (sonarqube-cli.nix と同じ)。
+#
+# raw のため ELF インタプリタは配布時のままのパスを指す。システム側に glibc /
+# ローダがある FHS 環境 (WSL の通常ディストリ等) で動く前提で、ローダを持たない
+# 環境 (純 NixOS 等) では動かない。
+#
+# サブコマンド: `claude-statusline main` (メイン statusline)。
+#
+# リリースタグは version そのもの (v 無し。例: 0.1.0)。
 #
 # バージョンを上げる場合 (deno task bump:claude-statusline が下記を自動で行う):
-#   1. https://github.com/ansanloms/claude-statusline/releases/download/v<ver>/claude-statusline
-#      を nix store prefetch-file で取得し hash を更新する。
+#   1. target ごとの資産 (claude-statusline-<target>) を nix store prefetch-file で
+#      取得し、system 別に hashes を更新する。
 #   2. version 文字列を更新する。
 {
   lib,
   stdenv,
   fetchurl,
-  deno,
 }:
 
 let
-  version = "0.0.1";
+  version = "0.1.0";
+
+  # nix の system -> Release 資産の target。
+  targets = {
+    "x86_64-linux" = "linux-x64";
+    "aarch64-linux" = "linux-arm64";
+  };
+
+  # 初回 bump 前のプレースホルダ (bump:claude-statusline が実値へ書き換える)。
+  hashes = {
+    "x86_64-linux" = "sha256-8vZLfyhPU3ruQ8o7bACu1/BfZEHjmi/4BPmsF3DIRsk=";
+    "aarch64-linux" = "sha256-UuwIB0WyZ2iTB0pczPooYDZSrKB5YYCzClsTT3SvXBQ=";
+  };
+
+  system = stdenv.hostPlatform.system;
+  target = targets.${system} or (throw "claude-statusline: unsupported system ${system}");
 in
 stdenv.mkDerivation {
   pname = "claude-statusline";
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ansanloms/claude-statusline/releases/download/v${version}/claude-statusline";
-    hash = "sha256-3XCgM6fXdyFNexH73PrEiXgWqlTKDr97OWk5+hfOI5E=";
+    url = "https://github.com/ansanloms/claude-statusline/releases/download/${version}/claude-statusline-${target}";
+    hash = hashes.${system};
   };
 
-  # src は deno bundle 済みの単一 JS ファイル。展開処理は不要。
+  # src は単一の実行ファイル。展開処理は不要。
   dontUnpack = true;
 
-  # patchShebangs (fixupPhase) が shebang の deno を nix store の絶対パスへ
-  # 書き換えるために必要。
-  buildInputs = [ deno ];
+  # fixup を全て無効化する。autoPatchelfHook は使わず、既定の strip も止める。
+  # どちらもバイナリを書き換え、Bun standalone の末尾 trailer を破壊するため。
+  dontFixup = true;
 
   installPhase = ''
     runHook preInstall
@@ -55,8 +74,8 @@ stdenv.mkDerivation {
     description = "Claude Code statusline renderer";
     homepage = "https://github.com/ansanloms/claude-statusline";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    platforms = lib.attrNames targets;
     mainProgram = "claude-statusline";
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

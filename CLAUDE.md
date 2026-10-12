@@ -123,7 +123,7 @@ devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボー
 
 `.config/nix/` には nixpkgs 未収録のパッケージを自前 derivation で管理している。
 
-- `claude-statusline.nix`（[claude-statusline](https://github.com/ansanloms/claude-statusline)、Claude Code の statusLine / subagentStatusLine レンダラ。nixpkgs 収録対象外の自前ツール。GitHub Release に添付した deno bundle 済み単一 JS を fetchurl で取得し raw のまま導入する。shebang（`env -S deno run ...`）は stdenv の patchShebangs で nix の deno に固定する。`.claude/settings.json` の `statusLine` / `subagentStatusLine` から `claude-statusline main` / `claude-statusline sub` で呼ばれる）
+- `claude-statusline.nix`（[claude-statusline](https://github.com/ansanloms/claude-statusline)、Claude Code の statusLine レンダラ。nixpkgs 収録対象外の自前ツール。GitHub Release（タグは `0.1.0` 形式で v 無し、nix の version と同じ値）に添付した OS 別の Bun standalone バイナリ（`claude-statusline-<target>`）を system ごとに fetchurl で取得し、raw のまま導入する（md2html / sonarqube-cli と同じ。patchelf / strip で末尾 trailer が壊れるため fixup 無し）。実行に deno / bun は不要。`.claude/settings.json` の `statusLine` から `claude-statusline main` で呼ばれる）
 - `md2html.nix`（[md2html](https://github.com/ansanloms/md2html)、markdown をシンタックスハイライト（shiki）・mermaid・目次内蔵の自己完結 HTML へ変換する CLI。nvim の quickrun からのプレビューが主用途。nixpkgs 収録対象外の自前ツール。元は `scripts/md2html` の workspace member だったが独立リポジトリへ移管した。GitHub Release（タグは `0.1.0` 形式で v プレフィックス無し）に添付した OS 別の Bun standalone バイナリ（`md2html-bun-<target>`）を fetchurl で取得し、raw のまま導入する（sonarqube-cli と同じ。patchelf / strip で末尾 trailer が壊れるため fixup 無し）。実行に deno は不要。mermaid は初回利用時に jsdelivr から取得して `$XDG_CACHE_HOME/md2html/` にキャッシュする）
 - `playwright-cli.nix`（`@playwright/cli`、npm パッケージ / buildNpmPackage、wrapper で nixpkgs `google-chrome` を駆動）
 - `sonarqube-cli.nix`（SonarQube CLI、コマンド名 `sonar`。SonarSource 配布のプリビルド ELF を fetchurl で取得し raw のまま導入する。配布物は Bun standalone 実行ファイルで、末尾 trailer に埋め込みアプリを持つ。patchelf / strip で ELF を書き換えると trailer が壊れ素の Bun CLI にフォールバックするため fixup を一切かけない。代わりにシステムの glibc / ローダに依存する＝FHS 環境専用。nixpkgs 収録の `sonar-scanner-cli` は別物の旧スキャナ）
@@ -138,7 +138,7 @@ devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボー
 
 `deno task bump`（全パッケージ）/ `deno task bump:<name> [version]`（version 省略で最新）で、version・ハッシュ（playwright-cli / backlog-bee-cli は lockfile も）を更新する。具体的な処理は各スクリプトを参照:
 
-- `.config/nix/claude-statusline/upgrade.ts`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。引数でバージョン指定も可）
+- `.config/nix/claude-statusline/upgrade.ts`（最新は GitHub releases の latest tag、hash は system（target）ごとに nix store prefetch-file。タグは v 無しで nix の version と同じ値。引数でバージョン指定も可）
 - `.config/nix/md2html/upgrade.ts`（最新は GitHub releases の latest tag、hash は Release の SHA256SUMS から system 別に更新。タグは v プレフィックス無し。引数でバージョン指定も可）
 - `.config/nix/playwright-cli/upgrade.ts`（最新は npm レジストリ、FOD は prefetch-npm-deps）
 - `.config/nix/sonarqube-cli/upgrade.ts`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。配布リリース番号は `1.1.0.3122` 形式）
