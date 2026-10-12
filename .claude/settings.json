@@ -45,10 +45,6 @@
     "command": "claude-statusline main",
     "padding": 0
   },
-  "subagentStatusLine": {
-    "type": "command",
-    "command": "claude-statusline sub"
-  },
   "enabledPlugins": {
     "denols@lsp": true,
     "lua-ls@lsp": true,
