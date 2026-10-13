@@ -8,10 +8,13 @@ dependencies:
     - ansanloms/skills/find-docs
     - ansanloms/skills/worktree
     - ansanloms/skills/infra-architecture
-    - mizchi/skills/meta/empirical-prompt-tuning
-    - mizchi/skills/meta/retrospective-codify
+    - mizchi/skills/empirical-prompt-tuning
+    - mizchi/skills/retrospective-codify
     - ansanloms/skills/ja-tech-proofread
     - ansanloms/skills/adr
+    - git: nanaism/yomiyasu
+      skills:
+        - yomiyasu
   mcp: []
 targets:
   - claude

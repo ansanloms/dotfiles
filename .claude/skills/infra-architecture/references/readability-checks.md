@@ -48,22 +48,24 @@
 drawio -x -f svg -e -o diagram.drawio.svg diagram.drawio --disable-gpu --no-sandbox
 
 # 幾何チェック
-deno run --allow-read scripts/check-readability.ts \
+npx --no --prefix scripts -- check-readability \
   --drawio diagram.drawio --svg diagram.drawio.svg
 ```
 
-スクリプトは skill 配下の絶対パス、対象ファイルは任意の絶対パスで渡せる。図が skill 外のディレクトリにある場合は両方とも絶対パスで指定する。
+`--no` は未インストールのパッケージを registry から取りに行かないための指定。`--` は必須。無いと npm 11 が `--config` 等のフラグを自分の設定として取り込む。
+
+スクリプトは skill 配下の絶対パス、対象ファイルは任意の絶対パスで渡せる。図が skill 外のディレクトリにある場合は両方とも絶対パスで指定する。`--prefix` は bin の解決先を指定するだけで、cwd は呼び出し元のまま変わらない。`--drawio`/`--svg` の相対パスは呼び出し元基準で解決される。
 
 ```bash
-deno run --allow-read <skillの絶対パス>/scripts/check-readability.ts \
+npx --no --prefix "<skillの絶対パス>/scripts" -- check-readability \
   --drawio /path/to/diagram.drawio --svg /path/to/diagram.drawio.svg
 ```
 
-`scripts/` には `deno.json` があり、そのディレクトリからは task でも呼べる。
+`scripts/` を cwd にすれば `npx --no -- check-readability --drawio ... --svg ...` で呼べる。
 
 ```bash
 cd scripts
-deno task check --drawio ../diagram.drawio --svg ../diagram.drawio.svg
+npx --no -- check-readability --drawio ../diagram.drawio --svg ../diagram.drawio.svg
 ```
 
 オプション。
@@ -74,6 +76,94 @@ deno task check --drawio ../diagram.drawio --svg ../diagram.drawio.svg
 終了コードは error が 1 件でもあれば 1、無ければ 0。修正は必ず `.drawio` 側で行い、SVG を再エクスポートしてから再度かける。
 
 チェッカ本体・テスト・fixture の開発手順は [README](../README.md) を参照。
+
+## 出力例
+
+実際に実行して得た出力。入力は `scripts/testdata/` の fixture で、`<skill>` は skill ディレクトリの絶対パス、cwd は `/tmp`。
+
+### 指摘なし (終了コード 0)
+
+取得日: 2026-10-12。
+
+```bash
+npx --no --prefix "<skill>/scripts" -- check-readability \
+  --drawio <skill>/scripts/testdata/clean.drawio --svg <skill>/scripts/testdata/clean.svg
+```
+
+```text
+OK: 見やすさの幾何チェックで指摘なし
+```
+
+### 指摘あり (終了コード 1)
+
+取得日: 2026-10-12。`bad.drawio` は 4 観点すべてに違反する fixture。
+
+```bash
+npx --no --prefix "<skill>/scripts" -- check-readability \
+  --drawio <skill>/scripts/testdata/bad.drawio --svg <skill>/scripts/testdata/bad.svg
+```
+
+```text
+[ERROR] overlaps: エッジ e_ab1 と e_ab2 の線が重なっている (共線)
+[ERROR] legend-hits: エッジ e_cd が凡例 (legend) を横切っている
+[ERROR] node-cross: エッジ e_ab1 が無関係なノード mid を貫いている
+[ERROR] node-cross: エッジ e_ab2 が無関係なノード mid を貫いている
+[ERROR] group-cross: エッジ e_ef が所属しない枠 vpc を貫いている
+
+5 error / 0 warn
+```
+
+### `--json` の出力 (終了コード 1)
+
+取得日: 2026-10-12。上の `bad` に `--json` を付けた。`findings` は 5 件中 2 件だけを載せ、残りは省略した。
+
+```bash
+npx --no --prefix "<skill>/scripts" -- check-readability \
+  --drawio <skill>/scripts/testdata/bad.drawio --svg <skill>/scripts/testdata/bad.svg --json
+```
+
+```json
+{
+  "summary": { "error": 5, "warn": 0 },
+  "findings": [
+    {
+      "check": "overlaps",
+      "severity": "error",
+      "message": "エッジ e_ab1 と e_ab2 の線が重なっている (共線)",
+      "cells": ["e_ab1", "e_ab2"]
+    },
+    {
+      "check": "legend-hits",
+      "severity": "error",
+      "message": "エッジ e_cd が凡例 (legend) を横切っている",
+      "cells": ["e_cd", "legend"]
+    }
+  ]
+}
+```
+
+実出力は `summary` と `findings` を複数行に整形して出す。上は読みやすさのため `summary` と `cells` を 1 行にまとめている。
+
+### 入力エラー (終了コード 2)
+
+取得日: 2026-10-12。存在しないファイルを渡した場合と、引数が無い場合。error・warn の指摘による終了コード 1 とは区別される。
+
+```bash
+npx --no --prefix "<skill>/scripts" -- check-readability \
+  --drawio /tmp/none.drawio --svg /tmp/none.svg
+```
+
+```text
+error: cannot read drawio file: /tmp/none.drawio
+```
+
+```bash
+npx --no --prefix "<skill>/scripts" -- check-readability
+```
+
+```text
+error: usage: --drawio <file.drawio> --svg <file.svg> [--json] [--legend-id <id>]
+```
 
 ## 正当な交差の扱い
 

@@ -43,6 +43,7 @@ pkgs: with pkgs; [
   playwright-cli
   postgresql
   pueue
+  python3
   python3Packages.psd-tools
   ripgrep
   rustup

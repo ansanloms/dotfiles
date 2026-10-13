@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-read
+#!/usr/bin/env node
 /**
  * check-readability.ts
  *
@@ -22,12 +22,14 @@
  * .drawio はセルの意味づけ (種別・接続・所属) だけに使い、両者を id (= data-cell-id) で突き合わせる。
  *
  * Usage:
- *   deno run --allow-read check-readability.ts --drawio diagram.drawio --svg diagram.drawio.svg
- *   deno run --allow-read check-readability.ts --drawio d.drawio --svg d.svg --json
- *   deno run --allow-read check-readability.ts --drawio d.drawio --svg d.svg --legend-id legend
+ *   npx --no -- check-readability --drawio diagram.drawio --svg diagram.drawio.svg
+ *   npx --no -- check-readability --drawio d.drawio --svg d.svg --json
+ *   npx --no -- check-readability --drawio d.drawio --svg d.svg --legend-id legend
  *
  * 終了コード: ERROR 重大度の指摘が 1 件でもあれば 1、無ければ 0。
  */
+
+import { readFileSync } from "node:fs";
 
 export type Point = { x: number; y: number };
 export type Rect = { x: number; y: number; w: number; h: number };
@@ -54,7 +56,7 @@ const INSET = 0.5;
 
 function die(msg: string): never {
   console.error(`error: ${msg}`);
-  Deno.exit(2);
+  process.exit(2);
 }
 
 function parseArgs(argv: string[]): {
@@ -141,7 +143,8 @@ export function parseDrawio(xml: string): Map<string, Cell> {
       continue;
     }
     if (!c.isVertex) continue; // root cells (0, 1) は対象外
-    const looksGroup = /container=1/.test(c.style) ||
+    const looksGroup =
+      /container=1/.test(c.style) ||
       /shape=[^;]*group/.test(c.style) ||
       /grIcon=/.test(c.style);
     const isGroup = looksGroup || hasChildren.has(c.id);
@@ -175,7 +178,10 @@ export function parsePolyline(d: string, off: Point): Point[] {
 /** path の d に現れる全座標から bbox を取る (ノード / グループの外形矩形用)。 */
 export function bboxOfPath(d: string, off: Point): Rect {
   const nums = d.match(/-?\d+(?:\.\d+)?/g)?.map(Number) ?? [];
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  let minX = Infinity,
+    minY = Infinity,
+    maxX = -Infinity,
+    maxY = -Infinity;
   for (let i = 0; i + 1 < nums.length; i += 2) {
     const x = nums[i] + off.x;
     const y = nums[i + 1] + off.y;
@@ -201,9 +207,9 @@ export function extractGeometry(
 
   for (const [id, cell] of cells) {
     const re = new RegExp(
-      `data-cell-id="${
-        escapeRe(id)
-      }"\\s*>\\s*<g transform="(translate\\([^)]*\\))"\\s*>\\s*(<rect\\b[^>]*>|<path\\b[^>]*>)`,
+      `data-cell-id="${escapeRe(
+        id,
+      )}"\\s*>\\s*<g transform="(translate\\([^)]*\\))"\\s*>\\s*(<rect\\b[^>]*>|<path\\b[^>]*>)`,
     );
     const m = svg.match(re);
     if (!m) continue;
@@ -298,8 +304,10 @@ export function segEntersRect(p1: Point, p2: Point, rect: Rect): boolean {
     return true;
   };
   if (
-    clip(-dx, p1.x - xmin) && clip(dx, xmax - p1.x) &&
-    clip(-dy, p1.y - ymin) && clip(dy, ymax - p1.y)
+    clip(-dx, p1.x - xmin) &&
+    clip(dx, xmax - p1.x) &&
+    clip(-dy, p1.y - ymin) &&
+    clip(dy, ymax - p1.y)
   ) {
     return t1 - t0 > EPS;
   }
@@ -322,8 +330,12 @@ export function segCrossesBorder(p1: Point, p2: Point, rect: Rect): number {
 }
 
 export function pointInRect(p: Point, rect: Rect): boolean {
-  return p.x >= rect.x - EPS && p.x <= rect.x + rect.w + EPS &&
-    p.y >= rect.y - EPS && p.y <= rect.y + rect.h + EPS;
+  return (
+    p.x >= rect.x - EPS &&
+    p.x <= rect.x + rect.w + EPS &&
+    p.y >= rect.y - EPS &&
+    p.y <= rect.y + rect.h + EPS
+  );
 }
 
 // ---- checks --------------------------------------------------------------
@@ -357,8 +369,8 @@ export function run(
   legendId: string,
 ): Finding[] {
   const findings: Finding[] = [];
-  const edges = [...cells.values()].filter((c) =>
-    c.kind === "edge" && polylines.has(c.id)
+  const edges = [...cells.values()].filter(
+    (c) => c.kind === "edge" && polylines.has(c.id),
   );
 
   // 1) overlaps: 異なるエッジ同士の線分の重なり / 交差。
@@ -379,18 +391,14 @@ export function run(
         findings.push({
           check: "overlaps",
           severity: "error",
-          message: `エッジ ${edges[i].id} と ${
-            edges[j].id
-          } の線が重なっている (共線)`,
+          message: `エッジ ${edges[i].id} と ${edges[j].id} の線が重なっている (共線)`,
           cells: [edges[i].id, edges[j].id],
         });
       } else if (crossCount > 0) {
         findings.push({
           check: "overlaps",
           severity: "warn",
-          message: `エッジ ${edges[i].id} と ${
-            edges[j].id
-          } が ${crossCount} 箇所で交差している`,
+          message: `エッジ ${edges[i].id} と ${edges[j].id} が ${crossCount} 箇所で交差している`,
           cells: [edges[i].id, edges[j].id],
         });
       }
@@ -403,7 +411,7 @@ export function run(
     for (const e of edges) {
       const pts = polylines.get(e.id)!;
       const hit = segmentsOf(pts).some(([p1, p2]) =>
-        segEntersRect(p1, p2, legendRect)
+        segEntersRect(p1, p2, legendRect),
       );
       if (hit) {
         findings.push({
@@ -417,8 +425,8 @@ export function run(
   }
 
   // 3) node-cross: エッジが始点・終点でないノードを貫く。凡例はノードではないので除外する。
-  const nodes = [...cells.values()].filter((c) =>
-    c.kind === "node" && c.id !== legendId && rects.has(c.id)
+  const nodes = [...cells.values()].filter(
+    (c) => c.kind === "node" && c.id !== legendId && rects.has(c.id),
   );
   for (const e of edges) {
     const pts = polylines.get(e.id)!;
@@ -427,7 +435,7 @@ export function run(
       if (endpoints.has(n.id)) continue;
       const rect = rects.get(n.id)!;
       const through = segmentsOf(pts).some(([p1, p2]) =>
-        segEntersRect(p1, p2, rect)
+        segEntersRect(p1, p2, rect),
       );
       if (through) {
         findings.push({
@@ -442,8 +450,8 @@ export function run(
 
   // 4) group-cross: エッジが所属しない枠を貫く。
   //    エッジの端点 (source / target) がその枠の内側にあれば、枠への出入りは正当とみなす。
-  const groups = [...cells.values()].filter((c) =>
-    c.kind === "group" && rects.has(c.id)
+  const groups = [...cells.values()].filter(
+    (c) => c.kind === "group" && rects.has(c.id),
   );
   for (const e of edges) {
     const pts = polylines.get(e.id)!;
@@ -457,8 +465,8 @@ export function run(
       const ep0 = pts[0];
       const epN = pts[pts.length - 1];
       if (pointInRect(ep0, rect) || pointInRect(epN, rect)) continue;
-      const pierces = segmentsOf(pts).some(([p1, p2]) =>
-        segCrossesBorder(p1, p2, rect) > 0
+      const pierces = segmentsOf(pts).some(
+        ([p1, p2]) => segCrossesBorder(p1, p2, rect) > 0,
       );
       if (pierces) {
         findings.push({
@@ -477,16 +485,16 @@ export function run(
 // ---- main ----------------------------------------------------------------
 
 function main() {
-  const { drawio, svg, json, legendId } = parseArgs(Deno.args);
+  const { drawio, svg, json, legendId } = parseArgs(process.argv.slice(2));
   let xmlText: string;
   let svgText: string;
   try {
-    xmlText = Deno.readTextFileSync(drawio);
+    xmlText = readFileSync(drawio, "utf-8");
   } catch {
     die(`cannot read drawio file: ${drawio}`);
   }
   try {
-    svgText = Deno.readTextFileSync(svg);
+    svgText = readFileSync(svg, "utf-8");
   } catch {
     die(`cannot read svg file: ${svg}`);
   }
@@ -499,14 +507,16 @@ function main() {
   const warns = findings.filter((f) => f.severity === "warn");
 
   if (json) {
-    console.log(JSON.stringify(
-      {
-        summary: { error: errors.length, warn: warns.length },
-        findings,
-      },
-      null,
-      2,
-    ));
+    console.log(
+      JSON.stringify(
+        {
+          summary: { error: errors.length, warn: warns.length },
+          findings,
+        },
+        null,
+        2,
+      ),
+    );
   } else {
     if (findings.length === 0) {
       console.log("OK: 見やすさの幾何チェックで指摘なし");
@@ -519,7 +529,7 @@ function main() {
     }
   }
 
-  Deno.exit(errors.length > 0 ? 1 : 0);
+  process.exitCode = errors.length > 0 ? 1 : 0;
 }
 
 if (import.meta.main) main();

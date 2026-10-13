@@ -76,6 +76,7 @@ base="<呼び出し側から供給されたベースディレクトリの絶対�
   ```
 
   `git branch --edit-description` はプログラム的に実行する場合は使わない。理由: 対話エディタが開くため。
+
 - 設定・更新はどの worktree の cwd から実行してもよい。branch description はリポジトリ共有の設定に書かれ、worktree ごとに分かれない (cwd 制約があるのは「作成手順」の `git-worktree-include` のみ)。
 
 ### 更新
