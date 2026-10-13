@@ -1,61 +1,69 @@
 # ja-tech-proofread scripts
 
-ja-tech-proofread skill の機械層 (表記・文法の機械判定) を実行する textlint のラッパー。preset `textlint-rule-preset-ansanloms` を有効化した状態で textlint を起動するだけの薄い層で、rule 自体はここでは定義しない。
+ja-tech-proofread skill の機械層を実行する Node の薄い層。表記・文法の機械判定は textlint (preset `@ansanloms/textlint-rule-preset-ansanloms`)、markdown の整形は oxfmt が担う。rule 自体はここでは定義しない。Node.js 24 以上が必要。
 
 ## ファイル構成
 
-- `deno.json`: `@ansanloms/textlint-rule-preset-ansanloms` を jsDelivr 経由の URL に alias する import map と、textlint を起動する `textlint` task を持つ。`fmt` 設定 (proseWrap preserve) と `fmt`/`fmt:check` task も持つ。
-- `.textlintrc.js`: `preset-ansanloms` rule を有効化するだけの設定。個別 rule の options はここでは上書きしない。
-- `textlint/textlint-rule-preset-ansanloms/index.js`: `--rules-base-directory` が探す実体で、import map で解決した preset をそのまま re-export する 1 行。
-- `.gitignore`: `.cache/` を除外する。
-- `deno.lock`: 依存の固定。preset の URL とその依存を pin する。
+- `package.json`: `textlint`、`oxfmt`、preset を `dependencies` に固定する。preset は `github:ansanloms/textlint-rule-preset-ansanloms#0.1.0` の git 依存。`lint`/`fix` script はこのディレクトリの設定ファイル自身の整形検査用で、推敲対象には使わない。
+- `package-lock.json`: 依存の固定。
+- `.npmrc`: `engine-strict`、`ignore-scripts`、`audit`、`min-release-age=7`、`save-exact`、`fund=false`。
+- `.textlintrc.json`: preset を有効化するだけの設定。個別 rule の options はここでは上書きしない。
+- `.oxfmtrc.json`: oxfmt の設定。`proseWrap: preserve` (日本語の段落を折り返さない) と `embeddedLanguageFormatting: off` (コードフェンス内を整形しない)。
+- `.ignore-none`: 空ファイル。`--ignore-path` に渡して、呼び出し元 cwd の `.textlintignore`・`.prettierignore`・`.gitignore` が対象を黙って除外するのを防ぐ (これらを渡さないと、textlint は除外されても終了コード 0 で指摘 0 件に見え、oxfmt は終了コード 2 になる。2026-10-12 実測)。
+- `.gitignore`: `node_modules/` と `.cache/` を除外する。
 - `README.md`: この文書。
 
 ## 起動方法
 
-このディレクトリを cwd として実行する前提で書く。SKILL.md からは `--cwd` に絶対パスを付けて呼ぶ (「呼び出し側の cwd と `--cwd`」参照)。
+依存は初回と更新後に `npm ci --omit=dev --prefix "<scripts の絶対パス>"` で入れる。以降は cwd を問わず、絶対パスで次のとおり呼ぶ。
 
 ```sh
-deno task -q textlint <対象ファイルの絶対パス...> [--fix] [--format json]
+npx --no --prefix "<scripts の絶対パス>" -- textlint --config "<scripts の絶対パス>/.textlintrc.json" --ignore-path "<scripts の絶対パス>/.ignore-none" [--fix] <対象ファイルの絶対パス...>
+npx --no --prefix "<scripts の絶対パス>" -- oxfmt -c "<scripts の絶対パス>/.oxfmtrc.json" --ignore-path "<scripts の絶対パス>/.ignore-none" [--check] <対象ファイルの絶対パス...>
 ```
 
-`--fix` を付けると自動修正が効く rule (全角半角スペース等) だけをその場で直す。追加の引数は task の後ろにそのまま渡る。
+- `--` は必須。npm 11 は `--config` や `--fix` を npx 自身のフラグとして解釈するため、`--` で区切らないと textlint に届かない。
+- `--prefix` は bin の解決先の指定で、cwd は呼び出し元のまま変わらない。相対パスの対象は呼び出し元の cwd 基準で解決される (2026-10-12 実測)。
+- `--no` を付けて、未インストールの依存を npx が勝手に取得しないようにする。`node_modules` が無いと `npm error npx canceled due to missing packages and no YES option` を出して終了コード 1 になる。
+  - 以下は `node_modules` を別名へ退避した状態で、cwd を `/` にして実行して得た実物の出力 (取得コマンドは次のとおり、取得日 2026-10-12、実行後に `node_modules` は戻した。パスはリポジトリ外の probe)。
 
-```sh
-deno task -q fmt <対象ファイルの絶対パス...>
-deno task -q fmt:check <対象ファイルの絶対パス...>
-```
+    ```sh
+    npx --no --prefix "<scripts の絶対パス>" -- textlint --config "<scripts の絶対パス>/.textlintrc.json" --ignore-path "<scripts の絶対パス>/.ignore-none" /home/ansanloms/.claude/jobs/4da019b2/tmp/jtp-r1/cwd/t.md
+    ```
 
-`deno fmt` は対象ファイルの祖先ディレクトリから設定を探すため、そのままでは対象が Deno プロジェクトの外 (一時ファイル等) にあると既定の `proseWrap: always` で日本語の段落が折り返される。これを避けるため `fmt` と `fmt:check` の task は常に `--config` でこのディレクトリの `deno.json` (`proseWrap: preserve`) を使う。対象が属するプロジェクトの fmt 設定 (インデント幅や引用符の種類等) と除外は見ない。推敲対象を明示的に渡す前提であり、コードフェンス内のコードがプロジェクトの設定と違う形に整形される可能性は受け入れる。
+    ```
+    npm error npx canceled due to missing packages and no YES option: ["textlint@15.8.0"]
+    npm error A complete log of this run can be found in: /home/ansanloms/.npm/_logs/2026-10-12T13_19_00_893Z-debug-0.log
+    ```
+- oxfmt は `--prefix` 側の設定を見ないため、`-c` に絶対パスで設定を渡す。`..` を含むパスは受け付けない。
+- `--fix` を付けると自動修正が効く rule (全角半角スペース等) だけをその場で直す。修正できない指摘が残っていても `--fix` の出力には載らず、終了コードは 0 になる。残りは `--fix` 無しで再実行して確認する。
+- oxfmt の `--check` は整形差分ありで終了コード 1、対象が見つからないと 2。`--check` 無しの書き込みモードは変更の有無を出力せず、終了コードは変更なしでも変更ありでも 0。
 
 ## preset の参照先
 
-`deno.json` の `imports` で `@ansanloms/textlint-rule-preset-ansanloms` を `https://cdn.jsdelivr.net/gh/ansanloms/textlint-rule-preset-ansanloms@0.0.2/index.ts` に alias している。タグ `0.0.2` は 2026-08-31 に公開済みで、この URL は配信されている。0.0.2 では `no-ai-list-formatting: { disableBoldListItems: true }` と `2.1.5.カタカナ: false` が preset に加わった。ただし `no-ai-emphasis-patterns` は「重要」「注意」等の情報プレフィックスの太字を引き続き検出する。
+preset は `package.json` の `dependencies` で `github:ansanloms/textlint-rule-preset-ansanloms#0.1.0` を指す git 依存で、dist を同梱しているためビルドは不要。タグを上げるときは `package.json` の `#<タグ>` を書き換え、このディレクトリで `npm install` を実行して `package-lock.json` を更新する。
 
 ## preset を取得できないときの挙動
 
-以下はタグ公開前 (2026-08-31) に取得した実物で、URL 不達時の形として残す。URL に到達できない (ネットワーク不通、タグの削除等) 状態で実行すると、rule が 1 つも読み込めないまま textlint が終了する。以下は実物のエラー出力の先頭 3 行 (取得コマンドは次の通り、取得日 2026-08-31)。
+preset が解決できない状態 (`node_modules` に preset が無い、`.textlintrc.json` の rule 名が誤っている等) で実行すると、rule が 1 つも読み込めないまま textlint が終了する。以下は `.textlintrc.json` の rule 名を存在しない名前に書き換えて得た実物の出力の先頭 3 行 (取得コマンドは次のとおり、取得日 2026-10-12)。
 
 ```sh
-deno task -q --cwd "<scripts の絶対パス>" textlint /home/ansanloms/.claude/jobs/b7dd5f76/tmp/proofread-probe.md
+npx --no --prefix "<scripts の絶対パス>" -- textlint --config "<scripts の絶対パス>/.textlintrc.json" --ignore-path "<scripts の絶対パス>/.ignore-none" /home/ansanloms/.claude/jobs/4da019b2/tmp/jtp-impl/probe.md
 ```
 
 ```
 == No rules found, textlint hasn’t done anything ==
+
+Possible reasons:
 ```
 
-終了コードは 1 (失敗)。preset の import 失敗が「rule が 0 件」という形で現れるため、SKILL.md の手順ではこの「No rules found」を「機械層: 実行不可 (理由)」として扱う。
+終了コードは 1。preset の解決失敗が「rule が 0 件」という形で現れるため、SKILL.md の手順ではこの `No rules found` を「機械層: 実行不可 (理由)」として扱う。
 
-## ローカル検証 (alias の一時差し替え)
+## ローカル検証
 
-公開前の変更を手元で確認したい場合は、`deno.json` の `imports."@ansanloms/textlint-rule-preset-ansanloms"` を、手元にチェックアウト済みの `textlint-rule-preset-ansanloms` リポジトリの `index.ts` の絶対パスに一時的に差し替えて実行する。確認が終わったら jsDelivr の URL (`@0.0.2`) に戻し、差し替えをコミットしない。
-
-## lock の再生成
-
-`deno.lock` を作り直すときは、このディレクトリで `rm -f deno.lock` の後に `deno install` を実行し、続けて `textlint` と `fmt:check` の task を 1 回ずつ走らせて lock を埋める。
+公開前の preset の変更を手元で確認したい場合は、このディレクトリで `npm install <手元の textlint-rule-preset-ansanloms clone の絶対パス>` を実行して一時的に差し替える。確認が終わったら `package.json` と `package-lock.json` を元に戻し (`git checkout -- package.json package-lock.json` の後に `npm ci`)、差し替えをコミットしない。
 
 ## 注意
 
-- 呼び出し側の cwd と `--cwd`: `deno task --cwd <path> <task>` で起動すると、task 内では `$PWD` が `--cwd` に渡した絶対パス (このディレクトリ) を指す。`$INIT_CWD` は `deno task` を起動したシェル自身の cwd を指し、`--cwd` の値とは異なるため使わない (2026-08-31 実測)。`deno.json` の `textlint` task は `$PWD` を使っている。
-- `.cache/`: 実測では、proofdict の辞書キャッシュはこのディレクトリ配下ではなく、Deno の npm キャッシュ (`~/.cache/deno/npm/registry.npmjs.org/textlint/<バージョン>/bin/.cache` 相当) に作られた (2026-08-31、strace で `mkdir` の呼び出し先を追跡して確認)。`.gitignore` の `.cache/` はこのディレクトリ配下に生成される場合に備えた予防的なエントリで、現時点の実測では実際には使われていない。
-- rule の options は上書きされると (preset 側の値と) マージされず置換される。preset が `false` にした rule を再び有効にしたいときは、その rule の値を空オブジェクト `{}` に置き換える。
+- `.cache/`: proofdict の辞書キャッシュは `<scripts>/.cache/kvs-node-localstorage/` に作られる。呼び出し元の cwd には作られない (cwd を `/` や別ディレクトリにして実測、2026-10-12)。`.gitignore` で除外している。
+- rule の options は上書きすると (preset 側の値と) マージされず置換される。preset が `false` にした rule を再び有効にしたいときは、その rule の値を空オブジェクト `{}` に置き換える。

@@ -8,7 +8,7 @@
 ### APM (recommended)
 
 ```bash
-apm install mizchi/skills/meta/empirical-prompt-tuning
+apm install mizchi/skills/empirical-prompt-tuning
 ```
 
 Or declare it in `apm.yml` for a reproducible setup:
@@ -16,7 +16,7 @@ Or declare it in `apm.yml` for a reproducible setup:
 ```yaml
 dependencies:
   apm:
-    - mizchi/skills/meta/empirical-prompt-tuning
+    - mizchi/skills/empirical-prompt-tuning
 ```
 
 then run `apm install`.
@@ -37,7 +37,7 @@ npx skills add mizchi/skills --skill empirical-prompt-tuning
 Or copy the folder in directly:
 
 ```bash
-npx degit mizchi/skills/meta/empirical-prompt-tuning ~/.claude/skills/empirical-prompt-tuning
+npx degit mizchi/skills/empirical-prompt-tuning ~/.claude/skills/empirical-prompt-tuning
 ```
 
 See [SKILL.md](./SKILL.md) for what this skill does and when to use it.

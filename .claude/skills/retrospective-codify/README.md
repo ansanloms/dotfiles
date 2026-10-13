@@ -8,7 +8,7 @@
 ### APM (recommended)
 
 ```bash
-apm install mizchi/skills/meta/retrospective-codify
+apm install mizchi/skills/retrospective-codify
 ```
 
 Or declare it in `apm.yml` for a reproducible setup:
@@ -16,7 +16,7 @@ Or declare it in `apm.yml` for a reproducible setup:
 ```yaml
 dependencies:
   apm:
-    - mizchi/skills/meta/retrospective-codify
+    - mizchi/skills/retrospective-codify
 ```
 
 then run `apm install`.
@@ -37,7 +37,7 @@ npx skills add mizchi/skills --skill retrospective-codify
 Or copy the folder in directly:
 
 ```bash
-npx degit mizchi/skills/meta/retrospective-codify ~/.claude/skills/retrospective-codify
+npx degit mizchi/skills/retrospective-codify ~/.claude/skills/retrospective-codify
 ```
 
 See [SKILL.md](./SKILL.md) for what this skill does and when to use it.

@@ -1,0 +1,17 @@
+{
+  "name": "ja-tech-proofread-scripts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "oxfmt --check",
+    "fix": "oxfmt"
+  },
+  "dependencies": {
+    "@ansanloms/textlint-rule-preset-ansanloms": "github:ansanloms/textlint-rule-preset-ansanloms#0.1.0",
+    "oxfmt": "0.72.0",
+    "textlint": "15.8.0"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

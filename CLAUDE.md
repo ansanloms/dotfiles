@@ -59,6 +59,8 @@ apm のデプロイ先は `apm.yml` の `targets: [claude]` で `.claude/skills/
 | ja-tech-proofread       | `ansanloms/skills`（apm） |
 | infra-architecture      | `ansanloms/skills`（apm） |
 | retrospective-codify    | `mizchi/skills`（apm）    |
+| adr                     | `ansanloms/skills`（apm） |
+| yomiyasu                | `nanaism/yomiyasu`（apm） |
 
 skill を追加・更新する場合のみ apm を使用する。`apm.yml` の `targets` で配置先（`.claude/skills/`）を固定済みのため、install は `--target` 無しでよい。
 
@@ -70,6 +72,10 @@ apm install <org>/<repo>/<skill>#<commit>
 更新も同じ install で commit を上げる。`apm update` は使わない。`apm update` は最新の一致 ref へ更新してしまい、commit hash 固定と噛み合わないため。最新 commit は `git ls-remote <repo> HEAD` 等で確認する。
 
 `apm.yml` / `apm.lock.yaml` は commit hash でバージョンを固定している。追加・更新後は、これらと `.claude/skills/` の差分をコミットする。
+
+yomiyasu は `<org>/<repo>/<skill>` 形式ではなく、`git: nanaism/yomiyasu` + `skills: [yomiyasu]` 形式で `apm.yml` に登録している（`../skills` の `apm.yml` と同じ形）。上記の `apm install <org>/<repo>/<skill>#<commit>` では更新しない。全依存をまとめて上げるときは、`apm.lock.yaml` と `.claude/skills/` の apm 管理分（`review-loop` 以外）を削除して引数無しの `apm install` を実行し、lock を再生成する（2026-10 の棚卸しはこの手順で行った）。
+
+`ja-tech-proofread` の機械層（textlint / oxfmt）は Node.js 24 以上と `scripts/node_modules` を要する。`node_modules` は gitignore 済みで、`apm install` も `deno task install` も作らない。clone 直後と skill の更新後に `npm ci --omit=dev --prefix .claude/skills/ja-tech-proofread/scripts` を実行する（更新後は古い `node_modules` が残ったままになるため、存在していても再実行する）。
 
 ## Local scripts
 
