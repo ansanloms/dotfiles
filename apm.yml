@@ -20,3 +20,9 @@ targets:
   - claude
 includes: auto
 scripts: {}
+lifecycle:
+  post-install:
+  - type: command
+    description: npm ci
+    command: 'rc=0; for d in .claude/skills/*/scripts; do [ -f "$d/package-lock.json" ] || continue; node -e ''const p=require(process.argv[1]);process.exit(Object.keys(p.dependencies||{}).length?0:1)'' "$PWD/$d/package.json" || continue; echo "npm ci: $d"; npm ci --omit=dev --prefix "$d" || rc=1; done; exit $rc'
+    timeoutSec: 300

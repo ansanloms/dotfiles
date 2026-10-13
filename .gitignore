@@ -32,3 +32,9 @@ apm_modules/
 
 # deno task coverage の出力
 /coverage/
+
+# apm で導入する skill。実体は apm install で apm.lock.yaml から復元する。
+# 自前管理の skill は追跡するため、追加したら下に否定パターン (!.claude/skills/<name>/) を足す。
+# 現状の自前管理は review-loop のみ。
+.claude/skills/*
+!.claude/skills/review-loop/
