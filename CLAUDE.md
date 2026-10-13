@@ -42,9 +42,9 @@ nix flake update --flake path:.config/nix
 
 ## Agent Skills
 
-Agent Skills は [apm](https://github.com/microsoft/apm)（`packages.nix` で導入）で管理し、skill 本体をリポジトリにコミットしている。`deno task install` でシンボリックリンクされる。
+Agent Skills は [apm](https://github.com/microsoft/apm)（`packages.nix` で導入）で管理し、apm で導入した skill の実体は `.gitignore` で除外してコミットせず、`apm install` で `apm.lock.yaml` の commit から復元する。`deno task install` でシンボリックリンクされる。
 
-skill の実体は `.claude/skills/` に置く。`~/.claude/skills` は `.claude/skills/` を指すシンボリックリンク（`config.yaml` で設定）。
+skill の実体は `.claude/skills/` に置く。`~/.claude/skills` は `.claude/skills/` を指すシンボリックリンク（`config.yaml` で設定）。自前管理の `review-loop` だけはコミットしている（`.gitignore` の否定パターンで除外から外している）。
 
 apm のデプロイ先は `apm.yml` の `targets: [claude]` で `.claude/skills/` に固定している。target の解決順は `--target` > `apm.yml` の `targets:` > auto-detect。省略時の auto-detect も `.claude/` の存在を見て `claude` を選ぶが、意図した配置先であることを明示するため固定を維持している。
 
@@ -71,11 +71,31 @@ apm install <org>/<repo>/<skill>#<commit>
 
 更新も同じ install で commit を上げる。`apm update` は使わない。`apm update` は最新の一致 ref へ更新してしまい、commit hash 固定と噛み合わないため。最新 commit は `git ls-remote <repo> HEAD` 等で確認する。
 
-`apm.yml` / `apm.lock.yaml` は commit hash でバージョンを固定している。追加・更新後は、これらと `.claude/skills/` の差分をコミットする。
+`apm.yml` / `apm.lock.yaml` は commit hash でバージョンを固定している。追加・更新後は、この 2 ファイルをコミットする（`.claude/skills/` は ignore 済み）。skill の中身の変化は diff に現れないため、lock の resolved_commit を上げる PR の本文には上流の compare URL（`https://github.com/<org>/<repo>/compare/<旧 commit>...<新 commit>`）を載せ、中身を読んでから取り込む。
 
-yomiyasu は `<org>/<repo>/<skill>` 形式ではなく、`git: nanaism/yomiyasu` + `skills: [yomiyasu]` 形式で `apm.yml` に登録している（`../skills` の `apm.yml` と同じ形）。上記の `apm install <org>/<repo>/<skill>#<commit>` では更新しない。全依存をまとめて上げるときは、`apm.lock.yaml` と `.claude/skills/` の apm 管理分（`review-loop` 以外）を削除して引数無しの `apm install` を実行し、lock を再生成する（2026-10 の棚卸しはこの手順で行った）。
+yomiyasu は `<org>/<repo>/<skill>` 形式ではなく、`git: nanaism/yomiyasu` + `skills: [yomiyasu]` 形式で `apm.yml` に登録している（`../skills` の `apm.yml` と同じ形）。上記の `apm install <org>/<repo>/<skill>#<commit>` では更新しない。全依存をまとめて上げるときは、`apm.lock.yaml` と `.claude/skills/` の apm 管理分（`review-loop` 以外）を削除して引数無しの `apm install` を実行し、lock を再生成する。
 
-`ja-tech-proofread` の機械層（textlint / oxfmt）は Node.js 24 以上と `scripts/node_modules` を要する。`node_modules` は gitignore 済みで、`apm install` も `deno task install` も作らない。clone 直後と skill の更新後に `npm ci --omit=dev --prefix .claude/skills/ja-tech-proofread/scripts` を実行する（更新後は古い `node_modules` が残ったままになるため、存在していても再実行する）。
+### 復元と lifecycle
+
+依存を持つ skill（`scripts/package.json` の `dependencies` が空でないもの。現状は `ja-tech-proofread`）は `scripts/node_modules` を要する。`apm.yml` の `lifecycle.post-install` が、`apm install` のたびに該当 skill の `scripts/` で `npm ci --omit=dev` を実行する。ブロックは ansanloms/skills の README「依存を持つ skill」節の雛形と同じ。
+
+lifecycle は `apm lifecycle trust` で信頼したときだけ実行される。trust はマシンごとに `~/.apm/scripts-trust.json` へ「`apm.yml` の絶対パス → lifecycle ブロックのハッシュ」で記録され、リポジトリでは運べない。次の場合は trust し直す。
+
+- 新しいマシン、または新しいパスへの clone
+- `lifecycle` ブロックを編集したとき（ハッシュが変わり信頼が外れる）
+
+未信頼の `apm install` は `Skipped N untrusted project script(s)` と出して lifecycle を飛ばす。lifecycle の失敗は `apm install` の出力にも終了コードにも現れないため、install 後は `ls .claude/skills/ja-tech-proofread/scripts/node_modules` 等で生成を確認する。
+
+clone 直後の手順:
+
+```sh
+apm lifecycle trust
+apm install
+deno task build
+deno task install
+```
+
+`apm.lock.yaml` が変わるコミットを pull したときも `apm install` を実行する。skill の実体は ignore 済みのため、pull だけでは更新されない。
 
 ## Local scripts
 
