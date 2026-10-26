@@ -61,4 +61,7 @@ pkgs: with pkgs; [
   wsl-open
   zellij
   zsh
+  gcc
+  openssh
+  less
 ]
