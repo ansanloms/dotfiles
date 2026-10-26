@@ -74,41 +74,6 @@ nix flake update --flake path:.config/nix
 nix profile remove .config/nix
 ```
 
-### 6. Enable systemd user services (WSL)
-
-WSL の常駐サービスを有効化する。前提として WSL で systemd が有効（`/etc/wsl.conf` の `[boot]` に `systemd=true`）であること。`deno task install` でユニットが `~/.config/systemd/user/` に symlink 済みであること。
-
-導入済みのユーザサービス:
-
-- `clip-image-watch` - Windows のクリップボードに入った画像を自動で `clip-image` に取り込む
-
-```sh
-# symlink したユニットを systemd に読み込ませる
-systemctl --user daemon-reload
-
-# 有効化 + 起動
-systemctl --user enable --now clip-image-watch
-```
-
-ターミナルを全て閉じてもサービスを常駐させるには、ユーザの linger を有効にする（systemd ユーザインスタンスがログインセッションに依存しなくなる）。
-
-```sh
-sudo loginctl enable-linger $USER
-```
-
-動作確認・トラブルシュート（`<service>` は `clip-image-watch` 等）:
-
-```sh
-# 起動しているか（クラッシュループしていないか）
-systemctl --user status <service>
-
-# ログをライブで追う（例: clip-image-watch なら Win+Shift+S しながら見る）
-journalctl --user -u <service> -f
-
-# 直近のログをまとめて見る
-journalctl --user -u <service> -n 50 --no-pager
-```
-
 ## Uninstall
 
 ```sh

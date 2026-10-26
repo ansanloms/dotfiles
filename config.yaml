@@ -184,19 +184,3 @@ link:
     - src: ./.local/bin/git-worktree-sweep
       targets:
         - linux
-  ~/.local/bin/clip-image:
-    - src: ./.local/bin/clip-image
-      targets:
-        - linux
-  ~/.local/bin/clip-image-watch:
-    - src: ./.local/bin/clip-image-watch
-      targets:
-        - linux
-  ~/.local/bin/clip-image-clip:
-    - src: ./.local/bin/clip-image-clip
-      targets:
-        - linux
-  ~/.config/systemd/user/clip-image-watch.service:
-    - src: ./.config/systemd/user/clip-image-watch.service
-      targets:
-        - linux

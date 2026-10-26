@@ -99,7 +99,7 @@ deno task install
 
 ## Local scripts
 
-`.local/bin/` 配下のコマンド（`git-worktree-select` / `git-worktree-include` 等）は、`scripts/` 以下の TypeScript を `deno bundle` で単一ファイルにビルドした生成物。`scripts/` は Deno workspace で、モジュールごとに `clip-image` / `git-worktree` のディレクトリ（member）に分かれている。共有依存はルートの `deno.json` の `imports` で、モジュール固有の依存（npm パッケージ等）は各 member（`scripts/<module>/deno.json`）の `imports` で管理する。
+`.local/bin/` 配下のコマンド（`git-worktree-select` / `git-worktree-include` 等）は、`scripts/` 以下の TypeScript を `deno bundle` で単一ファイルにビルドした生成物。`scripts/` は Deno workspace で、モジュールごとのディレクトリ（member。現状は `git-worktree` のみ）に分かれている。共有依存はルートの `deno.json` の `imports` で、モジュール固有の依存（npm パッケージ等）は各 member（`scripts/<module>/deno.json`）の `imports` で管理する。
 
 - ソース: `scripts/<module>/*.ts`（shebang に実行時の権限フラグを記述。`deno bundle` が生成物の先頭へ引き継ぐ）
 - ビルド: `deno task build` で `scripts/<module>/*.ts` を `.local/bin/<name>` に bundle し、実行ビットを付与する
@@ -111,9 +111,6 @@ deno task install
 
 - `git-worktree-select` / `git-worktree-include` - worktree の選択・ローカル設定持ち込み。選択 UI は fzf（`packages.nix` で導入）で、リストに branch description の先頭 1 行（subject）を表示し、プレビューで全文を mdcat により markdown レンダリングする（mdcat が無い環境では素のテキスト表示にフォールバック）。選択したパスは stdout へ出力する
 - `git-worktree-sweep` - マージ済み worktree の掃除。メイン以外の全 linked worktree (配置場所は問わない) を対象に、マージ判定を git のみで行い (squash merge は merge-base への仮 squash commit + `git cherry` の patch-id 判定で検知)、forge の API に依存しない。マージ済みかつクリーンなものだけを worktree remove + ローカルブランチ削除し、dirty・未マージ・固有コミット無し (作成直後) は報告のみ。判定不能 (git コマンドの失敗) も worktree には触れずエラーとして報告し非 0 で終了する。git が prunable と判定した worktree (管理情報の破損・実体ディレクトリの消失等) は分類せず Skipped として報告し、(非 dry-run では) 末尾の `git worktree prune` が整理する。`--dry-run` で判定結果だけ確認できる
-- `clip-image` - Windows ホストのクリップボード画像（Win+Shift+S 等）を WSL の PNG に保存し絶対パスを stdout へ出力する（WSL 専用）。`powershell.exe` で画像を取得し native NTFS の一時領域へ書き出してから `~/.cache/clip-image/` へコピーする。保存と同時に `~/.cache/clip-image/latest.png` を最新キャプチャへ張り替える（自動実行時の固定参照先）。nvim では `:r !clip-image`、claude code ではシェルから実行してパスを渡す。`--copy-path`（`-c`）で保存先パスを OSC 52 でクリップボードへ載せ、入力欄に Ctrl+V でパスを貼れるようにする（OSC 52 は `/dev/tty` へ直接書き stdout を汚さない）
-- `clip-image-watch` - 上記を自動化する常駐サービス本体（「クリップボード画像の自動取り込み」節を参照）。
-- `clip-image-clip` - devcontainer 内で動くクライアント。ホストの `clip-image-watch` が配信する PNG を unix socket 経由で受け取り、コンテナのクリップボードへ載せる（同節を参照）。
 
 `scripts/` のソースは「薄いエントリポイント（`scripts/<module>/*.ts`）＋ 純粋ロジック / 依存注入した `run()`（`scripts/<module>/lib/*.ts`）」に分離している。副作用（subprocess / fs / tty / 対話プロンプト等）を注入することでテスト可能にし、`scripts/<module>/lib/*.test.ts` でユニットテストする（`deno task test` / `deno task coverage`）。`deno task build` は各 member 直下のみを bundle 対象とし、`lib/` サブディレクトリは対象から外れる。
 
@@ -124,26 +121,6 @@ deno task install
 - トーストを表示するのは端末側。noctty（Ghostty の Windows フォーク）は `desktop-notifications`（既定 true）で OSC 777 をトースト表示する。zellij は 0.45.0 以降、ペイン内の通知シーケンスをホスト端末へ転送する。alacritty は OSC 通知を実装していないため表示されない。
 - 通知が出る場面は Claude Code が決める。Claude Code 2.1.286 の実装では、バックグラウンドジョブが入力待ち・完了になったとき（`claude agents` の画面側が出す）と、対話セッションで応答後のアイドルが続いたとき（`messageIdleNotifThresholdMs`、既定 60 秒）に出る。ターン完了の直後に出す経路は、同じ版の実装からは確認できていない。
 - 元は hook（`.claude/scripts/notify.ts`）が ntfy への送信と、hook の JSON 出力の `terminalSequence` による OSC 777 の返却を行っていた。バックグラウンドジョブの Stop で通知が欠ける回があり、原因が Claude Code 内部の書き込み経路で hook 側から直せないため、組み込み通知へ寄せて `.claude/scripts` ごと削除した。さらに前は unix socket 経由で WSL 常駐サーバ（`scripts/notify` + `notify.service`）から Windows の Toast Notification API を叩いていた。
-
-## クリップボード画像の自動取り込み（WSL systemd サービス）
-
-Windows のクリップボードに画像が入ったら自動で `clip-image` を実行する常駐サービス。管理を WSL 側に寄せ、systemd ユーザサービスとして動かす（WSL 専用）。
-
-Windows のクリップボード変更イベント（`WM_CLIPBOARDUPDATE`）は Linux からは購読できないため、イベント検知だけは Windows 側の powershell に任せ、それを WSL 側のサービスが監督する構成。
-
-- `clip-image-watch`（`scripts/clip-image/clip-image-watch.ts`）- `powershell.exe` を 1 個常駐起動し、`AddClipboardFormatListener` でクリップボード更新をイベント購読する（ポーリングしない）。リスナは画像コピーのたびに 1 行を stdout へ吐き、WSL 側はその行を読んで `clip-image` を起動する。リスナ（powershell）が死んだら非 0 で終了し systemd に再起動させる。`clip-image`（`--copy-path` なし）は Windows クリップボードを書き換えないためループしない。
-- `.config/systemd/user/clip-image-watch.service` - 上記を `Restart=always` で常駐させる systemd ユーザサービス。PATH に WindowsPowerShell ディレクトリを補い（systemd の最小 PATH には無いため）、`wl-copy` / `xclip` が WSLg のコンポジタへ繋がるよう `WAYLAND_DISPLAY` / `DISPLAY` を設定する。
-- 取り込んだ画像は 2 通りで使える。(1) `~/.cache/clip-image/latest.png` に PNG を保存（nvim / claude code から固定パスで読む）。(2) 保存した PNG を Linux クリップボードへ `image/png` で載せる（Wayland=`wl-copy`、X11=`xclip` の両方）。GUI アプリ（Chrome 等）で `Ctrl+V` 貼り付けできるようにするため。Chrome は通常 XWayland(X11) で動くので X11 側が効く。Wayland 側は WSLg が Windows クリップボードを再同期して上書きするため不安定。
-- 成功時は `journalctl --user -u clip-image-watch` に `captured <path>` を出す。
-- 有効化: `deno task build` 後に `systemctl --user enable --now clip-image-watch`。ターミナルを閉じても常駐させるなら `loginctl enable-linger $USER`（systemd ユーザインスタンスがログインセッションに依存しないようにする）。
-
-### devcontainer 内のクリップボードへ届ける（socket ブリッジ）
-
-devcontainer は WSL interop（`powershell.exe`）も WSLg のクリップボードも持たないため、ホストの取り込みをそのままでは使えない。unix socket で橋渡しする。inotify はコンテナの bind-mount 越しに発火しないため、ファイル監視ではなく socket ストリームを使う。
-
-- `clip-image-watch`（ホスト）は capture のたびに、保存した PNG を unix socket（`CLIP_IMAGE_SOCK`、既定 `/tmp/clip-image.sock`）の接続クライアントへ配信する。フレームは 4 byte big-endian 長 + PNG 本体（`scripts/clip-image/lib/frame.ts`）。
-- `clip-image-clip`（`scripts/clip-image/clip-image-clip.ts`、devcontainer 内で常駐）は socket に接続し、受信した PNG をコンテナのクリップボードへ `image/png` で載せる（`wl-copy` + `xclip`）。切断したら再接続する。これで devcontainer 内の Claude Code / Chrome 等で `Ctrl+V` 貼り付けできる。
-- devcontainer 側（このリポジトリの管轄外、利用側で設定）の前提: socket（`/tmp/clip-image.sock`）を bind-mount、`clip-image-clip` を起動時に常駐（`postStartCommand` 等）、コンテナに `wl-copy` / `xclip` と `DISPLAY` / `WAYLAND_DISPLAY`（コンテナの display server）があること。
 
 ## 自前 nix パッケージの更新
 
