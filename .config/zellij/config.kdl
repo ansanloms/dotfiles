@@ -17,10 +17,12 @@ ui {
 keybinds {
   normal clear-defaults=true {
     bind "Ctrl space" { SwitchToMode "Locked"; }
+    bind "Ctrl b" { SwitchToMode "Locked"; }
   }
 
   locked clear-defaults=true {
     bind "Ctrl space" { SwitchToMode "Normal"; }
+    bind "Ctrl b" { SwitchToMode "Normal"; }
     bind "Esc" { SwitchToMode "Normal"; }
     bind "p" { SwitchToMode "Pane"; }
     bind "t" { SwitchToMode "Tab"; }
