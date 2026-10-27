@@ -15,12 +15,16 @@ pkgs: with pkgs; [
   # CLI ユーティリティ
   eza
   fzf
+  gnutar
   jq
   just
   mdcat
   pandoc
   pueue
   ripgrep
+  unzip
+  xz
+  zip
 
   # ターミナルマルチプレクサ
   tmux
