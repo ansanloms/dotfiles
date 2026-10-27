@@ -10,7 +10,6 @@ pkgs: with pkgs; [
   sheldon
   sshpass
   starship
-  wsl-open
   zsh
 
   # CLI ユーティリティ
