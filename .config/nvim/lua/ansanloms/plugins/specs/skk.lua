@@ -90,14 +90,67 @@ local dicts = {
   },
 }
 
--- 辞書ファイルの文字コードから iconv の変換元コードへの対応表。
+-- 辞書ファイルの文字コードから vim.iconv の変換元コードへの対応表。
 -- skkelua はエンコーディングを自動判定できるが、euc-jis-2004 の対応は未確認のため、
 -- ビルド時に UTF-8 へ正規化して渡す。
+-- 変換は外部の iconv コマンドではなく vim.iconv で行う (Windows には iconv コマンドが無いため)。
+-- Windows 版 Neovim 同梱の libiconv は EUC-JISX0213 を持たないので、
+-- 変換に失敗したら EUC-JP として変換し直す。
 local iconvFrom = {
   ["euc-jp"] = "EUC-JP",
   ["euc-jis-2004"] = "EUC-JISX0213",
   ["utf-8"] = false,
 }
+
+-- src を from から UTF-8 へ変換して dst に書き出す。src は読み込み後に必ず削除する。
+-- from で変換できない場合は EUC-JP で変換し直す。
+local function convertToUtf8(src, dst, from, name)
+  local fin = io.open(src, "rb")
+  if not fin then
+    vim.fn.delete(src)
+    vim.notify(string.format("[skkelua] dict read failed: %s", name), vim.log.levels.ERROR)
+    return
+  end
+  local content = fin:read("*a")
+  fin:close()
+  vim.fn.delete(src)
+
+  local function convert(code)
+    local result = vim.iconv(content, code, "UTF-8")
+    if result == nil or (result == "" and content ~= "") then
+      return nil
+    end
+    return result
+  end
+
+  local converted = convert(from)
+  if not converted and from ~= "EUC-JP" then
+    converted = convert("EUC-JP")
+    if converted then
+      vim.notify(
+        string.format(
+          '[skkelua] %s is not supported by iconv, converted as EUC-JP (characters outside EUC-JP become "?"): %s',
+          from,
+          name
+        ),
+        vim.log.levels.WARN
+      )
+    end
+  end
+  if not converted then
+    vim.notify(string.format("[skkelua] dict iconv failed: %s", name), vim.log.levels.ERROR)
+    return
+  end
+
+  local fout = io.open(dst, "wb")
+  if not fout then
+    vim.notify(string.format("[skkelua] dict write failed: %s", name), vim.log.levels.ERROR)
+    return
+  end
+  fout:write(converted)
+  fout:close()
+  vim.notify(string.format("[skkelua] dict converted to utf-8: %s", name), vim.log.levels.INFO)
+end
 
 -- 辞書の保存先。skkelua の既定ユーザ辞書 stdpath("data")/skkelua/jisyo と
 -- 同じ階層に置くと vim.fs.find が拾うため、サブディレクトリに分ける。
@@ -132,7 +185,7 @@ return {
           end)
         end)
       else
-        -- ダウンロード後、iconv で UTF-8 へ変換する。
+        -- ダウンロード後、vim.iconv で UTF-8 へ変換する。
         local tmp = filepath .. ".raw"
         vim.system({
           "curl", "-L", "-f", "--silent", "--show-error",
@@ -140,21 +193,11 @@ return {
         }, { text = true }, function(dl)
           vim.schedule(function()
             if dl.code ~= 0 then
+              vim.fn.delete(tmp)
               vim.notify(string.format("[skkelua] dict download failed: %s", dict.url), vim.log.levels.ERROR)
               return
             end
-            vim.system({
-              "iconv", "-f", from, "-t", "UTF-8", "-o", filepath, tmp,
-            }, { text = true }, function(conv)
-              vim.schedule(function()
-                vim.fn.delete(tmp)
-                if conv.code == 0 then
-                  vim.notify(string.format("[skkelua] dict converted to utf-8: %s", dict.name), vim.log.levels.INFO)
-                else
-                  vim.notify(string.format("[skkelua] dict iconv failed: %s", dict.name), vim.log.levels.ERROR)
-                end
-              end)
-            end)
+            convertToUtf8(tmp, filepath, from, dict.name)
           end)
         end)
       end
