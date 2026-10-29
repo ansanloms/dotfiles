@@ -96,6 +96,7 @@ pkgs: with pkgs; [
   python3Packages.psd-tools
 
   # フォント
+  dejavu_fonts
   noto-fonts-cjk-sans
   noto-fonts-cjk-serif
 ]
