@@ -22,7 +22,6 @@
     "ask": [],
     "defaultMode": "auto"
   },
-  "model": "fable",
   "hooks": {
     "UserPromptSubmit": [
       {
@@ -94,10 +93,10 @@
   "showThinkingSummaries": false,
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
+  "editorMode": "vim",
   "preferredNotifChannel": "ghostty",
   "terminalProgressBarEnabled": true,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true,
-  "editorMode": "vim"
+  "voiceEnabled": true
 }
