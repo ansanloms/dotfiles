@@ -1,0 +1,21 @@
+# chezmoi の source はリポジトリ直下。`.` 始まりのエントリは chezmoi が既定で無視するため、
+# ここにはドット始まり以外のリポジトリ管理ファイル・生成物を列挙する。
+# dot-mori (config.yaml) から chezmoi へ移行が進んで不要になった行は削除する。
+README.md
+CLAUDE.md
+apm.yml
+apm.lock.yaml
+config.yaml
+deno.json
+deno.lock
+scripts
+AppData
+Documents
+result
+coverage
+apm_modules
+
+# nvim が target 側に書く・ローカル専用のファイル。chezmoi add / apply の対象から外す。
+.config/nvim/lazy-lock.json
+.config/nvim/lua/temp.lua
+.config/nvim/lua/work.lua

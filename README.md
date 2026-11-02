@@ -52,6 +52,34 @@ nix run nixpkgs#deno -- task build
 nix run nixpkgs#deno -- task install
 ```
 
+[chezmoi](https://www.chezmoi.io/) で nvim の設定をコピーする。Linux / macOS は次のとおり。
+
+```sh
+# chezmoi の設定（マシンごとに 1 回）
+mkdir -p ~/.config/chezmoi
+printf 'sourceDir = "~/dev/github.com/ansanloms/dotfiles"\n' > ~/.config/chezmoi/chezmoi.toml
+
+# 差分を確認して適用
+chezmoi diff
+chezmoi apply
+```
+
+以前 dot-mori が作った `~/.config/nvim` の symlink が残っている場合は、`chezmoi apply` の前に symlink だけを削除する（`rm ~/.config/nvim`。リンク先の中身は消えない）。旧 `.config/nvim/` に残る未追跡ファイル（`lazy-lock.json`、`lua/temp.lua`、`lua/work.lua` 等）は apply 後に `~/.config/nvim/` へ移す。
+
+Windows（PowerShell）は次のとおり。
+
+```powershell
+winget install twpayne.chezmoi
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.config\chezmoi" | Out-Null
+Set-Content "$env:USERPROFILE\.config\chezmoi\chezmoi.toml" "sourceDir = 'C:\path\to\dotfiles'"
+setx XDG_CONFIG_HOME "$env:USERPROFILE\.config"
+# 以前 dot-mori が作った ~/AppData/Local/nvim の symlink を削除してから、新しいシェルで
+chezmoi diff
+chezmoi apply
+```
+
+`sourceDir` は Windows 側 clone の絶対パスに置き換える。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、パスはシングルクォートで書く。旧 `.config/nvim/` に残る未追跡ファイル（`lazy-lock.json`、`lua/temp.lua`、`lua/work.lua` 等）は apply 後に `~/.config/nvim/` へ移す。`setx` の反映には新しいシェルが要る。適用後、nvim で `:echo stdpath("config")` が `~/.config/nvim` を指すことを確認する。
+
 ### 5. Apply packages
 
 `.config/nix/` の flake で定義したパッケージを nix profile に導入する。

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## リポジトリ概要
 
-個人用 dotfiles。[dot-mori](https://github.com/ansanloms/dot-mori) (Deno) でシンボリックリンクを管理し、Nix flake (`nix profile`) でパッケージを管理する。chezmoi は dot-mori からの移行を試験するために `packages.nix` で導入している (現時点では未使用で、シンボリックリンクの管理は引き続き dot-mori が行う)。
+個人用 dotfiles。[dot-mori](https://github.com/ansanloms/dot-mori) (Deno) でシンボリックリンクを管理し、Nix flake (`nix profile`) でパッケージを管理する。dot-mori から chezmoi (コピー方式、`packages.nix` で導入) への段階移行中で、移行済みの設定は chezmoi が、未移行の設定は dot-mori が管理する。
 
 ## コマンド
 
@@ -14,6 +14,10 @@ deno task install
 
 # dotfiles アンインストール（シンボリックリンク削除）
 deno task uninstall
+
+# chezmoi 管理分の差分確認と適用
+chezmoi diff
+chezmoi apply
 
 # パッケージ初回導入
 nix profile add path:.config/nix#default --impure
@@ -29,7 +33,7 @@ nix flake update --flake path:.config/nix
 
 - `config.yaml` - シンボリックリンク設定（OS別: windows/linux/darwin）
 - `.config/nix/` - Nix 設定（nix.conf）と flake によるパッケージ管理（flake.nix + packages.nix）
-- `.config/nvim/` - Neovim 設定（Lua）
+- `dot_config/nvim/` - Neovim 設定（Lua）。chezmoi 管理（下記「chezmoi」節）
 - `.config/vim/` - Vim 設定（minpac でプラグイン管理）
 - `.config/git/` - Git 設定
 - `.config/wezterm/` - WezTerm 設定
@@ -39,6 +43,22 @@ nix flake update --flake path:.config/nix
 - `.config/sheldon/` - Sheldon（zsh プラグインマネージャ）設定
 - `.claude/` - Claude Code のグローバル設定（`~/.claude/` にリンク）
 - `.local/bin/` - ユーザースクリプト（`scripts/` から `deno bundle` で生成）
+
+## chezmoi
+
+source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既定で無視するため、dot-mori 管理の `.config/` 等とは衝突しない。それ以外のリポジトリ管理ファイル（README.md・config.yaml・scripts 等）は `.chezmoiignore` で除外しており、移行が進んで不要になった行は削除する。
+
+- 管理対象は `dot_` 接頭辞で表す（`dot_config/nvim/` → `~/.config/nvim/`）。mode は既定の file（コピー）。symlink ではないため、`~/.config/nvim` を直接編集した場合は `chezmoi re-add` で source に取り込む。source 側を編集した場合は `chezmoi apply`。`chezmoi edit --apply <target>` で両方を一度にできる。管理対象ディレクトリの中のドットファイルも同様に `dot_` 接頭辞にする（`dot_config/nvim/dot_luarc.json` → `~/.config/nvim/.luarc.json`）。source 側で `.` 始まりのままだと chezmoi が無視して適用されない。
+- `exact_` は付けない。nvim が target 側に書く `lazy-lock.json` や、ローカル専用の `lua/temp.lua` を消さないため。これらはリポジトリに置かない（`.chezmoiignore` で target パスを除外しており `chezmoi add` / `apply` の対象にならない。`.gitignore` の該当行は git 側の安全網）。
+- マシンごとの設定は `~/.config/chezmoi/chezmoi.toml` に `sourceDir = "~/dev/github.com/ansanloms/dotfiles"` の 1 行を書く（Windows は `%USERPROFILE%\.config\chezmoi\chezmoi.toml`。`~` 展開は Windows で未確認のため絶対パスで書く。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、Windows のパスはシングルクォートの literal string で書く。例: `sourceDir = 'C:\path\to\dotfiles'`）。`chezmoi init` は使わない（ローカルパスを source にする手順が公式文書に無い）。
+- Windows は環境変数 `XDG_CONFIG_HOME` を `%USERPROFILE%\.config` にし、nvim に `~/.config/nvim` を読ませる。これにより nvim の source に OS 分岐は無い。`XDG_CONFIG_HOME` を読む他ツールの探索先も変わりうる点に注意。
+
+移行状況:
+
+| 設定     | 管理                         |
+| -------- | ---------------------------- |
+| nvim     | chezmoi (`dot_config/nvim/`) |
+| 上記以外 | dot-mori (`config.yaml`)     |
 
 ## Agent Skills
 
