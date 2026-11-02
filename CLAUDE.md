@@ -40,7 +40,9 @@ nix flake update --flake path:.config/nix
 - `.config/ghostty/` - Ghostty 設定（Windows では Ghostty フォークの noctty が読む。`config.ghostty` が共通、`windows.ghostty` が Windows 固有）
 - `.config/zellij/` - Zellij 設定
 - `.config/starship.toml` - Starship プロンプト設定
-- `.config/sheldon/` - Sheldon（zsh プラグインマネージャ）設定
+- `dot_config/zsh/` - zsh のプロンプト設定（prompt.zsh）。chezmoi 管理
+- `dot_config/sheldon/` - Sheldon（zsh プラグインマネージャ）設定
+- `dot_bashrc` / `dot_bash_profile` / `dot_bash_aliases` / `dot_zshenv` / `dot_zshrc` / `dot_zprofile` / `dot_inputrc` - shell の rc ファイル。chezmoi 管理
 - `.claude/` - Claude Code のグローバル設定（`~/.claude/` にリンク）
 - `.local/bin/` - ユーザースクリプト（`scripts/` から `deno bundle` で生成）
 
@@ -52,13 +54,15 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 - `exact_` は付けない。nvim が target 側に書く `lazy-lock.json` や、ローカル専用の `lua/temp.lua` を消さないため。これらはリポジトリに置かない（`.chezmoiignore` で target パスを除外しており `chezmoi add` / `apply` の対象にならない。`.gitignore` の該当行は git 側の安全網）。
 - マシンごとの設定は `~/.config/chezmoi/chezmoi.toml` に `sourceDir = "~/dev/github.com/ansanloms/dotfiles"` の 1 行を書く（Windows は `%USERPROFILE%\.config\chezmoi\chezmoi.toml`。`~` 展開は Windows で未確認のため絶対パスで書く。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、Windows のパスはシングルクォートの literal string で書く。例: `sourceDir = 'C:\path\to\dotfiles'`）。`chezmoi init` は使わない（ローカルパスを source にする手順が公式文書に無い）。
 - Windows は環境変数 `XDG_CONFIG_HOME` を `%USERPROFILE%\.config` にし、nvim に `~/.config/nvim` を読ませる。これにより nvim の source に OS 分岐は無い。`XDG_CONFIG_HOME` を読む他ツールの探索先も変わりうる点に注意。
+- OS ごとに配布先を変える設定は、`.chezmoiignore` の `.chezmoi.os` 分岐で対象外の OS から除外する（shell 設定は Windows に配らない等）。
 
 移行状況:
 
-| 設定     | 管理                         |
-| -------- | ---------------------------- |
-| nvim     | chezmoi (`dot_config/nvim/`) |
-| 上記以外 | dot-mori (`config.yaml`)     |
+| 設定                         | 管理                                                                |
+| ---------------------------- | ------------------------------------------------------------------- |
+| nvim                         | chezmoi (`dot_config/nvim/`)                                        |
+| shell (bash / zsh / sheldon) | chezmoi (`dot_bashrc` 等、`dot_config/zsh/`、`dot_config/sheldon/`) |
+| 上記以外                     | dot-mori (`config.yaml`)                                            |
 
 ## Agent Skills
 
