@@ -1,6 +1,7 @@
-# chezmoi の source はリポジトリ直下。`.` 始まりのエントリは chezmoi が既定で無視するため、
-# ここにはドット始まり以外のリポジトリ管理ファイル・生成物を列挙する。
-# dot-mori (config.yaml) から chezmoi へ移行が進んで不要になった行は削除する。
+# chezmoi の source はリポジトリ直下。`.` 始まりのエントリは chezmoi が既定で無視する。
+# このファイルは 2 用途。
+# (1) リポジトリ管理ファイル・生成物の除外 (次のブロック。移行が進んで不要になった行は削除する)。
+# (2) OS 別の配布制御 (`.chezmoi.os` 分岐のブロック。削除対象ではない)。
 README.md
 CLAUDE.md
 apm.yml
@@ -19,3 +20,19 @@ apm_modules
 .config/nvim/lazy-lock.json
 .config/nvim/lua/temp.lua
 .config/nvim/lua/work.lua
+
+# bash 設定は linux のみ (dot-mori 時代の targets を維持)。
+{{ if ne .chezmoi.os "linux" }}
+.bashrc
+.bash_profile
+.inputrc
+{{ end }}
+# zsh 系・bash_aliases は darwin と linux のみ。
+{{ if and (ne .chezmoi.os "linux") (ne .chezmoi.os "darwin") }}
+.bash_aliases
+.zshenv
+.zshrc
+.zprofile
+.config/zsh
+.config/sheldon
+{{ end }}

@@ -1,36 +1,4 @@
 link:
-  ~/.bashrc:
-    - src: ./.bashrc
-      targets:
-        - linux
-  ~/.bash_profile:
-    - src: ./.bash_profile
-      targets:
-        - linux
-  ~/.bash_aliases:
-    - src: ./.bash_aliases
-      targets:
-        - darwin
-        - linux
-  ~/.zshenv:
-    - src: ./.zshenv
-      targets:
-        - darwin
-        - linux
-  ~/.zshrc:
-    - src: ./.zshrc
-      targets:
-        - darwin
-        - linux
-  ~/.zprofile:
-    - src: ./.zprofile
-      targets:
-        - darwin
-        - linux
-  ~/.inputrc:
-    - src: ./.inputrc
-      targets:
-        - linux
   ~/.config/git:
     - src: ./.config/git
   ~/.config/git/config.os:
@@ -42,22 +10,12 @@ link:
         - linux
   ~/.config/starship.toml:
     - src: ./.config/starship.toml
-  ~/.config/zsh/prompt.zsh:
-    - src: ./.config/zsh/prompt.zsh
-      targets:
-        - darwin
-        - linux
   ~/.config/wezterm:
     - src: ./.config/wezterm
   ~/.config/vim:
     - src: ./.config/vim
   ~/.vimrc:
     - src: ./.vimrc
-  ~/.config/sheldon:
-    - src: ./.config/sheldon
-      targets:
-        - darwin
-        - linux
   ~/.config/efm-langserver/config.yaml:
     - src: ./.config/efm-langserver/config.yaml
       targets:
