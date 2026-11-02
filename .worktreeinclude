@@ -6,6 +6,5 @@
 # nvim
 **/.nvim
 **/.nvim.lua
-.config/nvim/lua/temp.lua
 
 # vim:ft=gitignore:

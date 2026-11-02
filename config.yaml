@@ -53,20 +53,11 @@ link:
     - src: ./.config/vim
   ~/.vimrc:
     - src: ./.vimrc
-  ~/.config/nvim:
-    - src: ./.config/nvim
-      targets:
-        - darwin
-        - linux
   ~/.config/sheldon:
     - src: ./.config/sheldon
       targets:
         - darwin
         - linux
-  ~/AppData/Local/nvim:
-    - src: ./.config/nvim
-      targets:
-        - windows
   ~/.config/efm-langserver/config.yaml:
     - src: ./.config/efm-langserver/config.yaml
       targets:

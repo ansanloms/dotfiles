@@ -14,8 +14,12 @@
 .config/git/config.work
 .config/git/config.personal
 
-.config/nvim/lua/temp.lua
+# dot-mori 時代の旧パス。README の chezmoi 移行手順を終えた後に削除する。
 .config/nvim/lazy-lock.json
+.config/nvim/lua/temp.lua
+
+dot_config/nvim/lua/temp.lua
+dot_config/nvim/lazy-lock.json
 
 .config/alacritty/os.toml
 
