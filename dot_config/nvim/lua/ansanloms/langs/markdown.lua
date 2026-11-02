@@ -103,7 +103,7 @@ do
   end
 
   if vim.fn.executable("md2html") == 1 then
-    -- 主経路: deno 製 md2html (shiki + mermaid 内蔵)。pandoc より優先する。
+    -- 主経路: md2html (Bun standalone バイナリ。shiki + mermaid 内蔵)。pandoc より優先する。
     quickrun_config["markdown"] = { type = "markdown/md2html" }
 
     quickrun_config["markdown/md2html"] = {
