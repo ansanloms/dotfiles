@@ -5,14 +5,6 @@ dot_config/git/*credentials*
 dot_config/git/*config.personal*
 dot_config/git/*config.work*
 
-# 未移行の clone に残る旧パスの秘匿ファイルと apm の残骸。全マシンの移行後に削除する。
-.config/git/credentials
-.config/git/config.personal
-.config/git/config.work
-apm_modules/
-apm.yml
-apm.lock.yaml
-
 # nvim が target 側に書く・ローカル専用のファイルを追跡しないための安全網。
 dot_config/nvim/lua/temp.lua
 dot_config/nvim/lazy-lock.json
