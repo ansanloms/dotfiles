@@ -1,6 +1,6 @@
 # Windows のセットアップ
 
-Windows 端末を CLI で整える手順。dotfiles の適用は [../getting-started.md](../getting-started.md)、WSL ディストリビューションの初期設定は [wsl-archlinux.md](wsl-archlinux.md) にある。
+Windows 端末を CLI で整え、Windows 側に dotfiles を適用する手順。dotfiles の導入全体は [../getting-started.md](../getting-started.md)、WSL ディストリビューションの初期設定は [wsl-archlinux.md](wsl-archlinux.md) にある。
 
 ## 方針
 
@@ -47,7 +47,7 @@ sudo reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /v 
 | Microsoft.Coreutils         | Windows ネイティブの UNIX 系コマンド群 (uutils/coreutils ベース。findutils と grep を同梱)       |
 | 7zip.7zip                   | 圧縮・展開。Windows 11 標準の圧縮機能はパスワード付きアーカイブを扱えない                        |
 | Microsoft.VisualStudioCode  | VS Code。開発は WSL で行うため、WSL 拡張機能 `ms-vscode-remote.remote-wsl` も導入する            |
-| twpayne.chezmoi             | dotfiles の適用 (次の注意を参照)                                                                 |
+| twpayne.chezmoi             | dotfiles の適用                                                                                  |
 | Microsoft.WSL               | WSL 本体 (Store 版)。管理者権限が要る                                                            |
 
 ```powershell
@@ -73,8 +73,6 @@ noctty は個人 1 名がメンテナンスする若いプロジェクトで、w
 Neovim Nightly (`Neovim.Neovim.Nightly`) は使わない。インストーラの URL は固定の nightly リリースを指し、中身は毎日差し替わる。winget-pkgs 側のハッシュ更新との合間はハッシュ不一致で失敗し、バージョン番号も変わらないため `winget upgrade` で日々の更新は追えない。ハッシュ検証を無効化して回避はしない。出典: [winget-pkgs PR #417698](https://github.com/microsoft/winget-pkgs/pull/417698)
 
 Microsoft.Coreutils の `find.exe`・`sort.exe` は Windows 標準と同名で、PowerShell では `ls` などの既定エイリアスが優先されるため、Coreutils 版を使うにはエイリアスの削除が必要。GitHub リポジトリ上はプレビュー扱い。出典: [Coreutils for Windows overview](https://learn.microsoft.com/en-us/windows/core-utils/overview)
-
-ZIP 展開型のポータブルパッケージが失敗する端末がある。ハッシュ検証と展開は成功した後、`Links\<名前>.exe` へのシンボリックリンク作成時に展開先の exe が見つからず失敗する (`create_symlink: The system cannot find the file specified`。展開先は `%LOCALAPPDATA%\Microsoft\WinGet\Packages`)。原因は未特定で、セキュリティ製品による削除などが考えられる。`twpayne.chezmoi` も ZIP 展開型のポータブルパッケージのため、同じ端末では失敗する可能性が高い。代替手段は未確認。
 
 ## Scoop とフォント
 
@@ -111,3 +109,26 @@ wsl --list --online
 ```
 
 ディストリビューションの導入と初期設定は [wsl-archlinux.md](wsl-archlinux.md) に続く。
+
+## dotfiles の適用
+
+Windows 側には chezmoi 管理分のうち Windows 向けの設定 (nvim・git・noctty・alacritty・CorvusSKK・Windows Terminal・PowerShell プロファイル等) だけを配る。前提として上記の Git for Windows・Neovim・PowerShell 7・chezmoi が入っていること。
+
+Windows 側にもリポジトリを clone し、`sourceDir` にその絶対パスを書く。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、パスはシングルクォートで書く。
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.config\chezmoi" | Out-Null
+Set-Content "$env:USERPROFILE\.config\chezmoi\chezmoi.toml" "sourceDir = 'C:\path\to\dotfiles'"
+setx XDG_CONFIG_HOME "$env:USERPROFILE\.config"
+```
+
+`XDG_CONFIG_HOME` を `%USERPROFILE%\.config` にすると nvim が `~/.config/nvim` を読むため、nvim の source に OS 分岐が無くなる。`XDG_CONFIG_HOME` を読む他ツールの探索先も変わりうる点に注意する。`setx` の反映には新しいシェルが要るので、シェルを開き直してから適用する。
+
+```powershell
+chezmoi diff
+chezmoi apply
+```
+
+適用後、nvim で `:echo stdpath("config")` が `~/.config/nvim` を指すことを確認する。
+
+`Documents/PowerShell/profile.ps1` は PowerShell 7 (pwsh) のプロファイルの場所に配る。Windows PowerShell 5.1 は `Documents/WindowsPowerShell` を読むため、pwsh が無いとプロファイルは効かない。

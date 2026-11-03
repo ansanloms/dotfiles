@@ -1,6 +1,6 @@
 # 導入
 
-この dotfiles を新しい環境へ導入する手順。Windows 端末そのものの整備 (アプリの導入・WSL の作成) は [setup/windows.md](setup/windows.md)、WSL ディストリビューションの初期設定は [setup/wsl-archlinux.md](setup/wsl-archlinux.md) にある。
+この dotfiles を新しい環境へ導入する手順。Windows 端末そのものの整備 (アプリの導入・WSL の作成・Windows 側での chezmoi の設定) は [setup/windows.md](setup/windows.md)、WSL ディストリビューションの初期設定は [setup/wsl-archlinux.md](setup/wsl-archlinux.md) にある。
 
 ## 方針
 
@@ -8,7 +8,7 @@
 - リポジトリは Linux 側のファイルシステムに置き、`~/dev/<service>/<owner>/<repo>` の構成で clone する (例: `~/dev/github.com/ansanloms/dotfiles`)。
 - 設定は [chezmoi](https://www.chezmoi.io/) (コピー方式) で配り、コマンド類は Nix flake (`nix profile`) で入れる。WSL 側のツールは原則すべて Nix で入れる。
 
-## Linux / WSL
+## 導入手順
 
 ### 1. Nix を導入する
 
@@ -72,20 +72,9 @@ nix run nixpkgs#chezmoi -- apply
 nix profile add ~/.config/nix#default --impure
 ```
 
-導入後はシェルを開き直す。`~/.nix-profile/bin` に chezmoi・git・zsh 等が入る。
+導入後はシェルを開き直す。`~/.nix-profile/bin` に chezmoi・git・zsh 等が入る。ログインシェルを zsh へ切り替える手順は [setup/wsl-archlinux.md](setup/wsl-archlinux.md#ログインシェルを-zsh-にする) にある。
 
-### 5. ログインシェルを zsh にする
-
-Nix の zsh を `/etc/shells` に登録して `chsh` する。
-
-```sh
-echo "$HOME/.nix-profile/bin/zsh" | sudo tee -a /etc/shells
-chsh -s "$HOME/.nix-profile/bin/zsh"
-```
-
-入り直して zsh で起動することを確認する。zsh が壊れてログインできなくなった場合は、Windows 側から `wsl -d archlinux -u root -- chsh -s /bin/bash <username>` で bash に戻せる。
-
-### 6. Agent Skills を導入する
+### 5. Agent Skills を導入する
 
 `~/.apm/apm.yml` は chezmoi が配るので、手順 3 の後に実行する。[apm](https://github.com/microsoft/apm) は手順 4 で nix profile に入る。`apm lifecycle trust` は `~/.apm` で実行する (マシンごとに 1 回。`apm.yml` の `lifecycle` ブロックを編集したときも再実行する)。
 
@@ -99,29 +88,6 @@ lifecycle の失敗は `apm install -g` の出力にも終了コードにも現�
 ```sh
 ls ~/.claude/skills/ja-tech-proofread/scripts/node_modules
 ```
-
-## Windows
-
-Windows 側には chezmoi 管理分のうち Windows 向けの設定 (nvim・git・noctty・alacritty・CorvusSKK・Windows Terminal・PowerShell プロファイル等) だけを配る。前提として Git for Windows・Neovim・PowerShell 7・chezmoi が入っていること ([setup/windows.md](setup/windows.md))。
-
-Windows 側にもリポジトリを clone し、`sourceDir` にその絶対パスを書く。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、パスはシングルクォートで書く。
-
-```powershell
-New-Item -ItemType Directory -Force "$env:USERPROFILE\.config\chezmoi" | Out-Null
-Set-Content "$env:USERPROFILE\.config\chezmoi\chezmoi.toml" "sourceDir = 'C:\path\to\dotfiles'"
-setx XDG_CONFIG_HOME "$env:USERPROFILE\.config"
-```
-
-`XDG_CONFIG_HOME` を `%USERPROFILE%\.config` にすると nvim が `~/.config/nvim` を読むため、nvim の source に OS 分岐が無くなる。`XDG_CONFIG_HOME` を読む他ツールの探索先も変わりうる点に注意する。`setx` の反映には新しいシェルが要るので、シェルを開き直してから適用する。
-
-```powershell
-chezmoi diff
-chezmoi apply
-```
-
-適用後、nvim で `:echo stdpath("config")` が `~/.config/nvim` を指すことを確認する。
-
-`Documents/PowerShell/profile.ps1` は PowerShell 7 (pwsh) のプロファイルの場所に配る。Windows PowerShell 5.1 は `Documents/WindowsPowerShell` を読むため、pwsh が無いとプロファイルは効かない。
 
 ## 更新
 

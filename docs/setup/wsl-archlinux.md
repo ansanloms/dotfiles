@@ -68,9 +68,20 @@ sudo usermod -aG docker <username>   # 再ログイン後に有効
 
 `docker` グループのメンバーは実質 root と同等になる。
 
+## ログインシェルを zsh にする
+
+zsh は dotfiles の nix profile で入るため、[../getting-started.md](../getting-started.md) の手順 4 (パッケージの導入) まで済ませてから行う。Nix の zsh を `/etc/shells` に登録して `chsh` する。
+
+```bash
+echo "$HOME/.nix-profile/bin/zsh" | sudo tee -a /etc/shells
+chsh -s "$HOME/.nix-profile/bin/zsh"
+```
+
+入り直して zsh で起動することを確認する。zsh が壊れてログインできなくなった場合は、Windows 側から `wsl -d archlinux -u root -- chsh -s /bin/bash <username>` で bash に戻せる。
+
 ## 次の手順
 
-Nix の導入から dotfiles の適用までは [../getting-started.md](../getting-started.md) に進む。
+Nix の導入から dotfiles の適用までは [../getting-started.md](../getting-started.md) に進む。ログインシェルの切り替えは上記のとおりその後に戻って行う。
 
 ## 補足: Windows 側のファイル共有を DrvFs でマウントする
 
