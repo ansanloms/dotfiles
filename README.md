@@ -72,6 +72,8 @@ nix run nixpkgs#chezmoi -- apply
 
 旧 dot-mori の残骸として `~/.config/alacritty/os.toml` の dangling symlink が残っている場合は、`chezmoi apply` の前に `rm` で削除する。
 
+`~/.config/git/config.os` は使わなくなったので `rm -f ~/.config/git/config.os` で消す（chezmoi は source から消したファイルを target から消さない）。
+
 vim の設定は削除したので、dot-mori が作った `~/.vimrc` と `~/.config/vim` の symlink は手で削除する（リポジトリ側 `.config/vim/` に残る undo・viminfo 等も不要なら削除）。
 
 Windows（PowerShell）は次のとおり。

@@ -57,7 +57,7 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 - `~/.claude` 配下と `~/.apm` もコピー方式。`~/.claude` `~/.apm` に限らず、アプリが自分で書き換える設定（devin の `config.json`、Windows Terminal の `settings.json`、CorvusSKK の `config.xml` 等）は `chezmoi diff` → `chezmoi re-add` でリポジトリへ取り込む。Windows の `AppData/.../*.tmpl`（include stub）と `~/.devin/rules/*.md` はテンプレートなので re-add できず、source 側（`dot_config/<name>/`、rules は `~/.claude/rules`）を直す。
 - Linux と Windows で配布先が異なる設定は、`dot_config/<name>/` を実体にし、`AppData/.../<name>/<file>.tmpl` の `include` stub で Windows 側に配る。`dot_config/<name>/` にファイルを足したら（include 元の断片のように target に置かないファイルは除く）、Windows 用の `AppData/.../<name>/<file>.tmpl` の stub も同じ名前で足す（自動では配られない）。OS ごとの要否は `.chezmoiignore` の `.chezmoi.os` 分岐で制御する（shell 設定は Windows に配らない等）。
 - 空になりうるファイル (alacritty の `os.toml` の Linux 版等) は `empty_` 接頭辞を付け、空でも target に作る。
-- OS で内容が変わる 1 ファイルは `<name>.tmpl` にして `{{ include "..." }}` で OS 別の断片を取り込む (`dot_config/git/config.os.tmpl` が `config.linux` / `config.windows` を `.chezmoi.os` で選ぶ)。断片そのものは `.chezmoiignore` で target から外す。`.tmpl` のファイルは `chezmoi re-add` の対象外なので、直すときは source 側を編集する。
+- OS で内容が変わる設定は 2 通り。(a) そのファイルを `<name>.tmpl` にして `.chezmoi.os` で分岐する。(b) OS 別の断片 (`dot_config/alacritty/linux.toml` 等) を置き、`<name>.tmpl` から `{{ include }}` で取り込む。断片そのものは `.chezmoiignore` で target から外す。どちらも `.tmpl` は `chezmoi re-add` の対象外なので、`git config --global` 等でファイル側が書き換わっても source には戻らない。直すときは source 側を編集して apply する。git の `config` は OS 差が無くなったので tmpl にしない。
 
 設定はすべて chezmoi 管理。`.local/bin` の 3 コマンドだけは #139 まで `deno task build` の生成物を手で置く。
 
