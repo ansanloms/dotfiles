@@ -36,3 +36,6 @@ fi
 if type npm > /dev/null 2>&1; then
   export PATH=$PATH:`npm prefix --location=global`/bin
 fi
+
+
+# vim:filetype=zsh:
