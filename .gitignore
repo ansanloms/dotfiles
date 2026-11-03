@@ -1,13 +1,7 @@
 **/.env
 
-.config/vim/*
-!.config/vim/config/
-!.config/vim/autoload/
-!.config/vim/bitmaps/
-!.config/vim/snippets/
-!.config/vim/launcher/000-general.yaml
-!.config/vim/launcher/001-terminal.yaml
-!.config/vim/launcher/002-ai-chat.yaml
+# vim 設定削除前の残骸 (undo・viminfo 等)。全マシンで残骸を消した後に削除する。
+.config/vim/
 
 # dot-mori 時代の旧パス (既存 clone に残る秘匿ファイル)。全マシンの移行が終わってから削除する (未移行の clone に平文の credentials が残る)。
 .config/git/credentials

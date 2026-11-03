@@ -19,7 +19,7 @@ jobs:
 
       # upstream nix を使う (Determinate Nix から移行済み)。flakes / nix-command は
       # 既定で無効のため extra_nix_config で有効化する。
-      # 注意: 相対 path: flake ref (path:.config/nix) の解決には
+      # 注意: 相対 path: flake ref (path:dot_config/nix) の解決には
       # 新しめの nix が必要 (旧 v30 同梱の 2.24.9 は失敗)。v31 は最新安定版を導入する。
       - name: Install Nix
         uses: cachix/install-nix-action@v31
@@ -28,7 +28,7 @@ jobs:
             experimental-features = nix-command flakes
 
       - name: Update flake inputs
-        run: nix flake update --flake path:.config/nix
+        run: nix flake update --flake path:dot_config/nix
 
       - name: Stage and detect changes
         id: diff
@@ -43,7 +43,7 @@ jobs:
       # 壊れた変更を main に流さないため build を gate にする。失敗で job が止まり commit は skip。
       - name: Verify build
         if: steps.diff.outputs.changed == 'true'
-        run: nix build ./.config/nix#packages.x86_64-linux.default --impure --no-link --print-build-logs
+        run: nix build ./dot_config/nix#packages.x86_64-linux.default --impure --no-link --print-build-logs
 
       - name: Commit and push
         if: steps.diff.outputs.changed == 'true'

@@ -2,7 +2,7 @@ alias rm="rm -i"
 alias cp="cp -i"
 alias mv="mv -i"
 alias ll="ls -l"
-alias vi="vim"
+alias vi="nvim"
 alias vim="nvim"
 
 # WSL: ファイル・ディレクトリ・URL を Windows 側の既定ハンドラで開く。

@@ -61,5 +61,20 @@ Documents
 .config/alacritty
 {{ end }}
 # include 元の OS 別断片は target に置かない。
+# ghostty は Windows の noctty 向けにしか使っていないので target に配らない (Linux / macOS で ghostty を使うときは外す)。
+.config/ghostty
 .config/alacritty/linux.toml
 .config/alacritty/windows.toml
+# nix は linux のみ (dot-mori 時代の targets を維持)。
+{{ if ne .chezmoi.os "linux" }}
+.config/nix
+{{ end }}
+# リポジトリでしか使わない更新スクリプト。
+.config/nix/*/upgrade.sh
+# upgrade.sh しか無いディレクトリ (backlog-bee-cli は package.json があるので残す)。
+# 自前 derivation を足して upgrade.sh しか無いディレクトリになる場合はここにも足す。
+.config/nix/claude-statusline
+.config/nix/md2html
+.config/nix/moddable-sdk
+.config/nix/sonarqube-cli
+.config/nix/result

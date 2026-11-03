@@ -1,12 +1,4 @@
 link:
-  ~/.config/vim:
-    - src: ./.config/vim
-  ~/.vimrc:
-    - src: ./.vimrc
-  ~/.config/nix:
-    - src: ./.config/nix
-      targets:
-        - linux
   ~/.local/bin/git-worktree-select:
     - src: ./.local/bin/git-worktree-select
       targets:

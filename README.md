@@ -70,6 +70,8 @@ nix run nixpkgs#chezmoi -- apply
 
 旧 dot-mori の残骸として `~/.config/alacritty/os.toml` の dangling symlink が残っている場合は、`chezmoi apply` の前に `rm` で削除する。
 
+vim の設定は削除したので、dot-mori が作った `~/.vimrc` と `~/.config/vim` の symlink は手で削除する（リポジトリ側 `.config/vim/` に残る undo・viminfo 等も不要なら削除）。
+
 Windows（PowerShell）は次のとおり。
 
 ```powershell
@@ -90,7 +92,7 @@ chezmoi apply
 
 ### 5. Apply packages
 
-`.config/nix/` の flake で定義したパッケージを nix profile に導入する。
+`dot_config/nix/` の flake で定義したパッケージを nix profile に導入する。flake は `chezmoi apply` が `~/.config/nix` へ配るので、先に手順 4 を済ませる。
 
 ```sh
 # 初回: profile に導入
@@ -101,13 +103,27 @@ nix profile add ~/.config/nix#default --impure
 
 ```sh
 # パッケージ定義の変更を反映
+chezmoi apply
 nix profile upgrade --all --impure
 
 # 依存（flake input）を更新
-nix flake update --flake path:.config/nix
+nix flake update --flake path:dot_config/nix
+chezmoi apply
 
-# プロファイルから削除
+# プロファイルから削除（登録名は `nix profile list` の Name 列で確認）
+nix profile remove <name>
+```
+
+既存機で dot-mori 時代の登録（`git+file://<clone>?dir=.config/nix`、名前 `.config/nix`）が残っている場合は、次の順で付け替える。
+
+```sh
+# 旧 symlink が残っていれば消す
+rm -f ~/.config/nix
+# ~/.config/nix がコピーで出来る
+chezmoi apply
+# この時点で ~/.nix-profile/bin の chezmoi・git は消える（nix 本体は installer が入れた system profile にあり、続行できる）
 nix profile remove .config/nix
+nix profile add ~/.config/nix#default --impure
 ```
 
 ## Agent Skills
