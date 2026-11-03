@@ -4,11 +4,7 @@
 # (2) OS 別の配布制御 (`.chezmoi.os` 分岐のブロック。削除対象ではない)。
 README.md
 CLAUDE.md
-deno.json
-deno.lock
-scripts
 result
-coverage
 
 # nvim が target 側に書く・ローカル専用のファイル。chezmoi add / apply の対象から外す。
 .config/nvim/lazy-lock.json

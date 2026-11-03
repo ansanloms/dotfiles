@@ -154,7 +154,8 @@ dependencies:
 - repo_url: ansanloms/skills
   name: worktree
   host: github.com
-  resolved_commit: aa8ecc611f38801a3f5416dfc14223945a59e1ba
+  resolved_commit: a26b7fd0d7f538d22d8b27fd674264dd70f0df19
+  resolved_ref: a26b7fd0d7f538d22d8b27fd674264dd70f0df19
   version: unknown
   virtual_path: worktree
   is_virtual: true
@@ -165,10 +166,10 @@ dependencies:
   - .claude/skills/worktree/SKILL.md
   - .claude/skills/worktree/assets/template.md
   deployed_file_hashes:
-    .claude/skills/worktree/README.md: sha256:b381a0b062e253f333f610a78c84037fef53a40f6d4a14e46ecc6bb409aa55e6
-    .claude/skills/worktree/SKILL.md: sha256:e767317852ca88c4cdad4579768bae424e647bdc315f190dfe23a934063921b0
+    .claude/skills/worktree/README.md: sha256:612d01fdcf947119ecfa53c6b617ea4f4dc77450b538a3a5d4cfdcf4a92d92f4
+    .claude/skills/worktree/SKILL.md: sha256:d3ebdb91646fdd84bf01a85409416ba594da815665b06bafc5e9ce3252970085
     .claude/skills/worktree/assets/template.md: sha256:d58676db6f6d8c4b84ff491995556a94d419c704d55ea9b7d21c3637f1ef0bee
-  content_hash: sha256:8e24bf4ccc4c6b1a92f5bd3d602aeafb64a1cc2ebe09714df6c33bdf7fb07788
+  content_hash: sha256:98d0b17dd3e5f3b449f37aa6fd29a7825050f468846e4088e28082df670d7bdc
 - repo_url: mizchi/skills
   name: empirical-prompt-tuning
   host: github.com
@@ -786,7 +787,7 @@ deployments:
   owners:
   - ansanloms/skills/worktree
   active_owner: ansanloms/skills/worktree
-  content_hash: sha256:b381a0b062e253f333f610a78c84037fef53a40f6d4a14e46ecc6bb409aa55e6
+  content_hash: sha256:612d01fdcf947119ecfa53c6b617ea4f4dc77450b538a3a5d4cfdcf4a92d92f4
 - kind: project-relative
   target: claude
   value: .claude/skills/worktree/SKILL.md
@@ -795,7 +796,7 @@ deployments:
   owners:
   - ansanloms/skills/worktree
   active_owner: ansanloms/skills/worktree
-  content_hash: sha256:e767317852ca88c4cdad4579768bae424e647bdc315f190dfe23a934063921b0
+  content_hash: sha256:d3ebdb91646fdd84bf01a85409416ba594da815665b06bafc5e9ce3252970085
 - kind: project-relative
   target: claude
   value: .claude/skills/worktree/assets/template.md

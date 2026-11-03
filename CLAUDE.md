@@ -44,11 +44,10 @@ chezmoi apply
 - `.claude/` - このリポジトリの project 設定 (worktrees・jobs・settings.local.json)。グローバル設定は `dot_claude/` に移した
 - `dot_claude/` - Claude Code のグローバル設定 (`CLAUDE.md` `settings.json` `rules/` `agents/` `lsp/` `skills/review-loop/`)。chezmoi 管理で `~/.claude/` へコピーする。`rules/` は `dot_devin/rules/*.md.tmpl` から `include` して `~/.devin/rules` にも配る。rules を追加・削除したら `dot_devin/rules/` の stub も同じ名前で追加・削除する (自動では配られない)。
 - `dot_apm/` - apm の manifest と lock (`~/.apm/` へコピー。下記「Agent Skills」節)
-- `.local/bin/` - ユーザースクリプト（`scripts/` から `deno bundle` で生成）
 
 ## chezmoi
 
-source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既定で無視するため、`.claude/` `.github/` 等とは衝突しない。それ以外のリポジトリ管理ファイル（README.md・scripts 等）は `.chezmoiignore` で除外している。
+source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既定で無視するため、`.claude/` `.github/` 等とは衝突しない。それ以外のリポジトリ管理ファイル（README.md・CLAUDE.md 等）は `.chezmoiignore` で除外している。
 
 - 管理対象は `dot_` 接頭辞で表す（`dot_config/nvim/` → `~/.config/nvim/`）。mode は既定の file（コピー）。symlink ではないため、`~/.config/nvim` を直接編集した場合は `chezmoi re-add` で source に取り込む。source 側を編集した場合は `chezmoi apply`。`chezmoi edit --apply <target>` で両方を一度にできる。管理対象ディレクトリの中のドットファイルも同様に `dot_` 接頭辞にする（`dot_config/nvim/dot_luarc.json` → `~/.config/nvim/.luarc.json`）。source 側で `.` 始まりのままだと chezmoi が無視して適用されない。
 - `exact_` は付けない。nvim が target 側に書く `lazy-lock.json` や、ローカル専用の `lua/temp.lua` を消さないため。これらはリポジトリに置かない（`.chezmoiignore` で target パスを除外しており `chezmoi add` / `apply` の対象にならない。`.gitignore` の該当行は git 側の安全網）。同じ理由で `~/.claude/skills/`（apm が置く skill と Claude Code の `synced/` キャッシュ）にも付けない。
@@ -59,7 +58,7 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 - 空になりうるファイル (alacritty の `os.toml` の Linux 版等) は `empty_` 接頭辞を付け、空でも target に作る。
 - OS で内容が変わる設定は 2 通り。(a) そのファイルを `<name>.tmpl` にして `.chezmoi.os` で分岐する。(b) OS 別の断片 (`dot_config/alacritty/linux.toml` 等) を置き、`<name>.tmpl` から `{{ include }}` で取り込む。断片そのものは `.chezmoiignore` で target から外す。どちらも `.tmpl` は `chezmoi re-add` の対象外なので、`git config --global` 等でファイル側が書き換わっても source には戻らない。直すときは source 側を編集して apply する。git の `config` は OS 差が無くなったので tmpl にしない。
 
-設定はすべて chezmoi 管理。`.local/bin` の 3 コマンドだけは #139 まで `deno task build` の生成物を手で置く。
+設定はすべて chezmoi 管理。コマンド類は nix で配る (`git-worktree-select` は下記「自前 nix パッケージの更新」節)。
 
 ## Agent Skills
 
@@ -111,27 +110,9 @@ clone 直後の手順:
 chezmoi apply
 (cd ~/.apm && apm lifecycle trust)
 apm install -g
-deno task build
 ```
 
 `dot_apm/apm.lock.yaml` が変わるコミットを pull したときは `chezmoi apply` の後に `apm install -g` を実行する。skill の実体はリポジトリに無いため、pull だけでは更新されない。
-
-## Local scripts
-
-`.local/bin/` 配下のコマンド（`git-worktree-select` / `git-worktree-include` 等）は、`scripts/` 以下の TypeScript を `deno bundle` で単一ファイルにビルドした生成物。`scripts/` は Deno workspace で、モジュールごとのディレクトリ（member。現状は `git-worktree` のみ）に分かれている。共有依存はルートの `deno.json` の `imports` で、モジュール固有の依存（npm パッケージ等）は各 member（`scripts/<module>/deno.json`）の `imports` で管理する。
-
-- ソース: `scripts/<module>/*.ts`（shebang に実行時の権限フラグを記述。`deno bundle` が生成物の先頭へ引き継ぐ）
-- ビルド: `deno task build` で `scripts/<module>/*.ts` を `.local/bin/<name>` に bundle し、実行ビットを付与する
-- 生成物は `.gitignore` 済みでコミットしない。#139（bun 書き換え + nix 配布）までの暫定として、`deno task build` の後（生成物が無いと zsh では glob が空でエラーになる）にリポジトリ直下で `mkdir -p ~/.local/bin && ln -sf "$PWD"/.local/bin/git-worktree-* ~/.local/bin/` を実行して symlink する
-
-ソースを編集したら `deno task build` で再生成する。
-
-導入済みコマンド:
-
-- `git-worktree-select` / `git-worktree-include` - worktree の選択・ローカル設定持ち込み。選択 UI は fzf（`packages.nix` で導入）で、リストに branch description の先頭 1 行（subject）を表示し、プレビューで全文を mdcat により markdown レンダリングする（mdcat が無い環境では素のテキスト表示にフォールバック）。選択したパスは stdout へ出力する
-- `git-worktree-sweep` - マージ済み worktree の掃除。メイン以外の全 linked worktree (配置場所は問わない) を対象に、マージ判定を git のみで行い (squash merge は merge-base への仮 squash commit + `git cherry` の patch-id 判定で検知)、forge の API に依存しない。マージ済みかつクリーンなものだけを worktree remove + ローカルブランチ削除し、dirty・未マージ・固有コミット無し (作成直後) は報告のみ。判定不能 (git コマンドの失敗) も worktree には触れずエラーとして報告し非 0 で終了する。git が prunable と判定した worktree (管理情報の破損・実体ディレクトリの消失等) は分類せず Skipped として報告し、(非 dry-run では) 末尾の `git worktree prune` が整理する。`--dry-run` で判定結果だけ確認できる
-
-`scripts/` のソースは「薄いエントリポイント（`scripts/<module>/*.ts`）＋ 純粋ロジック / 依存注入した `run()`（`scripts/<module>/lib/*.ts`）」に分離している。副作用（subprocess / fs / tty / 対話プロンプト等）を注入することでテスト可能にし、`scripts/<module>/lib/*.test.ts` でユニットテストする（`deno task test` / `deno task coverage`）。`deno task build` は各 member 直下のみを bundle 対象とし、`lib/` サブディレクトリは対象から外れる。
 
 ## Claude Code の通知（組み込み通知）
 
@@ -150,6 +131,7 @@ deno task build
 - `sonarqube-cli.nix`（SonarQube CLI、コマンド名 `sonar`。SonarSource 配布のプリビルド ELF を fetchurl で取得し raw のまま導入する。配布物は Bun standalone 実行ファイルで、末尾 trailer に埋め込みアプリを持つ。patchelf / strip で ELF を書き換えると trailer が壊れ素の Bun CLI にフォールバックするため fixup を一切かけない。代わりにシステムの glibc / ローダに依存する＝FHS 環境専用。nixpkgs 収録の `sonar-scanner-cli` は別物の旧スキャナ）
 - `moddable-sdk.nix`（Moddable SDK の CLI ツール `mcconfig` / `mcrun` / `mcpack` 等。Linux 専用。GTK ベースの GUI（xsbug / mcsim）はビルドしない。fetchFromGitHub で public ブランチの特定コミットを取得し、sub-makefile（xsc/xsid/xsl/serial2xsbug/tools）だけをビルドする。CLI ツールは単一マルチコールバイナリ `tools` への bash ラッパで、実行時に環境変数 `MODDABLE` が SDK ツリーを指す必要があるため、SDK ツリー一式を `$out/share/moddable` へ展開し各ツールを `MODDABLE` 付きで wrap する。SDK ツリーは read-only（store）のため、アプリビルド時は `mcconfig -o <書き込み可能なディレクトリ>` で出力先を明示する。nixpkgs 未収録。タグは 2022 年止まりなので tag ではなく public のコミットに pin する）
 - `backlog-bee-cli.nix`（Backlog（Nulab）の CLI `bee`。npm でのみ配布（`@nulab/bee`）されるため buildNpmPackage で導入する。nixpkgs の `bee` は別物（ethersphere/bee = Ethereum Swarm ノード）なので attribute 名を分けている。コマンド名は `bee`）
+- `git-worktree-select.nix`（git worktree を fzf で対話選択し、選んだ worktree の絶対パスを stdout へ出す shell スクリプト。本体は `git-worktree-select/git-worktree-select.sh` で、`writeShellApplication` が `git` / `fzf` / `mdcat` を `runtimeInputs` に固定する。一覧に branch description の先頭 1 行（subject）を表示し、プレビューで全文を mdcat でレンダリングする。`--exclude-main` でメイン worktree を候補から除く。git の alias `wt`（`dot_config/git/config`）の `ls` / `rm` / `mv` から呼ぶ。`wt add <path> [options]` は `git worktree add` の後に `.worktreeinclude`（gitignore 構文）に一致する未追跡ファイルを `git ls-files -o -i -X` でメインから複製する。path を先頭に置かない呼び出しは usage を出して終了する。バージョンも upgrade.sh も無い）
 
 `buildNpmPackage` で自前の `installPhase` を書く derivation（`backlog-bee-cli`）は、`node_modules` を `$out/lib/<pname>/node_modules` へ置く。`$out/lib/node_modules` へ平坦に展開すると、npm が `node_modules` 直下に書く `.package-lock.json` が derivation 間で同一の相対パスになり、`packages.nix` の `buildEnv` が file collision で落ちる（実際に発生した）。依存パッケージ名が被った場合も同じ理由で衝突する。nixpkgs 標準の `npmInstallHook` はパッケージ本体を `$out/lib/node_modules/<name>/` へ置き、依存をその配下へ入れ子にするため衝突しない（nixpkgs が `buildNpmPackage` で提供する npm パッケージはこちら）。この規約は hook を使わず `installPhase` を自前で書く場合にのみ当てはまる。
 

@@ -30,6 +30,9 @@
           # 自前配布の md2html (markdown → 自己完結 HTML 変換 CLI) を callPackage で注入する。
           (final: prev: { md2html = final.callPackage ./md2html.nix { }; })
 
+          # リポジトリ内の shell スクリプト git-worktree-select (fzf で worktree を選ぶ) を callPackage で注入する。
+          (final: prev: { git-worktree-select = final.callPackage ./git-worktree-select.nix { }; })
+
           # nixpkgs 未収録の backlog-bee-cli (Backlog CLI の bee コマンド) を callPackage で注入する。
           # nixpkgs の `bee` は別物 (ethersphere/bee) のため attribute 名を分けている。
           (final: prev: { backlog-bee-cli = final.callPackage ./backlog-bee-cli.nix { }; })
