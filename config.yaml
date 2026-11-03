@@ -1,8 +1,4 @@
 link:
-  ~/.config/nix:
-    - src: ./.config/nix
-      targets:
-        - linux
   ~/.local/bin/git-worktree-select:
     - src: ./.local/bin/git-worktree-select
       targets:

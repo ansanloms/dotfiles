@@ -10,8 +10,8 @@
 # git add / nix profile upgrade は行わない。完了後に git diff で確認し、手動で反映すること。
 #
 # 使い方:
-#   .config/nix/backlog-bee-cli/upgrade.sh           # 最新へ
-#   .config/nix/backlog-bee-cli/upgrade.sh 1.1.0     # 指定バージョンへ
+#   dot_config/nix/backlog-bee-cli/upgrade.sh           # 最新へ
+#   dot_config/nix/backlog-bee-cli/upgrade.sh 1.1.0     # 指定バージョンへ
 set -euo pipefail
 
 PKG="@nulab/bee"
@@ -69,5 +69,6 @@ set_nix_string "$nix_path" npmDepsHash "$hash"
 
 echo
 echo "更新完了。git diff で確認し、問題なければ反映:"
-echo "  git add .config/nix/backlog-bee-cli.nix .config/nix/backlog-bee-cli/"
+echo "  git add dot_config/nix/backlog-bee-cli.nix dot_config/nix/backlog-bee-cli/"
+echo "  chezmoi apply"
 echo "  nix profile upgrade --all --impure"

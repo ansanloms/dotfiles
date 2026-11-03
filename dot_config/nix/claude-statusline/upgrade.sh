@@ -1,27 +1,26 @@
 #!/usr/bin/env bash
-# md2html を指定バージョン（省略時は GitHub の最新リリース）へ更新する。
+# claude-statusline を指定バージョン（省略時は GitHub の最新リリース）へ更新する。
 #
 # 処理内容:
 #   1. 対象バージョンを決定（引数 or GitHub releases の latest tag）
-#   2. Release の SHA256SUMS を gh で取得し、target ごとの sha256 を SRI 形式へ変換
-#   3. md2html.nix の version / system 別 hash を反映
+#   2. target ごとの配布バイナリの hash を nix store prefetch-file で取得
+#   3. claude-statusline.nix の version / system 別 hash を反映
 #
 # git add / nix profile upgrade は行わない。完了後に git diff で確認し、手動で反映すること。
 #
 # 使い方:
-#   .config/nix/md2html/upgrade.sh          # 最新へ
-#   .config/nix/md2html/upgrade.sh 0.2.1    # 指定バージョンへ（先頭の v は省略可）
+#   dot_config/nix/claude-statusline/upgrade.sh          # 最新へ
+#   dot_config/nix/claude-statusline/upgrade.sh 0.1.0    # 指定バージョンへ
 set -euo pipefail
 
-REPO="ansanloms/md2html"
+REPO="ansanloms/claude-statusline"
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-nix_path="$script_dir/../md2html.nix"
+nix_path="$script_dir/../claude-statusline.nix"
 
-# nix の system -> Release 資産の target（md2html.nix の targets と同じ）。
-# SHA256SUMS には darwin も載るが、nix に無い system は更新しない。
+# nix の system -> Release 資産の target（claude-statusline.nix の targets と同じ）。
 declare -A TARGETS=(
-  ["x86_64-linux"]="bun-linux-x64"
-  ["aarch64-linux"]="bun-linux-arm64"
+  ["x86_64-linux"]="linux-x64"
+  ["aarch64-linux"]="linux-arm64"
 )
 
 # nix ファイル内の最初の `<key> = "...";` の値を置換する。
@@ -58,35 +57,21 @@ set_nix_system_hash() {
   fi
 }
 
-# 1. 対象バージョンを決定（引数は誤って "v" 付きで指定された場合への防御として先頭の "v" を
-#    除去する。タグ自体は v プレフィックス無しのため、自動取得した tag_name はそのまま使う）
-if [[ $# -ge 1 ]]; then
-  version="${1#v}"
-else
-  version="$(gh api "repos/${REPO}/releases/latest" --jq .tag_name)"
-fi
+# 1. 対象バージョンを決定（タグ = version）
+version="${1:-$(gh api "repos/${REPO}/releases/latest" --jq .tag_name)}"
 echo "対象バージョン: ${version}"
 
-# 2. SHA256SUMS を取得（sha256sum 形式: `<hex>  <name>`、name の前に `*` が付く場合もある）
-echo "SHA256SUMS を取得中..."
-sums="$(gh release download "$version" --repo "$REPO" --pattern SHA256SUMS -O -)"
-
+# 2. target ごとの hash を取得（SRI sha256- 形式でそのまま nix へ書ける）
 declare -A hashes=()
 for system in "${!TARGETS[@]}"; do
   target="${TARGETS[$system]}"
-  hex="$(awk -v name="md2html-${target}" '
-    { n = $2; sub(/^\*/, "", n) }
-    length($1) == 64 && $1 ~ /^[0-9a-f]+$/ && n == name { print $1; exit }
-  ' <<<"$sums")"
-  if [[ -z "$hex" ]]; then
-    echo "SHA256SUMS に md2html-${target} が見つからない" >&2
-    exit 1
-  fi
-  hashes[$system]="$(nix hash convert --hash-algo sha256 --to sri "$hex")"
+  echo "${system}: hash を取得中..."
+  hashes[$system]="$(nix store prefetch-file --json \
+    "https://github.com/${REPO}/releases/download/${version}/claude-statusline-${target}" | jq -r .hash)"
   echo "${system}: ${hashes[$system]}"
 done
 
-# 3. md2html.nix へ反映
+# 3. claude-statusline.nix へ反映
 set_nix_string "$nix_path" version "$version"
 for system in "${!hashes[@]}"; do
   set_nix_system_hash "$nix_path" "$system" "${hashes[$system]}"
@@ -94,5 +79,6 @@ done
 
 echo
 echo "更新完了。git diff で確認し、問題なければ反映:"
-echo "  git add .config/nix/md2html.nix"
+echo "  git add dot_config/nix/claude-statusline.nix"
+echo "  chezmoi apply"
 echo "  nix profile upgrade --all --impure"
