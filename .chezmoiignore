@@ -24,6 +24,8 @@ coverage
 .config/git/credentials
 .config/git/config.personal
 .config/git/config.work
+.config/git/config.personal.*
+.config/git/config.work.*
 
 # bash 設定は linux のみ (dot-mori 時代の targets を維持)。
 {{ if ne .chezmoi.os "linux" }}
