@@ -21,7 +21,7 @@
 #
 # リリースタグは v プレフィックス無し (例: 0.2.1)。
 #
-# バージョンを上げる場合 (deno task bump:md2html が下記を自動で行う):
+# バージョンを上げる場合 (.config/nix/md2html/upgrade.sh が下記を自動で行う):
 #   1. Release の SHA256SUMS から target ごとの sha256 を取得し、system 別に
 #      SRI 形式へ変換して hashes を更新する。
 #   2. version 文字列を更新する。

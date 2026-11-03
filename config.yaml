@@ -1,13 +1,4 @@
 link:
-  ~/.config/git:
-    - src: ./.config/git
-  ~/.config/git/config.os:
-    - src: ./.config/git/config.windows
-      targets:
-        - windows
-    - src: ./.config/git/config.linux
-      targets:
-        - linux
   ~/.config/vim:
     - src: ./.config/vim
   ~/.vimrc:

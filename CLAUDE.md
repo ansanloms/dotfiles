@@ -35,7 +35,7 @@ nix flake update --flake path:.config/nix
 - `.config/nix/` - Nix 設定（nix.conf）と flake によるパッケージ管理（flake.nix + packages.nix）
 - `dot_config/nvim/` - Neovim 設定（Lua）。chezmoi 管理（下記「chezmoi」節）
 - `.config/vim/` - Vim 設定（minpac でプラグイン管理）
-- `.config/git/` - Git 設定
+- `dot_config/git/` - Git 設定。chezmoi 管理
 - `dot_config/wezterm/` - WezTerm 設定。chezmoi 管理
 - `AppData/Local/noctty/` - Ghostty 設定（Windows では Ghostty フォークの noctty が読む。`config.ghostty` が共通、`os.ghostty` が Windows 固有。chezmoi 管理）
 - `dot_config/alacritty/` - Alacritty 設定。chezmoi 管理。Windows は `AppData/Roaming/alacritty/` の include stub から配る
@@ -63,6 +63,7 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 - `~/.claude` 配下と `~/.apm` もコピー方式。`~/.claude` `~/.apm` に限らず、アプリが自分で書き換える設定（devin の `config.json`、Windows Terminal の `settings.json`、CorvusSKK の `config.xml` 等）は `chezmoi diff` → `chezmoi re-add` でリポジトリへ取り込む。Windows の `AppData/.../*.tmpl`（include stub）と `~/.devin/rules/*.md` はテンプレートなので re-add できず、source 側（`dot_config/<name>/`、rules は `~/.claude/rules`）を直す。
 - Linux と Windows で配布先が異なる設定は、`dot_config/<name>/` を実体にし、`AppData/.../<name>/<file>.tmpl` の `include` stub で Windows 側に配る。`dot_config/<name>/` にファイルを足したら（include 元の断片のように target に置かないファイルは除く）、Windows 用の `AppData/.../<name>/<file>.tmpl` の stub も同じ名前で足す（自動では配られない）。OS ごとの要否は `.chezmoiignore` の `.chezmoi.os` 分岐で制御する（shell 設定は Windows に配らない等）。
 - 空になりうるファイル (alacritty の `os.toml` の Linux 版等) は `empty_` 接頭辞を付け、空でも target に作る。
+- OS で内容が変わる 1 ファイルは `<name>.tmpl` にして `{{ include "..." }}` で OS 別の断片を取り込む (`dot_config/git/config.os.tmpl` が `config.linux` / `config.windows` を `.chezmoi.os` で選ぶ)。断片そのものは `.chezmoiignore` で target から外す。`.tmpl` のファイルは `chezmoi re-add` の対象外なので、直すときは source 側を編集する。
 
 移行状況:
 
@@ -72,6 +73,7 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 | shell (bash / zsh / sheldon)                                               | chezmoi (`dot_bashrc` 等、`dot_config/zsh/`、`dot_config/sheldon/`)                                                                                        |
 | 共通設定 (starship / zellij / just / ripgrep / wezterm)                    | chezmoi (`dot_config/starship.toml`、`dot_config/zellij/`、`dot_config/just/`、`dot_config/wezterm/`、`dot_ripgreprc`)                                     |
 | .claude / .devin (rules) / .apm                                            | chezmoi (`dot_claude/`、`dot_devin/rules/*.md.tmpl`、`dot_apm/`)                                                                                           |
+| git                                                                        | chezmoi (`dot_config/git/`、config.os は tmpl)                                                                                                             |
 | Windows 専用 (AppData / Documents / .wslconfig / noctty)、devin、alacritty | chezmoi (`AppData/`、`Documents/`、`dot_wslconfig`、`dot_config/devin/`、`dot_config/alacritty/`。Windows 側は `AppData/Roaming/<name>/*.tmpl` の include) |
 | 上記以外                                                                   | dot-mori (`config.yaml`)                                                                                                                                   |
 
@@ -162,25 +164,23 @@ deno task install
 
 - `claude-statusline.nix`（[claude-statusline](https://github.com/ansanloms/claude-statusline)、Claude Code の statusLine レンダラ。nixpkgs 収録対象外の自前ツール。GitHub Release（タグは `0.1.0` 形式で v 無し、nix の version と同じ値）に添付した OS 別の Bun standalone バイナリ（`claude-statusline-<target>`）を system ごとに fetchurl で取得し、raw のまま導入する（md2html / sonarqube-cli と同じ。patchelf / strip で末尾 trailer が壊れるため fixup 無し）。実行に deno / bun は不要。`dot_claude/settings.json` の `statusLine` から `claude-statusline main` で呼ばれる）
 - `md2html.nix`（[md2html](https://github.com/ansanloms/md2html)、markdown をシンタックスハイライト（shiki）・mermaid・目次内蔵の自己完結 HTML へ変換する CLI。nvim の quickrun からのプレビューが主用途。nixpkgs 収録対象外の自前ツール。元は `scripts/md2html` の workspace member だったが独立リポジトリへ移管した。GitHub Release（タグは `0.1.0` 形式で v プレフィックス無し）に添付した OS 別の Bun standalone バイナリ（`md2html-bun-<target>`）を fetchurl で取得し、raw のまま導入する（sonarqube-cli と同じ。patchelf / strip で末尾 trailer が壊れるため fixup 無し）。実行に deno は不要。mermaid は初回利用時に jsdelivr から取得して `$XDG_CACHE_HOME/md2html/` にキャッシュする）
-- `playwright-cli.nix`（`@playwright/cli`、npm パッケージ / buildNpmPackage、wrapper で nixpkgs `google-chrome` を駆動）
 - `sonarqube-cli.nix`（SonarQube CLI、コマンド名 `sonar`。SonarSource 配布のプリビルド ELF を fetchurl で取得し raw のまま導入する。配布物は Bun standalone 実行ファイルで、末尾 trailer に埋め込みアプリを持つ。patchelf / strip で ELF を書き換えると trailer が壊れ素の Bun CLI にフォールバックするため fixup を一切かけない。代わりにシステムの glibc / ローダに依存する＝FHS 環境専用。nixpkgs 収録の `sonar-scanner-cli` は別物の旧スキャナ）
 - `moddable-sdk.nix`（Moddable SDK の CLI ツール `mcconfig` / `mcrun` / `mcpack` 等。Linux 専用。GTK ベースの GUI（xsbug / mcsim）はビルドしない。fetchFromGitHub で public ブランチの特定コミットを取得し、sub-makefile（xsc/xsid/xsl/serial2xsbug/tools）だけをビルドする。CLI ツールは単一マルチコールバイナリ `tools` への bash ラッパで、実行時に環境変数 `MODDABLE` が SDK ツリーを指す必要があるため、SDK ツリー一式を `$out/share/moddable` へ展開し各ツールを `MODDABLE` 付きで wrap する。SDK ツリーは read-only（store）のため、アプリビルド時は `mcconfig -o <書き込み可能なディレクトリ>` で出力先を明示する。nixpkgs 未収録。タグは 2022 年止まりなので tag ではなく public のコミットに pin する）
 - `backlog-bee-cli.nix`（Backlog（Nulab）の CLI `bee`。npm でのみ配布（`@nulab/bee`）されるため buildNpmPackage で導入する。nixpkgs の `bee` は別物（ethersphere/bee = Ethereum Swarm ノード）なので attribute 名を分けている。コマンド名は `bee`）
 
-`buildNpmPackage` で自前の `installPhase` を書く derivation（`playwright-cli` / `backlog-bee-cli`）は、`node_modules` を `$out/lib/<pname>/node_modules` へ置く。`$out/lib/node_modules` へ平坦に展開すると、npm が `node_modules` 直下に書く `.package-lock.json` が derivation 間で同一の相対パスになり、`packages.nix` の `buildEnv` が file collision で落ちる（実際に発生した）。依存パッケージ名が被った場合も同じ理由で衝突する。nixpkgs 標準の `npmInstallHook` はパッケージ本体を `$out/lib/node_modules/<name>/` へ置き、依存をその配下へ入れ子にするため衝突しない（nixpkgs が `buildNpmPackage` で提供する npm パッケージはこちら）。この規約は hook を使わず `installPhase` を自前で書く場合にのみ当てはまる。
+`buildNpmPackage` で自前の `installPhase` を書く derivation（`backlog-bee-cli`）は、`node_modules` を `$out/lib/<pname>/node_modules` へ置く。`$out/lib/node_modules` へ平坦に展開すると、npm が `node_modules` 直下に書く `.package-lock.json` が derivation 間で同一の相対パスになり、`packages.nix` の `buildEnv` が file collision で落ちる（実際に発生した）。依存パッケージ名が被った場合も同じ理由で衝突する。nixpkgs 標準の `npmInstallHook` はパッケージ本体を `$out/lib/node_modules/<name>/` へ置き、依存をその配下へ入れ子にするため衝突しない（nixpkgs が `buildNpmPackage` で提供する npm パッケージはこちら）。この規約は hook を使わず `installPhase` を自前で書く場合にのみ当てはまる。
 
 この衝突は個々の derivation を単体で `nix build` しても検出できない。`buildEnv` が複数パッケージを同一 prefix へ束ねたときにだけ現れる。そのため npm 系の derivation を追加・変更したら、`nix profile upgrade --all --impure`（または当該パッケージを含む `buildEnv`）まで通してから反映すること。
 
 ### バージョンを上げる
 
-`deno task bump`（全パッケージ）/ `deno task bump:<name> [version]`（version 省略で最新）で、version・ハッシュ（playwright-cli / backlog-bee-cli は lockfile も）を更新する。具体的な処理は各スクリプトを参照:
+`.config/nix/<name>/upgrade.sh [version]`（version 省略で最新）で、version・ハッシュ（backlog-bee-cli は lockfile も）を更新する。全パッケージをまとめて上げる場合は `for s in .config/nix/*/upgrade.sh; do "$s"; done`。具体的な処理は各スクリプトを参照:
 
-- `.config/nix/claude-statusline/upgrade.ts`（最新は GitHub releases の latest tag、hash は system（target）ごとに nix store prefetch-file。タグは v 無しで nix の version と同じ値。引数でバージョン指定も可）
-- `.config/nix/md2html/upgrade.ts`（最新は GitHub releases の latest tag、hash は Release の SHA256SUMS から system 別に更新。タグは v プレフィックス無し。引数でバージョン指定も可）
-- `.config/nix/playwright-cli/upgrade.ts`（最新は npm レジストリ、FOD は prefetch-npm-deps）
-- `.config/nix/sonarqube-cli/upgrade.ts`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。配布リリース番号は `1.1.0.3122` 形式）
-- `.config/nix/moddable-sdk/upgrade.ts`（最新は `git ls-remote ... public` の HEAD、hash と取得ツリーの storePath は `nix flake prefetch`、version は storePath の `tools/VERSION`。引数でコミット指定も可）
-- `.config/nix/backlog-bee-cli/upgrade.ts`（最新は npm レジストリ、FOD は prefetch-npm-deps）
+- `.config/nix/claude-statusline/upgrade.sh`（最新は GitHub releases の latest tag、hash は system（target）ごとに nix store prefetch-file。タグは v 無しで nix の version と同じ値。引数でバージョン指定も可）
+- `.config/nix/md2html/upgrade.sh`（最新は GitHub releases の latest tag、hash は Release の SHA256SUMS から system 別に更新。タグは v プレフィックス無し。引数でバージョン指定も可）
+- `.config/nix/sonarqube-cli/upgrade.sh`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。配布リリース番号は `1.1.0.3122` 形式）
+- `.config/nix/moddable-sdk/upgrade.sh`（最新は `git ls-remote ... public` の HEAD、hash と取得ツリーの storePath は `nix flake prefetch`、version は storePath の `tools/VERSION`。引数でコミット指定も可）
+- `.config/nix/backlog-bee-cli/upgrade.sh`（最新は npm レジストリ、FOD は prefetch-npm-deps）
 
 bump はファイルを書き換えるだけで反映はしない。完了後に `git diff` で確認してから `nix profile upgrade --all --impure` で反映する。これはプロファイルが `path:.config/nix#default` で登録されている前提。この `path:` はリポジトリ内にあるため nix はリポジトリの git tree を flake ソースとして使う。git tree flake は **tracked ファイルしか** store にコピーしない（追跡済みファイルの変更は作業ツリーの内容がそのまま反映されるが、未追跡の新規ファイルは除外され `path ... does not exist` でビルドが落ちる）。
 
@@ -192,7 +192,6 @@ bump が更新するのは version 文字列と FOD ハッシュという、機�
 
 - **claude-statusline**: 資産名や shebang の権限フラグ構成が変わると `claude-statusline.nix` が合わなくなる。bump 後は `echo '{"hook_event_name":"Status","...":"..."}' | claude-statusline main` のようなスモークで動作確認する。
 - **md2html**: 資産名（`md2html-bun-<target>`）や SHA256SUMS の形式が変わると `md2html.nix` が合わなくなる。bump 後は適当な markdown を変換して出力が `<!doctype html>` で始まることをスモーク確認する（例: `printf '# t\n' > /tmp/t.md && md2html /tmp/t.md | head -c 20`）。
-- **playwright-cli**: 新版で bin のパスや名前が変わると、`playwright-cli.nix` の wrapper（`--add-flags` のパス）が合わなくなる。`find` で実 bin を確認して修正する。
 - **sonarqube-cli**: bump 後は `sonar -h` で本物の SonarQube CLI help が出ることを必ず確認する。Bun の help（`bun <command>` の usage）や `--version` が Bun のバージョンを返す場合、配布物の埋め込み構造が変わって raw 導入では動かなくなったサイン。`dontFixup` のままラップ方式（buildFHSEnv 等）への切り替えを検討する。
 - **moddable-sdk**: 新版で release ターゲットの sub-makefile 構成（`xsc.mk` / `tools.mk` 等のパスや並び）や CLI ツールの一覧が変わると、`buildPhase` の make 呼び出しや `cliTools` のラップ対象がずれる。bump 後は `nix build` が通ること、`mcconfig` が実行できることを確認する。アプリビルドの C コンパイル段（`x-cli-lin` は `gio-2.0` 依存）が動くかは wrapper の `runtimeInputs` / `PKG_CONFIG_PATH` に依存するため、依存が増えた場合はそこを手当てする。
 - **backlog-bee-cli**: 新版で `bin` のパスや名前が変わると `installPhase` の `--add-flags` のパスが合わなくなる。bump 後は `bee --version` で動作確認する。
@@ -201,9 +200,7 @@ bump が更新するのは version 文字列と FOD ハッシュという、機�
 
 ### nixpkgs 収録されたら
 
-`@playwright/cli` が nixpkgs に収録されたら（`nix search nixpkgs playwright-cli` で確認）、自前 derivation 一式を削除して `packages.nix` の 1 行に乗り換える。
-
-`sonarqube-cli`（コマンド `sonar`）も nixpkgs に収録されたら、`sonarqube-cli.nix` と flake.nix の overlay を削除して `packages.nix` の 1 行に乗り換える。
+`sonarqube-cli`（コマンド `sonar`）が nixpkgs に収録されたら、`sonarqube-cli.nix` と flake.nix の overlay を削除して `packages.nix` の 1 行に乗り換える。
 
 `moddable-sdk` も nixpkgs に収録されたら（`nix search nixpkgs moddable` で確認）、`moddable-sdk.nix` と flake.nix の overlay を削除して `packages.nix` の 1 行に乗り換える。
 

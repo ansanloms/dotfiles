@@ -20,6 +20,17 @@ coverage
 .config/nvim/lua/temp.lua
 .config/nvim/lua/work.lua
 
+# git: config.os の include 元 (OS 別の断片) と、ローカル専用・秘匿ファイル。chezmoi add / apply の対象から外す。
+.config/git/config.linux
+.config/git/config.windows
+.config/git/credentials
+.config/git/config.personal
+.config/git/config.work
+# config.os は linux と windows だけ (dot-mori 時代の targets を維持)。
+{{ if eq .chezmoi.os "darwin" }}
+.config/git/config.os
+{{ end }}
+
 # bash 設定は linux のみ (dot-mori 時代の targets を維持)。
 {{ if ne .chezmoi.os "linux" }}
 .bashrc

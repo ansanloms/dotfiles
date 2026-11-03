@@ -9,10 +9,16 @@
 !.config/vim/launcher/001-terminal.yaml
 !.config/vim/launcher/002-ai-chat.yaml
 
+# dot-mori 時代の旧パス (既存 clone に残る秘匿ファイル)。全マシンの移行が終わってから削除する (未移行の clone に平文の credentials が残る)。
 .config/git/credentials
 .config/git/config.os
 .config/git/config.work
 .config/git/config.personal
+
+# 誤って chezmoi add した秘匿ファイルを追跡しないための安全網。
+dot_config/git/*credentials*
+dot_config/git/*config.personal*
+dot_config/git/*config.work*
 
 # dot-mori 時代の旧パス。README の chezmoi 移行手順を終えた後に削除する。
 .config/nvim/lazy-lock.json
