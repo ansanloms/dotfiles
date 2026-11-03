@@ -46,3 +46,5 @@
 			add) shift; git worktree add \"$@\" && git-worktree-include \"$@\" ;; \
 			*) git worktree \"$@\" ;; \
 		esac; }; f"
+
+# vim:set ft=gitconfig:
