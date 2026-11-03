@@ -1,42 +1,35 @@
 **/.env
 
-# vim 設定削除前の残骸 (undo・viminfo 等)。全マシンで残骸を消した後に削除する。
-.config/vim/
-
-# dot-mori 時代の旧パス (既存 clone に残る秘匿ファイル)。全マシンの移行が終わってから削除する (未移行の clone に平文の credentials が残る)。
-.config/git/credentials
-.config/git/config.os
-.config/git/config.work
-.config/git/config.personal
-
 # 誤って chezmoi add した秘匿ファイルを追跡しないための安全網。
 dot_config/git/*credentials*
 dot_config/git/*config.personal*
 dot_config/git/*config.work*
 
-# dot-mori 時代の旧パス。README の chezmoi 移行手順を終えた後に削除する。
-.config/nvim/lazy-lock.json
-.config/nvim/lua/temp.lua
+# 未移行の clone に残る旧パスの秘匿ファイルと apm の残骸。全マシンの移行後に削除する。
+.config/git/credentials
+.config/git/config.personal
+.config/git/config.work
+apm_modules/
+apm.yml
+apm.lock.yaml
 
+# nvim が target 側に書く・ローカル専用のファイルを追跡しないための安全網。
 dot_config/nvim/lua/temp.lua
 dot_config/nvim/lazy-lock.json
-
-# dot-mori 時代の旧パス。移行後に削除してよい。
-.config/alacritty/os.toml
 
 # os.toml は empty_os.toml.tmpl から生成する。re-add で混入した生成物を追跡しないための安全網。
 dot_config/alacritty/os.toml
 dot_config/alacritty/empty_os.toml
 
-# apm の project scope 時代の残骸 (既存 clone に残る skill 実体と apm_modules)。消した後はこの行も消してよい。
-apm_modules/
-.claude/skills/*
+# このリポジトリの project 設定。追跡ファイルは無く、settings.local.json・jobs・worktrees 等のローカル専用。グローバル設定は dot_claude/。
+/.claude/
 
 # nix build の成果物（store パスへの symlink）
 result
 
 # .local/bin/ 配下は scripts/ から deno bundle で生成する（deno task build）。
 # ディレクトリ自体は .gitkeep で残し、生成物はコミットしない。
+# #139 で nix 配布に移るまでの暫定。
 /.local/bin/*
 !/.local/bin/.gitkeep
 

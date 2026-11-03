@@ -28,23 +28,16 @@
     ]
   },
   "imports": {
-    "dot-mori/": "https://cdn.jsdelivr.net/gh/ansanloms/dot-mori@0.2.0/",
     "@std/assert": "jsr:@std/assert@1.0.19",
     "@std/cli": "jsr:@std/cli@1.0.32",
     "@std/path": "jsr:@std/path@1.1.6"
   },
   "tasks": {
-    "dot-mori": {
-      "description": "Manage and install dotfiles.",
-      "command": "deno run --allow-env=NODE_*,HOME,USERPROFILE --allow-read --allow-write dot-mori/cli.ts"
-    },
     "lint": "deno lint && deno fmt --check",
     "fix": "deno lint --fix && deno fmt",
     "check": "deno check ./scripts/**/*.ts",
     "test": "deno test --allow-read --allow-write --allow-net scripts/",
     "coverage": "deno test --allow-read --allow-write --allow-net --coverage=coverage scripts/ && deno coverage coverage",
-    "build": "deno run --allow-read=scripts --allow-write=.local/bin --allow-run=deno --allow-env=LD_LIBRARY_PATH scripts/build.ts",
-    "install": "deno task dot-mori --config ./config.yaml",
-    "uninstall": "deno task dot-mori --config ./config.yaml --clean"
+    "build": "deno run --allow-read=scripts --allow-write=.local/bin --allow-run=deno --allow-env=LD_LIBRARY_PATH scripts/build.ts"
   }
 }
