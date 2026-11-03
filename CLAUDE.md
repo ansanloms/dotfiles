@@ -36,10 +36,12 @@ nix flake update --flake path:.config/nix
 - `dot_config/nvim/` - Neovim 設定（Lua）。chezmoi 管理（下記「chezmoi」節）
 - `.config/vim/` - Vim 設定（minpac でプラグイン管理）
 - `.config/git/` - Git 設定
-- `.config/wezterm/` - WezTerm 設定
+- `dot_config/wezterm/` - WezTerm 設定。chezmoi 管理
 - `.config/ghostty/` - Ghostty 設定（Windows では Ghostty フォークの noctty が読む。`config.ghostty` が共通、`windows.ghostty` が Windows 固有）
-- `.config/zellij/` - Zellij 設定
-- `.config/starship.toml` - Starship プロンプト設定
+- `dot_config/zellij/` - Zellij 設定。chezmoi 管理
+- `dot_config/starship.toml` - Starship プロンプト設定。chezmoi 管理
+- `dot_config/just/` - just のグローバル justfile。chezmoi 管理
+- `dot_ripgreprc` - ripgrep の設定。chezmoi 管理
 - `dot_config/zsh/` - zsh のプロンプト設定（prompt.zsh）。chezmoi 管理
 - `dot_config/sheldon/` - Sheldon（zsh プラグインマネージャ）設定
 - `dot_bashrc` / `dot_bash_profile` / `dot_bash_aliases` / `dot_zshenv` / `dot_zshrc` / `dot_zprofile` / `dot_inputrc` - shell の rc ファイル。chezmoi 管理
@@ -58,11 +60,12 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 
 移行状況:
 
-| 設定                         | 管理                                                                |
-| ---------------------------- | ------------------------------------------------------------------- |
-| nvim                         | chezmoi (`dot_config/nvim/`)                                        |
-| shell (bash / zsh / sheldon) | chezmoi (`dot_bashrc` 等、`dot_config/zsh/`、`dot_config/sheldon/`) |
-| 上記以外                     | dot-mori (`config.yaml`)                                            |
+| 設定                                                    | 管理                                                                                                                   |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| nvim                                                    | chezmoi (`dot_config/nvim/`)                                                                                           |
+| shell (bash / zsh / sheldon)                            | chezmoi (`dot_bashrc` 等、`dot_config/zsh/`、`dot_config/sheldon/`)                                                    |
+| 共通設定 (starship / zellij / just / ripgrep / wezterm) | chezmoi (`dot_config/starship.toml`、`dot_config/zellij/`、`dot_config/just/`、`dot_config/wezterm/`、`dot_ripgreprc`) |
+| 上記以外                                                | dot-mori (`config.yaml`)                                                                                               |
 
 ## Agent Skills
 

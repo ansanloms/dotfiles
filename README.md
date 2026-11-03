@@ -66,7 +66,7 @@ nix run nixpkgs#chezmoi -- apply
 
 手順 5 で nix profile に入った後は素の `chezmoi` でよい。pull と `chezmoi apply` は同じシェルで続けて実行し、その間に新しいシェルを開かない。shell 設定の symlink が pull でリンク切れになるため、新しいシェルでは PATH が通らず `chezmoi` が見つからない。その場合は `~/.nix-profile/bin/chezmoi` を絶対パスで実行する。
 
-以前 dot-mori が作った symlink が残っている場合、ファイルの symlink は `chezmoi apply` がファイルの内容で置き換える。ディレクトリの symlink（`~/.config/nvim`、`~/.config/sheldon` 等）は `chezmoi apply` の前に symlink だけを削除する（`rm <path>`。リンク先の中身は消えない）。旧 `.config/nvim/` に残る未追跡ファイル（`lazy-lock.json`、`lua/temp.lua`、`lua/work.lua` 等）は apply 後に `~/.config/nvim/` へ移す。
+以前 dot-mori が作った symlink が残っている場合、ファイルの symlink は `chezmoi apply` がファイルの内容で置き換える。ディレクトリの symlink（`~/.config/nvim`、`~/.config/sheldon`、`~/.config/zellij`、`~/.config/wezterm` 等。CLAUDE.md の移行状況の表にあるディレクトリ）は `chezmoi apply` の前に symlink だけを削除する（`rm <path>`。リンク先の中身は消えない）。旧 `.config/nvim/` に残る未追跡ファイル（`lazy-lock.json`、`lua/temp.lua`、`lua/work.lua` 等）は apply 後に `~/.config/nvim/` へ移す。
 
 Windows（PowerShell）は次のとおり。
 
@@ -75,7 +75,7 @@ winget install twpayne.chezmoi
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.config\chezmoi" | Out-Null
 Set-Content "$env:USERPROFILE\.config\chezmoi\chezmoi.toml" "sourceDir = 'C:\path\to\dotfiles'"
 setx XDG_CONFIG_HOME "$env:USERPROFILE\.config"
-# 以前 dot-mori が作ったディレクトリの symlink（~/AppData/Local/nvim 等）を削除してから、新しいシェルで
+# 以前 dot-mori が作ったディレクトリの symlink（~/AppData/Local/nvim、zellij、wezterm 等）を削除してから、新しいシェルで
 chezmoi diff
 chezmoi apply
 ```
