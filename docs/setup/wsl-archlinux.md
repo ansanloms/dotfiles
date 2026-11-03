@@ -58,7 +58,7 @@ locale -a
 
 ## Docker Engine
 
-WSL 側のツールは原則 Nix で入れるが、Docker Engine は例外として pacman で入れる。root で常駐するデーモンと systemd ユニットが本体で、NixOS 以外では Nix でシステムサービスを管理できないため。Docker Desktop は従業員 250 人超または年間売上 1,000 万ドル超の企業では有償のため採用しない。
+WSL 側のツールは原則 Nix で入れるが、Docker Engine は例外として pacman で入れる。root で常駐するデーモンと systemd ユニットが本体で、NixOS 以外では Nix でシステムサービスを管理できないため。
 
 ```bash
 sudo pacman -S docker docker-buildx docker-compose
