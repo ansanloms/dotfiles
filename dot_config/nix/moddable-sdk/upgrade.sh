@@ -13,8 +13,8 @@
 # git add / nix profile upgrade は行わない。完了後に git diff で確認し、手動で反映すること。
 #
 # 使い方:
-#   .config/nix/moddable-sdk/upgrade.sh            # public HEAD へ
-#   .config/nix/moddable-sdk/upgrade.sh <commit>   # 指定コミットへ
+#   dot_config/nix/moddable-sdk/upgrade.sh            # public HEAD へ
+#   dot_config/nix/moddable-sdk/upgrade.sh <commit>   # 指定コミットへ
 set -euo pipefail
 
 REPO="https://github.com/Moddable-OpenSource/moddable.git"
@@ -73,5 +73,6 @@ set_nix_string "$nix_path" hash "$hash"
 
 echo
 echo "更新完了。git diff で確認し、問題なければ反映:"
-echo "  git add .config/nix/moddable-sdk.nix"
+echo "  git add dot_config/nix/moddable-sdk.nix"
+echo "  chezmoi apply"
 echo "  nix profile upgrade --all --impure"

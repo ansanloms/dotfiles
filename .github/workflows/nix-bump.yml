@@ -1,7 +1,7 @@
 name: nix bump
 
 # 自前 derivation の version・ハッシュ・lockfile を更新し、
-# ビルド検証のうえ直接 main へコミットする。適用 (nix profile upgrade --all --impure) はローカルで行う。
+# ビルド検証のうえ直接 main へコミットする。適用はローカルで行う (chezmoi apply の後に nix profile upgrade --all --impure)。
 
 on:
   schedule:
@@ -30,7 +30,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          for s in .config/nix/*/upgrade.sh; do
+          for s in dot_config/nix/*/upgrade.sh; do
             "$s"
           done
 
@@ -47,7 +47,7 @@ jobs:
       # 壊れた変更を main に流さないため build を gate にする。失敗で job が止まり commit は skip。
       - name: Verify build
         if: steps.diff.outputs.changed == 'true'
-        run: nix build ./.config/nix#packages.x86_64-linux.default --impure --no-link --print-build-logs
+        run: nix build ./dot_config/nix#packages.x86_64-linux.default --impure --no-link --print-build-logs
 
       - name: Commit and push
         if: steps.diff.outputs.changed == 'true'

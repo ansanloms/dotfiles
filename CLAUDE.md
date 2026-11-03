@@ -19,20 +19,22 @@ deno task uninstall
 chezmoi diff
 chezmoi apply
 
-# パッケージ初回導入
-nix profile add path:.config/nix#default --impure
+# パッケージ初回導入（chezmoi apply で配った ~/.config/nix を指す）
+nix profile add ~/.config/nix#default --impure
 
-# パッケージ適用（packages.nix / *.nix / flake.lock の変更を反映）
+# パッケージ適用（packages.nix / *.nix / flake.lock の変更を反映。先に chezmoi apply で届ける）
+chezmoi apply
 nix profile upgrade --all --impure
 
-# flake input（nixpkgs / llm-agents）を更新
-nix flake update --flake path:.config/nix
+# flake input（nixpkgs / llm-agents）を更新（リポジトリ直下が cwd の前提）
+nix flake update --flake path:dot_config/nix
+chezmoi apply
 ```
 
 ## 構成
 
 - `config.yaml` - シンボリックリンク設定（OS別: windows/linux/darwin）
-- `.config/nix/` - Nix 設定（nix.conf）と flake によるパッケージ管理（flake.nix + packages.nix）
+- `dot_config/nix/` - Nix 設定（nix.conf）と flake によるパッケージ管理（flake.nix + packages.nix）。chezmoi 管理で `~/.config/nix` へコピー
 - `dot_config/nvim/` - Neovim 設定（Lua）。chezmoi 管理（下記「chezmoi」節）
 - `dot_config/git/` - Git 設定。chezmoi 管理
 - `dot_config/wezterm/` - WezTerm 設定。chezmoi 管理
@@ -72,6 +74,7 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 | shell (bash / zsh / sheldon)                                                        | chezmoi (`dot_bashrc` 等、`dot_config/zsh/`、`dot_config/sheldon/`)                                                                                                                                              |
 | 共通設定 (starship / zellij / just / ripgrep / wezterm)                             | chezmoi (`dot_config/starship.toml`、`dot_config/zellij/`、`dot_config/just/`、`dot_config/wezterm/`、`dot_ripgreprc`)                                                                                           |
 | .claude / .devin (rules) / .apm                                                     | chezmoi (`dot_claude/`、`dot_devin/rules/*.md.tmpl`、`dot_apm/`)                                                                                                                                                 |
+| nix                                                                                 | chezmoi (`dot_config/nix/`。`*/upgrade.sh` は配らない)                                                                                                                                                           |
 | git                                                                                 | chezmoi (`dot_config/git/`、config.os は tmpl)                                                                                                                                                                   |
 | Windows 専用 (AppData / Documents / .wslconfig)、ghostty (noctty)、devin、alacritty | chezmoi (`AppData/`、`Documents/`、`dot_wslconfig`、`dot_config/devin/`、`dot_config/alacritty/`、`dot_config/ghostty/`。Windows 側は `AppData/Roaming/<name>/*.tmpl`、`AppData/Local/noctty/*.tmpl` の include) |
 | 上記以外                                                                            | dot-mori (`config.yaml`)                                                                                                                                                                                         |
@@ -159,7 +162,7 @@ deno task install
 
 ## 自前 nix パッケージの更新
 
-`.config/nix/` には nixpkgs 未収録のパッケージを自前 derivation で管理している。
+`dot_config/nix/` には nixpkgs 未収録のパッケージを自前 derivation で管理している。
 
 - `claude-statusline.nix`（[claude-statusline](https://github.com/ansanloms/claude-statusline)、Claude Code の statusLine レンダラ。nixpkgs 収録対象外の自前ツール。GitHub Release（タグは `0.1.0` 形式で v 無し、nix の version と同じ値）に添付した OS 別の Bun standalone バイナリ（`claude-statusline-<target>`）を system ごとに fetchurl で取得し、raw のまま導入する（md2html / sonarqube-cli と同じ。patchelf / strip で末尾 trailer が壊れるため fixup 無し）。実行に deno / bun は不要。`dot_claude/settings.json` の `statusLine` から `claude-statusline main` で呼ばれる）
 - `md2html.nix`（[md2html](https://github.com/ansanloms/md2html)、markdown をシンタックスハイライト（shiki）・mermaid・目次内蔵の自己完結 HTML へ変換する CLI。nvim の quickrun からのプレビューが主用途。nixpkgs 収録対象外の自前ツール。元は `scripts/md2html` の workspace member だったが独立リポジトリへ移管した。GitHub Release（タグは `0.1.0` 形式で v プレフィックス無し）に添付した OS 別の Bun standalone バイナリ（`md2html-bun-<target>`）を fetchurl で取得し、raw のまま導入する（sonarqube-cli と同じ。patchelf / strip で末尾 trailer が壊れるため fixup 無し）。実行に deno は不要。mermaid は初回利用時に jsdelivr から取得して `$XDG_CACHE_HOME/md2html/` にキャッシュする）
@@ -173,21 +176,31 @@ deno task install
 
 ### バージョンを上げる
 
-`.config/nix/<name>/upgrade.sh [version]`（version 省略で最新）で、version・ハッシュ（backlog-bee-cli は lockfile も）を更新する。全パッケージをまとめて上げる場合は `for s in .config/nix/*/upgrade.sh; do "$s"; done`。具体的な処理は各スクリプトを参照:
+`dot_config/nix/<name>/upgrade.sh [version]`（version 省略で最新）で、version・ハッシュ（backlog-bee-cli は lockfile も）を更新する。全パッケージをまとめて上げる場合は `for s in dot_config/nix/*/upgrade.sh; do "$s"; done`。具体的な処理は各スクリプトを参照:
 
-- `.config/nix/claude-statusline/upgrade.sh`（最新は GitHub releases の latest tag、hash は system（target）ごとに nix store prefetch-file。タグは v 無しで nix の version と同じ値。引数でバージョン指定も可）
-- `.config/nix/md2html/upgrade.sh`（最新は GitHub releases の latest tag、hash は Release の SHA256SUMS から system 別に更新。タグは v プレフィックス無し。引数でバージョン指定も可）
-- `.config/nix/sonarqube-cli/upgrade.sh`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。配布リリース番号は `1.1.0.3122` 形式）
-- `.config/nix/moddable-sdk/upgrade.sh`（最新は `git ls-remote ... public` の HEAD、hash と取得ツリーの storePath は `nix flake prefetch`、version は storePath の `tools/VERSION`。引数でコミット指定も可）
-- `.config/nix/backlog-bee-cli/upgrade.sh`（最新は npm レジストリ、FOD は prefetch-npm-deps）
+- `dot_config/nix/claude-statusline/upgrade.sh`（最新は GitHub releases の latest tag、hash は system（target）ごとに nix store prefetch-file。タグは v 無しで nix の version と同じ値。引数でバージョン指定も可）
+- `dot_config/nix/md2html/upgrade.sh`（最新は GitHub releases の latest tag、hash は Release の SHA256SUMS から system 別に更新。タグは v プレフィックス無し。引数でバージョン指定も可）
+- `dot_config/nix/sonarqube-cli/upgrade.sh`（最新は GitHub releases の latest tag、hash は nix store prefetch-file。配布リリース番号は `1.1.0.3122` 形式）
+- `dot_config/nix/moddable-sdk/upgrade.sh`（最新は `git ls-remote ... public` の HEAD、hash と取得ツリーの storePath は `nix flake prefetch`、version は storePath の `tools/VERSION`。引数でコミット指定も可）
+- `dot_config/nix/backlog-bee-cli/upgrade.sh`（最新は npm レジストリ、FOD は prefetch-npm-deps）
 
-bump はファイルを書き換えるだけで反映はしない。完了後に `git diff` で確認してから `nix profile upgrade --all --impure` で反映する。これはプロファイルが `path:.config/nix#default` で登録されている前提。この `path:` はリポジトリ内にあるため nix はリポジトリの git tree を flake ソースとして使う。git tree flake は **tracked ファイルしか** store にコピーしない（追跡済みファイルの変更は作業ツリーの内容がそのまま反映されるが、未追跡の新規ファイルは除外され `path ... does not exist` でビルドが落ちる）。
+bump はファイルを書き換えるだけで反映はしない。完了後に `git diff` で確認してから `chezmoi apply` で `~/.config/nix` へ届け、`nix profile upgrade --all --impure` で反映する。これはプロファイルが `~/.config/nix#default` で登録されている前提。`~/.config/nix` は chezmoi のコピーで git 管理外の通常ディレクトリなので、nix から見ると path flake であり、tracked かどうかに関係なくディレクトリ全体が使われる。新規 `.nix` ファイル等を追加したときも `chezmoi apply` で届ければよい（`git add` は不要）。`flake.nix` の input を変えたときは、リポジトリ側で `nix flake lock --flake path:dot_config/nix`（または `nix flake update`）を実行して `flake.lock` を更新してから `chezmoi apply` する。先に `nix profile upgrade` すると nix が `~/.config/nix` 側に lock を書き、source と食い違う。
 
-このため、bump で既存ファイルの version / hash を書き換えただけなら `git add` 不要で `nix profile upgrade` が反映する。一方、新規 `.nix` ファイル等を追加したときは `nix profile upgrade` の前に `git add` して tracked にしておく必要がある。
+既存 profile の付け替え（dot-mori 時代の登録は `git+file://<clone>?dir=.config/nix`、名前 `.config/nix`）は、このブランチのマージ後に次の順で行う。
+
+```sh
+# 旧 symlink が残っていれば消す
+rm -f ~/.config/nix
+# ~/.config/nix がコピーで出来る
+chezmoi apply
+# この時点で ~/.nix-profile/bin の chezmoi・git は消える（nix 本体は installer が入れた system profile にあり、続行できる）
+nix profile remove .config/nix
+nix profile add ~/.config/nix#default --impure
+```
 
 ### bump で拾えない変更
 
-bump が更新するのは version 文字列と FOD ハッシュという、機械的に再計算できる値だけ。新版が次を変えた場合は bump 後の `nix profile upgrade` がビルドエラーになるので、エラーを読んで derivation を手当てする:
+bump が更新するのは version 文字列と FOD ハッシュという、機械的に再計算できる値だけ。新版が次を変えた場合は bump 後の `nix profile upgrade` がビルドエラーになるので、エラーを読んで derivation を手当てする。以下の `nix profile upgrade` はいずれも先に `chezmoi apply` で届けてから実行する:
 
 - **claude-statusline**: 資産名や shebang の権限フラグ構成が変わると `claude-statusline.nix` が合わなくなる。bump 後は `echo '{"hook_event_name":"Status","...":"..."}' | claude-statusline main` のようなスモークで動作確認する。
 - **md2html**: 資産名（`md2html-bun-<target>`）や SHA256SUMS の形式が変わると `md2html.nix` が合わなくなる。bump 後は適当な markdown を変換して出力が `<!doctype html>` で始まることをスモーク確認する（例: `printf '# t\n' > /tmp/t.md && md2html /tmp/t.md | head -c 20`）。
@@ -198,6 +211,8 @@ bump が更新するのは version 文字列と FOD ハッシュという、機�
 このため bump 後は必ず `nix profile upgrade --all --impure` までやってビルドが通ることを確認すること。
 
 ### nixpkgs 収録されたら
+
+自前 derivation を削除したら、`~/.config/nix` に残る旧ファイルは chezmoi が消さない（`exact_` を付けていない）ので手で消す。
 
 `sonarqube-cli`（コマンド `sonar`）が nixpkgs に収録されたら、`sonarqube-cli.nix` と flake.nix の overlay を削除して `packages.nix` の 1 行に乗り換える。
 

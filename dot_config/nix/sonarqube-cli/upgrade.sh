@@ -9,8 +9,8 @@
 # git add / nix profile upgrade は行わない。完了後に git diff で確認し、手動で反映すること。
 #
 # 使い方:
-#   .config/nix/sonarqube-cli/upgrade.sh                # 最新へ
-#   .config/nix/sonarqube-cli/upgrade.sh 1.1.0.3122     # 指定バージョンへ
+#   dot_config/nix/sonarqube-cli/upgrade.sh                # 最新へ
+#   dot_config/nix/sonarqube-cli/upgrade.sh 1.1.0.3122     # 指定バージョンへ
 set -euo pipefail
 
 REPO="SonarSource/sonarqube-cli"
@@ -51,5 +51,6 @@ set_nix_string "$nix_path" hash "$hash"
 
 echo
 echo "更新完了。git diff で確認し、問題なければ反映:"
-echo "  git add .config/nix/sonarqube-cli.nix"
+echo "  git add dot_config/nix/sonarqube-cli.nix"
+echo "  chezmoi apply"
 echo "  nix profile upgrade --all --impure"

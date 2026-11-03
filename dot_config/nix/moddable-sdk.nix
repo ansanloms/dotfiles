@@ -19,7 +19,7 @@
 #      その 2 行は実行せず、sub-makefile (xsc/xsid/xsl/serial2xsbug/tools) だけを
 #      直接叩く。
 #
-# バージョンを上げる場合 (.config/nix/moddable-sdk/upgrade.sh が下記を自動で行う):
+# バージョンを上げる場合 (dot_config/nix/moddable-sdk/upgrade.sh が下記を自動で行う):
 #   1. public ブランチの HEAD コミットを解決し rev を更新する。
 #   2. そのコミットの tools/VERSION を version 文字列に反映する。
 #   3. fetchFromGitHub の hash を nix store prefetch (fetchTree) で取得する。
