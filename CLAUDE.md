@@ -45,8 +45,9 @@ nix flake update --flake path:.config/nix
 - `dot_config/zsh/` - zsh のプロンプト設定（prompt.zsh）。chezmoi 管理
 - `dot_config/sheldon/` - Sheldon（zsh プラグインマネージャ）設定
 - `dot_bashrc` / `dot_bash_profile` / `dot_bash_aliases` / `dot_zshenv` / `dot_zshrc` / `dot_zprofile` / `dot_inputrc` - shell の rc ファイル。chezmoi 管理
-- `.agents/rules/` - エージェント向けルールの実体（`~/.claude/rules` と `~/.devin/rules` にリンク。Claude Code と Devin CLI が読む）
-- `.claude/` - Claude Code のグローバル設定（`~/.claude/` にリンク）
+- `.claude/` - このリポジトリの project 設定 (worktrees・jobs・settings.local.json)。グローバル設定は `dot_claude/` に移した
+- `dot_claude/` - Claude Code のグローバル設定 (`CLAUDE.md` `settings.json` `rules/` `agents/` `lsp/` `skills/review-loop/`)。chezmoi 管理で `~/.claude/` へコピーする。`rules/` は `dot_devin/rules/*.md.tmpl` から `include` して `~/.devin/rules` にも配る。rules を追加・削除したら `dot_devin/rules/` の stub も同じ名前で追加・削除する (自動では配られない)。
+- `dot_apm/` - apm の manifest と lock (`~/.apm/` へコピー。下記「Agent Skills」節)
 - `.local/bin/` - ユーザースクリプト（`scripts/` から `deno bundle` で生成）
 
 ## chezmoi
@@ -54,9 +55,10 @@ nix flake update --flake path:.config/nix
 source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既定で無視するため、dot-mori 管理の `.config/` 等とは衝突しない。それ以外のリポジトリ管理ファイル（README.md・config.yaml・scripts 等）は `.chezmoiignore` で除外しており、移行が進んで不要になった行は削除する。
 
 - 管理対象は `dot_` 接頭辞で表す（`dot_config/nvim/` → `~/.config/nvim/`）。mode は既定の file（コピー）。symlink ではないため、`~/.config/nvim` を直接編集した場合は `chezmoi re-add` で source に取り込む。source 側を編集した場合は `chezmoi apply`。`chezmoi edit --apply <target>` で両方を一度にできる。管理対象ディレクトリの中のドットファイルも同様に `dot_` 接頭辞にする（`dot_config/nvim/dot_luarc.json` → `~/.config/nvim/.luarc.json`）。source 側で `.` 始まりのままだと chezmoi が無視して適用されない。
-- `exact_` は付けない。nvim が target 側に書く `lazy-lock.json` や、ローカル専用の `lua/temp.lua` を消さないため。これらはリポジトリに置かない（`.chezmoiignore` で target パスを除外しており `chezmoi add` / `apply` の対象にならない。`.gitignore` の該当行は git 側の安全網）。
+- `exact_` は付けない。nvim が target 側に書く `lazy-lock.json` や、ローカル専用の `lua/temp.lua` を消さないため。これらはリポジトリに置かない（`.chezmoiignore` で target パスを除外しており `chezmoi add` / `apply` の対象にならない。`.gitignore` の該当行は git 側の安全網）。同じ理由で `~/.claude/skills/`（apm が置く skill と Claude Code の `synced/` キャッシュ）にも付けない。
 - マシンごとの設定は `~/.config/chezmoi/chezmoi.toml` に `sourceDir = "~/dev/github.com/ansanloms/dotfiles"` の 1 行を書く（Windows は `%USERPROFILE%\.config\chezmoi\chezmoi.toml`。`~` 展開は Windows で未確認のため絶対パスで書く。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、Windows のパスはシングルクォートの literal string で書く。例: `sourceDir = 'C:\path\to\dotfiles'`）。`chezmoi init` は使わない（ローカルパスを source にする手順が公式文書に無い）。
 - Windows は環境変数 `XDG_CONFIG_HOME` を `%USERPROFILE%\.config` にし、nvim に `~/.config/nvim` を読ませる。これにより nvim の source に OS 分岐は無い。`XDG_CONFIG_HOME` を読む他ツールの探索先も変わりうる点に注意。
+- `~/.claude` 配下と `~/.apm` もコピー方式。`~/.claude/*` を直接編集した場合や、Claude Code が `settings.json` を書き換えた場合、apm が `~/.apm/apm.lock.yaml` を更新した場合は `chezmoi diff` で差分を見て `chezmoi re-add <target>` でリポジトリへ取り込む。`~/.devin/rules/*.md` はテンプレート（`include`）なので re-add の対象外で、rules は `~/.claude/rules` 側を直す。
 - OS ごとに配布先を変える設定は、`.chezmoiignore` の `.chezmoi.os` 分岐で対象外の OS から除外する（shell 設定は Windows に配らない等）。
 
 移行状況:
@@ -66,15 +68,14 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 | nvim                                                    | chezmoi (`dot_config/nvim/`)                                                                                           |
 | shell (bash / zsh / sheldon)                            | chezmoi (`dot_bashrc` 等、`dot_config/zsh/`、`dot_config/sheldon/`)                                                    |
 | 共通設定 (starship / zellij / just / ripgrep / wezterm) | chezmoi (`dot_config/starship.toml`、`dot_config/zellij/`、`dot_config/just/`、`dot_config/wezterm/`、`dot_ripgreprc`) |
+| .claude / .devin (rules) / .apm                         | chezmoi (`dot_claude/`、`dot_devin/rules/*.md.tmpl`、`dot_apm/`)                                                       |
 | 上記以外                                                | dot-mori (`config.yaml`)                                                                                               |
 
 ## Agent Skills
 
-Agent Skills は [apm](https://github.com/microsoft/apm)（`packages.nix` で導入）で管理し、apm で導入した skill の実体は `.gitignore` で除外してコミットせず、`apm install` で `apm.lock.yaml` の commit から復元する。`deno task install` でシンボリックリンクされる。
+Agent Skills は [apm](https://github.com/microsoft/apm)（`packages.nix` で導入）の user scope（`apm install -g`）で管理する。manifest と lock は `dot_apm/apm.yml` / `dot_apm/apm.lock.yaml` にあり、chezmoi が `~/.apm/` へコピーする。`apm install -g` は `~/.apm/apm.yml` を読み、`targets: [claude]` により skill を `~/.claude/skills/<name>/` に配置する。取得物は `~/.apm/apm_modules/`。
 
-skill の実体は `.claude/skills/` に置く。`~/.claude/skills` は `.claude/skills/` を指すシンボリックリンク（`config.yaml` で設定）。自前管理の `review-loop` だけはコミットしている（`.gitignore` の否定パターンで除外から外している）。
-
-apm のデプロイ先は `apm.yml` の `targets: [claude]` で `.claude/skills/` に固定している。target の解決順は `--target` > `apm.yml` の `targets:` > auto-detect。省略時の auto-detect も `.claude/` の存在を見て `claude` を選ぶが、意図した配置先であることを明示するため固定を維持している。
+skill の実体はリポジトリに置かない。自前管理の `review-loop` だけ `dot_claude/skills/review-loop/` にコミットし、chezmoi が `~/.claude/skills/review-loop/` へコピーする。`~/.claude/skills/` には apm の skill と Claude Code の `synced/` キャッシュも入るため `exact_` は付けない。
 
 導入済み skill:
 
@@ -90,40 +91,41 @@ apm のデプロイ先は `apm.yml` の `targets: [claude]` で `.claude/skills/
 | adr                     | `ansanloms/skills`（apm） |
 | yomiyasu                | `nanaism/yomiyasu`（apm） |
 
-skill を追加・更新する場合のみ apm を使用する。`apm.yml` の `targets` で配置先（`.claude/skills/`）を固定済みのため、install は `--target` 無しでよい。
+skill を追加・更新する場合のみ apm を使用する。cwd は問わない。
 
 ```sh
-# skill の追加・更新（apm.yml の targets: claude により .claude/skills/ へ配置）
-apm install <org>/<repo>/<skill>#<commit>
+# skill の追加・更新（~/.apm/apm.yml を更新し、targets: claude により ~/.claude/skills/ へ配置）
+apm install -g <org>/<repo>/<skill>#<commit>
 ```
 
 更新も同じ install で commit を上げる。`apm update` は使わない。`apm update` は最新の一致 ref へ更新してしまい、commit hash 固定と噛み合わないため。最新 commit は `git ls-remote <repo> HEAD` 等で確認する。
 
-`apm.yml` / `apm.lock.yaml` は commit hash でバージョンを固定している。追加・更新後は、この 2 ファイルをコミットする（`.claude/skills/` は ignore 済み）。skill の中身の変化は diff に現れないため、lock の resolved_commit を上げる PR の本文には上流の compare URL（`https://github.com/<org>/<repo>/compare/<旧 commit>...<新 commit>`）を載せ、中身を読んでから取り込む。
+`apm.yml` / `apm.lock.yaml` は commit hash でバージョンを固定している。追加・更新後は `chezmoi re-add ~/.apm/apm.yml ~/.apm/apm.lock.yaml` でリポジトリへ取り込み、`dot_apm/` の 2 ファイルをコミットする。skill の中身の変化は diff に現れないため、lock の resolved_commit を上げる PR の本文には上流の compare URL（`https://github.com/<org>/<repo>/compare/<旧 commit>...<新 commit>`）を載せ、中身を読んでから取り込む。
 
-yomiyasu は `<org>/<repo>/<skill>` 形式ではなく、`git: nanaism/yomiyasu` + `skills: [yomiyasu]` 形式で `apm.yml` に登録している（`../skills` の `apm.yml` と同じ形）。上記の `apm install <org>/<repo>/<skill>#<commit>` では更新しない。全依存をまとめて上げるときは、`apm.lock.yaml` と `.claude/skills/` の apm 管理分（`review-loop` 以外）を削除して引数無しの `apm install` を実行し、lock を再生成する。
+yomiyasu は `<org>/<repo>/<skill>` 形式ではなく、`git: nanaism/yomiyasu` + `skills: [yomiyasu]` 形式で `apm.yml` に登録している（`../skills` の `apm.yml` と同じ形）。上記の `apm install -g <org>/<repo>/<skill>#<commit>` では更新しない。全依存をまとめて上げるときは、`~/.apm/apm.lock.yaml` と `~/.claude/skills/` の apm 管理分（`review-loop` と `synced/` 以外）を削除して引数無しの `apm install -g` を実行し、`chezmoi re-add` で lock を取り込む。
 
 ### 復元と lifecycle
 
-依存を持つ skill（`scripts/package.json` の `dependencies` が空でないもの。現状は `ja-tech-proofread`）は `scripts/node_modules` を要する。`apm.yml` の `lifecycle.post-install` が、`apm install` のたびに該当 skill の `scripts/` で `npm ci --omit=dev` を実行する。ブロックは ansanloms/skills の README「依存を持つ skill」節の雛形と同じ。
+依存を持つ skill（`scripts/package.json` の `dependencies` が空でないもの。現状は `ja-tech-proofread`）は `scripts/node_modules` を要する。`apm.yml` の `lifecycle.post-install` が、`apm install -g` のたびに該当 skill の `scripts/` で `npm ci --omit=dev` を実行する。global では cwd が `~/.apm` になるため、コマンドは `$HOME/.claude/skills/*/scripts` を見る。ブロックは ansanloms/skills の README「依存を持つ skill」節の雛形を、global 向けにパスを直したもの。
 
-lifecycle は `apm lifecycle trust` で信頼したときだけ実行される。trust はマシンごとに `~/.apm/scripts-trust.json` へ「`apm.yml` の絶対パス → lifecycle ブロックのハッシュ」で記録され、リポジトリでは運べない。次の場合は trust し直す。
+lifecycle は `apm lifecycle trust` で信頼したときだけ実行される。trust は `~/.apm` で実行し、マシンごとに `~/.apm/scripts-trust.json` へ「`apm.yml` の絶対パス → lifecycle ブロックのハッシュ」で記録され、リポジトリでは運べない。次の場合は trust し直す。
 
-- 新しいマシン、または新しいパスへの clone
+- 新しいマシン
 - `lifecycle` ブロックを編集したとき（ハッシュが変わり信頼が外れる）
 
-未信頼の `apm install` は `Skipped N untrusted project script(s)` と出して lifecycle を飛ばす。lifecycle の失敗は `apm install` の出力にも終了コードにも現れないため、install 後は `ls .claude/skills/ja-tech-proofread/scripts/node_modules` 等で生成を確認する。
+未信頼の `apm install -g` は `Skipped N untrusted project script(s)` と出して lifecycle を飛ばす。lifecycle の失敗は `apm install -g` の出力にも終了コードにも現れないため、install 後は `ls ~/.claude/skills/ja-tech-proofread/scripts/node_modules` で生成を確認する。
 
 clone 直後の手順:
 
 ```sh
-apm lifecycle trust
-apm install
+chezmoi apply
+(cd ~/.apm && apm lifecycle trust)
+apm install -g
 deno task build
 deno task install
 ```
 
-`apm.lock.yaml` が変わるコミットを pull したときも `apm install` を実行する。skill の実体は ignore 済みのため、pull だけでは更新されない。
+`dot_apm/apm.lock.yaml` が変わるコミットを pull したときは `chezmoi apply` の後に `apm install -g` を実行する。skill の実体はリポジトリに無いため、pull だけでは更新されない。
 
 ## Local scripts
 
@@ -144,7 +146,7 @@ deno task install
 
 ## Claude Code の通知（組み込み通知）
 
-- `.claude/settings.json` の `preferredNotifChannel` を `"ghostty"` にし、Claude Code 自身の通知（OSC 777）を端末へ出す。通知用の hook は使わない。
+- `dot_claude/settings.json` の `preferredNotifChannel` を `"ghostty"` にし、Claude Code 自身の通知（OSC 777）を端末へ出す。通知用の hook は使わない。
 - 既定の `"auto"` は、端末を iTerm2・Ghostty・Kitty と検出したときだけデスクトップ通知を出す。zellij 越しの noctty で検出されるかに依存しないよう、チャネルを明示している。
 - トーストを表示するのは端末側。noctty（Ghostty の Windows フォーク）は `desktop-notifications`（既定 true）で OSC 777 をトースト表示する。zellij は 0.45.0 以降、ペイン内の通知シーケンスをホスト端末へ転送する。alacritty は OSC 通知を実装していないため表示されない。
 - 通知が出る場面は Claude Code が決める。Claude Code 2.1.286 の実装では、バックグラウンドジョブが入力待ち・完了になったとき（`claude agents` の画面側が出す）と、対話セッションで応答後のアイドルが続いたとき（`messageIdleNotifThresholdMs`、既定 60 秒）に出る。ターン完了の直後に出す経路は、同じ版の実装からは確認できていない。
@@ -154,7 +156,7 @@ deno task install
 
 `.config/nix/` には nixpkgs 未収録のパッケージを自前 derivation で管理している。
 
-- `claude-statusline.nix`（[claude-statusline](https://github.com/ansanloms/claude-statusline)、Claude Code の statusLine レンダラ。nixpkgs 収録対象外の自前ツール。GitHub Release（タグは `0.1.0` 形式で v 無し、nix の version と同じ値）に添付した OS 別の Bun standalone バイナリ（`claude-statusline-<target>`）を system ごとに fetchurl で取得し、raw のまま導入する（md2html / sonarqube-cli と同じ。patchelf / strip で末尾 trailer が壊れるため fixup 無し）。実行に deno / bun は不要。`.claude/settings.json` の `statusLine` から `claude-statusline main` で呼ばれる）
+- `claude-statusline.nix`（[claude-statusline](https://github.com/ansanloms/claude-statusline)、Claude Code の statusLine レンダラ。nixpkgs 収録対象外の自前ツール。GitHub Release（タグは `0.1.0` 形式で v 無し、nix の version と同じ値）に添付した OS 別の Bun standalone バイナリ（`claude-statusline-<target>`）を system ごとに fetchurl で取得し、raw のまま導入する（md2html / sonarqube-cli と同じ。patchelf / strip で末尾 trailer が壊れるため fixup 無し）。実行に deno / bun は不要。`dot_claude/settings.json` の `statusLine` から `claude-statusline main` で呼ばれる）
 - `md2html.nix`（[md2html](https://github.com/ansanloms/md2html)、markdown をシンタックスハイライト（shiki）・mermaid・目次内蔵の自己完結 HTML へ変換する CLI。nvim の quickrun からのプレビューが主用途。nixpkgs 収録対象外の自前ツール。元は `scripts/md2html` の workspace member だったが独立リポジトリへ移管した。GitHub Release（タグは `0.1.0` 形式で v プレフィックス無し）に添付した OS 別の Bun standalone バイナリ（`md2html-bun-<target>`）を fetchurl で取得し、raw のまま導入する（sonarqube-cli と同じ。patchelf / strip で末尾 trailer が壊れるため fixup 無し）。実行に deno は不要。mermaid は初回利用時に jsdelivr から取得して `$XDG_CACHE_HOME/md2html/` にキャッシュする）
 - `playwright-cli.nix`（`@playwright/cli`、npm パッケージ / buildNpmPackage、wrapper で nixpkgs `google-chrome` を駆動）
 - `sonarqube-cli.nix`（SonarQube CLI、コマンド名 `sonar`。SonarSource 配布のプリビルド ELF を fetchurl で取得し raw のまま導入する。配布物は Bun standalone 実行ファイルで、末尾 trailer に埋め込みアプリを持つ。patchelf / strip で ELF を書き換えると trailer が壊れ素の Bun CLI にフォールバックするため fixup を一切かけない。代わりにシステムの glibc / ローダに依存する＝FHS 環境専用。nixpkgs 収録の `sonar-scanner-cli` は別物の旧スキャナ）

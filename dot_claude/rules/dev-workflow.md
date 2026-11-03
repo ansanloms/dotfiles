@@ -4,12 +4,12 @@
 
 メインループは判断 (設計・計画・承認取得・レビューの裁定・コミット/PR 文面の決定) だけを担い、読み取り・探索・実行・編集は subagent へ外出しする。Claude Code の呼び出しはステートレスな API 上で動き、ツール呼び出しごとにその時点の全コンテキストが再送されるため、コンテキストが育ったメインループが自分で手を動かすほど 1 リクエストの再送量が膨らむ。
 
-| 役割                                                            | 担当                                                                                            |
-| --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| 実装                                                            | implementer subagent (`.claude/agents/implementer.md`、sonnet)                                  |
-| 調査                                                            | research-worker subagent (`.claude/agents/research-worker.md`、sonnet)                          |
-| `/code-review` の実行                                           | code-review-runner subagent (`.claude/agents/code-review-runner.md`、既定 sonnet / 昇格時 opus) |
-| 公開 (畳み込み・commit・push・PR 作成・branch description 更新) | pr-publisher subagent (`.claude/agents/pr-publisher.md`、haiku)                                 |
+| 役割                                                            | 担当                                                                                              |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| 実装                                                            | implementer subagent (`~/.claude/agents/implementer.md`、sonnet)                                  |
+| 調査                                                            | research-worker subagent (`~/.claude/agents/research-worker.md`、sonnet)                          |
+| `/code-review` の実行                                           | code-review-runner subagent (`~/.claude/agents/code-review-runner.md`、既定 sonnet / 昇格時 opus) |
+| 公開 (畳み込み・commit・push・PR 作成・branch description 更新) | pr-publisher subagent (`~/.claude/agents/pr-publisher.md`、haiku)                                 |
 
 ## 工程
 

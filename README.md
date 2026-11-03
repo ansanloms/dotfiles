@@ -75,12 +75,14 @@ winget install twpayne.chezmoi
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.config\chezmoi" | Out-Null
 Set-Content "$env:USERPROFILE\.config\chezmoi\chezmoi.toml" "sourceDir = 'C:\path\to\dotfiles'"
 setx XDG_CONFIG_HOME "$env:USERPROFILE\.config"
-# 以前 dot-mori が作ったディレクトリの symlink（~/AppData/Local/nvim、zellij、wezterm 等）を削除してから、新しいシェルで
+# 以前 dot-mori が作ったディレクトリの symlink（~/AppData/Local/nvim、zellij、wezterm、~/.claude 配下、~/.devin/rules 等）を削除してから、新しいシェルで
 chezmoi diff
 chezmoi apply
 ```
 
 `sourceDir` は Windows 側 clone の絶対パスに置き換える。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、パスはシングルクォートで書く。旧 `.config/nvim/` に残る未追跡ファイル（`lazy-lock.json`、`lua/temp.lua`、`lua/work.lua` 等）は apply 後に `~/.config/nvim/` へ移す。`setx` の反映には新しいシェルが要る。pull と `chezmoi apply` は同じシェルで続けて実行する。適用後、nvim で `:echo stdpath("config")` が `~/.config/nvim` を指すことを確認する。
+
+以前 dot-mori が作った `~/.claude/rules` `~/.claude/lsp` `~/.claude/skills` `~/.claude/agents` `~/.devin/rules` のディレクトリ symlink が残っている場合は apply 前に `rm` する（`~/.claude/CLAUDE.md` `~/.claude/settings.json` のファイル symlink は apply が内容で置き換える）。`~/.claude/skills` が symlink ではなく実ディレクトリ（Claude Code の `synced/` 等）の場合、apply はその中の管理対象（`review-loop/`）だけを書き、他には触れない。
 
 ### 5. Apply packages
 
@@ -102,6 +104,17 @@ nix flake update --flake path:.config/nix
 
 # プロファイルから削除
 nix profile remove .config/nix
+```
+
+## Agent Skills
+
+`~/.apm/apm.yml` は chezmoi が配るので、先に手順 4 の `chezmoi apply` を済ませてから実行する。
+
+[apm](https://github.com/microsoft/apm) は nix profile に入った後、user scope で skill を導入する。`apm lifecycle trust` は `~/.apm` で実行する。
+
+```sh
+(cd ~/.apm && apm lifecycle trust)
+apm install -g
 ```
 
 ## Uninstall
