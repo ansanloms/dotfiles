@@ -57,7 +57,7 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 - `exact_` は付けない。nvim が target 側に書く `lazy-lock.json` や、ローカル専用の `lua/temp.lua` を消さないため。これらはリポジトリに置かない（`.chezmoiignore` で target パスを除外しており `chezmoi add` / `apply` の対象にならない。`.gitignore` の該当行は git 側の安全網）。
 - マシンごとの設定は `~/.config/chezmoi/chezmoi.toml` に `sourceDir = "~/dev/github.com/ansanloms/dotfiles"` の 1 行を書く（Windows は `%USERPROFILE%\.config\chezmoi\chezmoi.toml`。`~` 展開は Windows で未確認のため絶対パスで書く。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、Windows のパスはシングルクォートの literal string で書く。例: `sourceDir = 'C:\path\to\dotfiles'`）。`chezmoi init` は使わない（ローカルパスを source にする手順が公式文書に無い）。
 - Windows は環境変数 `XDG_CONFIG_HOME` を `%USERPROFILE%\.config` にし、nvim に `~/.config/nvim` を読ませる。これにより nvim の source に OS 分岐は無い。`XDG_CONFIG_HOME` を読む他ツールの探索先も変わりうる点に注意。
-- `.claude/` と `.agents/rules/` はコピーせず `symlink_` で source 内の実体へリンクする（`private_dot_claude/symlink_rules.tmpl` の中身は `{{ .chezmoi.sourceDir }}/.agents/rules`）。理由: リポジトリの `.claude/` は project 設定と apm の配置先を兼ね、Claude Code が settings.json を書くため、コピーだと編集のたびに apply / re-add が要る。symlink なので `apm install` 後の apply も不要。Windows は symlink の作成に Developer Mode が要る。`~/.claude` は transcript 等を含み既存機で 0700 のため、`private_` 接頭辞（`private_dot_claude/`、`private_dot_devin/`）で 0700 を維持する。`.claude` 配下にエントリを足すときは `private_dot_claude/` に置き、`dot_claude/` を併置しない（同じ target を指す 2 つの source ディレクトリになる）。リンク先は `.chezmoi.sourceDir` から作るため、`--source` に worktree を渡して実 home に apply しない（worktree の検証は一時 destination に限る）。
+- `.claude/` と `.agents/rules/` はコピーせず `symlink_` で source 内の実体へリンクする（`dot_claude/symlink_rules.tmpl` の中身は `{{ .chezmoi.sourceDir }}/.agents/rules`）。理由: リポジトリの `.claude/` は project 設定と apm の配置先を兼ね、Claude Code が settings.json を書くため、コピーだと編集のたびに apply / re-add が要る。symlink なので `apm install` 後の apply も不要。Windows は symlink の作成に Developer Mode が要る。`private_` 接頭辞は付けず、`~/.claude` と `~/.devin` は chezmoi 既定の 0755 になる（既存機の `~/.claude` が 0700 でも apply で 0755 に変わる）。リンク先は `.chezmoi.sourceDir` から作るため、`--source` に worktree を渡して実 home に apply しない（worktree の検証は一時 destination に限る）。
 - OS ごとに配布先を変える設定は、`.chezmoiignore` の `.chezmoi.os` 分岐で対象外の OS から除外する（shell 設定は Windows に配らない等）。
 
 移行状況:
@@ -67,14 +67,14 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 | nvim                                                    | chezmoi (`dot_config/nvim/`)                                                                                           |
 | shell (bash / zsh / sheldon)                            | chezmoi (`dot_bashrc` 等、`dot_config/zsh/`、`dot_config/sheldon/`)                                                    |
 | 共通設定 (starship / zellij / just / ripgrep / wezterm) | chezmoi (`dot_config/starship.toml`、`dot_config/zellij/`、`dot_config/just/`、`dot_config/wezterm/`、`dot_ripgreprc`) |
-| .claude / .devin (rules)                                | chezmoi (`private_dot_claude/symlink_*.tmpl`、`private_dot_devin/symlink_rules.tmpl`。symlink 方式)                    |
+| .claude / .devin (rules)                                | chezmoi (`dot_claude/symlink_*.tmpl`、`dot_devin/symlink_rules.tmpl`。symlink 方式)                                    |
 | 上記以外                                                | dot-mori (`config.yaml`)                                                                                               |
 
 ## Agent Skills
 
-Agent Skills は [apm](https://github.com/microsoft/apm)（`packages.nix` で導入）で管理し、apm で導入した skill の実体は `.gitignore` で除外してコミットせず、`apm install` で `apm.lock.yaml` の commit から復元する。`~/.claude/skills` は chezmoi の symlink（`private_dot_claude/symlink_skills.tmpl`）で `.claude/skills/` を指す。
+Agent Skills は [apm](https://github.com/microsoft/apm)（`packages.nix` で導入）で管理し、apm で導入した skill の実体は `.gitignore` で除外してコミットせず、`apm install` で `apm.lock.yaml` の commit から復元する。`~/.claude/skills` は chezmoi の symlink（`dot_claude/symlink_skills.tmpl`）で `.claude/skills/` を指す。
 
-skill の実体は `.claude/skills/` に置く。`~/.claude/skills` は `.claude/skills/` を指すシンボリックリンク（chezmoi の `private_dot_claude/symlink_skills.tmpl` で設定）。自前管理の `review-loop` だけはコミットしている（`.gitignore` の否定パターンで除外から外している）。
+skill の実体は `.claude/skills/` に置く。`~/.claude/skills` は `.claude/skills/` を指すシンボリックリンク（chezmoi の `dot_claude/symlink_skills.tmpl` で設定）。自前管理の `review-loop` だけはコミットしている（`.gitignore` の否定パターンで除外から外している）。
 
 apm のデプロイ先は `apm.yml` の `targets: [claude]` で `.claude/skills/` に固定している。target の解決順は `--target` > `apm.yml` の `targets:` > auto-detect。省略時の auto-detect も `.claude/` の存在を見て `claude` を選ぶが、意図した配置先であることを明示するため固定を維持している。
 
