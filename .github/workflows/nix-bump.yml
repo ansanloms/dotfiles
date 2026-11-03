@@ -25,16 +25,14 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes
 
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.x
-
       - name: Bump self-built packages
-        # bump:sonarqube-cli が gh api で最新タグを引くため GH_TOKEN が必要。
+        # claude-statusline / md2html / sonarqube-cli の upgrade.sh が gh で最新タグや Release 資産を引くため GH_TOKEN が必要。
         env:
           GH_TOKEN: ${{ github.token }}
-        run: deno task bump
+        run: |
+          for s in .config/nix/*/upgrade.sh; do
+            "$s"
+          done
 
       - name: Stage and detect changes
         id: diff

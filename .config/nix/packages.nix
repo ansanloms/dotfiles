@@ -62,7 +62,6 @@ pkgs: with pkgs; [
   # lint / 開発ツール
   devcontainer
   hadolint
-  playwright-cli
   shellcheck
   sonar-scanner-cli
   sonarqube-cli

@@ -22,8 +22,9 @@ buildNpmPackage {
   src = ./backlog-bee-cli;
 
   # package-lock.json から得た npm 依存 FOD のハッシュ。
-  # lockfile を更新したら nix run nixpkgs#prefetch-npm-deps で再取得すること。
-  npmDepsHash = "sha256-W1uQqfeNWL/E3uPN6cO9sqMO72qn8d1ERhu41VqEAao=";
+  # lockfile が変わった (dependabot 等) ときは `backlog-bee-cli/upgrade.sh <現在の version>` で
+  # npmDepsHash を再取得する (引数を省くと最新版へ上がる)。
+  npmDepsHash = "sha256-xgmK3Tv7gV7aIgbNvgyCrGPd2byD45ySxgUihjhQI8w=";
 
   # 本体は unbuild でビルド済みの純 JS でビルドスクリプトを持たない。build phase を無効化する
   # (省略すると npmBuildHook が build script 不在でハードエラーになる)。
