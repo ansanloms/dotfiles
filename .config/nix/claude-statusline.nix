@@ -20,7 +20,7 @@
 #
 # リリースタグは version そのもの (v 無し。例: 0.1.0)。
 #
-# バージョンを上げる場合 (deno task bump:claude-statusline が下記を自動で行う):
+# バージョンを上げる場合 (.config/nix/claude-statusline/upgrade.sh が下記を自動で行う):
 #   1. target ごとの資産 (claude-statusline-<target>) を nix store prefetch-file で
 #      取得し、system 別に hashes を更新する。
 #   2. version 文字列を更新する。
@@ -39,7 +39,7 @@ let
     "aarch64-linux" = "linux-arm64";
   };
 
-  # 初回 bump 前のプレースホルダ (bump:claude-statusline が実値へ書き換える)。
+  # 初回 bump 前のプレースホルダ (.config/nix/claude-statusline/upgrade.sh が実値へ書き換える)。
   hashes = {
     "x86_64-linux" = "sha256-8vZLfyhPU3ruQ8o7bACu1/BfZEHjmi/4BPmsF3DIRsk=";
     "aarch64-linux" = "sha256-UuwIB0WyZ2iTB0pczPooYDZSrKB5YYCzClsTT3SvXBQ=";

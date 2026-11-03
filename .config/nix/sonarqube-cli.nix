@@ -12,7 +12,7 @@
 # ローダを持たない環境 (純 NixOS 等) では動かない。その場合は buildFHSEnv での
 # ラップに切り替える必要がある。
 #
-# バージョンを上げる場合 (deno task bump:sonarqube-cli が下記を自動で行う):
+# バージョンを上げる場合 (.config/nix/sonarqube-cli/upgrade.sh が下記を自動で行う):
 #   1. https://binaries.sonarsource.com/Distribution/sonarqube-cli/<ver>/linux/sonarqube-cli-<ver>-linux-x86-64.bin
 #      を nix store prefetch-file で取得し hash を更新する。
 #   2. version 文字列を更新する。
