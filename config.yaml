@@ -69,20 +69,6 @@ link:
     - src: ./Documents/PowerShell/profile.ps1
       targets:
         - windows
-  ~/.claude/CLAUDE.md:
-    - src: ./.claude/CLAUDE.md
-  ~/.claude/settings.json:
-    - src: ./.claude/settings.json
-  ~/.claude/rules:
-    - src: ./.agents/rules
-  ~/.devin/rules:
-    - src: ./.agents/rules
-  ~/.claude/lsp:
-    - src: ./.claude/lsp
-  ~/.claude/skills:
-    - src: ./.claude/skills
-  ~/.claude/agents:
-    - src: ./.claude/agents
   ~/.local/bin/git-worktree-select:
     - src: ./.local/bin/git-worktree-select
       targets:
