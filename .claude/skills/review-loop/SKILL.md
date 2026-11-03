@@ -50,10 +50,10 @@ store='git -C /path/to/worktree config branch.feature/x.review "$(cat {file})"'
 ### 読み書き
 
 - 初期化: `assets/ledger.md` を `ledger` にコピーし、`<branch>` / `<base>` を埋める。
-- 書き換え: `ledger` を編集 → `deno fmt --ext md --prose-wrap preserve` で整形 (表の縦線は fmt が表示幅で揃える。手で揃えない) → `store` があれば実行。
+- 書き換え: `ledger` を編集 → `npx --yes oxfmt@0.75.0 --stdin-filepath` で整形 (表の縦線は fmt が表示幅で揃える。手で揃えない) → `store` があれば実行。
 
   ```sh
-  deno fmt --ext md --prose-wrap preserve - < "$ledger" > "$ledger.tmp" && mv -f "$ledger.tmp" "$ledger"
+  npx --yes oxfmt@0.75.0 --stdin-filepath "$ledger" < "$ledger" > "$ledger.tmp" && mv -f "$ledger.tmp" "$ledger"
   if [ -n "$store" ]; then sh -c "$(printf '%s' "$store" | sed "s|{file}|$ledger|g")"; fi
   ```
 
@@ -270,5 +270,5 @@ git -C "$repo" commit -F <メインループが決めたメッセージのファ
 ## 注意
 
 - range 指定時に `/code-review` が未コミット変更を含めるかはプロンプト上未定義 (モデル任せ)。レビュー前に必ず WIP コミットし、未コミットを残さない。
-- `deno fmt` が無い環境では整形を飛ばし、その旨を報告する (台帳は崩れるが機能する)。
+- `npx` が無い環境では整形を飛ばし、その旨を報告する (台帳は崩れるが機能する)。
 - Claude Code on the web (リモートコンテナ) では、コンテナ側の Stop hook (`~/.claude/stop-hook-git-check.sh`。`~/.claude/launcher-settings.json` が登録する) が未コミット・未 push を毎ターン警告する。WIP を push しないこの skill の運用と衝突するが、この hook はリポジトリの管理下に無く (`config.yaml` に記述なし、シンボリックリンクでもない)、下位の設定から上位の hook を無効化する仕組みも無いため、リポジトリ側の変更では止められない。工程 7 まで警告が出続けるのは想定内として無視してよい。ローカル環境にこの hook は無い。なおこの hook は追跡ブランチではなくブランチ名から引いた `origin/<branch>` と比較するため、マージ後もリモートに残った同名ブランチがあると、実在しない未 push を報告する。
