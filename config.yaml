@@ -12,15 +12,6 @@ link:
     - src: ./.config/vim
   ~/.vimrc:
     - src: ./.vimrc
-  ~/.config/efm-langserver/config.yaml:
-    - src: ./.config/efm-langserver/config.yaml
-      targets:
-        - darwin
-        - linux
-  ~/AppData/Roaming/efm-langserver/config.yaml:
-    - src: ./.config/efm-langserver/config.yaml
-      targets:
-        - windows
   ~/.config/devin/config.json:
     - src: ./.config/devin/config.json
       targets:
@@ -58,24 +49,12 @@ link:
     - src: ./.config/nix
       targets:
         - linux
-  ~/.minttyrc:
-    - src: ./.minttyrc
-      targets:
-        - windows
-  ~/.nyagos:
-    - src: ./.nyagos
-      targets:
-        - windows
   ~/.wslconfig:
     - src: ./.wslconfig
       targets:
         - windows
   ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json:
     - src: ./AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json
-      targets:
-        - windows
-  ~/AppData/Roaming/PuTTY/putty.ini:
-    - src: ./AppData/Roaming/PuTTY/putty.ini
       targets:
         - windows
   ~/AppData/Roaming/CorvusSKK/config.xml:
@@ -90,15 +69,6 @@ link:
     - src: ./Documents/PowerShell/profile.ps1
       targets:
         - windows
-  /Windows/my.cnf:
-    - src: ./.my.cnf
-      targets:
-        - windows
-  ~/.my.cnf:
-    - src: ./.my.cnf
-      targets:
-        - darwin
-        - linux
   ~/.claude/CLAUDE.md:
     - src: ./.claude/CLAUDE.md
   ~/.claude/settings.json:
