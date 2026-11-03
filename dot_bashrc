@@ -21,3 +21,6 @@ fi
 if type wsl2-ssh-agent > /dev/null 2>&1; then
   eval $(wsl2-ssh-agent)
 fi
+
+
+# vim:filetype=bash:

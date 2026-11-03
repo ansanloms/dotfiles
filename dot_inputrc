@@ -1,2 +1,5 @@
 # bell
 set bell-style none
+
+
+# vim:filetype=readline:

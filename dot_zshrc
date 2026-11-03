@@ -37,3 +37,6 @@ git() {
     command git "$@"
   fi
 }
+
+
+# vim:filetype=zsh:
