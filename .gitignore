@@ -1,5 +1,6 @@
 **/.env
 
+# dot-mori 時代の旧パス (実行時ファイルの残骸対策)。README の移行手順を終えた後に削除する。
 .config/vim/*
 !.config/vim/config/
 !.config/vim/autoload/
@@ -8,6 +9,18 @@
 !.config/vim/launcher/000-general.yaml
 !.config/vim/launcher/001-terminal.yaml
 !.config/vim/launcher/002-ai-chat.yaml
+
+# 誤って chezmoi add した実行時ファイルを追跡しないための安全網。
+dot_config/vim/backup/
+dot_config/vim/undo/
+dot_config/vim/view/
+dot_config/vim/viminfo
+dot_config/vim/temp.vim
+dot_config/vim/work.vim
+dot_config/vim/syntax/
+dot_config/vim/pack/
+dot_config/vim/plugin/
+dot_config/vim/logs/
 
 .config/git/credentials
 .config/git/config.os
