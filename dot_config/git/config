@@ -1,5 +1,4 @@
 [include]
-	path = config.os
 	path = config.work
 	path = config.personal
 [user]
