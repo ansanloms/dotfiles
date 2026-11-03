@@ -114,11 +114,12 @@ wsl --list --online
 
 Windows 側には chezmoi 管理分のうち Windows 向けの設定 (nvim・git・noctty・alacritty・CorvusSKK・Windows Terminal・PowerShell プロファイル等) だけを配る。前提として上記の Git for Windows・Neovim・PowerShell 7・chezmoi が入っていること。
 
-Windows 側にもリポジトリを clone し、`sourceDir` にその絶対パスを書く。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、パスはシングルクォートで書く。
+Windows 側にもリポジトリを `%USERPROFILE%\dev\github.com\ansanloms\dotfiles` へ clone し、`sourceDir` にそのパスを書く。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、パスはシングルクォートで書く。
 
 ```powershell
+git clone https://github.com/ansanloms/dotfiles.git "$env:USERPROFILE\dev\github.com\ansanloms\dotfiles"
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.config\chezmoi" | Out-Null
-Set-Content "$env:USERPROFILE\.config\chezmoi\chezmoi.toml" "sourceDir = 'C:\path\to\dotfiles'"
+Set-Content "$env:USERPROFILE\.config\chezmoi\chezmoi.toml" "sourceDir = '$env:USERPROFILE\dev\github.com\ansanloms\dotfiles'"
 ```
 
 差分を確認して適用する。
