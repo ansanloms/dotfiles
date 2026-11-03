@@ -14,9 +14,13 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.softtabstop = 2
     vim.opt_local.expandtab = true
 
-    -- フォーマット指定
-    if vim.fn.executable("deno") == 1 then
-      vim.opt_local.formatprg = "deno fmt --ext json -"
+    -- フォーマット指定。oxfmt は --stdin-filepath のファイル名から parser を推定する。
+    if vim.fn.executable("npx") == 1 then
+      local name = vim.api.nvim_buf_get_name(0)
+      if name == "" then
+        name = "stdin.json"
+      end
+      vim.opt_local.formatprg = "npx --yes oxfmt@0.75.0 --stdin-filepath " .. vim.fn.shellescape(name)
     end
   end,
 })
