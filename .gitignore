@@ -41,10 +41,13 @@ apm_modules/
 # nix build の成果物（store パスへの symlink）
 result
 
-# .local/bin/ 配下は scripts/ から deno bundle で生成する（deno task build）。
+# dot_local/bin/ 配下は scripts/ から deno bundle で生成する（deno task build）。
 # ディレクトリ自体は .gitkeep で残し、生成物はコミットしない。
-/.local/bin/*
-!/.local/bin/.gitkeep
+/dot_local/bin/*
+!/dot_local/bin/.gitkeep
+
+# dot-mori 時代の生成物の残骸。`chezmoi apply` で `~/.local/bin` がコピーに置き換わってから削除し、この行も消す。
+/.local/bin/
 
 # deno task coverage の出力
 /coverage/

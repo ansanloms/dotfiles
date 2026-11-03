@@ -50,7 +50,7 @@ nix flake update --flake path:.config/nix
 - `.claude/` - このリポジトリの project 設定 (worktrees・jobs・settings.local.json)。グローバル設定は `dot_claude/` に移した
 - `dot_claude/` - Claude Code のグローバル設定 (`CLAUDE.md` `settings.json` `rules/` `agents/` `lsp/` `skills/review-loop/`)。chezmoi 管理で `~/.claude/` へコピーする。`rules/` は `dot_devin/rules/*.md.tmpl` から `include` して `~/.devin/rules` にも配る。rules を追加・削除したら `dot_devin/rules/` の stub も同じ名前で追加・削除する (自動では配られない)。
 - `dot_apm/` - apm の manifest と lock (`~/.apm/` へコピー。下記「Agent Skills」節)
-- `.local/bin/` - ユーザースクリプト（`scripts/` から `deno bundle` で生成）
+- `dot_local/bin/` - ユーザースクリプト（`scripts/` から `deno bundle` で `executable_<name>` として生成）。chezmoi 管理
 
 ## chezmoi
 
@@ -75,6 +75,7 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 | .claude / .devin (rules) / .apm                                            | chezmoi (`dot_claude/`、`dot_devin/rules/*.md.tmpl`、`dot_apm/`)                                                                                           |
 | git                                                                        | chezmoi (`dot_config/git/`、config.os は tmpl)                                                                                                             |
 | Windows 専用 (AppData / Documents / .wslconfig / noctty)、devin、alacritty | chezmoi (`AppData/`、`Documents/`、`dot_wslconfig`、`dot_config/devin/`、`dot_config/alacritty/`。Windows 側は `AppData/Roaming/<name>/*.tmpl` の include) |
+| .local/bin (git-worktree-*)                                                | chezmoi (`dot_local/bin/executable_*`、`deno task build` の生成物)                                                                                         |
 | 上記以外                                                                   | dot-mori (`config.yaml`)                                                                                                                                   |
 
 ## Agent Skills
@@ -124,10 +125,10 @@ lifecycle は `apm lifecycle trust` で信頼したときだけ実行される�
 clone 直後の手順:
 
 ```sh
+deno task build
 chezmoi apply
 (cd ~/.apm && apm lifecycle trust)
 apm install -g
-deno task build
 deno task install
 ```
 
@@ -135,11 +136,11 @@ deno task install
 
 ## Local scripts
 
-`.local/bin/` 配下のコマンド（`git-worktree-select` / `git-worktree-include` 等）は、`scripts/` 以下の TypeScript を `deno bundle` で単一ファイルにビルドした生成物。`scripts/` は Deno workspace で、モジュールごとのディレクトリ（member。現状は `git-worktree` のみ）に分かれている。共有依存はルートの `deno.json` の `imports` で、モジュール固有の依存（npm パッケージ等）は各 member（`scripts/<module>/deno.json`）の `imports` で管理する。
+`dot_local/bin/executable_<name>` のコマンド（`git-worktree-select` / `git-worktree-include` 等）は、`scripts/` 以下の TypeScript を `deno bundle` で単一ファイルにビルドした生成物。`scripts/` は Deno workspace で、モジュールごとのディレクトリ（member。現状は `git-worktree` のみ）に分かれている。共有依存はルートの `deno.json` の `imports` で、モジュール固有の依存（npm パッケージ等）は各 member（`scripts/<module>/deno.json`）の `imports` で管理する。
 
 - ソース: `scripts/<module>/*.ts`（shebang に実行時の権限フラグを記述。`deno bundle` が生成物の先頭へ引き継ぐ）
-- ビルド: `deno task build` で `scripts/<module>/*.ts` を `.local/bin/<name>` に bundle し、実行ビットを付与する
-- 生成物は `.gitignore` 済みでコミットしない。`deno task install` でシンボリックリンクするため、**install の前に build しておく**こと
+- ビルド: `deno task build` で `scripts/<module>/*.ts` を `dot_local/bin/executable_<name>` に bundle し、実行ビットを付与する
+- 生成物は `.gitignore` 済みでコミットしない。`deno task build` の後に `chezmoi apply` で `~/.local/bin/<name>` へコピーされる（build だけでは反映されない）。chezmoi は git の追跡状態を見ず source の実体を配るため、ignore 済みでも配られる。配布先は linux のみ（`.chezmoiignore`）。worktree で `deno task build` しても、`chezmoi apply` が配るのはメイン checkout (source) の `dot_local/bin/` なので、ブランチの動作確認は worktree の `dot_local/bin/executable_<name>` を直接実行して行う。
 
 ソースを編集したら `deno task build` で再生成する。
 

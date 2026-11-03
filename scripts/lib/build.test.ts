@@ -27,11 +27,13 @@ function fakeDeps(
   deps: BuildDeps;
   bundled: Array<[string, string]>;
   chmodded: string[];
+  removed: string[];
   logs: string[];
   errors: string[];
 } {
   const bundled: Array<[string, string]> = [];
   const chmodded: string[] = [];
+  const removed: string[] = [];
   const logs: string[] = [];
   const errors: string[] = [];
 
@@ -43,6 +45,10 @@ function fakeDeps(
 
   const deps: BuildDeps = {
     readDir,
+    remove: (path) => {
+      removed.push(path);
+      return Promise.resolve();
+    },
     bundle: (src, out) => {
       bundled.push([src, out]);
       return Promise.resolve(
@@ -57,7 +63,7 @@ function fakeDeps(
     errorLog: (m) => errors.push(m),
   };
 
-  return { deps, bundled, chmodded, logs, errors };
+  return { deps, bundled, chmodded, removed, logs, errors };
 }
 
 Deno.test("run: member ディレクトリを列挙し lib は無視する", async () => {
@@ -81,10 +87,13 @@ Deno.test("run: member ディレクトリを列挙し lib は無視する", asyn
 
   assertEquals(await run(f.deps), 0);
   assertEquals(f.bundled, [
-    ["scripts/sample-tool/sample-tool.ts", ".local/bin/sample-tool"],
+    [
+      "scripts/sample-tool/sample-tool.ts",
+      "dot_local/bin/executable_sample-tool",
+    ],
   ]);
-  assertEquals(f.chmodded, [".local/bin/sample-tool"]);
-  assertEquals(f.logs, ["Built: .local/bin/sample-tool"]);
+  assertEquals(f.chmodded, ["dot_local/bin/executable_sample-tool"]);
+  assertEquals(f.logs, ["Built: dot_local/bin/executable_sample-tool"]);
   assertEquals(f.errors, []);
 });
 
@@ -104,10 +113,16 @@ Deno.test("run: 複数 member の直下エントリをすべて bundle する", 
 
   assertEquals(await run(f.deps), 0);
   assertEquals(f.bundled, [
-    ["scripts/sample-tool/sample-tool.ts", ".local/bin/sample-tool"],
-    ["scripts/other-tool/other-tool.ts", ".local/bin/other-tool"],
+    [
+      "scripts/sample-tool/sample-tool.ts",
+      "dot_local/bin/executable_sample-tool",
+    ],
+    ["scripts/other-tool/other-tool.ts", "dot_local/bin/executable_other-tool"],
   ]);
-  assertEquals(f.chmodded, [".local/bin/sample-tool", ".local/bin/other-tool"]);
+  assertEquals(f.chmodded, [
+    "dot_local/bin/executable_sample-tool",
+    "dot_local/bin/executable_other-tool",
+  ]);
 });
 
 Deno.test("run: bundle 失敗で exit 1 し以降を止める", async () => {
@@ -124,7 +139,79 @@ Deno.test("run: bundle 失敗で exit 1 し以降を止める", async () => {
     { "scripts/a/a.ts": { success: false, stderr: "boom" } },
   );
   assertEquals(await run(f.deps), 1);
-  assertEquals(f.bundled, [["scripts/a/a.ts", ".local/bin/a"]]);
+  assertEquals(f.bundled, [["scripts/a/a.ts", "dot_local/bin/executable_a"]]);
   assertEquals(f.errors, ["boom"]);
   assertEquals(f.logs, []);
+});
+
+Deno.test("run: 成功時に今回生成しなかった executable_ だけ削除する", async () => {
+  const f = fakeDeps({
+    "dot_local/bin": [
+      { name: "executable_stale", isFile: true, isDirectory: false },
+      { name: "executable_a", isFile: true, isDirectory: false },
+      { name: ".gitkeep", isFile: true, isDirectory: false },
+      { name: "other", isFile: true, isDirectory: false },
+      { name: "executable_dir", isFile: false, isDirectory: true },
+    ],
+    "scripts": [
+      { name: "a", isFile: false, isDirectory: true },
+    ],
+    "scripts/a": [
+      { name: "a.ts", isFile: true, isDirectory: false },
+    ],
+  });
+  assertEquals(await run(f.deps), 0);
+  assertEquals(f.removed, ["dot_local/bin/executable_stale"]);
+});
+
+Deno.test("run: bundle 失敗時は既存の executable_ を削除しない", async () => {
+  const f = fakeDeps(
+    {
+      "dot_local/bin": [
+        { name: "executable_keep", isFile: true, isDirectory: false },
+      ],
+      "scripts": [
+        { name: "a", isFile: false, isDirectory: true },
+      ],
+      "scripts/a": [
+        { name: "a.ts", isFile: true, isDirectory: false },
+      ],
+    },
+    { "scripts/a/a.ts": { success: false, stderr: "boom" } },
+  );
+  assertEquals(await run(f.deps), 1);
+  assertEquals(f.removed, []);
+});
+
+Deno.test("run: 削除が NotFound でも残りの掃除を続ける", async () => {
+  const f = fakeDeps({
+    "dot_local/bin": [
+      { name: "executable_x", isFile: true, isDirectory: false },
+      { name: "executable_y", isFile: true, isDirectory: false },
+    ],
+  });
+  f.deps.remove = (path) => {
+    f.removed.push(path);
+    return path.endsWith("executable_x")
+      ? Promise.reject(new Deno.errors.NotFound("gone"))
+      : Promise.resolve();
+  };
+  assertEquals(await run(f.deps), 0);
+  assertEquals(f.removed, [
+    "dot_local/bin/executable_x",
+    "dot_local/bin/executable_y",
+  ]);
+});
+
+Deno.test("run: 出力先が無くてもエラーにしない", async () => {
+  const f = fakeDeps({});
+  const readDir = f.deps.readDir;
+  f.deps.readDir = (dir) => {
+    if (dir === "dot_local/bin") {
+      throw new Deno.errors.NotFound("no dir");
+    }
+    return readDir(dir);
+  };
+  assertEquals(await run(f.deps), 0);
+  assertEquals(f.removed, []);
 });

@@ -43,7 +43,7 @@
     "check": "deno check ./scripts/**/*.ts",
     "test": "deno test --allow-read --allow-write --allow-net scripts/",
     "coverage": "deno test --allow-read --allow-write --allow-net --coverage=coverage scripts/ && deno coverage coverage",
-    "build": "deno run --allow-read=scripts --allow-write=.local/bin --allow-run=deno --allow-env=LD_LIBRARY_PATH scripts/build.ts",
+    "build": "deno run --allow-read=scripts,dot_local/bin --allow-write=dot_local/bin --allow-run=deno --allow-env=LD_LIBRARY_PATH scripts/build.ts",
     "install": "deno task dot-mori --config ./config.yaml",
     "uninstall": "deno task dot-mori --config ./config.yaml --clean"
   }

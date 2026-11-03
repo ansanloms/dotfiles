@@ -37,6 +37,10 @@ coverage
 .bash_profile
 .inputrc
 {{ end }}
+# .local/bin のコマンドは linux のみ (dot-mori 時代の targets を維持。空の ~/.local を作らないよう .local ごと除外する)。
+{{ if ne .chezmoi.os "linux" }}
+.local
+{{ end }}
 # zsh 系・bash_aliases は darwin と linux のみ。
 {{ if and (ne .chezmoi.os "linux") (ne .chezmoi.os "darwin") }}
 .bash_aliases

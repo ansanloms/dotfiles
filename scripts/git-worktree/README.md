@@ -27,6 +27,6 @@ git worktree の選択・ローカル未追跡ファイルの持ち込み・マ�
 
 ## ビルドとテスト
 
-リポジトリルートで `deno task build` を実行すると、各エントリ（`git-worktree-select.ts` / `git-worktree-include.ts` / `git-worktree-sweep.ts`）が `deno bundle` で単一ファイル化され、`.local/bin/<エントリファイル名（拡張子なし）>` として配置される（`lib/` はビルド対象から外れる）。
+リポジトリルートで `deno task build` を実行すると、各エントリ（`git-worktree-select.ts` / `git-worktree-include.ts` / `git-worktree-sweep.ts`）が `deno bundle` で単一ファイル化され、`dot_local/bin/executable_<エントリファイル名（拡張子なし）>` として配置される（`chezmoi apply` で `~/.local/bin/<名前>` へコピーされる）（`lib/` はビルド対象から外れる）。
 
 `deno task test` でリポジトリ全体のユニットテスト（`lib/*.test.ts`）を実行する。

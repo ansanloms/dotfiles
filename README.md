@@ -40,7 +40,7 @@ sudo systemctl restart nix-daemon
 
 ### 4. Deploy dotfiles
 
-`.local/bin/` 配下のスクリプトは `scripts/` のソースから生成するため、先にビルドする。
+`dot_local/bin/` 配下のスクリプトは `scripts/` のソースから生成するため、chezmoi で配る前にビルドする。ビルドだけでは `~/.local/bin/` に反映されず、後述の `chezmoi apply` が必要。
 
 ```sh
 nix run nixpkgs#deno -- task build
@@ -68,7 +68,7 @@ nix run nixpkgs#chezmoi -- apply
 
 以前 dot-mori が作った symlink が残っている場合、ファイルの symlink は `chezmoi apply` がファイルの内容で置き換える。ディレクトリの symlink（`~/.config/nvim`、`~/.config/sheldon`、`~/.config/zellij`、`~/.config/wezterm`、`~/.config/git` 等。CLAUDE.md の移行状況の表にあるディレクトリ）は `chezmoi apply` の前に symlink だけを削除する（`rm <path>`。リンク先の中身は消えない）。旧 `.config/nvim/` に残る未追跡ファイル（`lazy-lock.json`、`lua/temp.lua`、`lua/work.lua` 等）は apply 後に `~/.config/nvim/` へ移す。旧 `.config/git/` に残る未追跡の秘匿ファイル（`credentials`、`config.personal`、`config.work`）は apply 後に `~/.config/git/` へ移す。
 
-旧 dot-mori の残骸として `~/.config/alacritty/os.toml` の dangling symlink が残っている場合は、`chezmoi apply` の前に `rm` で削除する。
+旧 dot-mori の残骸として `~/.config/alacritty/os.toml` の dangling symlink が残っている場合は、`chezmoi apply` の前に `rm` で削除する。旧 dot-mori の `~/.local/bin/*` の symlink は、先に消すと dangling になるため、`chezmoi apply` でコピーに置き換わってから残骸（リポジトリ内の `.local/bin/`）を削除する。
 
 Windows（PowerShell）は次のとおり。
 
