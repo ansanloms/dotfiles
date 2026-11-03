@@ -119,16 +119,13 @@ Windows 側にもリポジトリを clone し、`sourceDir` にその絶対パ�
 ```powershell
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.config\chezmoi" | Out-Null
 Set-Content "$env:USERPROFILE\.config\chezmoi\chezmoi.toml" "sourceDir = 'C:\path\to\dotfiles'"
-setx XDG_CONFIG_HOME "$env:USERPROFILE\.config"
 ```
 
-`XDG_CONFIG_HOME` を `%USERPROFILE%\.config` にすると nvim が `~/.config/nvim` を読むため、nvim の source に OS 分岐が無くなる。`XDG_CONFIG_HOME` を読む他ツールの探索先も変わりうる点に注意する。`setx` の反映には新しいシェルが要るので、シェルを開き直してから適用する。
+差分を確認して適用する。
 
 ```powershell
 chezmoi diff
 chezmoi apply
 ```
-
-適用後、nvim で `:echo stdpath("config")` が `~/.config/nvim` を指すことを確認する。
 
 `Documents/PowerShell/profile.ps1` は PowerShell 7 (pwsh) のプロファイルの場所に配る。Windows PowerShell 5.1 は `Documents/WindowsPowerShell` を読むため、pwsh が無いとプロファイルは効かない。
