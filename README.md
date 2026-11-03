@@ -64,9 +64,9 @@ nix run nixpkgs#chezmoi -- diff
 nix run nixpkgs#chezmoi -- apply
 ```
 
-手順 5 で nix profile に入った後は素の `chezmoi` でよい。pull と `chezmoi apply` は同じシェルで続けて実行し、その間に新しいシェルを開かない。shell 設定の symlink が pull でリンク切れになるため、新しいシェルでは PATH が通らず `chezmoi` が見つからない。その場合は `~/.nix-profile/bin/chezmoi` を絶対パスで実行する。
+手順 5 で nix profile に入った後は素の `chezmoi` でよい。pull と `chezmoi apply` は同じシェルで続けて実行し、その間に新しいシェルを開かない。shell 設定の symlink が pull でリンク切れになるため、新しいシェルでは PATH が通らず `chezmoi` が見つからない。その場合は `~/.nix-profile/bin/chezmoi` を絶対パスで実行する。git も同様で、apply までの間はグローバル設定（excludesfile・credential helper）が無い状態になるため、その間に git 操作をしない。
 
-以前 dot-mori が作った symlink が残っている場合、ファイルの symlink は `chezmoi apply` がファイルの内容で置き換える。ディレクトリの symlink（`~/.config/nvim`、`~/.config/sheldon`、`~/.config/zellij`、`~/.config/wezterm` 等。CLAUDE.md の移行状況の表にあるディレクトリ）は `chezmoi apply` の前に symlink だけを削除する（`rm <path>`。リンク先の中身は消えない）。旧 `.config/nvim/` に残る未追跡ファイル（`lazy-lock.json`、`lua/temp.lua`、`lua/work.lua` 等）は apply 後に `~/.config/nvim/` へ移す。
+以前 dot-mori が作った symlink が残っている場合、ファイルの symlink は `chezmoi apply` がファイルの内容で置き換える。ディレクトリの symlink（`~/.config/nvim`、`~/.config/sheldon`、`~/.config/zellij`、`~/.config/wezterm`、`~/.config/git` 等。CLAUDE.md の移行状況の表にあるディレクトリ）は `chezmoi apply` の前に symlink だけを削除する（`rm <path>`。リンク先の中身は消えない）。旧 `.config/nvim/` に残る未追跡ファイル（`lazy-lock.json`、`lua/temp.lua`、`lua/work.lua` 等）は apply 後に `~/.config/nvim/` へ移す。旧 `.config/git/` に残る未追跡の秘匿ファイル（`credentials`、`config.personal`、`config.work`）は apply 後に `~/.config/git/` へ移す。
 
 Windows（PowerShell）は次のとおり。
 
@@ -75,12 +75,12 @@ winget install twpayne.chezmoi
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.config\chezmoi" | Out-Null
 Set-Content "$env:USERPROFILE\.config\chezmoi\chezmoi.toml" "sourceDir = 'C:\path\to\dotfiles'"
 setx XDG_CONFIG_HOME "$env:USERPROFILE\.config"
-# 以前 dot-mori が作ったディレクトリの symlink（~/AppData/Local/nvim、zellij、wezterm、~/.claude 配下、~/.devin/rules 等）を削除してから、新しいシェルで
+# 以前 dot-mori が作ったディレクトリの symlink（~/AppData/Local/nvim、zellij、wezterm、~/.config/git、~/.claude 配下、~/.devin/rules 等）を削除してから、新しいシェルで
 chezmoi diff
 chezmoi apply
 ```
 
-`sourceDir` は Windows 側 clone の絶対パスに置き換える。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、パスはシングルクォートで書く。旧 `.config/nvim/` に残る未追跡ファイル（`lazy-lock.json`、`lua/temp.lua`、`lua/work.lua` 等）は apply 後に `~/.config/nvim/` へ移す。`setx` の反映には新しいシェルが要る。pull と `chezmoi apply` は同じシェルで続けて実行する。適用後、nvim で `:echo stdpath("config")` が `~/.config/nvim` を指すことを確認する。
+`sourceDir` は Windows 側 clone の絶対パスに置き換える。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、パスはシングルクォートで書く。旧 `.config/nvim/` に残る未追跡ファイル（`lazy-lock.json`、`lua/temp.lua`、`lua/work.lua` 等）は apply 後に `~/.config/nvim/` へ移す。旧 `.config/git/` に残る未追跡の秘匿ファイル（`credentials`、`config.personal`、`config.work`）は apply 後に `~/.config/git/` へ移す。`setx` の反映には新しいシェルが要る。pull と `chezmoi apply` は同じシェルで続けて実行する。適用後、nvim で `:echo stdpath("config")` が `~/.config/nvim` を指すことを確認する。
 
 以前 dot-mori が作った `~/.claude/rules` `~/.claude/lsp` `~/.claude/skills` `~/.claude/agents` `~/.devin/rules` のディレクトリ symlink が残っている場合は apply 前に `rm` する（`~/.claude/CLAUDE.md` `~/.claude/settings.json` のファイル symlink は apply が内容で置き換える）。`~/.claude/skills` が symlink ではなく実ディレクトリ（Claude Code の `synced/` 等）の場合、apply はその中の管理対象（`review-loop/`）だけを書き、他には触れない。
 

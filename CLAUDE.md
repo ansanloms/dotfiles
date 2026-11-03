@@ -35,7 +35,7 @@ nix flake update --flake path:.config/nix
 - `.config/nix/` - Nix 設定（nix.conf）と flake によるパッケージ管理（flake.nix + packages.nix）
 - `dot_config/nvim/` - Neovim 設定（Lua）。chezmoi 管理（下記「chezmoi」節）
 - `.config/vim/` - Vim 設定（minpac でプラグイン管理）
-- `.config/git/` - Git 設定
+- `dot_config/git/` - Git 設定。chezmoi 管理
 - `dot_config/wezterm/` - WezTerm 設定。chezmoi 管理
 - `.config/ghostty/` - Ghostty 設定（Windows では Ghostty フォークの noctty が読む。`config.ghostty` が共通、`windows.ghostty` が Windows 固有）
 - `dot_config/zellij/` - Zellij 設定。chezmoi 管理
@@ -60,6 +60,7 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 - Windows は環境変数 `XDG_CONFIG_HOME` を `%USERPROFILE%\.config` にし、nvim に `~/.config/nvim` を読ませる。これにより nvim の source に OS 分岐は無い。`XDG_CONFIG_HOME` を読む他ツールの探索先も変わりうる点に注意。
 - `~/.claude` 配下と `~/.apm` もコピー方式。`~/.claude/*` を直接編集した場合や、Claude Code が `settings.json` を書き換えた場合、apm が `~/.apm/apm.lock.yaml` を更新した場合は `chezmoi diff` で差分を見て `chezmoi re-add <target>` でリポジトリへ取り込む。`~/.devin/rules/*.md` はテンプレート（`include`）なので re-add の対象外で、rules は `~/.claude/rules` 側を直す。
 - OS ごとに配布先を変える設定は、`.chezmoiignore` の `.chezmoi.os` 分岐で対象外の OS から除外する（shell 設定は Windows に配らない等）。
+- OS で内容が変わる 1 ファイルは `<name>.tmpl` にして `{{ include "..." }}` で OS 別の断片を取り込む (`dot_config/git/config.os.tmpl` が `config.linux` / `config.windows` を `.chezmoi.os` で選ぶ)。断片そのものは `.chezmoiignore` で target から外す。`.tmpl` のファイルは `chezmoi re-add` の対象外なので、直すときは source 側を編集する。
 
 移行状況:
 
@@ -69,6 +70,7 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 | shell (bash / zsh / sheldon)                            | chezmoi (`dot_bashrc` 等、`dot_config/zsh/`、`dot_config/sheldon/`)                                                    |
 | 共通設定 (starship / zellij / just / ripgrep / wezterm) | chezmoi (`dot_config/starship.toml`、`dot_config/zellij/`、`dot_config/just/`、`dot_config/wezterm/`、`dot_ripgreprc`) |
 | .claude / .devin (rules) / .apm                         | chezmoi (`dot_claude/`、`dot_devin/rules/*.md.tmpl`、`dot_apm/`)                                                       |
+| git                                                     | chezmoi (`dot_config/git/`、config.os は tmpl)                                                                         |
 | 上記以外                                                | dot-mori (`config.yaml`)                                                                                               |
 
 ## Agent Skills
