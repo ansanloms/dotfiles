@@ -23,11 +23,12 @@ dot_config/nvim/lazy-lock.json
 
 .config/alacritty/os.toml
 
+# apm の project scope 時代の残骸 (既存 clone に残る skill 実体と apm_modules)。消した後はこの行も消してよい。
+apm_modules/
+.claude/skills/*
+
 # nix build の成果物（store パスへの symlink）
 result
-
-# APM dependencies
-apm_modules/
 
 # .local/bin/ 配下は scripts/ から deno bundle で生成する（deno task build）。
 # ディレクトリ自体は .gitkeep で残し、生成物はコミットしない。
@@ -36,9 +37,3 @@ apm_modules/
 
 # deno task coverage の出力
 /coverage/
-
-# apm で導入する skill。実体は apm install で apm.lock.yaml から復元する。
-# 自前管理の skill は追跡するため、追加したら下に否定パターン (!.claude/skills/<name>/) を足す。
-# 現状の自前管理は review-loop のみ。
-.claude/skills/*
-!.claude/skills/review-loop/
