@@ -149,18 +149,6 @@ apm install -g
 
 bump はファイルを書き換えるだけで反映はしない。完了後に `git diff` で確認してから `chezmoi apply` で `~/.config/nix` へ届け、`nix profile upgrade --all --impure` で反映する。これはプロファイルが `~/.config/nix#default` で登録されている前提。`~/.config/nix` は chezmoi のコピーで git 管理外の通常ディレクトリなので、nix から見ると path flake であり、tracked かどうかに関係なくディレクトリ全体が使われる。新規 `.nix` ファイル等を追加したときも `chezmoi apply` で届ければよい（`git add` は不要）。`flake.nix` の input を変えたときは、リポジトリ側で `nix flake lock --flake path:dot_config/nix`（または `nix flake update`）を実行して `flake.lock` を更新してから `chezmoi apply` する。先に `nix profile upgrade` すると nix が `~/.config/nix` 側に lock を書き、source と食い違う。
 
-既存 profile の付け替え（dot-mori 時代の登録は `git+file://<clone>?dir=.config/nix`、名前 `.config/nix`）は、このブランチのマージ後に次の順で行う。
-
-```sh
-# 旧 symlink が残っていれば消す
-rm -f ~/.config/nix
-# ~/.config/nix がコピーで出来る
-chezmoi apply
-# この時点で ~/.nix-profile/bin の chezmoi・git は消える（nix 本体は installer が入れた system profile にあり、続行できる）
-nix profile remove .config/nix
-nix profile add ~/.config/nix#default --impure
-```
-
 ### bump で拾えない変更
 
 bump が更新するのは version 文字列と FOD ハッシュという、機械的に再計算できる値だけ。新版が次を変えた場合は bump 後の `nix profile upgrade` がビルドエラーになるので、エラーを読んで derivation を手当てする。以下の `nix profile upgrade` はいずれも先に `chezmoi apply` で届けてから実行する:
