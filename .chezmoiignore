@@ -12,8 +12,6 @@ scripts
 apm.yml
 apm.lock.yaml
 apm_modules
-AppData
-Documents
 result
 coverage
 
@@ -48,3 +46,20 @@ coverage
 .config/zsh
 .config/sheldon
 {{ end }}
+# Windows 専用の配布物。Windows 以外では配らない。
+{{ if ne .chezmoi.os "windows" }}
+AppData
+Documents
+.wslconfig
+{{ end }}
+# devin は Linux / darwin 専用の配布物 (Windows は AppData 側に配る)。
+{{ if eq .chezmoi.os "windows" }}
+.config/devin
+{{ end }}
+# alacritty は linux のみ (dot-mori 時代の targets を維持。Windows は AppData 側に配る)。
+{{ if ne .chezmoi.os "linux" }}
+.config/alacritty
+{{ end }}
+# include 元の OS 別断片は target に置かない。
+.config/alacritty/linux.toml
+.config/alacritty/windows.toml

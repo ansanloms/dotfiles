@@ -27,7 +27,12 @@ dot_config/git/*config.work*
 dot_config/nvim/lua/temp.lua
 dot_config/nvim/lazy-lock.json
 
+# dot-mori 時代の旧パス。移行後に削除してよい。
 .config/alacritty/os.toml
+
+# os.toml は empty_os.toml.tmpl から生成する。re-add で混入した生成物を追跡しないための安全網。
+dot_config/alacritty/os.toml
+dot_config/alacritty/empty_os.toml
 
 # apm の project scope 時代の残骸 (既存 clone に残る skill 実体と apm_modules)。消した後はこの行も消してよい。
 apm_modules/

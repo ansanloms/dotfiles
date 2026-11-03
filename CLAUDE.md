@@ -37,7 +37,9 @@ nix flake update --flake path:.config/nix
 - `.config/vim/` - Vim 設定（minpac でプラグイン管理）
 - `dot_config/git/` - Git 設定。chezmoi 管理
 - `dot_config/wezterm/` - WezTerm 設定。chezmoi 管理
-- `.config/ghostty/` - Ghostty 設定（Windows では Ghostty フォークの noctty が読む。`config.ghostty` が共通、`windows.ghostty` が Windows 固有）
+- `AppData/Local/noctty/` - Ghostty 設定（Windows では Ghostty フォークの noctty が読む。`config.ghostty` が共通、`os.ghostty` が Windows 固有。chezmoi 管理）
+- `dot_config/alacritty/` - Alacritty 設定。chezmoi 管理。Windows は `AppData/Roaming/alacritty/` の include stub から配る
+- `dot_config/devin/` - Devin 設定。chezmoi 管理。Windows は `AppData/Roaming/devin/` の include stub から配る
 - `dot_config/zellij/` - Zellij 設定。chezmoi 管理
 - `dot_config/starship.toml` - Starship プロンプト設定。chezmoi 管理
 - `dot_config/just/` - just のグローバル justfile。chezmoi 管理
@@ -58,20 +60,22 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 - `exact_` は付けない。nvim が target 側に書く `lazy-lock.json` や、ローカル専用の `lua/temp.lua` を消さないため。これらはリポジトリに置かない（`.chezmoiignore` で target パスを除外しており `chezmoi add` / `apply` の対象にならない。`.gitignore` の該当行は git 側の安全網）。同じ理由で `~/.claude/skills/`（apm が置く skill と Claude Code の `synced/` キャッシュ）にも付けない。
 - マシンごとの設定は `~/.config/chezmoi/chezmoi.toml` に `sourceDir = "~/dev/github.com/ansanloms/dotfiles"` の 1 行を書く（Windows は `%USERPROFILE%\.config\chezmoi\chezmoi.toml`。`~` 展開は Windows で未確認のため絶対パスで書く。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、Windows のパスはシングルクォートの literal string で書く。例: `sourceDir = 'C:\path\to\dotfiles'`）。`chezmoi init` は使わない（ローカルパスを source にする手順が公式文書に無い）。
 - Windows は環境変数 `XDG_CONFIG_HOME` を `%USERPROFILE%\.config` にし、nvim に `~/.config/nvim` を読ませる。これにより nvim の source に OS 分岐は無い。`XDG_CONFIG_HOME` を読む他ツールの探索先も変わりうる点に注意。
-- `~/.claude` 配下と `~/.apm` もコピー方式。`~/.claude/*` を直接編集した場合や、Claude Code が `settings.json` を書き換えた場合、apm が `~/.apm/apm.lock.yaml` を更新した場合は `chezmoi diff` で差分を見て `chezmoi re-add <target>` でリポジトリへ取り込む。`~/.devin/rules/*.md` はテンプレート（`include`）なので re-add の対象外で、rules は `~/.claude/rules` 側を直す。
-- OS ごとに配布先を変える設定は、`.chezmoiignore` の `.chezmoi.os` 分岐で対象外の OS から除外する（shell 設定は Windows に配らない等）。
+- `~/.claude` 配下と `~/.apm` もコピー方式。`~/.claude` `~/.apm` に限らず、アプリが自分で書き換える設定（devin の `config.json`、Windows Terminal の `settings.json`、CorvusSKK の `config.xml` 等）は `chezmoi diff` → `chezmoi re-add` でリポジトリへ取り込む。Windows の `AppData/.../*.tmpl`（include stub）と `~/.devin/rules/*.md` はテンプレートなので re-add できず、source 側（`dot_config/<name>/`、rules は `~/.claude/rules`）を直す。
+- Linux と Windows で配布先が異なる設定は、`dot_config/<name>/` を実体にし、`AppData/.../<name>/<file>.tmpl` の `include` stub で Windows 側に配る。`dot_config/<name>/` にファイルを足したら（include 元の断片のように target に置かないファイルは除く）、Windows 用の `AppData/.../<name>/<file>.tmpl` の stub も同じ名前で足す（自動では配られない）。OS ごとの要否は `.chezmoiignore` の `.chezmoi.os` 分岐で制御する（shell 設定は Windows に配らない等）。
+- 空になりうるファイル (alacritty の `os.toml` の Linux 版等) は `empty_` 接頭辞を付け、空でも target に作る。
 - OS で内容が変わる 1 ファイルは `<name>.tmpl` にして `{{ include "..." }}` で OS 別の断片を取り込む (`dot_config/git/config.os.tmpl` が `config.linux` / `config.windows` を `.chezmoi.os` で選ぶ)。断片そのものは `.chezmoiignore` で target から外す。`.tmpl` のファイルは `chezmoi re-add` の対象外なので、直すときは source 側を編集する。
 
 移行状況:
 
-| 設定                                                    | 管理                                                                                                                   |
-| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| nvim                                                    | chezmoi (`dot_config/nvim/`)                                                                                           |
-| shell (bash / zsh / sheldon)                            | chezmoi (`dot_bashrc` 等、`dot_config/zsh/`、`dot_config/sheldon/`)                                                    |
-| 共通設定 (starship / zellij / just / ripgrep / wezterm) | chezmoi (`dot_config/starship.toml`、`dot_config/zellij/`、`dot_config/just/`、`dot_config/wezterm/`、`dot_ripgreprc`) |
-| .claude / .devin (rules) / .apm                         | chezmoi (`dot_claude/`、`dot_devin/rules/*.md.tmpl`、`dot_apm/`)                                                       |
-| git                                                     | chezmoi (`dot_config/git/`、config.os は tmpl)                                                                         |
-| 上記以外                                                | dot-mori (`config.yaml`)                                                                                               |
+| 設定                                                                       | 管理                                                                                                                                                       |
+| -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| nvim                                                                       | chezmoi (`dot_config/nvim/`)                                                                                                                               |
+| shell (bash / zsh / sheldon)                                               | chezmoi (`dot_bashrc` 等、`dot_config/zsh/`、`dot_config/sheldon/`)                                                                                        |
+| 共通設定 (starship / zellij / just / ripgrep / wezterm)                    | chezmoi (`dot_config/starship.toml`、`dot_config/zellij/`、`dot_config/just/`、`dot_config/wezterm/`、`dot_ripgreprc`)                                     |
+| .claude / .devin (rules) / .apm                                            | chezmoi (`dot_claude/`、`dot_devin/rules/*.md.tmpl`、`dot_apm/`)                                                                                           |
+| git                                                                        | chezmoi (`dot_config/git/`、config.os は tmpl)                                                                                                             |
+| Windows 専用 (AppData / Documents / .wslconfig / noctty)、devin、alacritty | chezmoi (`AppData/`、`Documents/`、`dot_wslconfig`、`dot_config/devin/`、`dot_config/alacritty/`。Windows 側は `AppData/Roaming/<name>/*.tmpl` の include) |
+| 上記以外                                                                   | dot-mori (`config.yaml`)                                                                                                                                   |
 
 ## Agent Skills
 
