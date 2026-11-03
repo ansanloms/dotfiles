@@ -8,10 +8,6 @@ link:
     - src: ./.config/git/config.linux
       targets:
         - linux
-  ~/.config/starship.toml:
-    - src: ./.config/starship.toml
-  ~/.config/wezterm:
-    - src: ./.config/wezterm
   ~/.config/vim:
     - src: ./.config/vim
   ~/.vimrc:
@@ -58,8 +54,6 @@ link:
     - src: ./.config/ghostty/windows.ghostty
       targets:
         - windows
-  ~/.config/zellij:
-    - src: ./.config/zellij
   ~/.config/nix:
     - src: ./.config/nix
       targets:
@@ -105,8 +99,6 @@ link:
       targets:
         - darwin
         - linux
-  ~/.ripgreprc:
-    - src: ./.ripgreprc
   ~/.claude/CLAUDE.md:
     - src: ./.claude/CLAUDE.md
   ~/.claude/settings.json:
@@ -119,8 +111,6 @@ link:
     - src: ./.claude/skills
   ~/.claude/agents:
     - src: ./.claude/agents
-  ~/.config/just/justfile:
-    - src: ./.config/just/justfile
   ~/.local/bin/git-worktree-select:
     - src: ./.local/bin/git-worktree-select
       targets:

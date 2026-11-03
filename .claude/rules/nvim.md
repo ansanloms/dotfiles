@@ -1,6 +1,6 @@
 # nvim 連携
 
-zellij セッション内で起動している nvim は `/tmp/nvim-<セッション名>.sock` で listen している (`.config/zellij/layouts/default.kdl` 参照)。この socket 経由で nvim を遠隔操作し、作業結果を隣ペインの nvim に流し込む。適用主体はメインループのみ (ユーザへの提示はメインループの責務。dev-workflow ルール)。subagent には適用しない。
+zellij セッション内で起動している nvim は `/tmp/nvim-<セッション名>.sock` で listen している (`~/.config/zellij/layouts/default.kdl` 参照。dotfiles の source は `dot_config/zellij/layouts/default.kdl`)。この socket 経由で nvim を遠隔操作し、作業結果を隣ペインの nvim に流し込む。適用主体はメインループのみ (ユーザへの提示はメインループの責務。dev-workflow ルール)。subagent には適用しない。
 
 本ルールは nvim で開く場面の判断と、socket の解決 (導出 + 発見 + 絞り込み) と生存確認を定める。これらは呼び出し側 (本ルール) の責務とする。
 
