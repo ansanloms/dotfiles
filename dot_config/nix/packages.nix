@@ -40,6 +40,7 @@ pkgs: with pkgs; [
   git
   git-crypt
   git-remote-codecommit
+  git-worktree-select # リポジトリ内の shell スクリプト (fzf で worktree を選ぶ)
 
   # dotfiles
   chezmoi

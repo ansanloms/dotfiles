@@ -2,7 +2,7 @@
 
 メインの worktree (clone 直下) のブランチを切り替えずに、タスクを別ブランチの worktree へ隔離するためのルール。ファイルを変更する作業だけでなく、別ブランチを対象にする読み取り専用の調査にも適用する。
 
-本ルールは「いつ worktree へ隔離するか」の判断、worktree の配置先 (`<base>`) の供給、片付けツールの供給を定める。これらは呼び出し側 (本ルール) の責務とする。worktree の作成・ローカル設定の持ち込み・branch description の設定と更新・マージ後の片付けといった具体手順は `worktree` skill に委譲する。
+本ルールは「いつ worktree へ隔離するか」の判断と、worktree の配置先 (`<base>`) の供給を定める。これらは呼び出し側 (本ルール) の責務とする。worktree の作成・ローカル設定の持ち込み・branch description の設定と更新・マージ後の片付けといった具体手順は `worktree` skill に委譲する。
 
 ## 原則
 
@@ -17,7 +17,7 @@ Claude Code のバックグラウンドジョブは、既定 (`worktree.bgIsolat
 隔離したセッション (`claude --worktree` や `isolation: worktree` の subagent も同じ) では、メイン checkout 宛ての Edit・Write と、cwd がメイン checkout に解決する Bash が `This session is isolated in the worktree <path>` で拒否される。git をメイン checkout へ向けるリダイレクト (`git -C`・`GIT_DIR`・事前の `cd`) も拒否される。worktree 内に留まると静的検証できない形の Bash (パイプ・`;`・heredoc・`$(...)`・サブシェル・`eval`。git を含まないコマンドも対象) も同じく拒否される。この隔離後のガードは設定では切れない。
 
 - MUST: `bgIsolation` はグローバル `.claude/settings.json` で `"none"` にし、バックグラウンドジョブでも `EnterWorktree` を使わず本ルールの手順で隔離する。
-  - 理由: 隔離の責務は本ルールが持ち、配置先も同じ `<base>` のため、`EnterWorktree` を挟むと二重隔離になる。しかも隔離後は `worktree` skill の `git-worktree-include` (cwd = メインの worktree 必須) が cwd ガードに当たる。description 設定 (`git config ... "$(cat ...)"`) は形状ガードに当たる。どちらに当たっても skill の手順自体が実行できない。
+  - 理由: 隔離の責務は本ルールが持ち、配置先も同じ `<base>` のため、`EnterWorktree` を挟むと二重隔離になる。しかも隔離後は `worktree` skill のローカル設定持ち込み (`git -C <main> ls-files ... | (cd <main> && xargs ... cp ...)`) がリダイレクト拒否と形状ガードに当たり、description 設定 (`git config ... "$(cat ...)"`) も形状ガードに当たる。どちらに当たっても skill の手順自体が実行できない。
   - `"none"` が外すのは「Call EnterWorktree first」の拒否だけだが、それで `EnterWorktree` を呼ぶ動機が消え、隔離後のガードに入らなくなる (2026-08-15〜29 の tool エラー 792 件中 490 件が隔離後ガードによるもので、全件が `.claude/worktrees/` 配下を cwd にした bg ジョブで発生)。
 - 代償: バックグラウンドジョブが工程 1 (隔離) を飛ばすと、誰も見ていない状態でメイン checkout へ直接書く。設定はグローバルで全リポジトリに及ぶ。防波堤は「原則」の MUST だけになる。
 - 隔離後のガードはセッションの属性であり、そのセッションが起動する subagent (implementer・code-review-runner 等) にも及ぶ。subagent に別 worktree の絶対パスを渡しても、入っている worktree 以外への git 操作は拒否される。そのため複数 worktree の並列作業が成立せず、`EnterWorktree` の `path` で切り替える直列作業になる (#72 の事例。片方の worktree で reviewer が動いている間、もう片方に触れなかった)。
@@ -29,14 +29,9 @@ Claude Code のバックグラウンドジョブは、既定 (`worktree.bgIsolat
 
 ## 片付け
 
-- MUST: マージ済み worktree の削除は `git-worktree-sweep` (`.local/bin`、`--dry-run` あり。skill が言う「呼び出し側から供給される専用ツール」がこれ) に任せる。
-  - PR/ブランチのマージ報告を受けたとき、または残骸に気づいたときに、メインの worktree の cwd で実行する (`--dry-run` は任意)。
-  - skill の汎用手順 (個別の `git worktree remove`・`git branch -d`) を手組みしない。
-  - sweep は squash merge も検知し、dirty・未マージ・detached の worktree には触れず報告のみ行う。
-  - 判定不能 (git コマンドの失敗) の worktree にも触れないが、こちらはエラーとして報告し非 0 で終了する。
-  - git が prunable と判定した worktree (管理情報の破損・実体ディレクトリの消失等) は分類せず Skipped として報告する。非 dry-run では末尾の `git worktree prune` が整理する。
-- MUST: merge 操作のローカル後処理を merge コマンドに任せない (理由と失敗例は skill の「片付け」節)。GitHub なら `--delete-branch` を付けずに merge し、ブランチ削除は sweep に任せる。
-- `EnterWorktree` で入った worktree を `ExitWorktree` で除去する場合 (それ以外の除去は sweep に任せる)、squash merge 済みならローカルコミットは常に「未マージ」に見えるため検知による拒否が必ず作動する。確認済みなら最初から `discard_changes: true` で呼んでよい。
+- MUST: PR/ブランチのマージ報告を受けたら、`worktree` skill の「片付け」の手順 (`git worktree remove --force <path>` + `git branch -D <branch>`) をメインの worktree の cwd で実行する。マージ状態や working tree の状態は確認しない (skill の手順どおり)。マージ報告を受けていない worktree は、残骸に見えても削除せず報告に留める。
+- MUST: merge 操作のローカル後処理を merge コマンドに任せない (理由と失敗例は skill の「片付け」節)。GitHub なら `--delete-branch` を付けずに merge し、ブランチ削除は上記の手順で行う。
+- `EnterWorktree` で入った worktree を `ExitWorktree` で除去する場合、squash merge 済みならローカルコミットは常に「未マージ」に見えるため検知による拒否が必ず作動する。確認済みなら最初から `discard_changes: true` で呼んでよい。
 
 ## worktree 配置先 (base) の供給
 
@@ -48,7 +43,7 @@ Claude Code のバックグラウンドジョブは、既定 (`worktree.bgIsolat
 ## 実行手順
 
 - MUST: 上記「原則」で worktree への隔離が必要と判断した場合、worktree の用意 (作成 + ローカル設定の持ち込み + branch description 設定) は `worktree` skill に委譲する。「worktree 配置先 (base) の供給」で定めた `<base>` = `<main>/.claude/worktrees` を絶対パスで渡す。理由: どの cwd から実行しても所定のディレクトリへ確実に置く。
-- 渡した `<base>` を使った worktree 操作の具体手順 (`git worktree add` の送り方、`git-worktree-include` によるローカル設定持ち込みとその cwd 制約、branch description の書式・確認方法、対話セレクタを使わないこと) は `worktree` skill に従う。
+- 渡した `<base>` を使った worktree 操作の具体手順 (`git worktree add` の送り方、`.worktreeinclude` によるローカル設定の持ち込み、branch description の書式・確認方法、対話セレクタを使わないこと) は `worktree` skill に従う。
 - MUST: branch description は worktree の不変条件として常に持つ。書式・確認方法は skill に従う。
   - 設定タイミングは、worktree を新規に用意したときは着手前。既存ブランチに description が既にあればそれを使い、無ければその場で設定してから着手する。
 - MUST: 作業の節目 (todo 項目の完了・方針転換・中断・再開・PR 作成) が来たら、その場で branch description の status・todo を更新する。手順は skill の「更新」節に従う。

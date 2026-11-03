@@ -40,18 +40,6 @@ sudo systemctl restart nix-daemon
 
 ### 4. Deploy dotfiles
 
-`.local/bin/` 配下のスクリプトは `scripts/` のソースから生成するため、先にビルドする。
-
-```sh
-nix run nixpkgs#deno -- task build
-```
-
-ビルドした生成物は、#139（bun 書き換え + nix 配布）までの暫定として `~/.local/bin` へ symlink する（リポジトリ直下で、`deno task build` の後に実行する。生成物が無いと zsh では glob が空でエラーになる）。
-
-```sh
-mkdir -p ~/.local/bin && ln -sf "$PWD"/.local/bin/git-worktree-* ~/.local/bin/
-```
-
 [chezmoi](https://www.chezmoi.io/) で chezmoi 管理分の設定（nvim・shell 等）をコピーする。Linux / macOS は次のとおり。
 
 ```sh

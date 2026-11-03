@@ -39,11 +39,18 @@
 	b = branch
 	co = commit
 	wt = "!f() { \
+		cd \"${GIT_PREFIX:-.}\" || return $?; \
 		case \"$1\" in \
 			ls) git-worktree-select ;; \
 			rm) shift; selected=$(git-worktree-select --exclude-main) && git worktree remove \"$@\" \"$selected\" ;; \
 			mv) new_path=\"$2\"; selected=$(git-worktree-select --exclude-main) && git worktree move \"$selected\" \"$new_path\" ;; \
-			add) shift; git worktree add \"$@\" && git-worktree-include \"$@\" ;; \
+			add) shift; \
+				case \"$1\" in \"\"|-*) echo \"usage: git wt add <path> [options]\" >&2; return 2 ;; esac; \
+				git worktree add \"$@\" || return $?; \
+				main=$(git worktree list --porcelain | head -1 | cut -d\" \" -f2-); dst=$(cd \"$1\" && pwd -P); \
+				if [ -f \"$main/.worktreeinclude\" ]; then \
+					git -C \"$main\" ls-files -z -o -i -X .worktreeinclude | grep -zv '/$' | (cd \"$main\" && xargs -0 -r cp --parents -t \"$dst\"); \
+				fi ;; \
 			*) git worktree \"$@\" ;; \
 		esac; }; f"
 
