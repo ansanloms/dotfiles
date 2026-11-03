@@ -46,13 +46,13 @@ sudo systemctl restart nix-daemon
 nix run nixpkgs#deno -- task build
 ```
 
-[dot-mori](https://github.com/ansanloms/dot-mori) でシンボリックリンクを作成する。
+ビルドした生成物は、#139（bun 書き換え + nix 配布）までの暫定として `~/.local/bin` へ symlink する（リポジトリ直下で、`deno task build` の後に実行する。生成物が無いと zsh では glob が空でエラーになる）。
 
 ```sh
-nix run nixpkgs#deno -- task install
+mkdir -p ~/.local/bin && ln -sf "$PWD"/.local/bin/git-worktree-* ~/.local/bin/
 ```
 
-[chezmoi](https://www.chezmoi.io/) で chezmoi 管理分の設定（nvim・shell 等。一覧は CLAUDE.md の移行状況）をコピーする。Linux / macOS は次のとおり。
+[chezmoi](https://www.chezmoi.io/) で chezmoi 管理分の設定（nvim・shell 等）をコピーする。Linux / macOS は次のとおり。
 
 ```sh
 # chezmoi の設定（マシンごとに 1 回）
@@ -66,7 +66,9 @@ nix run nixpkgs#chezmoi -- apply
 
 手順 5 で nix profile に入った後は素の `chezmoi` でよい。pull と `chezmoi apply` は同じシェルで続けて実行し、その間に新しいシェルを開かない。shell 設定の symlink が pull でリンク切れになるため、新しいシェルでは PATH が通らず `chezmoi` が見つからない。その場合は `~/.nix-profile/bin/chezmoi` を絶対パスで実行する。git も同様で、apply までの間はグローバル設定（excludesfile・credential helper）が無い状態になるため、その間に git 操作をしない。
 
-以前 dot-mori が作った symlink が残っている場合、ファイルの symlink は `chezmoi apply` がファイルの内容で置き換える。ディレクトリの symlink（`~/.config/nvim`、`~/.config/sheldon`、`~/.config/zellij`、`~/.config/wezterm`、`~/.config/git` 等。CLAUDE.md の移行状況の表にあるディレクトリ）は `chezmoi apply` の前に symlink だけを削除する（`rm <path>`。リンク先の中身は消えない）。旧 `.config/nvim/` に残る未追跡ファイル（`lazy-lock.json`、`lua/temp.lua`、`lua/work.lua` 等）は apply 後に `~/.config/nvim/` へ移す。旧 `.config/git/` に残る未追跡の秘匿ファイル（`credentials`、`config.personal`、`config.work`）は apply 後に `~/.config/git/` へ移す。
+以前の symlink 管理（dot-mori）から移行する場合、以前 dot-mori が作った symlink が残っていると、ファイルの symlink は `chezmoi apply` がファイルの内容で置き換える。ディレクトリの symlink（`~/.config/{nvim,sheldon,zsh,zellij,wezterm,just,git,alacritty,devin,nix}`、`~/.claude/{rules,lsp,skills,agents}`、`~/.devin/rules` 等）は `chezmoi apply` の前に symlink だけを削除する（`rm <path>`。リンク先の中身は消えない）。旧 `.config/nvim/` に残る未追跡ファイル（`lazy-lock.json`、`lua/temp.lua`、`lua/work.lua` 等）は apply 後に `~/.config/nvim/` へ移す。旧 `.config/git/` に残る未追跡の秘匿ファイル（`credentials`、`config.personal`、`config.work`）は apply 後に `~/.config/git/` へ移す。
+
+漏れの確認には `find ~ -maxdepth 3 -lname '*dotfiles*'` で dotfiles の clone を指す symlink を列挙する（Windows は PowerShell の `Get-ChildItem -Recurse -Depth 2 ~ | Where-Object LinkType` 等で相当の確認をする）。
 
 旧 dot-mori の残骸として `~/.config/alacritty/os.toml` の dangling symlink が残っている場合は、`chezmoi apply` の前に `rm` で削除する。
 
@@ -81,7 +83,7 @@ winget install twpayne.chezmoi
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.config\chezmoi" | Out-Null
 Set-Content "$env:USERPROFILE\.config\chezmoi\chezmoi.toml" "sourceDir = 'C:\path\to\dotfiles'"
 setx XDG_CONFIG_HOME "$env:USERPROFILE\.config"
-# 以前 dot-mori が作ったディレクトリの symlink（~/AppData/Local/nvim、zellij、wezterm、~/.config/git、~/.claude 配下、~/.devin/rules、~/AppData/Roaming/alacritty 等）を削除してから、新しいシェルで
+# 以前 dot-mori が作ったディレクトリの symlink（~/.config/{nvim,git,zellij,wezterm,just,zsh,sheldon}、~/AppData/Roaming/{alacritty,devin}、~/AppData/Local/nvim、~/.claude/{rules,lsp,skills,agents}、~/.devin/rules 等）を削除してから、新しいシェルで
 chezmoi diff
 chezmoi apply
 ```
@@ -137,10 +139,4 @@ nix profile add ~/.config/nix#default --impure
 ```sh
 (cd ~/.apm && apm lifecycle trust)
 apm install -g
-```
-
-## Uninstall
-
-```sh
-deno task uninstall
 ```

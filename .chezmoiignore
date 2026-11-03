@@ -1,17 +1,12 @@
 # chezmoi の source はリポジトリ直下。`.` 始まりのエントリは chezmoi が既定で無視する。
 # このファイルは 2 用途。
-# (1) リポジトリ管理ファイル・生成物の除外 (次のブロック。移行が進んで不要になった行は削除する)。
+# (1) リポジトリ管理ファイル・生成物の除外 (次のブロック)。
 # (2) OS 別の配布制御 (`.chezmoi.os` 分岐のブロック。削除対象ではない)。
 README.md
 CLAUDE.md
-config.yaml
 deno.json
 deno.lock
 scripts
-# apm の project scope 時代の残骸 (既存 clone に残る)。消した後はこの 3 行も消してよい。
-apm.yml
-apm.lock.yaml
-apm_modules
 result
 coverage
 
@@ -27,7 +22,7 @@ coverage
 .config/git/config.personal.*
 .config/git/config.work.*
 
-# bash 設定は linux のみ (dot-mori 時代の targets を維持)。
+# bash 設定は linux のみ。
 {{ if ne .chezmoi.os "linux" }}
 .bashrc
 .bash_profile
@@ -52,7 +47,7 @@ Documents
 {{ if eq .chezmoi.os "windows" }}
 .config/devin
 {{ end }}
-# alacritty は linux のみ (dot-mori 時代の targets を維持。Windows は AppData 側に配る)。
+# alacritty は linux のみ (Windows は AppData 側に配る)。
 {{ if ne .chezmoi.os "linux" }}
 .config/alacritty
 {{ end }}
@@ -61,7 +56,7 @@ Documents
 .config/ghostty
 .config/alacritty/linux.toml
 .config/alacritty/windows.toml
-# nix は linux のみ (dot-mori 時代の targets を維持)。
+# nix は linux のみ。
 {{ if ne .chezmoi.os "linux" }}
 .config/nix
 {{ end }}

@@ -4,17 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## リポジトリ概要
 
-個人用 dotfiles。[dot-mori](https://github.com/ansanloms/dot-mori) (Deno) でシンボリックリンクを管理し、Nix flake (`nix profile`) でパッケージを管理する。dot-mori から chezmoi (コピー方式、`packages.nix` で導入) への段階移行中で、移行済みの設定は chezmoi が、未移行の設定は dot-mori が管理する。
+個人用 dotfiles。設定は [chezmoi](https://www.chezmoi.io/)（コピー方式、`packages.nix` で導入）で管理し、Nix flake (`nix profile`) でパッケージを管理する。
 
 ## コマンド
 
 ```sh
-# dotfiles インストール（シンボリックリンク作成）
-deno task install
-
-# dotfiles アンインストール（シンボリックリンク削除）
-deno task uninstall
-
 # chezmoi 管理分の差分確認と適用
 chezmoi diff
 chezmoi apply
@@ -33,7 +27,6 @@ chezmoi apply
 
 ## 構成
 
-- `config.yaml` - シンボリックリンク設定（OS別: windows/linux/darwin）
 - `dot_config/nix/` - Nix 設定（nix.conf）と flake によるパッケージ管理（flake.nix + packages.nix）。chezmoi 管理で `~/.config/nix` へコピー
 - `dot_config/nvim/` - Neovim 設定（Lua）。chezmoi 管理（下記「chezmoi」節）
 - `dot_config/git/` - Git 設定。chezmoi 管理
@@ -55,7 +48,7 @@ chezmoi apply
 
 ## chezmoi
 
-source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既定で無視するため、dot-mori 管理の `.config/` 等とは衝突しない。それ以外のリポジトリ管理ファイル（README.md・config.yaml・scripts 等）は `.chezmoiignore` で除外しており、移行が進んで不要になった行は削除する。
+source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既定で無視するため、`.claude/` `.github/` 等とは衝突しない。それ以外のリポジトリ管理ファイル（README.md・scripts 等）は `.chezmoiignore` で除外している。
 
 - 管理対象は `dot_` 接頭辞で表す（`dot_config/nvim/` → `~/.config/nvim/`）。mode は既定の file（コピー）。symlink ではないため、`~/.config/nvim` を直接編集した場合は `chezmoi re-add` で source に取り込む。source 側を編集した場合は `chezmoi apply`。`chezmoi edit --apply <target>` で両方を一度にできる。管理対象ディレクトリの中のドットファイルも同様に `dot_` 接頭辞にする（`dot_config/nvim/dot_luarc.json` → `~/.config/nvim/.luarc.json`）。source 側で `.` 始まりのままだと chezmoi が無視して適用されない。
 - `exact_` は付けない。nvim が target 側に書く `lazy-lock.json` や、ローカル専用の `lua/temp.lua` を消さないため。これらはリポジトリに置かない（`.chezmoiignore` で target パスを除外しており `chezmoi add` / `apply` の対象にならない。`.gitignore` の該当行は git 側の安全網）。同じ理由で `~/.claude/skills/`（apm が置く skill と Claude Code の `synced/` キャッシュ）にも付けない。
@@ -66,18 +59,7 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 - 空になりうるファイル (alacritty の `os.toml` の Linux 版等) は `empty_` 接頭辞を付け、空でも target に作る。
 - OS で内容が変わる設定は 2 通り。(a) そのファイルを `<name>.tmpl` にして `.chezmoi.os` で分岐する。(b) OS 別の断片 (`dot_config/alacritty/linux.toml` 等) を置き、`<name>.tmpl` から `{{ include }}` で取り込む。断片そのものは `.chezmoiignore` で target から外す。どちらも `.tmpl` は `chezmoi re-add` の対象外なので、`git config --global` 等でファイル側が書き換わっても source には戻らない。直すときは source 側を編集して apply する。git の `config` は OS 差が無くなったので tmpl にしない。
 
-移行状況:
-
-| 設定                                                                                | 管理                                                                                                                                                                                                             |
-| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| nvim                                                                                | chezmoi (`dot_config/nvim/`)                                                                                                                                                                                     |
-| shell (bash / zsh / sheldon)                                                        | chezmoi (`dot_bashrc` 等、`dot_config/zsh/`、`dot_config/sheldon/`)                                                                                                                                              |
-| 共通設定 (starship / zellij / just / ripgrep / wezterm)                             | chezmoi (`dot_config/starship.toml`、`dot_config/zellij/`、`dot_config/just/`、`dot_config/wezterm/`、`dot_ripgreprc`)                                                                                           |
-| .claude / .devin (rules) / .apm                                                     | chezmoi (`dot_claude/`、`dot_devin/rules/*.md.tmpl`、`dot_apm/`)                                                                                                                                                 |
-| nix                                                                                 | chezmoi (`dot_config/nix/`。`*/upgrade.sh` は配らない)                                                                                                                                                           |
-| git                                                                                 | chezmoi (`dot_config/git/`)                                                                                                                                                                                      |
-| Windows 専用 (AppData / Documents / .wslconfig)、ghostty (noctty)、devin、alacritty | chezmoi (`AppData/`、`Documents/`、`dot_wslconfig`、`dot_config/devin/`、`dot_config/alacritty/`、`dot_config/ghostty/`。Windows 側は `AppData/Roaming/<name>/*.tmpl`、`AppData/Local/noctty/*.tmpl` の include) |
-| 上記以外                                                                            | dot-mori (`config.yaml`)                                                                                                                                                                                         |
+設定はすべて chezmoi 管理。`.local/bin` の 3 コマンドだけは #139 まで `deno task build` の生成物を手で置く。
 
 ## Agent Skills
 
@@ -130,7 +112,6 @@ chezmoi apply
 (cd ~/.apm && apm lifecycle trust)
 apm install -g
 deno task build
-deno task install
 ```
 
 `dot_apm/apm.lock.yaml` が変わるコミットを pull したときは `chezmoi apply` の後に `apm install -g` を実行する。skill の実体はリポジトリに無いため、pull だけでは更新されない。
@@ -141,7 +122,7 @@ deno task install
 
 - ソース: `scripts/<module>/*.ts`（shebang に実行時の権限フラグを記述。`deno bundle` が生成物の先頭へ引き継ぐ）
 - ビルド: `deno task build` で `scripts/<module>/*.ts` を `.local/bin/<name>` に bundle し、実行ビットを付与する
-- 生成物は `.gitignore` 済みでコミットしない。`deno task install` でシンボリックリンクするため、**install の前に build しておく**こと
+- 生成物は `.gitignore` 済みでコミットしない。#139（bun 書き換え + nix 配布）までの暫定として、`deno task build` の後（生成物が無いと zsh では glob が空でエラーになる）にリポジトリ直下で `mkdir -p ~/.local/bin && ln -sf "$PWD"/.local/bin/git-worktree-* ~/.local/bin/` を実行して symlink する
 
 ソースを編集したら `deno task build` で再生成する。
 
