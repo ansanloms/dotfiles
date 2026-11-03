@@ -31,7 +31,7 @@
 }:
 
 let
-  version = "0.1.0";
+  version = "0.1.1";
 
   # nix の system -> Release 資産の target。
   targets = {
@@ -41,8 +41,8 @@ let
 
   # 初回 bump 前のプレースホルダ (dot_config/nix/claude-statusline/upgrade.sh が実値へ書き換える)。
   hashes = {
-    "x86_64-linux" = "sha256-8vZLfyhPU3ruQ8o7bACu1/BfZEHjmi/4BPmsF3DIRsk=";
-    "aarch64-linux" = "sha256-UuwIB0WyZ2iTB0pczPooYDZSrKB5YYCzClsTT3SvXBQ=";
+    "x86_64-linux" = "sha256-29TWpBJ76Si8j2krR84f3jlch53GW1sjk4QmPKkVDpo=";
+    "aarch64-linux" = "sha256-CJvmO0v2X+8eVI+L+E5hJlw71g8jI0QJIserlU9//sw=";
   };
 
   system = stdenv.hostPlatform.system;
