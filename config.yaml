@@ -1,8 +1,4 @@
 link:
-  ~/.config/vim:
-    - src: ./.config/vim
-  ~/.vimrc:
-    - src: ./.vimrc
   ~/.config/nix:
     - src: ./.config/nix
       targets:

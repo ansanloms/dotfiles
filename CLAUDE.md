@@ -34,7 +34,6 @@ nix flake update --flake path:.config/nix
 - `config.yaml` - シンボリックリンク設定（OS別: windows/linux/darwin）
 - `.config/nix/` - Nix 設定（nix.conf）と flake によるパッケージ管理（flake.nix + packages.nix）
 - `dot_config/nvim/` - Neovim 設定（Lua）。chezmoi 管理（下記「chezmoi」節）
-- `.config/vim/` - Vim 設定（minpac でプラグイン管理）
 - `dot_config/git/` - Git 設定。chezmoi 管理
 - `dot_config/wezterm/` - WezTerm 設定。chezmoi 管理
 - `AppData/Local/noctty/` - Ghostty 設定（Windows では Ghostty フォークの noctty が読む。`config.ghostty` が共通、`os.ghostty` が Windows 固有。chezmoi 管理）
