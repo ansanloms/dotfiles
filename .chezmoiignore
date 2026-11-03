@@ -61,6 +61,8 @@ Documents
 .config/alacritty
 {{ end }}
 # include 元の OS 別断片は target に置かない。
+# ghostty は Windows の noctty 向けにしか使っていないので target に配らない (Linux / macOS で ghostty を使うときは外す)。
+.config/ghostty
 .config/alacritty/linux.toml
 .config/alacritty/windows.toml
 # nix は linux のみ (dot-mori 時代の targets を維持)。

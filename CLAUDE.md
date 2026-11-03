@@ -38,7 +38,7 @@ chezmoi apply
 - `dot_config/nvim/` - Neovim 設定（Lua）。chezmoi 管理（下記「chezmoi」節）
 - `dot_config/git/` - Git 設定。chezmoi 管理
 - `dot_config/wezterm/` - WezTerm 設定。chezmoi 管理
-- `AppData/Local/noctty/` - Ghostty 設定（Windows では Ghostty フォークの noctty が読む。`config.ghostty` が共通、`os.ghostty` が Windows 固有。chezmoi 管理）
+- `dot_config/ghostty/` - Ghostty 設定（`config.ghostty` が共通、`windows.ghostty` が Windows 固有。Windows では Ghostty フォークの noctty が `AppData/Local/noctty/{config,os}.ghostty` として include stub 経由で読む。chezmoi 管理）
 - `dot_config/alacritty/` - Alacritty 設定。chezmoi 管理。Windows は `AppData/Roaming/alacritty/` の include stub から配る
 - `dot_config/devin/` - Devin 設定。chezmoi 管理。Windows は `AppData/Roaming/devin/` の include stub から配る
 - `dot_config/zellij/` - Zellij 設定。chezmoi 管理
@@ -68,16 +68,16 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 
 移行状況:
 
-| 設定                                                                       | 管理                                                                                                                                                       |
-| -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| nvim                                                                       | chezmoi (`dot_config/nvim/`)                                                                                                                               |
-| shell (bash / zsh / sheldon)                                               | chezmoi (`dot_bashrc` 等、`dot_config/zsh/`、`dot_config/sheldon/`)                                                                                        |
-| 共通設定 (starship / zellij / just / ripgrep / wezterm)                    | chezmoi (`dot_config/starship.toml`、`dot_config/zellij/`、`dot_config/just/`、`dot_config/wezterm/`、`dot_ripgreprc`)                                     |
-| .claude / .devin (rules) / .apm                                            | chezmoi (`dot_claude/`、`dot_devin/rules/*.md.tmpl`、`dot_apm/`)                                                                                           |
-| nix                                                                        | chezmoi (`dot_config/nix/`。`*/upgrade.sh` は配らない)                                                                                                     |
-| git                                                                        | chezmoi (`dot_config/git/`、config.os は tmpl)                                                                                                             |
-| Windows 専用 (AppData / Documents / .wslconfig / noctty)、devin、alacritty | chezmoi (`AppData/`、`Documents/`、`dot_wslconfig`、`dot_config/devin/`、`dot_config/alacritty/`。Windows 側は `AppData/Roaming/<name>/*.tmpl` の include) |
-| 上記以外                                                                   | dot-mori (`config.yaml`)                                                                                                                                   |
+| 設定                                                                                | 管理                                                                                                                                                                                                             |
+| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| nvim                                                                                | chezmoi (`dot_config/nvim/`)                                                                                                                                                                                     |
+| shell (bash / zsh / sheldon)                                                        | chezmoi (`dot_bashrc` 等、`dot_config/zsh/`、`dot_config/sheldon/`)                                                                                                                                              |
+| 共通設定 (starship / zellij / just / ripgrep / wezterm)                             | chezmoi (`dot_config/starship.toml`、`dot_config/zellij/`、`dot_config/just/`、`dot_config/wezterm/`、`dot_ripgreprc`)                                                                                           |
+| .claude / .devin (rules) / .apm                                                     | chezmoi (`dot_claude/`、`dot_devin/rules/*.md.tmpl`、`dot_apm/`)                                                                                                                                                 |
+| nix                                                                                 | chezmoi (`dot_config/nix/`。`*/upgrade.sh` は配らない)                                                                                                                                                           |
+| git                                                                                 | chezmoi (`dot_config/git/`、config.os は tmpl)                                                                                                                                                                   |
+| Windows 専用 (AppData / Documents / .wslconfig)、ghostty (noctty)、devin、alacritty | chezmoi (`AppData/`、`Documents/`、`dot_wslconfig`、`dot_config/devin/`、`dot_config/alacritty/`、`dot_config/ghostty/`。Windows 側は `AppData/Roaming/<name>/*.tmpl`、`AppData/Local/noctty/*.tmpl` の include) |
+| 上記以外                                                                            | dot-mori (`config.yaml`)                                                                                                                                                                                         |
 
 ## Agent Skills
 
