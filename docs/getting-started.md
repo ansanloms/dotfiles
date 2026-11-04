@@ -50,16 +50,18 @@ git clone https://github.com/ansanloms/dotfiles.git ~/dev/github.com/ansanloms/d
 
 ### 3. chezmoi で設定を配る
 
-chezmoi 自身の設定 `~/.config/chezmoi/chezmoi.toml` も chezmoi が配る (`dot_config/chezmoi/chezmoi.toml.tmpl`)。新しいマシンにはまだ無いので、初回だけ `-S` で source を指定する。`chezmoi init` は使わない。
-
-差分を確認して適用する。手順 4 で nix profile に入った後は素の `chezmoi` でよい。
+chezmoi 自身の設定 `~/.config/chezmoi/chezmoi.toml` は、リポジトリ直下の `.chezmoi.toml.tmpl` から `chezmoi init` が生成する。マシンごとに 1 回。source に `.git` があるので clone はされず、config の生成だけ行われる。
 
 ```sh
-nix run nixpkgs#chezmoi -- diff -S ~/dev/github.com/ansanloms/dotfiles
-nix run nixpkgs#chezmoi -- apply -S ~/dev/github.com/ansanloms/dotfiles
+nix run nixpkgs#chezmoi -- --source ~/dev/github.com/ansanloms/dotfiles init
 ```
 
-apply 後は `~/.config/chezmoi/chezmoi.toml` に `sourceDir` が書かれるので、以後は `-S` 無しでよい。
+生成後は `--source` 無しでよい。差分を確認して適用する。手順 4 で nix profile に入った後は素の `chezmoi` でよい。
+
+```sh
+nix run nixpkgs#chezmoi -- diff
+nix run nixpkgs#chezmoi -- apply
+```
 
 ### 4. パッケージを導入する
 

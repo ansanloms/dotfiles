@@ -100,15 +100,14 @@ wsl --list --online
 
 ## dotfiles の適用
 
-Windows 側にもリポジトリを `%USERPROFILE%\dev\github.com\ansanloms\dotfiles` へ clone する。chezmoi 自身の設定 `%USERPROFILE%\.config\chezmoi\chezmoi.toml` は chezmoi が配る (`dot_config/chezmoi/chezmoi.toml.tmpl`) ので、初回だけ `-S` で source を指定して差分を確認し、適用する。
+Windows 側にもリポジトリを `%USERPROFILE%\dev\github.com\ansanloms\dotfiles` へ clone し、chezmoi 自身の設定 `%USERPROFILE%\.config\chezmoi\chezmoi.toml` をリポジトリ直下の `.chezmoi.toml.tmpl` から `chezmoi init` で生成する。
 
 ```powershell
 git clone https://github.com/ansanloms/dotfiles.git "$env:USERPROFILE\dev\github.com\ansanloms\dotfiles"
-chezmoi diff -S "$env:USERPROFILE\dev\github.com\ansanloms\dotfiles"
-chezmoi apply -S "$env:USERPROFILE\dev\github.com\ansanloms\dotfiles"
+chezmoi --source "$env:USERPROFILE\dev\github.com\ansanloms\dotfiles" init
 ```
 
-apply 後は `chezmoi.toml` に `sourceDir` が書かれるので、以後は `-S` 無しでよい。
+生成後は `--source` 無しでよい。差分を確認して適用する。
 
 ```powershell
 chezmoi diff
