@@ -29,6 +29,7 @@ chezmoi apply
 
 - `dot_config/nix/` - Nix 設定（nix.conf）と flake によるパッケージ管理（flake.nix + packages.nix）。chezmoi 管理で `~/.config/nix` へコピー
 - `dot_config/nvim/` - Neovim 設定（Lua）。chezmoi 管理（下記「chezmoi」節）
+- `.chezmoi.toml.tmpl` - chezmoi 自身の設定の template。`chezmoi init` が `~/.config/chezmoi/chezmoi.toml` を生成する（下記「chezmoi」節）
 - `dot_config/git/` - Git 設定。chezmoi 管理
 - `dot_config/wezterm/` - WezTerm 設定。chezmoi 管理
 - `dot_config/ghostty/` - Ghostty 設定（`config.ghostty` が共通、`windows.ghostty` が Windows 固有。Windows では Ghostty フォークの noctty が `AppData/Local/noctty/{config,os}.ghostty` として include stub 経由で読む。chezmoi 管理）
@@ -51,7 +52,7 @@ source はリポジトリ直下。chezmoi は `.` 始まりのエントリを既
 
 - 管理対象は `dot_` 接頭辞で表す（`dot_config/nvim/` → `~/.config/nvim/`）。mode は既定の file（コピー）。symlink ではないため、`~/.config/nvim` を直接編集した場合は `chezmoi re-add` で source に取り込む。source 側を編集した場合は `chezmoi apply`。`chezmoi edit --apply <target>` で両方を一度にできる。管理対象ディレクトリの中のドットファイルも同様に `dot_` 接頭辞にする（`dot_config/nvim/dot_luarc.json` → `~/.config/nvim/.luarc.json`）。source 側で `.` 始まりのままだと chezmoi が無視して適用されない。
 - `exact_` は付けない。nvim が target 側に書く `lazy-lock.json` や、ローカル専用の `lua/temp.lua` を消さないため。これらはリポジトリに置かない（`.chezmoiignore` で target パスを除外しており `chezmoi add` / `apply` の対象にならない。`.gitignore` の該当行は git 側の安全網）。同じ理由で `~/.claude/skills/`（apm が置く skill と Claude Code の `synced/` キャッシュ）にも付けない。
-- マシンごとの設定は `~/.config/chezmoi/chezmoi.toml` に `sourceDir = "~/dev/github.com/ansanloms/dotfiles"` の 1 行を書く（Windows は `%USERPROFILE%\.config\chezmoi\chezmoi.toml`。`~` 展開は Windows で未確認のため絶対パスで書く。TOML のダブルクォート文字列ではバックスラッシュがエスケープになるため、Windows のパスはシングルクォートの literal string で書く。例: `sourceDir = 'C:\path\to\dotfiles'`）。`chezmoi init` は使わない（ローカルパスを source にする手順が公式文書に無い）。
+- chezmoi 自身の設定 `~/.config/chezmoi/chezmoi.toml` は、リポジトリ直下の `.chezmoi.toml.tmpl` から `chezmoi init` が生成する（chezmoi 公式の config 生成機構。`.chezmoiignore` と同じ特殊ファイルで、`chezmoi apply` の配布対象ではない）。中身は `sourceDir = {{ .chezmoi.sourceDir | quote }}` の 1 行。実行時の source directory を絶対パスで書き戻すため、OS 分岐や `~` 展開は不要（Windows の `.chezmoi.sourceDir` の区切り文字は公式文書に明記が無いが、`quote` が `\` をエスケープするので TOML として壊れない）。新しいマシンでは `chezmoi --source <リポジトリの絶対パス> init` を 1 回実行する。source に `.git` があるので clone はされず、config の生成だけ行われる。以後は `--source` 無しで `chezmoi apply` 等を使う。`.chezmoi.toml.tmpl` を変えると `status` / `apply` / `diff` が `config file template has changed` と警告するので、`chezmoi init` を再実行して再生成する（`managed` は警告を出さない）。
 - Windows は環境変数 `XDG_CONFIG_HOME` を `%USERPROFILE%\.config` にし、nvim に `~/.config/nvim` を読ませる。これにより nvim の source に OS 分岐は無い。`XDG_CONFIG_HOME` を読む他ツールの探索先も変わりうる点に注意。
 - `~/.claude` 配下と `~/.apm` もコピー方式。`~/.claude` `~/.apm` に限らず、アプリが自分で書き換える設定（devin の `config.json`、Windows Terminal の `settings.json`、CorvusSKK の `config.xml` 等）は `chezmoi diff` → `chezmoi re-add` でリポジトリへ取り込む。Windows の `AppData/.../*.tmpl`（include stub）と `~/.devin/rules/*.md` はテンプレートなので re-add できず、source 側（`dot_config/<name>/`、rules は `~/.claude/rules`）を直す。
 - Linux と Windows で配布先が異なる設定は、`dot_config/<name>/` を実体にし、`AppData/.../<name>/<file>.tmpl` の `include` stub で Windows 側に配る。`dot_config/<name>/` にファイルを足したら（include 元の断片のように target に置かないファイルは除く）、Windows 用の `AppData/.../<name>/<file>.tmpl` の stub も同じ名前で足す（自動では配られない）。OS ごとの要否は `.chezmoiignore` の `.chezmoi.os` 分岐で制御する（shell 設定は Windows に配らない等）。

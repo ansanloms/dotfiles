@@ -50,14 +50,13 @@ git clone https://github.com/ansanloms/dotfiles.git ~/dev/github.com/ansanloms/d
 
 ### 3. chezmoi で設定を配る
 
-chezmoi の設定はマシンごとに 1 回。`chezmoi init` は使わない (ローカルパスを source にする手順が公式文書に無い)。
+chezmoi 自身の設定 `~/.config/chezmoi/chezmoi.toml` は、リポジトリ直下の `.chezmoi.toml.tmpl` から `chezmoi init` が生成する。マシンごとに 1 回。source に `.git` があるので clone はされず、config の生成だけ行われる。
 
 ```sh
-mkdir -p ~/.config/chezmoi
-printf 'sourceDir = "~/dev/github.com/ansanloms/dotfiles"\n' > ~/.config/chezmoi/chezmoi.toml
+nix run nixpkgs#chezmoi -- --source ~/dev/github.com/ansanloms/dotfiles init
 ```
 
-差分を確認して適用する。手順 4 で nix profile に入った後は素の `chezmoi` でよい。
+生成後は `--source` 無しでよい。差分を確認して適用する。手順 4 で nix profile に入った後は素の `chezmoi` でよい。
 
 ```sh
 nix run nixpkgs#chezmoi -- diff
