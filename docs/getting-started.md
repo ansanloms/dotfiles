@@ -21,12 +21,12 @@ curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install | sh -s -- --da
 
 公式 installer は flakes を有効化しないため、システム側で有効にする (次手順の `nix run` に必要)。
 
-あわせて、`~/.config/nix/nix.conf` の `extra-substituters` が無視されないよう trusted-users を設定する。`<username>` は自分のユーザー名に置き換える。
+あわせて、`~/.config/nix/nix.conf` の `extra-substituters` が無視されないよう trusted-users を設定する。
 
 ```sh
-sudo tee -a /etc/nix/nix.conf <<'EOF'
+sudo tee -a /etc/nix/nix.conf <<EOF
 extra-experimental-features = nix-command flakes
-extra-trusted-users = <username>
+extra-trusted-users = $USER
 EOF
 sudo systemctl restart nix-daemon
 ```
