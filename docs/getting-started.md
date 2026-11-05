@@ -16,7 +16,7 @@ Windows 端末そのものの整備 (アプリの導入・WSL の作成・Window
 [公式 installer](https://nixos.org/download/) を multi-user/daemon モードで使う。installer の取得に curl を使うため、無い環境では OS のパッケージマネージャで先に入れる。
 
 ```sh
-sh <(curl -L https://nixos.org/nix/install) --daemon
+curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install | sh -s -- --daemon
 ```
 
 公式 installer は flakes を有効化しないため、システム側で有効にする (次手順の `nix run` に必要)。
