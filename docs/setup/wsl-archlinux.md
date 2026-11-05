@@ -69,7 +69,7 @@ WSL 側のツールは原則 Nix で入れるが、Docker Engine は例外とし
 ```bash
 sudo pacman -S docker docker-buildx docker-compose
 sudo systemctl enable --now docker.service
-sudo usermod -aG docker <username>   # 再ログイン後に有効
+sudo usermod -aG docker "$USER"   # 再ログイン後に有効
 ```
 
 `docker` グループのメンバーは実質 root と同等になる。
