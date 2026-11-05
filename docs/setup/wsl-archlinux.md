@@ -1,6 +1,6 @@
 # WSL (Arch Linux) のセットアップ
 
-Arch Linux 公式 WSL イメージを導入し、Nix と dotfiles を入れる前の初期設定の手順。前提として WSL 本体と仮想マシン プラットフォームの有効化が済んでいること ([windows.md](windows.md))。Nix 以降の手順は [../getting-started.md](../getting-started.md) にある。
+Arch Linux 公式 WSL イメージを導入し、Nix と dotfiles を入れる前の初期設定の手順。開発作業は WSL (Arch Linux) 上で行い、Windows 側は dotfiles の適用など Windows 側で必要な用途に限る。前提として WSL 本体と仮想マシン プラットフォームの有効化が済んでいること ([windows.md](windows.md))。Nix 以降の手順は [../getting-started.md](../getting-started.md) にある。
 
 ## 導入
 
@@ -86,6 +86,12 @@ chsh -s "$HOME/.nix-profile/bin/zsh"
 入り直して zsh で起動することを確認する。zsh が壊れてログインできなくなった場合は、Windows 側から `wsl -d archlinux -u root -- chsh -s /bin/bash <username>` で bash に戻せる。
 
 ## 次の手順
+
+Nix の installer は curl で取得するが、Arch Linux の WSL イメージには curl が無いため先に入れる。この時点では Nix が無いので pacman で入れる。
+
+```bash
+sudo pacman -S --needed curl
+```
 
 Nix の導入から dotfiles の適用までは [../getting-started.md](../getting-started.md) に進む。ログインシェルの切り替えは上記のとおりその後に戻って行う。
 
