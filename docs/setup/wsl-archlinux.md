@@ -34,6 +34,12 @@ wsl -d archlinux
 
 `whoami` が自分のユーザー名を返すこと、PID 1 が systemd で `systemctl is-system-running` が running を返すこと、`sudo -v` が通ることを確認する。
 
+既定のディストリビューションを archlinux にする (Windows 側で実行)。`wsl --status` の既定のディストリビューションが archlinux になることを確認する。
+
+```powershell
+wsl --set-default archlinux
+```
+
 ## sudo をパスワードなしにする
 
 WSL では `wsl -u root` でパスワードなしに root へ入れるため、NOPASSWD にして失うのはディストリビューション内のプロセスに対する昇格の壁だけと判断している。一時ファイルを `visudo -c` で検査してから配置する。
