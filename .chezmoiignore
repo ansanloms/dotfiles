@@ -44,16 +44,12 @@ Documents
 .config/devin
 {{ end }}
 
-# alacritty は linux のみ (Windows は AppData 側に配る)。
-{{ if ne .chezmoi.os "linux" }}
-.config/alacritty
-{{ end }}
-
+# alacritty / ghostty の本体 (alacritty.toml / config.ghostty) は全 OS で .config 配下に配る。
+# Windows のアプリは AppData 側の include stub を読むため、.config 側は Windows では使われない。
 # include 元の OS 別断片は target に置かない。
-# ghostty は Windows の noctty 向けにしか使っていないので target に配らない (Linux / macOS で ghostty を使うときは外す)。
-.config/ghostty
 .config/alacritty/linux.toml
 .config/alacritty/windows.toml
+.config/ghostty/windows.ghostty
 
 # nix は linux のみ。
 {{ if ne .chezmoi.os "linux" }}
