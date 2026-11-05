@@ -1,12 +1,6 @@
 # claude-statusline (Claude Code の statusLine レンダラ)。
 # nixpkgs 収録対象外の自前ツール (https://github.com/ansanloms/claude-statusline)。
 #
-# 配布物は GitHub Release に添付された Bun の standalone 実行ファイル
-# (claude-statusline-<target>)。Bun ランタイムとアプリを 1 つのバイナリに埋め込んでおり、
-# 実行に deno / bun は不要。system と Release 資産 target の対応は下記 targets を参照
-# (x86_64 / aarch64 の linux のみ)。darwin は未検証。dontFixup で ad-hoc 署名も
-# 止まるため、署名の扱いを確認してから足す。
-#
 # Bun は起動時に /proc/self/exe で自分自身を読み、ファイル末尾の trailer から
 # 埋め込みペイロードの位置を得る。patchelf や strip で書き換えると trailer の
 # 位置がずれ、Bun がアプリを見つけられず素の Bun CLI にフォールバックする。

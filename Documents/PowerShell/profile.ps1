@@ -3,8 +3,6 @@ $Env:EDITOR = "nvim"
 $Env:LESSCHARSET = "UTF-8"
 $Env:RIPGREP_CONFIG_PATH = (Join-Path $Env:userprofile "\.ripgreprc")
 
-$Env:Path += ";" + (Join-Path $Env:userprofile "\.deno\bin")
-
 # bash ライクな補完
 Set-PSReadLineKeyHandler -Key Tab -Function Complete
 

@@ -19,14 +19,11 @@ result
 .config/git/config.personal.*
 .config/git/config.work.*
 
-# bash 設定は linux のみ。
-{{ if ne .chezmoi.os "linux" }}
+# bash / zsh 系は darwin と linux のみ。
+{{ if and (ne .chezmoi.os "linux") (ne .chezmoi.os "darwin") }}
 .bashrc
 .bash_profile
 .inputrc
-{{ end }}
-# zsh 系・bash_aliases は darwin と linux のみ。
-{{ if and (ne .chezmoi.os "linux") (ne .chezmoi.os "darwin") }}
 .bash_aliases
 .zshenv
 .zshrc
@@ -34,35 +31,31 @@ result
 .config/zsh
 .config/sheldon
 {{ end }}
+
 # Windows 専用の配布物。Windows 以外では配らない。
 {{ if ne .chezmoi.os "windows" }}
 AppData
 Documents
 .wslconfig
 {{ end }}
+
 # devin は Linux / darwin 専用の配布物 (Windows は AppData 側に配る)。
 {{ if eq .chezmoi.os "windows" }}
 .config/devin
 {{ end }}
+
 # alacritty は linux のみ (Windows は AppData 側に配る)。
 {{ if ne .chezmoi.os "linux" }}
 .config/alacritty
 {{ end }}
+
 # include 元の OS 別断片は target に置かない。
 # ghostty は Windows の noctty 向けにしか使っていないので target に配らない (Linux / macOS で ghostty を使うときは外す)。
 .config/ghostty
 .config/alacritty/linux.toml
 .config/alacritty/windows.toml
+
 # nix は linux のみ。
 {{ if ne .chezmoi.os "linux" }}
 .config/nix
 {{ end }}
-# リポジトリでしか使わない更新スクリプト。
-.config/nix/*/upgrade.sh
-# upgrade.sh しか無いディレクトリ (backlog-bee-cli は package.json があるので残す)。
-# 自前 derivation を足して upgrade.sh しか無いディレクトリになる場合はここにも足す。
-.config/nix/claude-statusline
-.config/nix/md2html
-.config/nix/moddable-sdk
-.config/nix/sonarqube-cli
-.config/nix/result
