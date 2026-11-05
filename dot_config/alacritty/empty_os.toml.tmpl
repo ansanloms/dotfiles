@@ -1,2 +1,2 @@
-{{- /* .config/alacritty は .chezmoiignore で linux 以外を除外しているため linux 版だけを include する。Windows は AppData/Roaming/alacritty/os.toml.tmpl */ -}}
+{{- /* ~/.config/alacritty は全 OS に配るが、読むのは Linux の alacritty のみなので linux 版を include する。Windows の alacritty は AppData/Roaming/alacritty/os.toml.tmpl を読む。 */ -}}
 {{ include "dot_config/alacritty/linux.toml" }}
