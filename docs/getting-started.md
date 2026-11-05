@@ -6,18 +6,16 @@ Windows 端末そのものの整備 (アプリの導入・WSL の作成・Window
 
 ## 方針
 
-- 開発作業は WSL (Arch Linux) 上で行う。Windows 側は dotfiles の適用など Windows 側で必要な用途に限る。
 - リポジトリは Linux 側のファイルシステムに置き、`~/dev/<service>/<owner>/<repo>` の構成で clone する (例: `~/dev/github.com/ansanloms/dotfiles`)。
-- 設定は [chezmoi](https://www.chezmoi.io/) で配り、コマンド類は Nix flake (`nix profile`) で入れる。WSL 側のツールは原則すべて Nix で入れる。
+- 設定は [chezmoi](https://www.chezmoi.io/) で配り、コマンド類は Nix flake (`nix profile`) で入れる。コマンド類は原則すべて Nix で入れる。
 
 ## 導入手順
 
 ### 1. Nix を導入する
 
-[公式 installer](https://nixos.org/download/) を multi-user/daemon モードで使う。Arch Linux の WSL イメージには curl が無いので先に入れる。
+[公式 installer](https://nixos.org/download/) を multi-user/daemon モードで使う。installer の取得に curl を使うため、無い環境では OS のパッケージマネージャで先に入れる (Arch Linux の WSL は [setup/wsl-archlinux.md](setup/wsl-archlinux.md) を参照)。
 
 ```sh
-command -v curl || sudo pacman -S --needed curl
 sh <(curl -L https://nixos.org/nix/install) --daemon
 ```
 
