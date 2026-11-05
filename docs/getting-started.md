@@ -13,7 +13,7 @@ Windows 端末そのものの整備 (アプリの導入・WSL の作成・Window
 
 ### 1. Nix を導入する
 
-[公式 installer](https://nixos.org/download/) を multi-user/daemon モードで使う。installer の取得に curl を使うため、無い環境では OS のパッケージマネージャで先に入れる (Arch Linux の WSL は [setup/wsl-archlinux.md](setup/wsl-archlinux.md) を参照)。
+[公式 installer](https://nixos.org/download/) を multi-user/daemon モードで使う。installer の取得に curl を使うため、無い環境では OS のパッケージマネージャで先に入れる。
 
 ```sh
 sh <(curl -L https://nixos.org/nix/install) --daemon
