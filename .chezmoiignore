@@ -44,11 +44,6 @@ Documents
 .config/devin
 {{ end }}
 
-# noctty (Windows の ghostty 実装) は設定ディレクトリを XDG_CONFIG_HOME、次に %LOCALAPPDATA% の順で
-# 解決するため、Windows では XDG_CONFIG_HOME=%USERPROFILE%\.config を設定し (docs/setup/windows.md)、
-# nvim と同じく ~/.config/noctty に配る。中身は dot_config/ghostty の include stub で、
-# alacritty / ghostty 本体と同じく全 OS に配る (Windows 以外では読まれない)。
-
 # alacritty / ghostty の本体 (alacritty.toml / config.ghostty) は全 OS で .config 配下に配る。
 # Windows の alacritty は %APPDATA% しか見ないため AppData 側の include stub を読み、.config 側は Windows では使われない。
 # include 元の OS 別断片は target に置かない。

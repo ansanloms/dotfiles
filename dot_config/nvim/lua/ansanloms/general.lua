@@ -5,7 +5,6 @@ vim.opt.fileformats = "unix,mac,dos"
 vim.opt.exrc = true
 
 -- runtimepath と packpath の設定。
--- 設定ディレクトリは OS で異なる (Linux / macOS は ~/.config/nvim、Windows は %LOCALAPPDATA%\nvim) ため stdpath で解決する。
 vim.opt.runtimepath:prepend(vim.fn.stdpath("config"))
 vim.opt.packpath:prepend(vim.fn.stdpath("config"))
 
