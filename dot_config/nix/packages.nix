@@ -61,6 +61,7 @@ pkgs: with pkgs; [
   statix
 
   # lint / 開発ツール
+  betterleaks
   devcontainer
   hadolint
   shellcheck
@@ -72,6 +73,10 @@ pkgs: with pkgs; [
   awscli2
   google-cloud-sdk
   ssm-session-manager-plugin
+
+  # ネットワーク / 証明書
+  mkcert
+  tailscale
 
   # データベース
   percona-toolkit
