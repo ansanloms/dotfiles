@@ -39,11 +39,6 @@ Documents
 .wslconfig
 {{ end }}
 
-# devin は Linux / darwin 専用の配布物 (Windows は AppData 側に配る)。
-{{ if eq .chezmoi.os "windows" }}
-.config/devin
-{{ end }}
-
 # alacritty / ghostty の本体 (alacritty.toml / config.ghostty) は全 OS で .config 配下に配る。
 # Windows の alacritty は %APPDATA% しか見ないため AppData 側の include stub を読み、.config 側は Windows では使われない。
 # include 元の OS 別断片は target に置かない。
