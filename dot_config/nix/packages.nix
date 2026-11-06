@@ -88,7 +88,6 @@ pkgs: with pkgs; [
   apm-cli
   claude-code
   claude-statusline
-  devin-cli
 
   # 組み込み
   moddable-sdk
