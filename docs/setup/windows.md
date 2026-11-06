@@ -98,6 +98,29 @@ wsl --list --online
 
 ディストリビューションの導入と初期設定は [wsl-archlinux.md](wsl-archlinux.md) に続く。
 
+## OpenSSH Authentication Agent
+
+SSH の秘密鍵は Windows 側の ssh-agent サービス (OpenSSH Authentication Agent) に持たせ、WSL からは [wsl2-ssh-agent](https://github.com/mame/wsl2-ssh-agent) で橋渡しして使う ([wsl-archlinux.md](wsl-archlinux.md))。WSL 内の ssh-agent は鍵をメモリにしか持たず、WSL インスタンスは最後の端末を閉じると停止するため、WSL 側に agent を置くと端末を閉じるごとに鍵が消える。Windows 側のサービスに持たせれば WSL の停止や再起動の影響を受けない。
+
+サービスの開始の種類を自動にして起動する。サービスの構成変更には管理者権限が要る。
+
+```powershell
+sudo sc.exe config ssh-agent start= auto
+sudo sc.exe start ssh-agent
+```
+
+`Get-Service ssh-agent` で `Status` が `Running`、`StartType` が `Automatic` になっていることを確認する。
+
+鍵をサービスに登録する。登録済みの鍵は `ssh-add -l` で確認する。
+
+```powershell
+ssh-add "$env:USERPROFILE\.ssh\id_ed25519"
+ssh-add -l
+ssh -T git@github.com
+```
+
+登録した鍵は Windows のログオンに紐づけて保存され、再起動後も残る。鍵をすべて外すときは `ssh-add -D`。
+
 ## dotfiles の適用
 
 Windows 側にもリポジトリを `%USERPROFILE%\dev\github.com\ansanloms\dotfiles` へ clone し、chezmoi 自身の設定 `%USERPROFILE%\.config\chezmoi\chezmoi.toml` をリポジトリ直下の `.chezmoi.toml.tmpl` から `chezmoi init` で生成する。

@@ -18,8 +18,11 @@ fi
 #  eval "$(sheldon source)"
 #fi
 
-if type wsl2-ssh-agent > /dev/null 2>&1; then
-  eval $(wsl2-ssh-agent)
+# WSL では Windows 側の ssh-agent.exe を使う。wsl2-ssh-agent は既に daemon が居れば再利用し、
+# 居なければ自身を daemon 化して SSH_AUTH_SOCK の export 文を出力する。
+# @see https://github.com/mame/wsl2-ssh-agent
+if is-wsl && type wsl2-ssh-agent > /dev/null 2>&1; then
+  eval "$(wsl2-ssh-agent)"
 fi
 
 

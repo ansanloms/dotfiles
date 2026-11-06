@@ -10,6 +10,7 @@ pkgs: with pkgs; [
   sheldon
   sshpass
   starship
+  wsl2-ssh-agent # WSL から Windows 側の ssh-agent.exe (OpenSSH Authentication Agent) へ橋渡しする
   zsh
 
   # CLI ユーティリティ

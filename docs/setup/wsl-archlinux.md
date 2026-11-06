@@ -85,6 +85,22 @@ chsh -s "$HOME/.nix-profile/bin/zsh"
 
 入り直して zsh で起動することを確認する。zsh が壊れてログインできなくなった場合は、Windows 側から `wsl -d archlinux -u root -- chsh -s /bin/bash <username>` で bash に戻せる。
 
+## ssh-agent (Windows 側の agent を使う)
+
+SSH の秘密鍵は Windows 側の OpenSSH Authentication Agent に持たせる ([windows.md](windows.md))。WSL からは wsl2-ssh-agent で橋渡しする。wsl2-ssh-agent は dotfiles の nix profile で入り、`.zshrc` / `.bashrc` が WSL 上では `eval "$(wsl2-ssh-agent)"` を実行して `SSH_AUTH_SOCK` を `~/.ssh/wsl2-ssh-agent.sock` に向ける。初回は daemon を起動し、以降のシェルは起動済みの daemon を再利用する。daemon は PowerShell.exe を子プロセスとして起こし、Windows 側の名前付きパイプ `openssh-ssh-agent` へ中継する。
+
+[../getting-started.md](../getting-started.md) の手順 4 (パッケージの導入) まで済ませ、Windows 側で鍵をサービスに登録した後、シェルを開き直して Windows 側の鍵が見えることを確認する。
+
+```bash
+echo "$SSH_AUTH_SOCK"
+ssh-add -l
+ssh -T git@github.com
+```
+
+`ssh-add -l` が Windows 側で登録した鍵を返せば橋渡しは動いている。`Could not open a connection to your authentication agent` が出る場合は、まず Windows 側で `Get-Service ssh-agent` が `Running` であること、PowerShell から `ssh-add -l` が鍵を返すことを確認する。WSL 側の daemon を作り直すときは `wsl2-ssh-agent -stop` で止めてシェルを開き直す。`wsl2-ssh-agent --verbose --foreground` で前景起動すると中継の過程がログに出る。
+
+WSL 内に ssh-agent を立てる構成は採らない。WSL インスタンスは最後の端末を閉じると停止するため、WSL 側の agent に載せた鍵は端末を閉じるごとに消える。
+
 ## 次の手順
 
 Nix の installer は curl で取得するが、Arch Linux の WSL イメージには curl が無いため先に入れる。この時点では Nix が無いので pacman で入れる。
