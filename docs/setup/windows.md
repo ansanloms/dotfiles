@@ -107,9 +107,19 @@ git clone https://github.com/ansanloms/dotfiles.git "$env:USERPROFILE\dev\github
 chezmoi --source "$env:USERPROFILE\dev\github.com\ansanloms\dotfiles" init
 ```
 
-生成後は `--source` 無しでよい。差分を確認して適用する。
+生成後は `--source` 無しでよい。
+
+Neovim と noctty は設定ディレクトリの解決に `XDG_CONFIG_HOME` を使う (Neovim は未設定なら `%LOCALAPPDATA%\nvim`、noctty は未設定なら `%LOCALAPPDATA%\noctty`)。dotfiles は両者を Linux / macOS と同じ `~/.config` 配下に配るため、`XDG_CONFIG_HOME` を `%USERPROFILE%\.config` に設定する。`setx` はユーザー環境変数を永続化するが、既に開いているシェルには反映されないので、設定後にシェルを開き直す。alacritty は Windows では `%APPDATA%` しか見ないため `XDG_CONFIG_HOME` の影響を受けず、`AppData\Roaming\alacritty` に配る。
+
+```powershell
+setx XDG_CONFIG_HOME "$env:USERPROFILE\.config"
+```
+
+シェルを開き直してから差分を確認して適用する。
 
 ```powershell
 chezmoi diff
 chezmoi apply
 ```
+
+適用後、`nvim` で `:echo stdpath("config")` が `%USERPROFILE%\.config\nvim` を指すことを確認する。

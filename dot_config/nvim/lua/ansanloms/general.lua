@@ -5,8 +5,8 @@ vim.opt.fileformats = "unix,mac,dos"
 vim.opt.exrc = true
 
 -- runtimepath と packpath の設定。
-vim.opt.runtimepath:prepend("~/.config/nvim")
-vim.opt.packpath:prepend("~/.config/nvim")
+vim.opt.runtimepath:prepend(vim.fn.stdpath("config"))
+vim.opt.packpath:prepend(vim.fn.stdpath("config"))
 
 -- viminfo (shada) 設定。
 vim.opt.shada = "'10000,:100,<1000,s10,n" .. vim.fn.expand(vim.fn.stdpath("data") .. "/shada")
