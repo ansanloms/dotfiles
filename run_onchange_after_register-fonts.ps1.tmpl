@@ -1,8 +1,10 @@
 # .chezmoiexternal.toml hash: {{ include ".chezmoiexternal.toml" | sha256sum }}
+# ASCII only: Windows PowerShell 5.1 reads a UTF-8 file without BOM as ANSI
+# (CP932 on Japanese Windows), which breaks string literals. Keep this file ASCII.
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-# chezmoi external が展開した per-user フォントを HKCU の Fonts キーへ登録する。
+# Register the per-user fonts extracted by chezmoi externals in the HKCU Fonts key.
 $fontDir = Join-Path $env:LOCALAPPDATA 'Microsoft\Windows\Fonts'
 $regKey = 'HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts'
 
@@ -10,13 +12,13 @@ if (-not (Test-Path $regKey)) {
     New-Item -Path $regKey -Force | Out-Null
 }
 
-# 0 件は展開失敗とみなし、失敗させて次回 apply で再実行させる。
+# Zero matches means the extraction failed. Fail so that the next apply retries.
 $fonts = @(Get-ChildItem -Path $fontDir -File | Where-Object { $_.Name -like 'Moralerspace*.ttf' -or $_.Name -like 'SourceHanSansJP*.otf' })
 if ($fonts.Count -eq 0) {
-    throw "対象フォント (Moralerspace*.ttf / SourceHanSansJP*.otf) が $fontDir に無い"
+    throw "No Moralerspace*.ttf / SourceHanSansJP*.otf found in $fontDir"
 }
 
-# レジストリ値名の接尾辞は ttf が TrueType、otf が OpenType。
+# Registry value name suffix: TrueType for .ttf, OpenType for .otf.
 $fonts | ForEach-Object {
     $suffix = if ($_.Extension -ieq '.otf') { 'OpenType' } else { 'TrueType' }
     New-ItemProperty -Path $regKey -Name "$($_.BaseName) ($suffix)" -Value $_.FullName -PropertyType String -Force | Out-Null
