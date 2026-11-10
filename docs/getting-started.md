@@ -105,7 +105,9 @@ ls ~/.claude/skills/ja-tech-proofread/scripts/node_modules
 | macOS   | `~/Library/Fonts`                        | この repo では未検証。                                                            |
 | Windows | `%LOCALAPPDATA%\Microsoft\Windows\Fonts` | 続けて `run_onchange_after_register-fonts.ps1` が HKCU の Fonts キーへ登録する。  |
 
-バージョンはフォントごとに `.chezmoiexternal.toml` の `url` と `checksum.sha256` の 2 箇所で固定している。更新するときは新しい zip の SHA-256 を `Get-FileHash -Algorithm SHA256 <zip>` (PowerShell) または `sha256sum <zip>` で求め、両方を書き換えてから `chezmoi apply --refresh-externals` を実行する。
+バージョンはフォントごとに `.chezmoiexternal.toml` の `url` と `checksum.sha256` の 2 箇所で固定している。GitHub Actions の `font-bump` workflow が毎週 latest release を見て 2 箇所を書き換え、展開を検証したうえで main にコミットする。各機では `chezmoi apply --refresh-externals` で取り直す。
+
+手動で上げるときは新しい zip の SHA-256 を `Get-FileHash -Algorithm SHA256 <zip>` (PowerShell) または `sha256sum <zip>` で求め、同じ 2 箇所を書き換える。
 
 ## 更新
 

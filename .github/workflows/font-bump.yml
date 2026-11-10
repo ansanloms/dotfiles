@@ -1,0 +1,123 @@
+name: font bump
+
+# .chezmoiexternal.toml の 2 フォントについて GitHub Releases の latest を引き、
+# url と checksum.sha256 を書き換え、chezmoi apply で展開を検証したうえで直接 main へコミットする。
+# 適用はローカルで行う (chezmoi apply --refresh-externals)。
+
+on:
+  schedule:
+    - cron: "0 8 * * 1" # 毎週月曜 08:00 UTC (17:00 JST)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # chezmoi は nix run で引くため、upstream nix を入れる。flakes / nix-command は
+      # 既定で無効のため extra_nix_config で有効化する。
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Bump font externals
+        # gh で latest release の asset を引くため GH_TOKEN が必要。
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          # bump <entry> <repo> <name-regex>
+          # latest release から name-regex に一致する asset を 1 つ選び、
+          # .chezmoiexternal.toml の <entry> の url と sha256 だけを書き換える。
+          bump() {
+            local entry="$1" repo="$2" regex="$3"
+            local release matched count url digest current current_sha tmp actual
+            release=$(gh release view -R "$repo" --json assets)
+            matched=$(jq -c --arg re "$regex" '[.assets[] | select(.name | test($re))]' <<< "$release")
+            count=$(jq 'length' <<< "$matched")
+            if [ "$count" -ne 1 ]; then
+              echo "::error::$repo: asset が ${count} 件一致 (期待は 1 件): $regex" >&2
+              jq -r '.[].name' <<< "$matched" >&2
+              exit 1
+            fi
+            url=$(jq -r '.[0].url' <<< "$matched")
+            digest=$(jq -r '.[0].digest // ""' <<< "$matched")
+
+            current=$(sed -n "/^\[\"$entry\"\]\$/,/^\$/s|^ *url = \"\(.*\)\"|\1|p" .chezmoiexternal.toml)
+            current_sha=$(sed -n "/^\[\"$entry\"\]\$/,/^\$/s|^ *sha256 = \"\(.*\)\"|\1|p" .chezmoiexternal.toml)
+            # url 一致でも toml の sha256 が digest と食い違うなら up to date とせず書き直す。
+            if [ "$current" = "$url" ]; then
+              if [ -z "$digest" ] || [ "$digest" = "sha256:$current_sha" ]; then
+                echo "$entry: up to date ($url)"
+                return 0
+              fi
+              echo "$entry: sha256 mismatch in toml ($current_sha vs $digest), rewriting"
+            fi
+
+            tmp=$(mktemp)
+            curl -fsSL -o "$tmp" "$url"
+            actual=$(sha256sum "$tmp" | cut -d' ' -f1)
+            rm -f "$tmp"
+
+            if [ -z "$digest" ]; then
+              echo "::warning::$repo: release asset に digest が無いため照合をスキップ"
+            elif [ "$digest" != "sha256:$actual" ]; then
+              echo "::error::$repo: digest 不一致 (release: $digest, actual: sha256:$actual)" >&2
+              exit 1
+            fi
+
+            sed -i \
+              -e "/^\[\"$entry\"\]\$/,/^\$/s|^\( *\)url = .*|\1url = \"$url\"|" \
+              -e "/^\[\"$entry\"\]\$/,/^\$/s|^\( *\)sha256 = .*|\1sha256 = \"$actual\"|" \
+              .chezmoiexternal.toml
+
+            local range
+            range=$(sed -n "/^\[\"$entry\"\]\$/,/^\$/p" .chezmoiexternal.toml)
+            if ! grep -qF "url = \"$url\"" <<< "$range" || ! grep -qF "sha256 = \"$actual\"" <<< "$range"; then
+              echo "::error::$entry: .chezmoiexternal.toml の書き換えに失敗" >&2
+              exit 1
+            fi
+          }
+
+          bump fonts-moralerspace yuru7/moralerspace '^MoralerspaceHWJPDOC_v.*\.zip$'
+          bump fonts-source-han-sans-jp adobe-fonts/source-han-sans '^[0-9]+_SourceHanSansJP\.zip$'
+
+      - name: Stage and detect changes
+        id: diff
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # 壊れた url / checksum を main に流さないため、実際に chezmoi で展開できることを gate にする。
+      # 失敗で job が止まり commit は skip。
+      - name: Verify extraction
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          tmp=$(mktemp -d)
+          nix run nixpkgs#chezmoi -- -S "$PWD" -D "$tmp" apply --include=externals,dirs
+          [ -n "$(find "$tmp/.local/share/fonts" -name '*.ttf' -print -quit)" ]
+          [ -n "$(find "$tmp/.local/share/fonts" -name '*.otf' -print -quit)" ]
+
+      - name: Commit and push
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: フォントのバージョンを更新"
+          # 並行するワークフローが先に main へ push していると non-fast-forward で
+          # 弾かれるため、remote の進みを取り込んでから push する。
+          git fetch origin main
+          git rebase FETCH_HEAD
+          git push origin HEAD:main
