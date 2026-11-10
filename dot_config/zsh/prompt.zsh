@@ -22,6 +22,6 @@ _os_icon="%F{green}${_os_glyph}%f"
 precmd() { vcs_info }
 
 PROMPT='
-%F{244}┌──────────────%f ${_os_icon}${vcs_info_msg_0_}
+%F{244}┌──────────────%f ${_os_icon}%F{green}%m%f ${vcs_info_msg_0_}
 %F{244}│%f %F{white}%~%f
 %(?.%F{244}>%f.%F{red}>%f) '
