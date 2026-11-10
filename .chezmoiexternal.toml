@@ -1,8 +1,15 @@
-# Windows 向けフォントの取得。
-# Moralerspace (yuru7/moralerspace、OFL-1.1) の HWJPDOC と Source Han Sans JP (adobe-fonts/source-han-sans、OFL-1.1) を per-user フォントディレクトリへ展開する。
-# HKCU への登録は run_onchange_after_register-fonts.ps1.tmpl が行う。
-{{ if eq .chezmoi.os "windows" -}}
-{{- $fontDir := "AppData/Local/Microsoft/Windows/Fonts" -}}
+# フォントの取得。
+# Moralerspace (yuru7/moralerspace、OFL-1.1) の HWJPDOC と Source Han Sans JP (adobe-fonts/source-han-sans、OFL-1.1) を OS ごとのユーザーフォントディレクトリへ展開する。
+# Windows では HKCU への登録を run_onchange_after_register-fonts.ps1.tmpl が行う。
+{{ $fontDir := "" -}}
+{{- if eq .chezmoi.os "windows" -}}
+{{-   $fontDir = "AppData/Local/Microsoft/Windows/Fonts" -}}
+{{- else if eq .chezmoi.os "darwin" -}}
+{{-   $fontDir = "Library/Fonts" -}}
+{{- else if eq .chezmoi.os "linux" -}}
+{{-   $fontDir = ".local/share/fonts" -}}
+{{- end -}}
+{{ if $fontDir -}}
 ["fonts-moralerspace"]
     type = "archive"
     targetPath = "{{ $fontDir }}"

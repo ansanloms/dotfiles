@@ -62,19 +62,6 @@ sudo winget install --id Microsoft.WSL -e
 
 仕上げに `winget upgrade` で対象一覧を確認してから `winget upgrade --all` で導入済みパッケージを更新する。
 
-## フォント
-
-フォントは次の 2 つを使う。
-
-- Moralerspace: Monaspace と IBM Plex Sans JP などを合成したプログラミング向けフォントで、SIL Open Font License 1.1。出典: [yuru7/moralerspace](https://github.com/yuru7/moralerspace)
-- Source Han Sans JP: 源ノ角ゴシックの日本語サブセット OTF で、SIL Open Font License 1.1。出典: [adobe-fonts/source-han-sans](https://github.com/adobe-fonts/source-han-sans)
-
-導入は chezmoi に任せる。`chezmoi apply` が `.chezmoiexternal.toml` に従って各フォントの zip を取得し、ユーザー単位のフォントディレクトリ `%LOCALAPPDATA%\Microsoft\Windows\Fonts` へ展開する。続けて `run_onchange_after_register-fonts.ps1` が HKCU の Fonts キーへ登録する。管理者権限は要らない。
-
-バージョンはフォントごとに `.chezmoiexternal.toml` の `url` と `checksum.sha256` の 2 箇所で固定している。更新するときは新しい zip の SHA-256 を `Get-FileHash -Algorithm SHA256 <zip>` (PowerShell) または `sha256sum <zip>` で求め、両方を書き換えてから `chezmoi apply --refresh-externals` を実行する。
-
-以前 Scoop で Moralerspace や Source Han Sans JP を入れていた機では、先に `sudo scoop uninstall moralerspace` と `sudo scoop uninstall source-han-sans-jp` でシステム側 (`%WINDIR%\Fonts` と HKLM) のフォントを外しておく。残したままだと同じ family がユーザー側と二重に登録される。
-
 ## WSL
 
 WSL 本体 (上記の `Microsoft.WSL`) を入れた後、仮想マシン プラットフォームを有効化する。再起動が要る。
@@ -132,6 +119,8 @@ Neovim と noctty は設定ディレクトリの解決に `XDG_CONFIG_HOME` を�
 ```powershell
 setx XDG_CONFIG_HOME "$env:USERPROFILE\.config"
 ```
+
+フォント (Moralerspace、Source Han Sans JP) も `chezmoi apply` で入る ([../getting-started.md](../getting-started.md) の「フォント」)。以前 Scoop で入れていた機では、先に `sudo scoop uninstall moralerspace` と `sudo scoop uninstall source-han-sans-jp` でシステム側 (`%WINDIR%\Fonts` と HKLM) のフォントを外しておく。残したままだと同じ family がユーザー側と二重に登録される。
 
 シェルを開き直してから差分を確認して適用する。
 
