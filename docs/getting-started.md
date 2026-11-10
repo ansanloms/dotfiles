@@ -2,7 +2,7 @@
 
 この dotfiles を新しい環境へ導入する手順。
 
-Windows 端末そのものの整備 (アプリの導入・WSL の作成・Windows 側での chezmoi の設定) は [setup/windows.md](setup/windows.md)、WSL ディストリビューションの初期設定は [setup/wsl-archlinux.md](setup/wsl-archlinux.md) にある。
+Windows 端末そのものの整備 (アプリの導入・WSL の作成・Windows 側での chezmoi の設定) は [setup/windows.md](setup/windows.md)、Arch Linux の共通の初期設定は [setup/archlinux.md](setup/archlinux.md)、WSL 固有の手順は [setup/wsl-archlinux.md](setup/wsl-archlinux.md) にある。
 
 ## 方針
 

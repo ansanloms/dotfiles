@@ -1,6 +1,6 @@
 # WSL (Arch Linux) のセットアップ
 
-Arch Linux 公式 WSL イメージを導入し、Nix と dotfiles を入れる前の初期設定の手順。開発作業は WSL (Arch Linux) 上で行い、Windows 側は dotfiles の適用など Windows 側で必要な用途に限る。前提として WSL 本体と仮想マシン プラットフォームの有効化が済んでいること ([windows.md](windows.md))。Nix 以降の手順は [../getting-started.md](../getting-started.md) にある。
+Arch Linux 公式 WSL イメージを導入し、Nix と dotfiles を入れる前の初期設定のうち、WSL 固有の手順。環境を問わない共通の初期設定 (ユーザー作成・ロケール・Docker Engine・ログインシェル) は [archlinux.md](archlinux.md) にあり、本書はそこへの参照と WSL 固有の差分だけを持つ。開発作業は WSL (Arch Linux) 上で行い、Windows 側は dotfiles の適用など Windows 側で必要な用途に限る。前提として WSL 本体と仮想マシン プラットフォームの有効化が済んでいること ([windows.md](windows.md))。Nix 以降の手順は [../getting-started.md](../getting-started.md) にある。
 
 ## 導入
 
@@ -12,19 +12,7 @@ wsl --install archlinux
 
 ## 初回設定
 
-root で実行する。`<username>` は自分のユーザー名に置き換える。
-
-```bash
-pacman -Syu
-pacman -S --needed sudo
-useradd -m -G wheel <username>
-passwd <username>
-passwd
-echo '%wheel ALL=(ALL:ALL) ALL' > /etc/sudoers.d/wheel
-chmod 440 /etc/sudoers.d/wheel
-```
-
-既定ユーザーを設定する (Windows 側で実行)。
+ユーザーの作成と sudo の設定は [archlinux.md](archlinux.md) の「初回設定」に従う。ログインし直す代わりに、既定ユーザーを設定する (Windows 側で実行)。
 
 ```powershell
 wsl --manage archlinux --set-default-user <username>
@@ -52,42 +40,17 @@ rm /tmp/wheel
 sudo -k && sudo true
 ```
 
-## ロケール
+## 共通の初期設定
 
-`ja_JP.UTF-8` が未生成だと setlocale の警告が出る。`LOCALE_ARCHIVE` の設定は不要。
-
-```bash
-sudo sed -i -e 's/^#\(ja_JP\.UTF-8 UTF-8\)/\1/' -e 's/^#\(en_US\.UTF-8 UTF-8\)/\1/' /etc/locale.gen
-sudo locale-gen
-locale -a
-```
-
-## Docker Engine
-
-WSL 側のツールは原則 Nix で入れるが、Docker Engine は例外として pacman で入れる。root で常駐するデーモンと systemd ユニットが本体で、NixOS 以外では Nix でシステムサービスを管理できないため。
-
-```bash
-sudo pacman -S docker docker-buildx docker-compose
-sudo systemctl enable --now docker.service
-sudo usermod -aG docker "$USER"   # 再ログイン後に有効
-```
-
-`docker` グループのメンバーは実質 root と同等になる。
+ロケールと Docker Engine は [archlinux.md](archlinux.md) の該当節に従う。WSL 固有の差分は無い。
 
 ## ログインシェルを zsh にする
 
-zsh は dotfiles の nix profile で入るため、[../getting-started.md](../getting-started.md) の手順 4 (パッケージの導入) まで済ませてから行う。Nix の zsh を `/etc/shells` に登録して `chsh` する。
-
-```bash
-echo "$HOME/.nix-profile/bin/zsh" | sudo tee -a /etc/shells
-chsh -s "$HOME/.nix-profile/bin/zsh"
-```
-
-入り直して zsh で起動することを確認する。zsh が壊れてログインできなくなった場合は、Windows 側から `wsl -d archlinux -u root -- chsh -s /bin/bash <username>` で bash に戻せる。
+手順は [archlinux.md](archlinux.md) の「ログインシェルを zsh にする」に従う。zsh が壊れてログインできなくなった場合は、Windows 側から `wsl -d archlinux -u root -- chsh -s /bin/bash <username>` で bash に戻せる。
 
 ## ssh-agent (Windows 側の agent を使う)
 
-SSH の秘密鍵は Windows 側の OpenSSH Authentication Agent に持たせる ([windows.md](windows.md))。WSL からは wsl2-ssh-agent で橋渡しする。wsl2-ssh-agent は dotfiles の nix profile で入り、`.zshrc` / `.bashrc` が WSL 上では `eval "$(wsl2-ssh-agent)"` を実行して `SSH_AUTH_SOCK` を `~/.ssh/wsl2-ssh-agent.sock` に向ける。初回は daemon を起動し、以降のシェルは起動済みの daemon を再利用する。daemon は PowerShell.exe を子プロセスとして起こし、Windows 側の名前付きパイプ `openssh-ssh-agent` へ中継する。
+SSH の秘密鍵は Windows 側の OpenSSH Authentication Agent に持たせる ([windows.md](windows.md))。WSL からは wsl2-ssh-agent で橋渡しする。wsl2-ssh-agent は dotfiles の nix profile で入り、`.zshrc`/`.bashrc` が WSL 上では `eval "$(wsl2-ssh-agent)"` を実行して `SSH_AUTH_SOCK` を `~/.ssh/wsl2-ssh-agent.sock` に向ける。初回は daemon を起動し、以降のシェルは起動済みの daemon を再利用する。daemon は PowerShell.exe を子プロセスとして起こし、Windows 側の名前付きパイプ `openssh-ssh-agent` へ中継する。
 
 [../getting-started.md](../getting-started.md) の手順 4 (パッケージの導入) まで済ませ、Windows 側で鍵をサービスに登録した後、シェルを開き直して Windows 側の鍵が見えることを確認する。
 
