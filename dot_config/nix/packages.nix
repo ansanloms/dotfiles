@@ -23,6 +23,7 @@ pkgs: with pkgs; [
   pandoc
   pueue
   ripgrep
+  rsync
   unzip
   xz
   zip
