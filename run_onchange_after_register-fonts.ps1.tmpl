@@ -11,11 +11,13 @@ if (-not (Test-Path $regKey)) {
 }
 
 # 0 件は展開失敗とみなし、失敗させて次回 apply で再実行させる。
-$fonts = @(Get-ChildItem -Path $fontDir -Filter 'Moralerspace*.ttf')
+$fonts = @(Get-ChildItem -Path $fontDir -File | Where-Object { $_.Name -like 'Moralerspace*.ttf' -or $_.Name -like 'SourceHanSansJP*.otf' })
 if ($fonts.Count -eq 0) {
-    throw "Moralerspace*.ttf が $fontDir に無い"
+    throw "対象フォント (Moralerspace*.ttf / SourceHanSansJP*.otf) が $fontDir に無い"
 }
 
+# レジストリ値名の接尾辞は ttf が TrueType、otf が OpenType。
 $fonts | ForEach-Object {
-    New-ItemProperty -Path $regKey -Name "$($_.BaseName) (TrueType)" -Value $_.FullName -PropertyType String -Force | Out-Null
+    $suffix = if ($_.Extension -ieq '.otf') { 'OpenType' } else { 'TrueType' }
+    New-ItemProperty -Path $regKey -Name "$($_.BaseName) ($suffix)" -Value $_.FullName -PropertyType String -Force | Out-Null
 }
