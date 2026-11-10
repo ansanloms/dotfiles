@@ -72,6 +72,7 @@ pkgs: with pkgs; [
 
   # クラウド / インフラ
   awscli2
+  cloudflared
   google-cloud-sdk
   ssm-session-manager-plugin
 
