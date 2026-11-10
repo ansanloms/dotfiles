@@ -78,7 +78,6 @@ pkgs: with pkgs; [
   # ネットワーク / 証明書
   mkcert
   nssTools # certutil / pk12util 等 (mkcert が Firefox/Chromium の NSS DB へ CA を入れる際に certutil を使う)
-  tailscale
 
   # データベース
   percona-toolkit
