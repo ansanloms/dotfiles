@@ -93,6 +93,11 @@ pkgs: with pkgs; [
   moddable-sdk
   platformio-core
 
+  # ディスク / ISO イメージ
+  dosfstools
+  libisoburn # xorriso
+  mtools
+
   # メディア / 文書 / GUI
   drawio
   ffmpeg
