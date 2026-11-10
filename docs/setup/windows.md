@@ -62,23 +62,15 @@ sudo winget install --id Microsoft.WSL -e
 
 仕上げに `winget upgrade` で対象一覧を確認してから `winget upgrade --all` で導入済みパッケージを更新する。
 
-## Scoop とフォント
+## フォント
 
-[Scoop](https://scoop.sh/) 本体は管理者ではない通常の PowerShell で導入する (管理者コンソールでのインストールは既定で拒否される)。
+フォント Moralerspace を使う。Monaspace と IBM Plex Sans JP などを合成したプログラミング向けフォントで、SIL Open Font License 1.1。出典: [yuru7/moralerspace](https://github.com/yuru7/moralerspace)
 
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
-```
+導入は chezmoi に任せる。`chezmoi apply` が `.chezmoiexternal.toml` に従って HWJPDOC の zip を取得し、ユーザー単位のフォントディレクトリ `%LOCALAPPDATA%\Microsoft\Windows\Fonts` へ展開する。続けて `run_onchange_after_register-fonts.ps1` が HKCU の Fonts キーへ登録する。管理者権限は要らない。
 
-自前バケットを追加し、フォント Moralerspace を導入する。Monaspace と IBM Plex Sans JP などを合成したプログラミング向けフォントで、SIL Open Font License 1.1。出典: [yuru7/moralerspace](https://github.com/yuru7/moralerspace)
+バージョンは `.chezmoiexternal.toml` の `$version` と `checksum.sha256` の 2 箇所で固定している。更新するときは新しい zip の SHA-256 を `Get-FileHash -Algorithm SHA256 <zip>` (PowerShell) または `sha256sum <zip>` で求め、両方を書き換えてから `chezmoi apply --refresh-externals` を実行する。
 
-```powershell
-scoop bucket add ansanloms https://github.com/ansanloms/scoop-ansanloms.git
-sudo scoop install ansanloms/moralerspace
-```
-
-このマニフェストはフォントをシステムのフォントフォルダ (`%WINDIR%\Fonts`) に入れるため管理者権限が要り、`sudo` 付きで実行する (Scoop 本体の導入とは逆で、こちらは昇格が前提)。
+以前 Scoop で Moralerspace を入れていた機では、先に `sudo scoop uninstall moralerspace` でシステム側 (`%WINDIR%\Fonts` と HKLM) のフォントを外しておく。残したままだと同じ family がユーザー側と二重に登録される。
 
 ## WSL
 
