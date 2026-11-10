@@ -2,7 +2,7 @@
 
 この dotfiles を新しい環境へ導入する手順。
 
-Windows 端末そのものの整備 (アプリの導入・WSL の作成・Windows 側での chezmoi の設定) は [setup/windows.md](setup/windows.md)、WSL ディストリビューションの初期設定は [setup/wsl-archlinux.md](setup/wsl-archlinux.md) にある。
+Windows 端末そのものの整備 (アプリの導入・WSL の作成・Windows 側での chezmoi の設定) は [setup/windows.md](setup/windows.md)、WSL ディストリビューションの初期設定は [setup/wsl-archlinux.md](setup/wsl-archlinux.md)、WSL ではない Arch Linux の初期設定は [setup/archlinux.md](setup/archlinux.md) にある。
 
 ## 方針
 
@@ -36,14 +36,6 @@ sudo systemctl restart nix-daemon
 ```sh
 nix run nixpkgs#hello
 ```
-
-> [!NOTE]
->
-> `Could not resolve host` で失敗する場合、systemd-resolved を使うホストでは `/etc/resolv.conf` が stub resolver を指しているかを確認する。ホスト側の `ping` や `curl` が通っていても起きる ([NixOS/nix#6770](https://github.com/NixOS/nix/issues/6770))。指していなければ stub resolver へ向けてから再実行する ([ArchWiki: systemd-resolved](https://wiki.archlinux.org/title/Systemd-resolved))。
->
-> ```sh
-> sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
-> ```
 
 インストーラ同梱の nix はブートストラップ用。普段使いの nix client は `packages.nix` で nixpkgs 版を導入しており、`~/.nix-profile/bin` が daemon profile (`/nix/var/nix/profiles/default/bin`) より PATH で優先されるため、profile 導入後はそちらが使われる。
 
