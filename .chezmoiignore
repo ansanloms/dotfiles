@@ -37,6 +37,8 @@ result
 AppData
 Documents
 .wslconfig
+# フォント登録スクリプト。
+register-fonts.ps1
 {{ end }}
 
 # alacritty / ghostty の本体 (alacritty.toml / config.ghostty) は全 OS で .config 配下に配る。

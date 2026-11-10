@@ -1,0 +1,30 @@
+# フォントの取得。
+# Moralerspace (yuru7/moralerspace、OFL-1.1) の HWJPDOC と Source Han Sans JP (adobe-fonts/source-han-sans、OFL-1.1) を OS ごとのユーザーフォントディレクトリへ展開する。
+# Windows では HKCU への登録を run_onchange_after_register-fonts.ps1.tmpl が行う。
+{{ $fontDir := "" -}}
+{{- if eq .chezmoi.os "windows" -}}
+{{-   $fontDir = "AppData/Local/Microsoft/Windows/Fonts" -}}
+{{- else if eq .chezmoi.os "darwin" -}}
+{{-   $fontDir = "Library/Fonts" -}}
+{{- else if eq .chezmoi.os "linux" -}}
+{{-   $fontDir = ".local/share/fonts" -}}
+{{- end -}}
+{{ if $fontDir -}}
+["fonts-moralerspace"]
+    type = "archive"
+    targetPath = "{{ $fontDir }}"
+    url = "https://github.com/yuru7/moralerspace/releases/download/v2.0.0/MoralerspaceHWJPDOC_v2.0.0.zip"
+    stripComponents = 1
+    include = ["**/*.ttf"]
+    ["fonts-moralerspace".checksum]
+        sha256 = "3598729cb4693ff74fe32695fac167991d6bee55fc1649281aab64f311624907"
+
+["fonts-source-han-sans-jp"]
+    type = "archive"
+    targetPath = "{{ $fontDir }}"
+    url = "https://github.com/adobe-fonts/source-han-sans/releases/download/2.005R/17_SourceHanSansJP.zip"
+    stripComponents = 2
+    include = ["**/*.otf"]
+    ["fonts-source-han-sans-jp".checksum]
+        sha256 = "076a167394a2bf125a7ab13164a5ea1ce529b988d867c11052e83473b2a704f1"
+{{ end -}}

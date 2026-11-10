@@ -90,6 +90,23 @@ lifecycle の失敗は `apm install -g` の出力にも終了コードにも現�
 ls ~/.claude/skills/ja-tech-proofread/scripts/node_modules
 ```
 
+## フォント
+
+フォントは次の 2 つを使う。
+
+- Moralerspace: Monaspace と IBM Plex Sans JP などを合成したプログラミング向けフォントで、SIL Open Font License 1.1。出典: [yuru7/moralerspace](https://github.com/yuru7/moralerspace)
+- Source Han Sans JP: 源ノ角ゴシックの日本語サブセット OTF で、SIL Open Font License 1.1。出典: [adobe-fonts/source-han-sans](https://github.com/adobe-fonts/source-han-sans)
+
+導入は chezmoi に任せる。`chezmoi apply` が `.chezmoiexternal.toml` に従って各フォントの zip を取得し、OS ごとのユーザーフォントディレクトリへ展開する。管理者権限は要らない。
+
+| OS      | 展開先                                   | 補足                                                                              |
+| ------- | ---------------------------------------- | --------------------------------------------------------------------------------- |
+| Linux   | `~/.local/share/fonts`                   | fontconfig の既定設定が見るディレクトリ。反映されなければ `fc-cache` を実行する。 |
+| macOS   | `~/Library/Fonts`                        | この repo では未検証。                                                            |
+| Windows | `%LOCALAPPDATA%\Microsoft\Windows\Fonts` | 続けて `run_onchange_after_register-fonts.ps1` が HKCU の Fonts キーへ登録する。  |
+
+バージョンはフォントごとに `.chezmoiexternal.toml` の `url` と `checksum.sha256` の 2 箇所で固定している。更新するときは新しい zip の SHA-256 を `Get-FileHash -Algorithm SHA256 <zip>` (PowerShell) または `sha256sum <zip>` で求め、両方を書き換えてから `chezmoi apply --refresh-externals` を実行する。
+
 ## 更新
 
 ```sh

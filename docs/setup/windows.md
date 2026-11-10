@@ -62,24 +62,6 @@ sudo winget install --id Microsoft.WSL -e
 
 仕上げに `winget upgrade` で対象一覧を確認してから `winget upgrade --all` で導入済みパッケージを更新する。
 
-## Scoop とフォント
-
-[Scoop](https://scoop.sh/) 本体は管理者ではない通常の PowerShell で導入する (管理者コンソールでのインストールは既定で拒否される)。
-
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
-```
-
-自前バケットを追加し、フォント Moralerspace を導入する。Monaspace と IBM Plex Sans JP などを合成したプログラミング向けフォントで、SIL Open Font License 1.1。出典: [yuru7/moralerspace](https://github.com/yuru7/moralerspace)
-
-```powershell
-scoop bucket add ansanloms https://github.com/ansanloms/scoop-ansanloms.git
-sudo scoop install ansanloms/moralerspace
-```
-
-このマニフェストはフォントをシステムのフォントフォルダ (`%WINDIR%\Fonts`) に入れるため管理者権限が要り、`sudo` 付きで実行する (Scoop 本体の導入とは逆で、こちらは昇格が前提)。
-
 ## WSL
 
 WSL 本体 (上記の `Microsoft.WSL`) を入れた後、仮想マシン プラットフォームを有効化する。再起動が要る。
@@ -137,6 +119,8 @@ Neovim と noctty は設定ディレクトリの解決に `XDG_CONFIG_HOME` を�
 ```powershell
 setx XDG_CONFIG_HOME "$env:USERPROFILE\.config"
 ```
+
+フォント (Moralerspace、Source Han Sans JP) も `chezmoi apply` で入る ([../getting-started.md](../getting-started.md) の「フォント」)。以前 Scoop で入れていた機では、先に `sudo scoop uninstall moralerspace` と `sudo scoop uninstall source-han-sans-jp` でシステム側 (`%WINDIR%\Fonts` と HKLM) のフォントを外しておく。残したままだと同じ family がユーザー側と二重に登録される。
 
 シェルを開き直してから差分を確認して適用する。
 
