@@ -3,12 +3,10 @@
 # HKCU への登録は run_onchange_after_register-fonts.ps1.tmpl が行う。
 {{ if eq .chezmoi.os "windows" -}}
 {{- $fontDir := "AppData/Local/Microsoft/Windows/Fonts" -}}
-{{- $moralerspaceVersion := "2.0.0" -}}
-{{- $sourceHanSansVersion := "2.005R" -}}
 ["fonts-moralerspace"]
     type = "archive"
     targetPath = "{{ $fontDir }}"
-    url = "https://github.com/yuru7/moralerspace/releases/download/v{{ $moralerspaceVersion }}/MoralerspaceHWJPDOC_v{{ $moralerspaceVersion }}.zip"
+    url = "https://github.com/yuru7/moralerspace/releases/download/v2.0.0/MoralerspaceHWJPDOC_v2.0.0.zip"
     stripComponents = 1
     include = ["**/*.ttf"]
     ["fonts-moralerspace".checksum]
@@ -17,7 +15,7 @@
 ["fonts-source-han-sans-jp"]
     type = "archive"
     targetPath = "{{ $fontDir }}"
-    url = "https://github.com/adobe-fonts/source-han-sans/releases/download/{{ $sourceHanSansVersion }}/17_SourceHanSansJP.zip"
+    url = "https://github.com/adobe-fonts/source-han-sans/releases/download/2.005R/17_SourceHanSansJP.zip"
     stripComponents = 2
     include = ["**/*.otf"]
     ["fonts-source-han-sans-jp".checksum]
