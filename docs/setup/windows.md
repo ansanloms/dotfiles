@@ -5,7 +5,7 @@ Windows 端末を CLI で整え、Windows 側に dotfiles を適用する手順�
 ## 方針
 
 - セットアップは原則 CLI で完結させる。GUI 操作が避けられない手順は、その理由とともに記録する。
-- 開発作業は WSL 上で行う。Windows 側に入れる開発系ツールは、dotfiles の適用など Windows 側で必要な用途に限定する。
+- 開発作業は WSL 上で行う。Windows 側に入れる開発系ツールは、dotfiles の適用など Windows 側で必要な用途に限定する。例外として、ターミナルマルチプレクサ (zellij) は Windows ネイティブでも Neovim と組み合わせて使えるようにしておく。
 
 ## 開発者向け設定
 
@@ -38,6 +38,7 @@ sudo reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /v 
 | nathancorvussolis.corvusskk | 日本語入力 (SKK 方式の IME)。インストーラはマシンスコープ。                                        |
 | Git.Git                     | Git for Windows                                                                                    |
 | Neovim.Neovim               | エディタ (Neovim 安定版)                                                                           |
+| Zellij.Zellij               | ターミナルマルチプレクサ。Windows ネイティブ対応は 0.44.0 以降。                                   |
 | Microsoft.PowerShell        | PowerShell 7 (pwsh)。dotfiles の PowerShell プロファイルはこちらの場所に配る。                     |
 | Microsoft.PowerToys         | Windows ユーティリティ集。winget の既定はユーザースコープ (`%LOCALAPPDATA%\Microsoft\PowerToys`)。 |
 | Microsoft.Coreutils         | Windows ネイティブの UNIX 系コマンド群 (uutils/coreutils ベース。findutils と grep を同梱)。       |
@@ -51,6 +52,7 @@ winget install --id AmanThanvi.noctty -e
 winget install --id nathancorvussolis.corvusskk -e
 winget install --id Git.Git -e --source winget
 winget install --id Neovim.Neovim -e
+winget install --id Zellij.Zellij -e --source winget
 winget install --id Microsoft.PowerShell -e
 winget install --id Microsoft.PowerToys -e --source winget
 winget install --id Microsoft.Coreutils -e
@@ -120,6 +122,12 @@ Neovim と noctty は設定ディレクトリの解決に `XDG_CONFIG_HOME` を�
 setx XDG_CONFIG_HOME "$env:USERPROFILE\.config"
 ```
 
+zellij の設定も `~/.config/zellij` に配る。Windows での既定の設定ディレクトリに依存しないよう、`ZELLIJ_CONFIG_DIR` で明示する。
+
+```powershell
+setx ZELLIJ_CONFIG_DIR "$env:USERPROFILE\.config\zellij"
+```
+
 フォント (Moralerspace、Source Han Sans JP) も `chezmoi apply` で入る ([../getting-started.md](../getting-started.md) の「フォント」)。以前 Scoop で入れていた機では、先に `sudo scoop uninstall moralerspace` と `sudo scoop uninstall source-han-sans-jp` でシステム側 (`%WINDIR%\Fonts` と HKLM) のフォントを外しておく。残したままだと同じ family がユーザー側と二重に登録される。
 
 シェルを開き直してから差分を確認して適用する。
@@ -130,3 +138,5 @@ chezmoi apply
 ```
 
 適用後、`nvim` で `:echo stdpath("config")` が `%USERPROFILE%\.config\nvim` を指すことを確認する。
+
+zellij は `zellij setup --check` の `[CONFIG DIR]` が `%USERPROFILE%\.config\zellij` を指すことを確認する。Windows ではペインを PowerShell 7 (`pwsh`) で起動し、Neovim は named pipe `\\.\pipe\nvim-<セッション名>` で listen する (Linux / macOS は `/tmp/nvim-<セッション名>.sock`)。OS による分岐は `dot_config/zellij/config.kdl.tmpl` と `dot_config/zellij/layouts/default.kdl.tmpl` にある。
