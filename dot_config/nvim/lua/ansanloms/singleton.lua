@@ -24,6 +24,16 @@ M.config = {
 }
 
 local function socket_exists(path)
+  -- Windows の named pipe はファイルシステム上の実体を持たないため、接続できるかで判定する。
+  if vim.fn.has("win32") == 1 then
+    local ok, chan = pcall(vim.fn.sockconnect, "pipe", path)
+    if not ok or chan == 0 then
+      return false
+    end
+    vim.fn.chanclose(chan)
+    return true
+  end
+
   return vim.uv.fs_stat(path) ~= nil
 end
 
@@ -60,11 +70,12 @@ function M.setup()
     return
   end
 
-  if not socket_exists(socket_path) then
+  -- 自分自身がサーバなら何もしない。socket_exists より先に判定し、自分の pipe へ接続しない。
+  if is_server(socket_path) then
     return
   end
 
-  if is_server(socket_path) then
+  if not socket_exists(socket_path) then
     return
   end
 

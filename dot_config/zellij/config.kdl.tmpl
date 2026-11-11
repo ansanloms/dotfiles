@@ -1,7 +1,12 @@
 show_startup_tips false
 theme "nightfox"
 default_layout "default"
+{{- /* zsh は Windows に配らない (.chezmoiignore)。Windows では pwsh を使う。 */}}
+{{- if eq .chezmoi.os "windows" }}
+default_shell "pwsh"
+{{- else }}
 default_shell "zsh"
+{{- end }}
 scrollback_editor "nvim"
 pane_frames true
 mouse_mode true
