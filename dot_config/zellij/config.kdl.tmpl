@@ -32,5 +32,9 @@ keybinds {
     bind "t" { SwitchToMode "Tab"; }
     bind "s" { SwitchToMode "Scroll"; }
     bind "q" { Quit; }
+    // 入れ子セッションとの行き来。入れ子 (guest) の中で "]" を押すと親 (host) に戻り、
+    // 親で "[" を押すとフォーカス中のペインの入れ子に入る。
+    bind "]" { SwitchToMode "Normal"; FocusHostSession; }
+    bind "[" { SwitchToMode "Normal"; FocusGuestSession; }
   }
 }
