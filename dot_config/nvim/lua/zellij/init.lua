@@ -20,12 +20,16 @@ function M.in_session()
   return (vim.env.ZELLIJ or "") ~= ""
 end
 
--- layout の `nvim --listen /tmp/nvim-${ZELLIJ_SESSION_NAME}.sock` に対応する
--- nvim socket パス。zellij 外なら nil。
+-- layout の `nvim --listen ...` に対応する nvim の listen アドレス。zellij 外なら nil。
+-- Linux / macOS は unix socket (/tmp/nvim-<セッション名>.sock)、
+-- Windows は named pipe (\\.\pipe\nvim-<セッション名>)。
 function M.nvim_socket_path()
   local name = M.session_name()
   if not name then
     return nil
+  end
+  if vim.fn.has("win32") == 1 then
+    return [[\\.\pipe\nvim-]] .. name
   end
   return "/tmp/nvim-" .. name .. ".sock"
 end
