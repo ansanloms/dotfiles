@@ -128,7 +128,7 @@ zellij の設定も `~/.config/zellij` に配る。Windows での既定の設定
 setx ZELLIJ_CONFIG_DIR "$env:USERPROFILE\.config\zellij"
 ```
 
-フォント (Moralerspace、Source Han Sans JP) も `chezmoi apply` で入る ([../getting-started.md](../getting-started.md) の「フォント」)。以前 Scoop で入れていた機では、先に `sudo scoop uninstall moralerspace` と `sudo scoop uninstall source-han-sans-jp` でシステム側 (`%WINDIR%\Fonts` と HKLM) のフォントを外しておく。残したままだと同じ family がユーザー側と二重に登録される。
+フォント (Moralerspace、Source Han Sans JP) も `chezmoi apply` で入る ([../getting-started.md](../getting-started.md) の「フォント」)。
 
 シェルを開き直してから差分を確認して適用する。
 
