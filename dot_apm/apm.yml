@@ -6,7 +6,7 @@ dependencies:
   apm:
     - ansanloms/skills/nvim-remote
     - ansanloms/skills/find-docs
-    - ansanloms/skills/worktree#a26b7fd0d7f538d22d8b27fd674264dd70f0df19
+    - ansanloms/skills/worktree
     - ansanloms/skills/infra-architecture
     - mizchi/skills/empirical-prompt-tuning
     - mizchi/skills/retrospective-codify
