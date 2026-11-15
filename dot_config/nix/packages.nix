@@ -63,6 +63,7 @@ pkgs: with pkgs; [
   statix
 
   # lint / 開発ツール
+  actionlint
   betterleaks
   devcontainer
   hadolint
@@ -70,6 +71,7 @@ pkgs: with pkgs; [
   sonar-scanner-cli
   sonarqube-cli
   tlaplus
+  zizmor
 
   # クラウド / インフラ
   awscli2
