@@ -1,0 +1,40 @@
+name: just fmt
+
+# justfile (リポジトリ直下と dot_config/just) が just の標準の書式どおりかを検査する。
+
+on:
+  pull_request:
+    paths:
+      - justfile
+      - dot_config/just/**
+      - .github/workflows/just-fmt.yml
+  push:
+    branches:
+      - main
+    paths:
+      - justfile
+      - dot_config/just/**
+      - .github/workflows/just-fmt.yml
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # push しないので資格情報を残さない。
+          persist-credentials: false
+
+      - name: Install just
+        uses: extractions/setup-just@53165ef7e734c5c07cb06b3c8e7b647c5aa16db3 # v4.0.0
+        with:
+          # 整形結果は just の版で変わりうるので、ローカルで検証した版に固定する。
+          just-version: "1.59.0"
+
+      - name: Check justfile format
+        run: |
+          just --fmt --check --justfile justfile
+          just --fmt --check --justfile dot_config/just/justfile
