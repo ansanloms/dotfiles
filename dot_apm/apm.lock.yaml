@@ -1,10 +1,10 @@
 lockfile_version: '1'
-apm_version: 0.33.0
+apm_version: 0.35.0
 dependencies:
 - repo_url: ansanloms/skills
   name: adr
   host: github.com
-  resolved_commit: a26b7fd0d7f538d22d8b27fd674264dd70f0df19
+  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
   version: unknown
   virtual_path: adr
   is_virtual: true
@@ -24,7 +24,7 @@ dependencies:
 - repo_url: ansanloms/skills
   name: find-docs
   host: github.com
-  resolved_commit: a26b7fd0d7f538d22d8b27fd674264dd70f0df19
+  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
   version: unknown
   virtual_path: find-docs
   is_virtual: true
@@ -40,7 +40,7 @@ dependencies:
 - repo_url: ansanloms/skills
   name: infra-architecture
   host: github.com
-  resolved_commit: a26b7fd0d7f538d22d8b27fd674264dd70f0df19
+  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
   version: unknown
   virtual_path: infra-architecture
   is_virtual: true
@@ -93,18 +93,18 @@ dependencies:
     .claude/skills/infra-architecture/scripts/.oxfmtrc.json: sha256:929e7ff6e701dfb69913600cc763b3969b7e7b24b9f167429ee042c89e9d0994
     .claude/skills/infra-architecture/scripts/check-readability.test.ts: sha256:9b94f9b87027f34cf0a86f8c756505049d9c96f14b305e695310f158627379f2
     .claude/skills/infra-architecture/scripts/check-readability.ts: sha256:0a658b513d56616039af4aa6168f5fd71577e35905137f2c797d89501b70ac2e
-    .claude/skills/infra-architecture/scripts/package-lock.json: sha256:4b653cd5d26cdf64e099d368e5d7f1a46316582906c96bc7384bc0619de0b2e0
-    .claude/skills/infra-architecture/scripts/package.json: sha256:46063e588b26d794b0390395b31bc8a919a112f988c810025981c79c22ca7c27
+    .claude/skills/infra-architecture/scripts/package-lock.json: sha256:4efe8dd8d2517ec0fa7ac9ef24b6ccd535c5445dc7d100c03338de05a6b3bd09
+    .claude/skills/infra-architecture/scripts/package.json: sha256:4715c9be1b7948edb0fd0066ec20741f120f46abd43191662877dbc3addf9f38
     .claude/skills/infra-architecture/scripts/testdata/bad.drawio: sha256:e1da56eed2af4c084e8c2d161d9f3181896faedab7d0246851974c0d1c809b2d
     .claude/skills/infra-architecture/scripts/testdata/bad.svg: sha256:08cd2fdad1ca19dc2ce5216b9daf34d6ccb0d44b4aa9b68c27007edb3977c1c2
     .claude/skills/infra-architecture/scripts/testdata/clean.drawio: sha256:5a819f2dd8e7ec27f28e44a5285ab05e6cbd14f08115af02306270871dc59e1a
     .claude/skills/infra-architecture/scripts/testdata/clean.svg: sha256:f647e45d4848860d7130c56b3856cc062f6ae8b597a7e6ad6f7924399d532cfe
     .claude/skills/infra-architecture/scripts/tsconfig.json: sha256:a91df145c14a81626382b0caf113d2d79db63cf72bc3240407931053539d70a0
-  content_hash: sha256:dacb49b54f6bcef39c40016dc7bda04ff8333df8e12d3f375c829e205efb80ac
+  content_hash: sha256:af51d87fac0ef8ebd328b9e726b89bf70225058225ba0b8c0323438cb4d7facf
 - repo_url: ansanloms/skills
   name: ja-tech-proofread
   host: github.com
-  resolved_commit: a26b7fd0d7f538d22d8b27fd674264dd70f0df19
+  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
   version: unknown
   virtual_path: ja-tech-proofread
   is_virtual: true
@@ -132,13 +132,13 @@ dependencies:
     .claude/skills/ja-tech-proofread/scripts/.oxfmtrc.json: sha256:a4993a6e1f395afa85ba6997e0c320dfdebaf936e9050702be912c5fd7f2f435
     .claude/skills/ja-tech-proofread/scripts/.textlintrc.json: sha256:14a3e2706afa3885420e6ee69884bf0469015aadfa784335297f436a978b7086
     .claude/skills/ja-tech-proofread/scripts/README.md: sha256:3a44f6fa5b5d49ee48c15d31198dd3276c29c3f13b9a23ae99c30214536175e5
-    .claude/skills/ja-tech-proofread/scripts/package-lock.json: sha256:e61979b2d20e895f803dd2d23f61b75dc867aa7c610579c5fc9315b73b46e56b
-    .claude/skills/ja-tech-proofread/scripts/package.json: sha256:a250cb8dd8368bb5250275aae6c0a1498bc1334feca689893f65228a414e5e99
-  content_hash: sha256:4c6b6f901720271122d6b6d30cba3c1c7f8fc50a8a30d3446d66d554c13c1dd5
+    .claude/skills/ja-tech-proofread/scripts/package-lock.json: sha256:0488835124d45ba63ac9961a48c6b6e36bd9c207be4e20695826ac49a7d3e935
+    .claude/skills/ja-tech-proofread/scripts/package.json: sha256:44b288c45d690f33b9c185da07d00226331ab21b5a8c8a451cbc68b11c04813d
+  content_hash: sha256:dd28266d17cdb562a0d5016d72e69ea79976140100bc9213d5077f8a2dbb08ba
 - repo_url: ansanloms/skills
   name: nvim-remote
   host: github.com
-  resolved_commit: a26b7fd0d7f538d22d8b27fd674264dd70f0df19
+  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
   version: unknown
   virtual_path: nvim-remote
   is_virtual: true
@@ -154,7 +154,7 @@ dependencies:
 - repo_url: ansanloms/skills
   name: worktree
   host: github.com
-  resolved_commit: a26b7fd0d7f538d22d8b27fd674264dd70f0df19
+  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
   version: unknown
   virtual_path: worktree
   is_virtual: true
@@ -169,10 +169,28 @@ dependencies:
     .claude/skills/worktree/SKILL.md: sha256:d3ebdb91646fdd84bf01a85409416ba594da815665b06bafc5e9ce3252970085
     .claude/skills/worktree/assets/template.md: sha256:d58676db6f6d8c4b84ff491995556a94d419c704d55ea9b7d21c3637f1ef0bee
   content_hash: sha256:98d0b17dd3e5f3b449f37aa6fd29a7825050f468846e4088e28082df670d7bdc
+- repo_url: ansanloms/skills
+  name: github-actions
+  host: github.com
+  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
+  version: unknown
+  virtual_path: github-actions
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .claude/skills/github-actions
+  - .claude/skills/github-actions/README.md
+  - .claude/skills/github-actions/SKILL.md
+  - .claude/skills/github-actions/references/machine-layer.md
+  deployed_file_hashes:
+    .claude/skills/github-actions/README.md: sha256:d83414499665c73f715e5ea01169ff03bb5683e0bb52dcf984a49400a0f04a62
+    .claude/skills/github-actions/SKILL.md: sha256:2f85fd4c65bf64579838201d6cb32a7ebac95fe68cbce08de2a7830a7b691b2f
+    .claude/skills/github-actions/references/machine-layer.md: sha256:8b548b73319765a5ba670471f7312711e325461b3d57f974c9732d511118575a
+  content_hash: sha256:122ad359b61663dbbaada6fd06808e43596e0bb8e9d38d62f8e8fc1a416df400
 - repo_url: mizchi/skills
   name: empirical-prompt-tuning
   host: github.com
-  resolved_commit: 195bb34cb5220c3610ec4ba49007cae2fb10373e
+  resolved_commit: 5a51332694840551613e4cb3812a2c3929bb738c
   version: unknown
   virtual_path: empirical-prompt-tuning
   is_virtual: true
@@ -184,13 +202,13 @@ dependencies:
   - .claude/skills/empirical-prompt-tuning/SKILL.md
   deployed_file_hashes:
     .claude/skills/empirical-prompt-tuning/README.md: sha256:5fc8e7774a7290497c941e46baeb2712731dd92a7ea2ddff75fecc9173ccc347
-    .claude/skills/empirical-prompt-tuning/SKILL-ja.md: sha256:0a38d830802c2e08a7faca13928fedf6911e00b896946b4b03910d662de6dea5
+    .claude/skills/empirical-prompt-tuning/SKILL-ja.md: sha256:0a58ca4405635a7e79944736b93a8844d0b08b65c95a1f09ad971a3e496e82a7
     .claude/skills/empirical-prompt-tuning/SKILL.md: sha256:252418e7ef022981d2dda2e3ec57fa1c786d30af68c50b7e062edf1d7361b0cb
-  content_hash: sha256:26042612e2d8b6ee1deebcdfc556da494640488e03471aaae74da587ae84fa2b
+  content_hash: sha256:2b864d197ac10283265fd7b881075278c84a9bf22267a5f704b2f7e3df449cd8
 - repo_url: mizchi/skills
   name: retrospective-codify
   host: github.com
-  resolved_commit: 195bb34cb5220c3610ec4ba49007cae2fb10373e
+  resolved_commit: 5a51332694840551613e4cb3812a2c3929bb738c
   version: unknown
   virtual_path: retrospective-codify
   is_virtual: true
@@ -202,9 +220,9 @@ dependencies:
   - .claude/skills/retrospective-codify/SKILL.md
   deployed_file_hashes:
     .claude/skills/retrospective-codify/README.md: sha256:77a51f2096aa51722ff927ff4908a4c824e5b82ab0c74dce2564239d7fab5aa5
-    .claude/skills/retrospective-codify/SKILL-ja.md: sha256:c55610bfe5ac589d43a6f2199d3b9226a46fef41c0e3f6d02958f69da4c240e9
-    .claude/skills/retrospective-codify/SKILL.md: sha256:70bd226087028461f1e208ac5497593cdf6a0dc1e074d80f970addc1e36e5afa
-  content_hash: sha256:8c2442dd8598e65521b9cfe627cceaf7475a1a359e8d6eacb01aac3992f623b1
+    .claude/skills/retrospective-codify/SKILL-ja.md: sha256:3efef5c4ed6432a0cdee18dd7b078cd6f908432562c5185cd8a13f939b5fcc06
+    .claude/skills/retrospective-codify/SKILL.md: sha256:e53bb143fac571824d2c9073ddfcb1b4083dcc8b55c7c174e51887a018a13c40
+  content_hash: sha256:d25f1a040f53474ca9eef99677a663cbb825a35970a522c6ea13628939fcda69
 - repo_url: nanaism/yomiyasu
   name: yomiyasu
   host: github.com
@@ -374,7 +392,7 @@ deployments:
   owners:
   - mizchi/skills/empirical-prompt-tuning
   active_owner: mizchi/skills/empirical-prompt-tuning
-  content_hash: sha256:0a38d830802c2e08a7faca13928fedf6911e00b896946b4b03910d662de6dea5
+  content_hash: sha256:0a58ca4405635a7e79944736b93a8844d0b08b65c95a1f09ad971a3e496e82a7
 - kind: project-relative
   target: claude
   value: .claude/skills/empirical-prompt-tuning/SKILL.md
@@ -411,6 +429,42 @@ deployments:
   - ansanloms/skills/find-docs
   active_owner: ansanloms/skills/find-docs
   content_hash: sha256:f4379d8f0fb9a5efdf195f6cf73f5ed0ee9473c330a2eb02c1006295feaab597
+- kind: project-relative
+  target: claude
+  value: .claude/skills/github-actions
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/github-actions
+  active_owner: ansanloms/skills/github-actions
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/github-actions/README.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/github-actions
+  active_owner: ansanloms/skills/github-actions
+  content_hash: sha256:d83414499665c73f715e5ea01169ff03bb5683e0bb52dcf984a49400a0f04a62
+- kind: project-relative
+  target: claude
+  value: .claude/skills/github-actions/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/github-actions
+  active_owner: ansanloms/skills/github-actions
+  content_hash: sha256:2f85fd4c65bf64579838201d6cb32a7ebac95fe68cbce08de2a7830a7b691b2f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/github-actions/references/machine-layer.md
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/github-actions
+  active_owner: ansanloms/skills/github-actions
+  content_hash: sha256:8b548b73319765a5ba670471f7312711e325461b3d57f974c9732d511118575a
 - kind: project-relative
   target: claude
   value: .claude/skills/infra-architecture
@@ -599,7 +653,7 @@ deployments:
   owners:
   - ansanloms/skills/infra-architecture
   active_owner: ansanloms/skills/infra-architecture
-  content_hash: sha256:4b653cd5d26cdf64e099d368e5d7f1a46316582906c96bc7384bc0619de0b2e0
+  content_hash: sha256:4efe8dd8d2517ec0fa7ac9ef24b6ccd535c5445dc7d100c03338de05a6b3bd09
 - kind: project-relative
   target: claude
   value: .claude/skills/infra-architecture/scripts/package.json
@@ -608,7 +662,7 @@ deployments:
   owners:
   - ansanloms/skills/infra-architecture
   active_owner: ansanloms/skills/infra-architecture
-  content_hash: sha256:46063e588b26d794b0390395b31bc8a919a112f988c810025981c79c22ca7c27
+  content_hash: sha256:4715c9be1b7948edb0fd0066ec20741f120f46abd43191662877dbc3addf9f38
 - kind: project-relative
   target: claude
   value: .claude/skills/infra-architecture/scripts/testdata/bad.drawio
@@ -752,7 +806,7 @@ deployments:
   owners:
   - ansanloms/skills/ja-tech-proofread
   active_owner: ansanloms/skills/ja-tech-proofread
-  content_hash: sha256:e61979b2d20e895f803dd2d23f61b75dc867aa7c610579c5fc9315b73b46e56b
+  content_hash: sha256:0488835124d45ba63ac9961a48c6b6e36bd9c207be4e20695826ac49a7d3e935
 - kind: project-relative
   target: claude
   value: .claude/skills/ja-tech-proofread/scripts/package.json
@@ -761,7 +815,7 @@ deployments:
   owners:
   - ansanloms/skills/ja-tech-proofread
   active_owner: ansanloms/skills/ja-tech-proofread
-  content_hash: sha256:a250cb8dd8368bb5250275aae6c0a1498bc1334feca689893f65228a414e5e99
+  content_hash: sha256:44b288c45d690f33b9c185da07d00226331ab21b5a8c8a451cbc68b11c04813d
 - kind: project-relative
   target: claude
   value: .claude/skills/nvim-remote
@@ -815,7 +869,7 @@ deployments:
   owners:
   - mizchi/skills/retrospective-codify
   active_owner: mizchi/skills/retrospective-codify
-  content_hash: sha256:c55610bfe5ac589d43a6f2199d3b9226a46fef41c0e3f6d02958f69da4c240e9
+  content_hash: sha256:3efef5c4ed6432a0cdee18dd7b078cd6f908432562c5185cd8a13f939b5fcc06
 - kind: project-relative
   target: claude
   value: .claude/skills/retrospective-codify/SKILL.md
@@ -824,7 +878,7 @@ deployments:
   owners:
   - mizchi/skills/retrospective-codify
   active_owner: mizchi/skills/retrospective-codify
-  content_hash: sha256:70bd226087028461f1e208ac5497593cdf6a0dc1e074d80f970addc1e36e5afa
+  content_hash: sha256:e53bb143fac571824d2c9073ddfcb1b4083dcc8b55c7c174e51887a018a13c40
 - kind: project-relative
   target: claude
   value: .claude/skills/worktree

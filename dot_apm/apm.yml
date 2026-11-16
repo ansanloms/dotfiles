@@ -15,6 +15,7 @@ dependencies:
     - git: nanaism/yomiyasu
       skills:
         - yomiyasu
+    - ansanloms/skills/github-actions
   mcp: []
 targets:
   - claude
