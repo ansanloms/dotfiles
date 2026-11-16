@@ -8,21 +8,23 @@ on:
     - cron: "0 6 * * *" # 毎日 06:00 UTC (15:00 JST)
   workflow_dispatch:
 
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
 
       # upstream nix を使う (Determinate Nix から移行済み)。flakes / nix-command は
       # 既定で無効のため extra_nix_config で有効化する。
       # 注意: 相対 path: flake ref (path:dot_config/nix) の解決には
-      # 新しめの nix が必要 (旧 v30 同梱の 2.24.9 は失敗)。v31 は最新安定版を導入する。
+      # 新しめの nix が必要 (旧 v30 同梱の 2.24.9 は失敗)。導入する nix の版は
+      # install-nix-action の版で決まり、Dependabot による action の更新で上がる。
       - name: Install Nix
-        uses: cachix/install-nix-action@v31
+        uses: cachix/install-nix-action@v31.11.5
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
