@@ -9,19 +9,20 @@ on:
     - cron: "0 8 * * 1" # 毎週月曜 08:00 UTC (17:00 JST)
   workflow_dispatch:
 
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
   bump:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
 
-      # chezmoi は nix run で引くため、upstream nix を入れる。flakes / nix-command は
-      # 既定で無効のため extra_nix_config で有効化する。
+      # chezmoi は nix shell --inputs-from で dot_config/nix の flake.lock が固定する nixpkgs から引くため、
+      # upstream nix を入れる。flakes / nix-command は既定で無効のため extra_nix_config で有効化する。
       - name: Install Nix
-        uses: cachix/install-nix-action@v31
+        uses: cachix/install-nix-action@v31.11.5
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
@@ -106,7 +107,7 @@ jobs:
         run: |
           set -euo pipefail
           tmp=$(mktemp -d)
-          nix run nixpkgs#chezmoi -- -S "$PWD" -D "$tmp" apply --include=externals,dirs
+          nix shell --inputs-from path:dot_config/nix nixpkgs#chezmoi -c chezmoi -S "$PWD" -D "$tmp" apply --include=externals,dirs
           [ -n "$(find "$tmp/.local/share/fonts" -name '*.ttf' -print -quit)" ]
           [ -n "$(find "$tmp/.local/share/fonts" -name '*.otf' -print -quit)" ]
 

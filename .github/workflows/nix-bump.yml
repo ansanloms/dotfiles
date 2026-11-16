@@ -8,19 +8,20 @@ on:
     - cron: "0 7 * * *" # 毎日 07:00 UTC (16:00 JST)
   workflow_dispatch:
 
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
   bump:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
 
       # upstream nix を使う (Determinate Nix から移行済み)。flakes / nix-command は
       # 既定で無効のため extra_nix_config で有効化する。
       - name: Install Nix
-        uses: cachix/install-nix-action@v31
+        uses: cachix/install-nix-action@v31.11.5
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
