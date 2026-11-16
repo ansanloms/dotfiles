@@ -111,6 +111,14 @@ ls ~/.claude/skills/ja-tech-proofread/scripts/node_modules
 
 ## 更新
 
+通常の更新ではリポジトリ直下で `just upgrade` を実行する。
+
+```sh
+just upgrade
+```
+
+`just upgrade` は `git pull --ff-only`、`chezmoi apply`、`nix profile upgrade --all --impure`、`apm install -g` を順に実行する。flake input の手動更新と `nix profile remove` は `just upgrade` の対象外で、次の個別コマンドを使う。
+
 ```sh
 # chezmoi 管理分の差分確認と適用
 chezmoi diff

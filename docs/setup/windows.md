@@ -45,6 +45,7 @@ sudo reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /v 
 | 7zip.7zip                   | 圧縮・展開。Windows 11 標準の圧縮機能はパスワード付きアーカイブを扱えない。                        |
 | Microsoft.VisualStudioCode  | VS Code。開発は WSL で行うため、WSL 拡張機能 `ms-vscode-remote.remote-wsl` も導入する。            |
 | twpayne.chezmoi             | dotfiles の適用                                                                                    |
+| Casey.Just                  | dotfiles の更新 (`just upgrade`)                                                                   |
 | Microsoft.WSL               | WSL 本体 (Store 版)。管理者権限が要る。                                                            |
 
 ```powershell
@@ -59,6 +60,7 @@ winget install --id Microsoft.Coreutils -e
 winget install --id 7zip.7zip -e --source winget
 winget install --id Microsoft.VisualStudioCode -e
 winget install --id twpayne.chezmoi -e
+winget install --id Casey.Just -e
 sudo winget install --id Microsoft.WSL -e
 ```
 
@@ -116,7 +118,7 @@ chezmoi --source "$env:USERPROFILE\dev\github.com\ansanloms\dotfiles" init
 
 生成後は `--source` 無しでよい。
 
-Neovim と noctty は設定ディレクトリの解決に `XDG_CONFIG_HOME` を使う (Neovim は未設定なら `%LOCALAPPDATA%\nvim`、noctty は未設定なら `%LOCALAPPDATA%\noctty`)。dotfiles は両者を Linux / macOS と同じ `~/.config` 配下に配るため、`XDG_CONFIG_HOME` を `%USERPROFILE%\.config` に設定する。`setx` はユーザー環境変数を永続化するが、既に開いているシェルには反映されないので、設定後にシェルを開き直す。alacritty は Windows では `%APPDATA%` しか見ないため `XDG_CONFIG_HOME` の影響を受けず、`AppData\Roaming\alacritty` に配る。
+Neovim と noctty は設定ディレクトリの解決に `XDG_CONFIG_HOME` を使う (Neovim は未設定なら `%LOCALAPPDATA%\nvim`、noctty は未設定なら `%LOCALAPPDATA%\noctty`)。dotfiles は両者を Linux/macOS と同じ `~/.config` 配下に配るため、`XDG_CONFIG_HOME` を `%USERPROFILE%\.config` に設定する。`setx` はユーザー環境変数を永続化するが、既に開いているシェルには反映されないので、設定後にシェルを開き直す。alacritty は Windows では `%APPDATA%` しか見ないため `XDG_CONFIG_HOME` の影響を受けず、`AppData\Roaming\alacritty` に配る。
 
 ```powershell
 setx XDG_CONFIG_HOME "$env:USERPROFILE\.config"
@@ -139,4 +141,6 @@ chezmoi apply
 
 適用後、`nvim` で `:echo stdpath("config")` が `%USERPROFILE%\.config\nvim` を指すことを確認する。
 
-zellij は `zellij setup --check` の `[CONFIG DIR]` が `%USERPROFILE%\.config\zellij` を指すことを確認する。Windows ではペインを PowerShell 7 (`pwsh`) で起動し、Neovim は named pipe `\\.\pipe\nvim-<セッション名>` で listen する (Linux / macOS は `/tmp/nvim-<セッション名>.sock`)。OS による分岐は `dot_config/zellij/config.kdl.tmpl` と `dot_config/zellij/layouts/default.kdl.tmpl` にある。
+zellij は `zellij setup --check` の `[CONFIG DIR]` が `%USERPROFILE%\.config\zellij` を指すことを確認する。Windows ではペインを PowerShell 7 (`pwsh`) で起動し、Neovim は named pipe `\\.\pipe\nvim-<セッション名>` で listen する (Linux/macOS は `/tmp/nvim-<セッション名>.sock`)。OS による分岐は `dot_config/zellij/config.kdl.tmpl` と `dot_config/zellij/layouts/default.kdl.tmpl` にある。
+
+以後の更新ではリポジトリ直下で `just upgrade` を実行する。`just upgrade` は `git pull --ff-only` と `chezmoi apply` を順に実行する。アプリの更新 (`winget upgrade --all`) は含まないので、別に実行する。
