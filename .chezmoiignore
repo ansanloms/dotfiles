@@ -5,6 +5,7 @@
 README.md
 CLAUDE.md
 docs
+justfile
 result
 
 # nvim が target 側に書く・ローカル専用のファイル。chezmoi add / apply の対象から外す。
