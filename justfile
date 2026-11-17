@@ -5,16 +5,14 @@ set shell := ["pwsh", "-NoLogo", "-NoProfileLoadTime", "-Command"]
 list:
     @just --list
 
-# dotfiles を最新にして適用する。
+# pull せずに dotfiles を適用する。引数は chezmoi apply へ渡す (例: --force で上書き確認を省く)。
 [linux]
-upgrade:
-    git pull --ff-only
-    chezmoi apply
+upgrade *flags:
+    chezmoi apply {{ flags }}
     nix profile upgrade --all --impure
     apm install -g
 
-# dotfiles を最新にして適用する。
+# pull せずに dotfiles を適用する。引数は chezmoi apply へ渡す (例: --force で上書き確認を省く)。
 [windows]
-upgrade:
-    git pull --ff-only
-    chezmoi apply
+upgrade *flags:
+    chezmoi apply {{ flags }}

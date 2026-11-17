@@ -143,4 +143,4 @@ chezmoi apply
 
 zellij は `zellij setup --check` の `[CONFIG DIR]` が `%USERPROFILE%\.config\zellij` を指すことを確認する。Windows ではペインを PowerShell 7 (`pwsh`) で起動し、Neovim は named pipe `\\.\pipe\nvim-<セッション名>` で listen する (Linux/macOS は `/tmp/nvim-<セッション名>.sock`)。OS による分岐は `dot_config/zellij/config.kdl.tmpl` と `dot_config/zellij/layouts/default.kdl.tmpl` にある。
 
-以後の更新ではリポジトリ直下で `just upgrade` を実行する。`just upgrade` は `git pull --ff-only` と `chezmoi apply` を順に実行する。アプリの更新 (`winget upgrade --all`) は含まないので、別に実行する。
+以後の更新ではリポジトリ直下で `just upgrade` を実行する。`just upgrade` は `chezmoi apply` だけを実行し、`git pull` はしないので、リモートの変更は事前に手動で取り込む。引数は `chezmoi apply` へ渡すので、`just upgrade --force` は上書きの確認なしで適用する。アプリの更新 (`winget upgrade --all`) は含まないので、別に実行する。
