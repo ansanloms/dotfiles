@@ -114,10 +114,11 @@ ls ~/.claude/skills/ja-tech-proofread/scripts/node_modules
 通常の更新ではリポジトリ直下で `just upgrade` を実行する。
 
 ```sh
+git pull --ff-only
 just upgrade
 ```
 
-`just upgrade` は `git pull --ff-only`、`chezmoi apply`、`nix profile upgrade --all --impure`、`apm install -g` を順に実行する。flake input の手動更新と `nix profile remove` は `just upgrade` の対象外で、次の個別コマンドを使う。
+`just upgrade` は `chezmoi apply`、`nix profile upgrade --all --impure`、`apm install -g` を順に実行する。`git pull` は実行しないので、リモートの変更は事前に手動で取り込む。引数は `chezmoi apply` へ渡すので、`just upgrade --force` は `chezmoi apply --force` となり、上書きの確認なしで適用する。flake input の手動更新と `nix profile remove` は `just upgrade` の対象外で、次の個別コマンドを使う。
 
 ```sh
 # chezmoi 管理分の差分確認と適用
