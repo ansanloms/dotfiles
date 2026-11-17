@@ -32,7 +32,7 @@
 }:
 
 let
-  version = "0.2.1";
+  version = "0.3.0";
 
   # nix の system -> Release 資産の target。
   targets = {
@@ -41,8 +41,8 @@ let
   };
 
   hashes = {
-    "x86_64-linux" = "sha256-01VUxtfV+PEJiGYIEhh0MSHnYoXUiGUzF0XXI+OQLc4=";
-    "aarch64-linux" = "sha256-ndQ/2zavA4HfUCHYtSTB+Aqt9ZRJDNG42XKZbZTVICY=";
+    "x86_64-linux" = "sha256-XldrjHijpCnV66qz453xNb3C7b+qJUaHYD+8KncmjWg=";
+    "aarch64-linux" = "sha256-9RxJDhpainRqQCHKc6O791yaZetEZ1ySn2NXwp5AlUc=";
   };
 
   system = stdenv.hostPlatform.system;
