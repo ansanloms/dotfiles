@@ -3,8 +3,8 @@
 #
 # 処理内容:
 #   1. 対象バージョンを決定（引数 or GitHub releases の latest tag）
-#   2. 配布 ELF の hash を nix store prefetch-file で取得
-#   3. sonarqube-cli.nix の version / hash を反映
+#   2. target ごとの配布 ELF の hash を nix store prefetch-file で取得
+#   3. sonarqube-cli.nix の version / system 別 hash を反映
 #
 # git add / nix profile upgrade は行わない。完了後に git diff で確認し、手動で反映すること。
 #
@@ -16,6 +16,12 @@ set -euo pipefail
 REPO="SonarSource/sonarqube-cli"
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 nix_path="$script_dir/../sonarqube-cli.nix"
+
+# nix の system -> 配布物の target（sonarqube-cli.nix の targets と同じ）。
+declare -A TARGETS=(
+  ["x86_64-linux"]="linux-x86-64"
+  ["aarch64-linux"]="linux-arm64"
+)
 
 # nix ファイル内の最初の `<key> = "...";` の値を置換する。
 # value は sed の置換文字列に埋め込むため、`/` `&` `\` をエスケープする
@@ -34,20 +40,42 @@ set_nix_string() {
   fi
 }
 
+# nix ファイル内の `"<system>" = "sha256-...";` の hash を置換する。
+# targets 側の `"<system>" = "..."` に当たらないよう sha256- を前提にする。
+# value は set_nix_string と同じく `/` `&` `\` をエスケープして sed の置換側へ埋め込む。
+set_nix_system_hash() {
+  local file="$1" system="$2" raw="$3" value
+  value="$(printf '%s' "$raw" | sed -e 's/[\/&\\]/\\&/g')"
+  if ! grep -qE "\"${system}\" = \"sha256-[^\"]*\"" "$file"; then
+    echo "${file} に ${system} の hash 定義が見つからない" >&2
+    exit 1
+  fi
+  sed -i -E "0,/(\"${system}\" = \")sha256-[^\"]*(\")/s//\1${value}\2/" "$file"
+  if ! grep -qF "\"${system}\" = \"${raw}\"" "$file"; then
+    echo "${file} の ${system} の hash を更新できなかった" >&2
+    exit 1
+  fi
+}
+
 # 1. 対象バージョンを決定
 version="${1:-$(gh api "repos/${REPO}/releases/latest" --jq .tag_name)}"
 echo "対象バージョン: ${version}"
 
-# 2. 配布 ELF の hash を取得（SRI sha256- 形式でそのまま nix へ書ける）
-echo "hash を取得中..."
-hash="$(nix store prefetch-file --json \
-  "https://binaries.sonarsource.com/Distribution/sonarqube-cli/${version}/linux/sonarqube-cli-${version}-linux-x86-64.bin" |
-  jq -r .hash)"
-echo "hash: ${hash}"
+# 2. target ごとの hash を取得（SRI sha256- 形式でそのまま nix へ書ける）
+declare -A hashes=()
+for system in "${!TARGETS[@]}"; do
+  target="${TARGETS[$system]}"
+  echo "${system}: hash を取得中..."
+  hashes[$system]="$(nix store prefetch-file --json \
+    "https://binaries.sonarsource.com/Distribution/sonarqube-cli/${version}/linux/sonarqube-cli-${version}-${target}.bin" | jq -r .hash)"
+  echo "${system}: ${hashes[$system]}"
+done
 
 # 3. sonarqube-cli.nix へ反映
 set_nix_string "$nix_path" version "$version"
-set_nix_string "$nix_path" hash "$hash"
+for system in "${!hashes[@]}"; do
+  set_nix_system_hash "$nix_path" "$system" "${hashes[$system]}"
+done
 
 echo
 echo "更新完了。git diff で確認し、問題なければ反映:"
