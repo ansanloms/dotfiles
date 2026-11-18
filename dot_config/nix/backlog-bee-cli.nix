@@ -17,14 +17,14 @@
 
 buildNpmPackage {
   pname = "backlog-bee-cli";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = ./backlog-bee-cli;
 
   # package-lock.json から得た npm 依存 FOD のハッシュ。
   # lockfile が変わった (dependabot 等) ときは `backlog-bee-cli/upgrade.sh <現在の version>` で
   # npmDepsHash を再取得する (引数を省くと最新版へ上がる)。
-  npmDepsHash = "sha256-xgmK3Tv7gV7aIgbNvgyCrGPd2byD45ySxgUihjhQI8w=";
+  npmDepsHash = "sha256-cLpEFT74RbuOqWny8rJDdnsel/UHwlA/E7h6rb3mCeo=";
 
   # 本体は unbuild でビルド済みの純 JS でビルドスクリプトを持たない。build phase を無効化する
   # (省略すると npmBuildHook が build script 不在でハードエラーになる)。
