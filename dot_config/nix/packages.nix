@@ -75,6 +75,7 @@ pkgs: with pkgs; [
 
   # クラウド / インフラ
   awscli2
+  aws-login-select # リポジトリ内の shell スクリプト (fzf で AWS profile を選んで aws login)
   cloudflared
   google-cloud-sdk
   ssm-session-manager-plugin

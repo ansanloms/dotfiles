@@ -29,4 +29,21 @@ git() {
 }
 
 
+# aws login は fzf で profile を選んで実行する (--profile 指定時と help は素通し)
+aws() {
+  if [[ "$1" == "login" && "$2" != "help" ]]; then
+    local arg
+    for arg in "$@"; do
+      if [[ "$arg" == "--profile" || "$arg" == --profile=* ]]; then
+        command aws "$@"
+        return
+      fi
+    done
+    shift
+    command aws-login-select "$@"
+  else
+    command aws "$@"
+  fi
+}
+
 # vim:filetype=zsh:
