@@ -24,7 +24,7 @@
 }:
 
 let
-  version = "1.12.0.17622";
+  version = "1.13.1.18209";
 
   # nix の system -> 配布物の target。
   targets = {
@@ -34,8 +34,8 @@ let
 
   # system 別の hash (dot_config/nix/sonarqube-cli/upgrade.sh が書き換える)。
   hashes = {
-    "x86_64-linux" = "sha256-xpLmTa2J6p4jiOwzja1H+ocDlU4cDKivERvEPjSvqpk=";
-    "aarch64-linux" = "sha256-JYyxBuUHIfbli6DgvM0ciM3Bv+azlIcdxmQNxDyhL+o=";
+    "x86_64-linux" = "sha256-suP6z2A4UUyEb3w8+it88KB2HIsFL8W3b+QkzfvJybc=";
+    "aarch64-linux" = "sha256-zgGMjdps7xY0FqrXQtgZLFh8c6Ub1AvpRB9IeA8k80M=";
   };
 
   system = stdenv.hostPlatform.system;
