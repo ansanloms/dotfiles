@@ -5,8 +5,8 @@
 ## 原則
 
 - MUST: 日本語の markdown を推敲する場面では、skill `yomiyasu` を先に当て、続けて skill `ja-tech-proofread` (fix モード) を当てる。順序はこの通りに固定する。
-  - 理由: yomiyasu は文の構造と語の選び方を書き換える。ja-tech-proofread は構成・語彙の推敲に加え preset の表記規則で最終形を揃える。逆順にすると、yomiyasu の書き換えが持ち込んだ preset 違反が残る。
-- このルールによる推敲は yomiyasu を名指しした依頼として扱う。理由: 現行の yomiyasu (3.1.0) は名前を出して頼まれたときだけ動く。
+  - 理由: yomiyasu は文の構造と語の選び方を書き換える。ja-tech-proofread は構成・語彙の推敲に加え textlint の表記規則で最終形を揃える。逆順にすると、yomiyasu の書き換えが持ち込んだ表記規則の違反が残る。
+- このルールによる推敲は yomiyasu を名指しした依頼として扱う。理由: 現行の yomiyasu (3.4.1) は名前を出して頼まれたときだけ動く。
 - ユーザが一方の skill だけを名指しした場合は、その skill だけを実行する。
 - 対象は変更したファイルを列挙して渡し、ディレクトリ走査はしない。
 - yomiyasu の検査には原文と最終稿を標準入力で渡す (`yomiyasu_check.py run --stdin`。照合は `verify --final -`)。理由: yomiyasu は名前が点で始まるフォルダの中のファイルを読まない。隔離 worktree は `.claude/worktrees/` の下にあるので、パスでは渡せない。
