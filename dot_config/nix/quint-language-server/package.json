@@ -1,0 +1,8 @@
+{
+  "name": "quint-language-server-env",
+  "version": "0.21.0",
+  "private": true,
+  "dependencies": {
+    "@informalsystems/quint-language-server": "0.21.0"
+  }
+}

@@ -67,6 +67,7 @@ pkgs: with pkgs; [
   betterleaks
   devcontainer
   hadolint
+  quint-language-server
   shellcheck
   sonar-scanner-cli
   sonarqube-cli

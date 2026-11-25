@@ -154,6 +154,13 @@ vim.lsp.config("efm", {
   },
 })
 
+-- quint: nvim-lspconfig に定義が無いため自前で書く。
+vim.lsp.config("quint", {
+  cmd = { "quint-language-server", "--stdio" },
+  filetypes = { "quint" },
+  root_markers = { ".git" },
+})
+
 vim.lsp.enable({
   "vtsls",
   "vue_ls",
@@ -167,4 +174,5 @@ vim.lsp.enable({
   "actionlint",
   "jsonls",
   "rust_analyzer",
+  "quint",
 })
