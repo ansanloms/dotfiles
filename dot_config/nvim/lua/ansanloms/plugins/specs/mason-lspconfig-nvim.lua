@@ -12,12 +12,6 @@ return {
       })
     end
 
-    if vim.fn.executable("deno") == 1 then
-      vim.list_extend(ensure, {
-        "denols",
-      })
-    end
-
     if vim.fn.executable("php") == 1 then
       vim.list_extend(ensure, {
         "phpactor",
