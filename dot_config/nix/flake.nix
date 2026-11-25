@@ -51,6 +51,9 @@
           # nixpkgs の `bee` は別物 (ethersphere/bee) のため attribute 名を分けている。
           (final: prev: { backlog-bee-cli = final.callPackage ./backlog-bee-cli.nix { }; })
 
+          # nixpkgs 未収録の quint-language-server (Quint の言語サーバ) を callPackage で注入する。
+          (final: prev: { quint-language-server = final.callPackage ./quint-language-server.nix { }; })
+
           # nixpkgs 未収録の sonarqube-cli (sonar コマンド) を callPackage で注入する。
           (final: prev: { sonarqube-cli = final.callPackage ./sonarqube-cli.nix { }; })
 
