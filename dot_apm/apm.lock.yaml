@@ -22,22 +22,6 @@ dependencies:
     .claude/skills/adr/assets/template.md: sha256:2cdf578f270d3fc49c45fe25c0faf2f72e09189cdc44ba7cd06c9b9611118512
   content_hash: sha256:8aa4f6dba293ebfaae1b57b94fc343cd33800a5d31e6b3a836d2090ee07d65e7
 - repo_url: ansanloms/skills
-  name: find-docs
-  host: github.com
-  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
-  version: unknown
-  virtual_path: find-docs
-  is_virtual: true
-  package_type: claude_skill
-  deployed_files:
-  - .claude/skills/find-docs
-  - .claude/skills/find-docs/README.md
-  - .claude/skills/find-docs/SKILL.md
-  deployed_file_hashes:
-    .claude/skills/find-docs/README.md: sha256:42bbbb98294980dd4988ebb3f63e05901ed2cbeea779e9d64bef022d59d61a51
-    .claude/skills/find-docs/SKILL.md: sha256:f4379d8f0fb9a5efdf195f6cf73f5ed0ee9473c330a2eb02c1006295feaab597
-  content_hash: sha256:fd781fb8ed612afb07d0fcac6bcfae9583982064c361dcce75ac9c089cc87008
-- repo_url: ansanloms/skills
   name: infra-architecture
   host: github.com
   resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
@@ -402,33 +386,6 @@ deployments:
   - mizchi/skills/empirical-prompt-tuning
   active_owner: mizchi/skills/empirical-prompt-tuning
   content_hash: sha256:252418e7ef022981d2dda2e3ec57fa1c786d30af68c50b7e062edf1d7361b0cb
-- kind: project-relative
-  target: claude
-  value: .claude/skills/find-docs
-  runtime: null
-  scope: project
-  owners:
-  - ansanloms/skills/find-docs
-  active_owner: ansanloms/skills/find-docs
-  content_hash: null
-- kind: project-relative
-  target: claude
-  value: .claude/skills/find-docs/README.md
-  runtime: null
-  scope: project
-  owners:
-  - ansanloms/skills/find-docs
-  active_owner: ansanloms/skills/find-docs
-  content_hash: sha256:42bbbb98294980dd4988ebb3f63e05901ed2cbeea779e9d64bef022d59d61a51
-- kind: project-relative
-  target: claude
-  value: .claude/skills/find-docs/SKILL.md
-  runtime: null
-  scope: project
-  owners:
-  - ansanloms/skills/find-docs
-  active_owner: ansanloms/skills/find-docs
-  content_hash: sha256:f4379d8f0fb9a5efdf195f6cf73f5ed0ee9473c330a2eb02c1006295feaab597
 - kind: project-relative
   target: claude
   value: .claude/skills/github-actions

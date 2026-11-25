@@ -5,7 +5,6 @@ author: ansanloms
 dependencies:
   apm:
     - ansanloms/skills/nvim-remote
-    - ansanloms/skills/find-docs
     - ansanloms/skills/worktree
     - ansanloms/skills/infra-architecture
     - mizchi/skills/empirical-prompt-tuning
