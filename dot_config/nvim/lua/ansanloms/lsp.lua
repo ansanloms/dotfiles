@@ -41,21 +41,6 @@ vim.lsp.config("*", {
   capabilities = ok and blink.get_lsp_capabilities() or vim.lsp.protocol.make_client_capabilities(),
 })
 
-vim.lsp.config("denols", {
-  filetypes = {
-    "javascript",
-    "javascriptreact",
-    "javascript.jsx",
-    "typescript",
-    "typescriptreact",
-    "typescript.tsx",
-  },
-  root_markers = {
-    "deno.json",
-    "deno.jsonc",
-  },
-})
-
 vim.lsp.config("vue_ls", {
   filetypes = {
     "vue",
@@ -96,16 +81,6 @@ vim.lsp.config("vtsls", {
   root_markers = {
     "package.json",
   },
-  callback = function()
-    -- deno 優先
-    if vim.fn.findfile("deno.json", ".;") ~= "" or vim.fn.findfile("deno.jsonc", ".;") ~= "" then
-      vim.lsp.start(vim.lsp.config.denols)
-      return
-    end
-
-    -- node
-    vim.lsp.start(vim.lsp.config.vtsls)
-  end,
 })
 
 vim.lsp.config("jsonls", {
@@ -180,7 +155,6 @@ vim.lsp.config("efm", {
 })
 
 vim.lsp.enable({
-  "denols",
   "vtsls",
   "vue_ls",
   "eslint",
