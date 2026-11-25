@@ -74,6 +74,17 @@ pkgs: with pkgs; [
   tlaplus
   zizmor
 
+  # LSP サーバ
+  docker-compose-language-service
+  docker-language-server
+  efm-langserver
+  lua-language-server
+  phpactor
+  tombi
+  vscode-langservers-extracted
+  vtsls
+  vue-language-server
+
   # クラウド / インフラ
   awscli2
   aws-login-select # リポジトリ内の shell スクリプト (fzf で AWS profile を選んで aws login)
