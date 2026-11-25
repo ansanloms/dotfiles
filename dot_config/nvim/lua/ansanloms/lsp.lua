@@ -53,6 +53,27 @@ vim.lsp.config("vue_ls", {
   },
 })
 
+-- nix の vue-language-server パッケージ内の @vue/language-server を指す。
+local vue_language_server_path = (function()
+  local exe = vim.fn.exepath("vue-language-server")
+  if exe == "" then
+    return nil
+  end
+  local real = vim.uv.fs_realpath(exe)
+  if not real then
+    return nil
+  end
+  local path = vim.fs.dirname(vim.fs.dirname(real)) .. "/lib/language-tools/packages/language-server"
+  if vim.fn.isdirectory(path) ~= 1 then
+    vim.notify(
+      "vue-language-server のパッケージ内に " .. path .. " が無く、Vue の TypeScript プラグインを読み込めない。",
+      vim.log.levels.WARN
+    )
+    return nil
+  end
+  return path
+end)()
+
 vim.lsp.config("vtsls", {
   filetypes = {
     "vue",
@@ -67,14 +88,14 @@ vim.lsp.config("vtsls", {
     -- @see https://github.com/vuejs/language-tools/wiki/Neovim
     vtsls = {
       tsserver = {
-        globalPlugins = {
+        globalPlugins = vue_language_server_path and {
           {
             name = "@vue/typescript-plugin",
-            location = vim.fn.stdpath("data") .. "/mason/packages/vue-language-server/node_modules/@vue/language-server",
+            location = vue_language_server_path,
             languages = { "vue" },
             configNamespace = "typescript",
           }
-        },
+        } or {},
       },
     },
   },
@@ -87,13 +108,6 @@ vim.lsp.config("jsonls", {
   filetypes = {
     "json",
     "json5"
-  },
-})
-
-vim.lsp.config("intelephense", {
-  filetypes = {
-    "php",
-    "volt"
   },
 })
 
@@ -119,8 +133,9 @@ vim.lsp.config("efm", {
     languages = {
       php = {
         {
+          -- ecs はプロジェクトの vendor/bin を使い、ecs.php が無いプロジェクトでは実行しない。
           lintCommand = table.concat({
-            vim.fn.stdpath("data") .. "/mason/packages/easy-coding-standard/vendor/bin/ecs",
+            "vendor/bin/ecs",
             "check",
             [["${INPUT}"]],
             "--fix",
@@ -128,10 +143,8 @@ vim.lsp.config("efm", {
           }, " "),
           formatStdin = false,
           lintIgnoreExitCode = true,
-          root_markers = {
-            "ecs.php",
-            "composer.json"
-          },
+          rootMarkers = { "ecs.php" },
+          requireMarker = true,
         },
       },
       nix = {
@@ -157,14 +170,21 @@ vim.lsp.config("efm", {
 vim.lsp.enable({
   "vtsls",
   "vue_ls",
-  "eslint",
   "docker_compose_language_service",
   "docker_language_server",
-  "intelephense",
+  "phpactor",
   "lua_ls",
   "efm",
   "tombi",
   "actionlint",
-  "jsonls",
   "rust_analyzer",
 })
+
+-- eslint と jsonls は nvim-lspconfig の cmd が関数で、実行ファイルが無いと起動のたびにエラーが出る。
+-- (ほかのサーバは実行ファイルが無ければ黙って起動しない)
+if vim.fn.executable("vscode-eslint-language-server") == 1 then
+  vim.lsp.enable("eslint")
+end
+if vim.fn.executable("vscode-json-language-server") == 1 then
+  vim.lsp.enable("jsonls")
+end
