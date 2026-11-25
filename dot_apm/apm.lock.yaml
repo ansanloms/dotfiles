@@ -4,7 +4,7 @@ dependencies:
 - repo_url: ansanloms/skills
   name: adr
   host: github.com
-  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
+  resolved_commit: 62696571c1aea48aa5479aa885195289072cd2eb
   version: unknown
   virtual_path: adr
   is_virtual: true
@@ -22,9 +22,27 @@ dependencies:
     .claude/skills/adr/assets/template.md: sha256:2cdf578f270d3fc49c45fe25c0faf2f72e09189cdc44ba7cd06c9b9611118512
   content_hash: sha256:8aa4f6dba293ebfaae1b57b94fc343cd33800a5d31e6b3a836d2090ee07d65e7
 - repo_url: ansanloms/skills
+  name: github-actions
+  host: github.com
+  resolved_commit: 62696571c1aea48aa5479aa885195289072cd2eb
+  version: unknown
+  virtual_path: github-actions
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .claude/skills/github-actions
+  - .claude/skills/github-actions/README.md
+  - .claude/skills/github-actions/SKILL.md
+  - .claude/skills/github-actions/references/machine-layer.md
+  deployed_file_hashes:
+    .claude/skills/github-actions/README.md: sha256:d83414499665c73f715e5ea01169ff03bb5683e0bb52dcf984a49400a0f04a62
+    .claude/skills/github-actions/SKILL.md: sha256:2f85fd4c65bf64579838201d6cb32a7ebac95fe68cbce08de2a7830a7b691b2f
+    .claude/skills/github-actions/references/machine-layer.md: sha256:8b548b73319765a5ba670471f7312711e325461b3d57f974c9732d511118575a
+  content_hash: sha256:122ad359b61663dbbaada6fd06808e43596e0bb8e9d38d62f8e8fc1a416df400
+- repo_url: ansanloms/skills
   name: infra-architecture
   host: github.com
-  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
+  resolved_commit: 62696571c1aea48aa5479aa885195289072cd2eb
   version: unknown
   virtual_path: infra-architecture
   is_virtual: true
@@ -88,7 +106,7 @@ dependencies:
 - repo_url: ansanloms/skills
   name: ja-tech-proofread
   host: github.com
-  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
+  resolved_commit: 62696571c1aea48aa5479aa885195289072cd2eb
   version: unknown
   virtual_path: ja-tech-proofread
   is_virtual: true
@@ -102,27 +120,33 @@ dependencies:
   - .claude/skills/ja-tech-proofread/scripts/.ignore-none
   - .claude/skills/ja-tech-proofread/scripts/.npmrc
   - .claude/skills/ja-tech-proofread/scripts/.oxfmtrc.json
+  - .claude/skills/ja-tech-proofread/scripts/.oxlintrc.json
   - .claude/skills/ja-tech-proofread/scripts/.textlintrc.json
   - .claude/skills/ja-tech-proofread/scripts/README.md
   - .claude/skills/ja-tech-proofread/scripts/package-lock.json
   - .claude/skills/ja-tech-proofread/scripts/package.json
+  - .claude/skills/ja-tech-proofread/scripts/textlintrc.test.ts
+  - .claude/skills/ja-tech-proofread/scripts/tsconfig.json
   deployed_file_hashes:
-    .claude/skills/ja-tech-proofread/README.md: sha256:6f27c214b14135a7ec711294d99656218b2ca8cba292ec1d33e1538033c07055
-    .claude/skills/ja-tech-proofread/SKILL.md: sha256:82d588c0866c3c91adcb48a16dd02f5ee771d868ab124688573e6a77d8b15798
+    .claude/skills/ja-tech-proofread/README.md: sha256:05780a8103be7caeb5814748c9597656d2f07ef3cceb5c0c58470280c2da0dd4
+    .claude/skills/ja-tech-proofread/SKILL.md: sha256:997db40e0545084172965c642a52aacc1a68b985e23735d883b167c8b03d1460
     .claude/skills/ja-tech-proofread/references/sources.md: sha256:7164f81c3686409e936a538ab32e58d7ac207b57c26039476fbaf6dd3c930176
     .claude/skills/ja-tech-proofread/scripts/.gitignore: sha256:af4ab05e427b8408f81adcadfbc042fc81f69e62cc750bece8b8bde1152886ee
     .claude/skills/ja-tech-proofread/scripts/.ignore-none: sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
     .claude/skills/ja-tech-proofread/scripts/.npmrc: sha256:de8a5e7c930cbe6df5590b3e05fc178a5155ac18c2e4554c788b53e95b6979af
     .claude/skills/ja-tech-proofread/scripts/.oxfmtrc.json: sha256:a4993a6e1f395afa85ba6997e0c320dfdebaf936e9050702be912c5fd7f2f435
-    .claude/skills/ja-tech-proofread/scripts/.textlintrc.json: sha256:14a3e2706afa3885420e6ee69884bf0469015aadfa784335297f436a978b7086
-    .claude/skills/ja-tech-proofread/scripts/README.md: sha256:3a44f6fa5b5d49ee48c15d31198dd3276c29c3f13b9a23ae99c30214536175e5
-    .claude/skills/ja-tech-proofread/scripts/package-lock.json: sha256:0488835124d45ba63ac9961a48c6b6e36bd9c207be4e20695826ac49a7d3e935
-    .claude/skills/ja-tech-proofread/scripts/package.json: sha256:44b288c45d690f33b9c185da07d00226331ab21b5a8c8a451cbc68b11c04813d
-  content_hash: sha256:dd28266d17cdb562a0d5016d72e69ea79976140100bc9213d5077f8a2dbb08ba
+    .claude/skills/ja-tech-proofread/scripts/.oxlintrc.json: sha256:f43663a9e5bd2608cf24c234bd290f80b3237ae83535cd04992890be285cf980
+    .claude/skills/ja-tech-proofread/scripts/.textlintrc.json: sha256:3fe72b0dc946ac11bb942b6c2a031fa052083d569a75addddb7cdc7d59499dd2
+    .claude/skills/ja-tech-proofread/scripts/README.md: sha256:5dc43f0e915858c41122ff6e7ad58cf5376dd18e501d3f7e71fac037dd7cc839
+    .claude/skills/ja-tech-proofread/scripts/package-lock.json: sha256:6b7cceaceed99db3ab3ce3e9210e59cae910f53a381f2a420aa74d014f97ea02
+    .claude/skills/ja-tech-proofread/scripts/package.json: sha256:7bfbc566417db249ba3ccb05d37dc40c52dad6c54b60cfbaf021883124181832
+    .claude/skills/ja-tech-proofread/scripts/textlintrc.test.ts: sha256:c81c13371a038eda39613e5dce3cff0bf23086f5db2eaf4eddf31782b62cc55f
+    .claude/skills/ja-tech-proofread/scripts/tsconfig.json: sha256:a22be857b024911ace763b5a7cff6a4134b0bd01a34af8bb3e33aaa887e51d23
+  content_hash: sha256:6317362e761fbc70718a479604197f382831afdd00a3d9f67e0ac098a152598e
 - repo_url: ansanloms/skills
   name: nvim-remote
   host: github.com
-  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
+  resolved_commit: 62696571c1aea48aa5479aa885195289072cd2eb
   version: unknown
   virtual_path: nvim-remote
   is_virtual: true
@@ -138,7 +162,7 @@ dependencies:
 - repo_url: ansanloms/skills
   name: worktree
   host: github.com
-  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
+  resolved_commit: 62696571c1aea48aa5479aa885195289072cd2eb
   version: unknown
   virtual_path: worktree
   is_virtual: true
@@ -153,28 +177,10 @@ dependencies:
     .claude/skills/worktree/SKILL.md: sha256:d3ebdb91646fdd84bf01a85409416ba594da815665b06bafc5e9ce3252970085
     .claude/skills/worktree/assets/template.md: sha256:d58676db6f6d8c4b84ff491995556a94d419c704d55ea9b7d21c3637f1ef0bee
   content_hash: sha256:98d0b17dd3e5f3b449f37aa6fd29a7825050f468846e4088e28082df670d7bdc
-- repo_url: ansanloms/skills
-  name: github-actions
-  host: github.com
-  resolved_commit: 392133e5c6d32f32910e5f38c35d9f2f0649ee6f
-  version: unknown
-  virtual_path: github-actions
-  is_virtual: true
-  package_type: claude_skill
-  deployed_files:
-  - .claude/skills/github-actions
-  - .claude/skills/github-actions/README.md
-  - .claude/skills/github-actions/SKILL.md
-  - .claude/skills/github-actions/references/machine-layer.md
-  deployed_file_hashes:
-    .claude/skills/github-actions/README.md: sha256:d83414499665c73f715e5ea01169ff03bb5683e0bb52dcf984a49400a0f04a62
-    .claude/skills/github-actions/SKILL.md: sha256:2f85fd4c65bf64579838201d6cb32a7ebac95fe68cbce08de2a7830a7b691b2f
-    .claude/skills/github-actions/references/machine-layer.md: sha256:8b548b73319765a5ba670471f7312711e325461b3d57f974c9732d511118575a
-  content_hash: sha256:122ad359b61663dbbaada6fd06808e43596e0bb8e9d38d62f8e8fc1a416df400
 - repo_url: mizchi/skills
   name: empirical-prompt-tuning
   host: github.com
-  resolved_commit: 5a51332694840551613e4cb3812a2c3929bb738c
+  resolved_commit: ec5c980f0090922ac18ea67c695e4cf04c8d5879
   version: unknown
   virtual_path: empirical-prompt-tuning
   is_virtual: true
@@ -192,7 +198,7 @@ dependencies:
 - repo_url: mizchi/skills
   name: retrospective-codify
   host: github.com
-  resolved_commit: 5a51332694840551613e4cb3812a2c3929bb738c
+  resolved_commit: ec5c980f0090922ac18ea67c695e4cf04c8d5879
   version: unknown
   virtual_path: retrospective-codify
   is_virtual: true
@@ -203,15 +209,15 @@ dependencies:
   - .claude/skills/retrospective-codify/SKILL-ja.md
   - .claude/skills/retrospective-codify/SKILL.md
   deployed_file_hashes:
-    .claude/skills/retrospective-codify/README.md: sha256:77a51f2096aa51722ff927ff4908a4c824e5b82ab0c74dce2564239d7fab5aa5
-    .claude/skills/retrospective-codify/SKILL-ja.md: sha256:3efef5c4ed6432a0cdee18dd7b078cd6f908432562c5185cd8a13f939b5fcc06
-    .claude/skills/retrospective-codify/SKILL.md: sha256:e53bb143fac571824d2c9073ddfcb1b4083dcc8b55c7c174e51887a018a13c40
-  content_hash: sha256:d25f1a040f53474ca9eef99677a663cbb825a35970a522c6ea13628939fcda69
+    .claude/skills/retrospective-codify/README.md: sha256:8436cbd3fe4cb702828715abec66c8375f1093618ae46e4e3d70caf9bb164e42
+    .claude/skills/retrospective-codify/SKILL-ja.md: sha256:190f11efc1b637505832537c8c9671d1d7362fedec862ea2ee4db51589f161ea
+    .claude/skills/retrospective-codify/SKILL.md: sha256:a011ec84ad7389c4a20eb3881d9eb816da4116dca377ca3e6edf0fe398493270
+  content_hash: sha256:ce00f68c0a51599890fd64a66a7395187d4cb460a589685cc284a1b21bcd7e69
 - repo_url: nanaism/yomiyasu
   name: yomiyasu
   host: github.com
-  resolved_commit: db78b9bc5e868549b517a037df7a4d1c93edac23
-  version: 3.1.0
+  resolved_commit: 3979c750b5e1fe9892bd47bb354f0fb51d534ff2
+  version: 3.4.1
   package_type: marketplace_plugin
   deployed_files:
   - .claude/skills/yomiyasu
@@ -259,11 +265,11 @@ dependencies:
   - .claude/skills/yomiyasu/scripts/yomiyasu_lint.py
   deployed_file_hashes:
     .claude/skills/yomiyasu/LICENSE: sha256:79d802f15bc8caf67f1a83c1bdbe214ccb41a0a0275f9046b329b89c65ee1fca
-    .claude/skills/yomiyasu/SKILL.md: sha256:34f2611aa021f4496ff4555ef1b29a67670c411d137aaeb269e9ba9ab2b73877
+    .claude/skills/yomiyasu/SKILL.md: sha256:e12341e6a5ca956be2589cfcd5fa5675913add02ddd168c5d5cd04f0b22fb709
     .claude/skills/yomiyasu/UNICODE-LICENSE.txt: sha256:e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96
     .claude/skills/yomiyasu/assets/algo-artis.png: sha256:57c7c204d43d0e2873e3b61221db3ac4ba75a7ce29271a6deaeb3bd09f26fdec
-    .claude/skills/yomiyasu/references/audience.md: sha256:fedae4ffbcd808ea2a3900b1dfccdfaed7cfbb74e2b5b1ca3f82966826d6b60c
-    .claude/skills/yomiyasu/references/calques.md: sha256:11d342cf90d24e20b12a9ecac66951a957fd930832c8b6cbdfb567cb9f5f01b0
+    .claude/skills/yomiyasu/references/audience.md: sha256:451a18af660be00065b89cf2c977711cc8c30b02a05643172fda758a083b7038
+    .claude/skills/yomiyasu/references/calques.md: sha256:6a2f7b4980d6fe58c0f191f91046f75ae5cfb97a6b4626e7efd07276a213635b
     .claude/skills/yomiyasu/references/doc-types/article.md: sha256:e5009c496b4b4ac8974c16f2f15b0f8ce93620863dfe721803b01138db845716
     .claude/skills/yomiyasu/references/doc-types/essay.md: sha256:fd8b888d3599747040c416df696ab39b9d9b962ce19a9229544b691ef43742af
     .claude/skills/yomiyasu/references/doc-types/formal.md: sha256:6b4121d4e57d52fb60fb428770a4504c53e1fb06c3fa20e57a1fcd56ce933141
@@ -276,7 +282,7 @@ dependencies:
     .claude/skills/yomiyasu/references/doc-types/promo.md: sha256:06f8f3a39547985fc74a70c3717596070401b9d3db5fc93e3b10f76f9b6656e4
     .claude/skills/yomiyasu/references/doc-types/proposal.md: sha256:2a8d8a557b33f2df51aedeed02ba5bb8ed623fcde55f6a42ff4b477920853731
     .claude/skills/yomiyasu/references/doc-types/script.md: sha256:41bc1c8ebb9f5fea7c18b70b18a3e8ee86073e38f85d62d4ad00ae0719acb49a
-    .claude/skills/yomiyasu/references/doc-types/slides.md: sha256:9bd9dac1e4886ebdc23cefc46d68ec1eeb06b98442eff1b34f992b5997d6213d
+    .claude/skills/yomiyasu/references/doc-types/slides.md: sha256:fb175cf4cc8205e25991758be816350bd28f95b5b26e7be74134e25b02e66a20
     .claude/skills/yomiyasu/references/domains/business.md: sha256:b68dbdf15d0145462794ba638c795cc9f13be9fe4d59e7dedafa945da6689aa3
     .claude/skills/yomiyasu/references/domains/essay.md: sha256:5dccd1810c1b99b87e4bd27538240c32406be64280a4c6ee8be1ef9521eb3694
     .claude/skills/yomiyasu/references/domains/tech.md: sha256:a45800b3fea46b45456ad00b8607f5ef347ede53d6a51f65826e1423f47d634a
@@ -286,21 +292,21 @@ dependencies:
     .claude/skills/yomiyasu/references/lists/fact-gaps.txt: sha256:c78da500dcddc76978fecd1a7a9f3318d9feabf0db78387a41662a4545e6964f
     .claude/skills/yomiyasu/references/lists/feelings.txt: sha256:37b6779b3ef8cf91260379b21d6b721bda362542a5702affd99d550879539e82
     .claude/skills/yomiyasu/references/lists/hedges.txt: sha256:ed666036f63f4705d2c129d3fd30e971018d50732bbef2c18081412a61ccd771
-    .claude/skills/yomiyasu/references/lists/intensifiers.txt: sha256:65d9189ebebaf8f9cb2aad2c04be3d0ccf53c4d6782affe16bcd8078054d3c83
+    .claude/skills/yomiyasu/references/lists/intensifiers.txt: sha256:b10e9fb077e76cd5a93ec6e27df943a03a3a08b4cf8dd5bd72910d0266e23fdb
     .claude/skills/yomiyasu/references/lists/katakana-terms.txt: sha256:47c686e6a7a94590a97fa9e052b3dee9171dfc8a5f25da727111428cda978e2d
     .claude/skills/yomiyasu/references/lists/nominalization.txt: sha256:cfe31060efc6d165c30b1619ab574ec405312a80bfb00387efc6557911614be0
     .claude/skills/yomiyasu/references/lists/renyo-nouns.txt: sha256:0642b6ba40e4707af4715463d7433c0215087a8e068b00e7894b73e89365997a
     .claude/skills/yomiyasu/references/lists/thin-evaluation.txt: sha256:b2cf6a8e1fc424d1bcac15e2aa2045a98ec77a002e2830692922a8f97ee406e4
-    .claude/skills/yomiyasu/references/persona.md: sha256:88f9490473acd3c51116556fbc9c06d95bbf003236fc9ef54cf94446cef7e191
+    .claude/skills/yomiyasu/references/persona.md: sha256:2e8f83550d1ee55066a8c83c594d1a2f34e87b910fb1fc1c67c30839e8bbb21f
     .claude/skills/yomiyasu/references/rephrase-test.md: sha256:1086593de2fbcbcc577ca68c155d441f9fbe3bb72a229340cb639b4538207304
-    .claude/skills/yomiyasu/references/review-points.md: sha256:ec1f7ff6bdf0095db2b3f683e7acee6cc62d203975c28de9e6d515ff37caa0f5
-    .claude/skills/yomiyasu/references/slop-catalog.md: sha256:cdf2cef3f62ba8b75a02bc56b5ae8d2f69a9fac257b5c8fc56637adb3827bf97
-    .claude/skills/yomiyasu/scripts/markdown_visibility.py: sha256:c8d410c5379c00c4bb94fc06d3a5a3fee118ac6b0cf7e6b81b4d452d5e912e60
-    .claude/skills/yomiyasu/scripts/yomiyasu_check.py: sha256:4355847c6cc8b8f08e7541c7f04add5eb4e0ef7b9e0176e6a069bfa8b9679ca8
-    .claude/skills/yomiyasu/scripts/yomiyasu_diff.py: sha256:25e5e1db015297a9cbf0642482091b8c6f47b5c8b5f03dcc8b565a0ab5aecaba
-    .claude/skills/yomiyasu/scripts/yomiyasu_hook.py: sha256:2b5611ae6075af3046100197f438874727480859bcc9c11ee4845ce952c172ee
-    .claude/skills/yomiyasu/scripts/yomiyasu_lint.py: sha256:bde745c46242ab0a923503bbe5488178f2b503e972498112e46df2ec79559767
-  content_hash: sha256:694df4ed0c947f04c19cf169d13d7201e7bea09d0e3d8d0dbcc85420c3aed7ca
+    .claude/skills/yomiyasu/references/review-points.md: sha256:fb187881f99ad3e0a945b1e011597299b8af7ca6af7da78071c459cc13ea87ea
+    .claude/skills/yomiyasu/references/slop-catalog.md: sha256:25b38064d9d192d63bf1b5552df291608cf12534d675c4f7ee0a6ccf9d11fb00
+    .claude/skills/yomiyasu/scripts/markdown_visibility.py: sha256:94d64b9e09386842b750944f6eb553ca0a0034cbc96be992a576d00ff985e27f
+    .claude/skills/yomiyasu/scripts/yomiyasu_check.py: sha256:49b5a3492a6d1ac98085e8e34a5a0df6b813b9109159fe145004e7baee135844
+    .claude/skills/yomiyasu/scripts/yomiyasu_diff.py: sha256:275625a234f8b00b7dfcddb5084dd1a629a0d0213df02c348420987fd3c54ab1
+    .claude/skills/yomiyasu/scripts/yomiyasu_hook.py: sha256:9ae600e4f04db0435c39830f65752f727e2db31918a2eaa005129015f0d9b854
+    .claude/skills/yomiyasu/scripts/yomiyasu_lint.py: sha256:d536a6d2256c559e60ab4ca237eb9f6ac34f277e5b5c284bd5640b9c39171b53
+  content_hash: sha256:447c7c5015724442f447208b5e1c8f3f0d10a663aabf1f6440750272613e5560
   skill_subset:
   - yomiyasu
   declared_license: MIT
@@ -682,7 +688,7 @@ deployments:
   owners:
   - ansanloms/skills/ja-tech-proofread
   active_owner: ansanloms/skills/ja-tech-proofread
-  content_hash: sha256:6f27c214b14135a7ec711294d99656218b2ca8cba292ec1d33e1538033c07055
+  content_hash: sha256:05780a8103be7caeb5814748c9597656d2f07ef3cceb5c0c58470280c2da0dd4
 - kind: project-relative
   target: claude
   value: .claude/skills/ja-tech-proofread/SKILL.md
@@ -691,7 +697,7 @@ deployments:
   owners:
   - ansanloms/skills/ja-tech-proofread
   active_owner: ansanloms/skills/ja-tech-proofread
-  content_hash: sha256:82d588c0866c3c91adcb48a16dd02f5ee771d868ab124688573e6a77d8b15798
+  content_hash: sha256:997db40e0545084172965c642a52aacc1a68b985e23735d883b167c8b03d1460
 - kind: project-relative
   target: claude
   value: .claude/skills/ja-tech-proofread/references/sources.md
@@ -739,13 +745,22 @@ deployments:
   content_hash: sha256:a4993a6e1f395afa85ba6997e0c320dfdebaf936e9050702be912c5fd7f2f435
 - kind: project-relative
   target: claude
+  value: .claude/skills/ja-tech-proofread/scripts/.oxlintrc.json
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/ja-tech-proofread
+  active_owner: ansanloms/skills/ja-tech-proofread
+  content_hash: sha256:f43663a9e5bd2608cf24c234bd290f80b3237ae83535cd04992890be285cf980
+- kind: project-relative
+  target: claude
   value: .claude/skills/ja-tech-proofread/scripts/.textlintrc.json
   runtime: null
   scope: project
   owners:
   - ansanloms/skills/ja-tech-proofread
   active_owner: ansanloms/skills/ja-tech-proofread
-  content_hash: sha256:14a3e2706afa3885420e6ee69884bf0469015aadfa784335297f436a978b7086
+  content_hash: sha256:3fe72b0dc946ac11bb942b6c2a031fa052083d569a75addddb7cdc7d59499dd2
 - kind: project-relative
   target: claude
   value: .claude/skills/ja-tech-proofread/scripts/README.md
@@ -754,7 +769,7 @@ deployments:
   owners:
   - ansanloms/skills/ja-tech-proofread
   active_owner: ansanloms/skills/ja-tech-proofread
-  content_hash: sha256:3a44f6fa5b5d49ee48c15d31198dd3276c29c3f13b9a23ae99c30214536175e5
+  content_hash: sha256:5dc43f0e915858c41122ff6e7ad58cf5376dd18e501d3f7e71fac037dd7cc839
 - kind: project-relative
   target: claude
   value: .claude/skills/ja-tech-proofread/scripts/package-lock.json
@@ -763,7 +778,7 @@ deployments:
   owners:
   - ansanloms/skills/ja-tech-proofread
   active_owner: ansanloms/skills/ja-tech-proofread
-  content_hash: sha256:0488835124d45ba63ac9961a48c6b6e36bd9c207be4e20695826ac49a7d3e935
+  content_hash: sha256:6b7cceaceed99db3ab3ce3e9210e59cae910f53a381f2a420aa74d014f97ea02
 - kind: project-relative
   target: claude
   value: .claude/skills/ja-tech-proofread/scripts/package.json
@@ -772,7 +787,25 @@ deployments:
   owners:
   - ansanloms/skills/ja-tech-proofread
   active_owner: ansanloms/skills/ja-tech-proofread
-  content_hash: sha256:44b288c45d690f33b9c185da07d00226331ab21b5a8c8a451cbc68b11c04813d
+  content_hash: sha256:7bfbc566417db249ba3ccb05d37dc40c52dad6c54b60cfbaf021883124181832
+- kind: project-relative
+  target: claude
+  value: .claude/skills/ja-tech-proofread/scripts/textlintrc.test.ts
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/ja-tech-proofread
+  active_owner: ansanloms/skills/ja-tech-proofread
+  content_hash: sha256:c81c13371a038eda39613e5dce3cff0bf23086f5db2eaf4eddf31782b62cc55f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/ja-tech-proofread/scripts/tsconfig.json
+  runtime: null
+  scope: project
+  owners:
+  - ansanloms/skills/ja-tech-proofread
+  active_owner: ansanloms/skills/ja-tech-proofread
+  content_hash: sha256:a22be857b024911ace763b5a7cff6a4134b0bd01a34af8bb3e33aaa887e51d23
 - kind: project-relative
   target: claude
   value: .claude/skills/nvim-remote
@@ -817,7 +850,7 @@ deployments:
   owners:
   - mizchi/skills/retrospective-codify
   active_owner: mizchi/skills/retrospective-codify
-  content_hash: sha256:77a51f2096aa51722ff927ff4908a4c824e5b82ab0c74dce2564239d7fab5aa5
+  content_hash: sha256:8436cbd3fe4cb702828715abec66c8375f1093618ae46e4e3d70caf9bb164e42
 - kind: project-relative
   target: claude
   value: .claude/skills/retrospective-codify/SKILL-ja.md
@@ -826,7 +859,7 @@ deployments:
   owners:
   - mizchi/skills/retrospective-codify
   active_owner: mizchi/skills/retrospective-codify
-  content_hash: sha256:3efef5c4ed6432a0cdee18dd7b078cd6f908432562c5185cd8a13f939b5fcc06
+  content_hash: sha256:190f11efc1b637505832537c8c9671d1d7362fedec862ea2ee4db51589f161ea
 - kind: project-relative
   target: claude
   value: .claude/skills/retrospective-codify/SKILL.md
@@ -835,7 +868,7 @@ deployments:
   owners:
   - mizchi/skills/retrospective-codify
   active_owner: mizchi/skills/retrospective-codify
-  content_hash: sha256:e53bb143fac571824d2c9073ddfcb1b4083dcc8b55c7c174e51887a018a13c40
+  content_hash: sha256:a011ec84ad7389c4a20eb3881d9eb816da4116dca377ca3e6edf0fe398493270
 - kind: project-relative
   target: claude
   value: .claude/skills/worktree
@@ -898,7 +931,7 @@ deployments:
   owners:
   - nanaism/yomiyasu
   active_owner: nanaism/yomiyasu
-  content_hash: sha256:34f2611aa021f4496ff4555ef1b29a67670c411d137aaeb269e9ba9ab2b73877
+  content_hash: sha256:e12341e6a5ca956be2589cfcd5fa5675913add02ddd168c5d5cd04f0b22fb709
 - kind: project-relative
   target: claude
   value: .claude/skills/yomiyasu/UNICODE-LICENSE.txt
@@ -925,7 +958,7 @@ deployments:
   owners:
   - nanaism/yomiyasu
   active_owner: nanaism/yomiyasu
-  content_hash: sha256:fedae4ffbcd808ea2a3900b1dfccdfaed7cfbb74e2b5b1ca3f82966826d6b60c
+  content_hash: sha256:451a18af660be00065b89cf2c977711cc8c30b02a05643172fda758a083b7038
 - kind: project-relative
   target: claude
   value: .claude/skills/yomiyasu/references/calques.md
@@ -934,7 +967,7 @@ deployments:
   owners:
   - nanaism/yomiyasu
   active_owner: nanaism/yomiyasu
-  content_hash: sha256:11d342cf90d24e20b12a9ecac66951a957fd930832c8b6cbdfb567cb9f5f01b0
+  content_hash: sha256:6a2f7b4980d6fe58c0f191f91046f75ae5cfb97a6b4626e7efd07276a213635b
 - kind: project-relative
   target: claude
   value: .claude/skills/yomiyasu/references/doc-types/article.md
@@ -1051,7 +1084,7 @@ deployments:
   owners:
   - nanaism/yomiyasu
   active_owner: nanaism/yomiyasu
-  content_hash: sha256:9bd9dac1e4886ebdc23cefc46d68ec1eeb06b98442eff1b34f992b5997d6213d
+  content_hash: sha256:fb175cf4cc8205e25991758be816350bd28f95b5b26e7be74134e25b02e66a20
 - kind: project-relative
   target: claude
   value: .claude/skills/yomiyasu/references/domains/business.md
@@ -1141,7 +1174,7 @@ deployments:
   owners:
   - nanaism/yomiyasu
   active_owner: nanaism/yomiyasu
-  content_hash: sha256:65d9189ebebaf8f9cb2aad2c04be3d0ccf53c4d6782affe16bcd8078054d3c83
+  content_hash: sha256:b10e9fb077e76cd5a93ec6e27df943a03a3a08b4cf8dd5bd72910d0266e23fdb
 - kind: project-relative
   target: claude
   value: .claude/skills/yomiyasu/references/lists/katakana-terms.txt
@@ -1186,7 +1219,7 @@ deployments:
   owners:
   - nanaism/yomiyasu
   active_owner: nanaism/yomiyasu
-  content_hash: sha256:88f9490473acd3c51116556fbc9c06d95bbf003236fc9ef54cf94446cef7e191
+  content_hash: sha256:2e8f83550d1ee55066a8c83c594d1a2f34e87b910fb1fc1c67c30839e8bbb21f
 - kind: project-relative
   target: claude
   value: .claude/skills/yomiyasu/references/rephrase-test.md
@@ -1204,7 +1237,7 @@ deployments:
   owners:
   - nanaism/yomiyasu
   active_owner: nanaism/yomiyasu
-  content_hash: sha256:ec1f7ff6bdf0095db2b3f683e7acee6cc62d203975c28de9e6d515ff37caa0f5
+  content_hash: sha256:fb187881f99ad3e0a945b1e011597299b8af7ca6af7da78071c459cc13ea87ea
 - kind: project-relative
   target: claude
   value: .claude/skills/yomiyasu/references/slop-catalog.md
@@ -1213,7 +1246,7 @@ deployments:
   owners:
   - nanaism/yomiyasu
   active_owner: nanaism/yomiyasu
-  content_hash: sha256:cdf2cef3f62ba8b75a02bc56b5ae8d2f69a9fac257b5c8fc56637adb3827bf97
+  content_hash: sha256:25b38064d9d192d63bf1b5552df291608cf12534d675c4f7ee0a6ccf9d11fb00
 - kind: project-relative
   target: claude
   value: .claude/skills/yomiyasu/scripts/markdown_visibility.py
@@ -1222,7 +1255,7 @@ deployments:
   owners:
   - nanaism/yomiyasu
   active_owner: nanaism/yomiyasu
-  content_hash: sha256:c8d410c5379c00c4bb94fc06d3a5a3fee118ac6b0cf7e6b81b4d452d5e912e60
+  content_hash: sha256:94d64b9e09386842b750944f6eb553ca0a0034cbc96be992a576d00ff985e27f
 - kind: project-relative
   target: claude
   value: .claude/skills/yomiyasu/scripts/yomiyasu_check.py
@@ -1231,7 +1264,7 @@ deployments:
   owners:
   - nanaism/yomiyasu
   active_owner: nanaism/yomiyasu
-  content_hash: sha256:4355847c6cc8b8f08e7541c7f04add5eb4e0ef7b9e0176e6a069bfa8b9679ca8
+  content_hash: sha256:49b5a3492a6d1ac98085e8e34a5a0df6b813b9109159fe145004e7baee135844
 - kind: project-relative
   target: claude
   value: .claude/skills/yomiyasu/scripts/yomiyasu_diff.py
@@ -1240,7 +1273,7 @@ deployments:
   owners:
   - nanaism/yomiyasu
   active_owner: nanaism/yomiyasu
-  content_hash: sha256:25e5e1db015297a9cbf0642482091b8c6f47b5c8b5f03dcc8b565a0ab5aecaba
+  content_hash: sha256:275625a234f8b00b7dfcddb5084dd1a629a0d0213df02c348420987fd3c54ab1
 - kind: project-relative
   target: claude
   value: .claude/skills/yomiyasu/scripts/yomiyasu_hook.py
@@ -1249,7 +1282,7 @@ deployments:
   owners:
   - nanaism/yomiyasu
   active_owner: nanaism/yomiyasu
-  content_hash: sha256:2b5611ae6075af3046100197f438874727480859bcc9c11ee4845ce952c172ee
+  content_hash: sha256:9ae600e4f04db0435c39830f65752f727e2db31918a2eaa005129015f0d9b854
 - kind: project-relative
   target: claude
   value: .claude/skills/yomiyasu/scripts/yomiyasu_lint.py
@@ -1258,4 +1291,4 @@ deployments:
   owners:
   - nanaism/yomiyasu
   active_owner: nanaism/yomiyasu
-  content_hash: sha256:bde745c46242ab0a923503bbe5488178f2b503e972498112e46df2ec79559767
+  content_hash: sha256:d536a6d2256c559e60ab4ca237eb9f6ac34f277e5b5c284bd5640b9c39171b53
