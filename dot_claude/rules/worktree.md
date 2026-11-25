@@ -12,21 +12,12 @@
 
 ## ハーネスの bg 隔離との関係
 
-Claude Code のバックグラウンドジョブは、既定 (`worktree.bgIsolation: "worktree"`) ではメイン checkout (= メインの worktree) への Edit・Write が「Call EnterWorktree first」で拒否され、セッション自身が `EnterWorktree` で隔離してから編集する。
-
-隔離したセッション (`claude --worktree` や `isolation: worktree` の subagent も同じ) では、メイン checkout 宛ての Edit・Write と、cwd がメイン checkout に解決する Bash が `This session is isolated in the worktree <path>` で拒否される。git をメイン checkout へ向けるリダイレクト (`git -C`・`GIT_DIR`・事前の `cd`) も拒否される。worktree 内に留まると静的検証できない形の Bash (パイプ・`;`・heredoc・`$(...)`・サブシェル・`eval`。git を含まないコマンドも対象) も同じく拒否される。この隔離後のガードは設定では切れない。
-
 - MUST: `bgIsolation` はグローバル `.claude/settings.json` で `"none"` にし、バックグラウンドジョブでも `EnterWorktree` を使わず本ルールの手順で隔離する。
-  - 理由: 隔離の責務は本ルールが持ち、配置先も同じ `<base>` のため、`EnterWorktree` を挟むと二重隔離になる。しかも隔離後は `worktree` skill のローカル設定持ち込み (`git -C <main> ls-files ... | (cd <main> && xargs ... cp ...)`) がリダイレクト拒否と形状ガードに当たり、description 設定 (`git config ... "$(cat ...)"`) も形状ガードに当たる。どちらに当たっても skill の手順自体が実行できない。
-  - `"none"` が外すのは「Call EnterWorktree first」の拒否だけだが、それで `EnterWorktree` を呼ぶ動機が消え、隔離後のガードに入らなくなる (2026-08-15〜29 の tool エラー 792 件中 490 件が隔離後ガードによるもので、全件が `.claude/worktrees/` 配下を cwd にした bg ジョブで発生)。
+  - 理由: `EnterWorktree` で隔離したセッションでは、メイン checkout 宛ての操作と別 worktree への git 操作が拒否される。この拒否は、そのセッションが起動した subagent にも及ぶ。`worktree` skill の手順と、複数 worktree の並列作業が実行できなくなる。
 - 代償: バックグラウンドジョブが工程 4 (隔離) を飛ばすと、誰も見ていない状態でメイン checkout へ直接書く。設定はグローバルで全リポジトリに及ぶ。防波堤は「原則」の MUST だけになる。
-- 隔離後のガードはセッションの属性であり、そのセッションが起動する subagent (implementer・code-review-runner 等) にも及ぶ。subagent に別 worktree の絶対パスを渡しても、入っている worktree 以外への git 操作は拒否される。そのため複数 worktree の並列作業が成立せず、`EnterWorktree` の `path` で切り替える直列作業になる (#72 の事例。片方の worktree で reviewer が動いている間、もう片方に触れなかった)。
-- セッション開始時または作業中に、自分が `EnterWorktree` の隔離下にある (cwd が `.claude/worktrees/` 配下で、上記 `This session is isolated` の拒否が出る) と分かったら、作業を続ける前に `ExitWorktree` で抜けてメイン checkout に戻る。抜け方はその worktree の状態で分ける。
+- 自分が `EnterWorktree` の隔離下にある (cwd が `.claude/worktrees/` 配下で、`This session is isolated in the worktree <path>` の拒否が出る) と分かったら、作業を続ける前に `ExitWorktree` で抜けてメイン checkout に戻る。`claude --worktree` で隔離したセッションも同じ。
   - 未着手 (変更もコミットも無い): `action: "remove"` で抜け、本ルールの手順で worktree を切り直す。
-  - 作業済み (変更またはコミットがある): `action: "keep"` で抜け、その worktree を本ルールの worktree として引き取る。配置先は `<base>` と同じ `.claude/worktrees/<name>` なので切り直さず、メイン checkout の cwd から skill の include・description 設定を施して続行する。
-  - 抜けた後は、複数の worktree に `git -C <path>` と subagent の並列起動で同時に触れられる (#72 で実測)。
-  - `bgIsolation` を `"none"` にしている間は、この状態になりにくい。2026-11-12 に集計した直近 26 セッションでは、隔離後のガードによる拒否は 0 件だった。
-- `claude --worktree` で隔離したセッションも `ExitWorktree` (`action: "keep"`) で抜けられ、cwd がメイン checkout、HEAD が main に戻る。2026-08-31 に `claude --worktree exit-probe -p` で実測した (`--worktree <name>` が作る worktree は `.claude/worktrees/<name>`、ブランチ名は `worktree-<name>`)。扱いは `EnterWorktree` と同じで、上の MUST に従う。
+  - 作業済み (変更またはコミットがある): `action: "keep"` で抜け、その worktree を本ルールの worktree として引き取る。メイン checkout の cwd から skill の include・description 設定を施して続行する。
 
 ## 片付け
 
